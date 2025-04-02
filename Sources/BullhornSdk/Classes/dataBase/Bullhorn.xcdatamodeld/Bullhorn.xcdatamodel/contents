@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DownloadItem" representedClassName="DownloadItemMO" syncable="YES">
+        <attribute name="file" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="prevStatus" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="prev_status"/>
+            </userInfo>
+        </attribute>
+        <attribute name="progress" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="progress"/>
+            </userInfo>
+        </attribute>
+        <attribute name="reason" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="reason"/>
+            </userInfo>
+        </attribute>
+        <attribute name="status" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="status"/>
+            </userInfo>
+        </attribute>
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="time"/>
+            </userInfo>
+        </attribute>
+        <attribute name="url" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="url"/>
+            </userInfo>
+        </attribute>
+        <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Post">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="post"/>
+            </userInfo>
+        </relationship>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="file"/>
+        </userInfo>
+    </entity>
+    <entity name="LikedPosts" representedClassName="LikedPostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="page"/>
+            </userInfo>
+        </attribute>
+        <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="likedPosts" inverseEntity="Post">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="liked_posts"/>
+            </userInfo>
+        </relationship>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="pages"/>
+        </userInfo>
+    </entity>
+    <entity name="Network" representedClassName="NetworkMO" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="created_at"/>
+            </userInfo>
+        </attribute>
+        <attribute name="descr" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="description"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="name" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="name"/>
+            </userInfo>
+        </attribute>
+        <attribute name="path" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="path"/>
+            </userInfo>
+        </attribute>
+        <attribute name="podcastsCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="podcasts_count"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePicture" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureBig" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_big"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureTiny" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_tiny"/>
+            </userInfo>
+        </attribute>
+        <attribute name="shareLink" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="share_link"/>
+            </userInfo>
+        </attribute>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="created_at"/>
+        </userInfo>
+    </entity>
+    <entity name="NetworkFeaturedPosts" representedClassName="NetworkFeaturedPostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="featuredPosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="featuredPosts" inverseEntity="Post">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="featured_posts"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="NetworkFeaturedUsers" representedClassName="NetworkFeaturedUsersMO" syncable="YES">
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="featuredUsers" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" inverseName="featuredUsers" inverseEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="featured_users"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="NetworkLivePosts" representedClassName="NetworkLivePostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="livePosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="livePosts" inverseEntity="Post"/>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="live_posts"/>
+        </userInfo>
+    </entity>
+    <entity name="NetworkPosts" representedClassName="NetworkPostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="page"/>
+            </userInfo>
+        </attribute>
+        <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="pages"/>
+            </userInfo>
+        </attribute>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="posts" inverseEntity="Post">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="posts"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="NetworkRadios" representedClassName="NetworkRadiosMO" syncable="YES">
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="radios" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Radio" inverseName="radios" inverseEntity="Radio">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="radios"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="NetworkScheduledPosts" representedClassName="NetworkScheduledPostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="scheduledPosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="scheduledPosts" inverseEntity="Post">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="scheduled_posts"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="NetworkUsers" representedClassName="NetworkUsersMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="pages"/>
+            </userInfo>
+        </attribute>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" inverseName="users" inverseEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="users"/>
+            </userInfo>
+        </relationship>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="page"/>
+        </userInfo>
+    </entity>
+    <entity name="Post" representedClassName="PostMO" syncable="YES">
+        <attribute name="alias" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="alias"/>
+            </userInfo>
+        </attribute>
+        <attribute name="descr" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="description"/>
+            </userInfo>
+        </attribute>
+        <attribute name="endTime" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="end_time"/>
+            </userInfo>
+        </attribute>
+        <attribute name="hasMeetingRoom" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="has_meeting_room"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="isPlaybackCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="playback_completed"/>
+            </userInfo>
+        </attribute>
+        <attribute name="liked" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="liked"/>
+            </userInfo>
+        </attribute>
+        <attribute name="originalTime" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="original_time"/>
+            </userInfo>
+        </attribute>
+        <attribute name="playbackOffset" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="playback_offset"/>
+            </userInfo>
+        </attribute>
+        <attribute name="postType" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="post_type"/>
+            </userInfo>
+        </attribute>
+        <attribute name="privacy" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="privacy"/>
+            </userInfo>
+        </attribute>
+        <attribute name="published" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="published"/>
+            </userInfo>
+        </attribute>
+        <attribute name="publishedAt" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="published_at"/>
+            </userInfo>
+        </attribute>
+        <attribute name="scheduledAt" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="scheduled_at"/>
+            </userInfo>
+        </attribute>
+        <attribute name="shareLink" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="share_link"/>
+            </userInfo>
+        </attribute>
+        <attribute name="startTime" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="start_time"/>
+            </userInfo>
+        </attribute>
+        <attribute name="title" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="title"/>
+            </userInfo>
+        </attribute>
+        <relationship name="bulletin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PostBulletin">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="bulletin"/>
+            </userInfo>
+        </relationship>
+        <relationship name="featuredPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedPosts" inverseName="featuredPosts" inverseEntity="NetworkFeaturedPosts"/>
+        <relationship name="likedPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LikedPosts" inverseName="likedPosts" inverseEntity="LikedPosts"/>
+        <relationship name="livePosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkLivePosts" inverseName="livePosts" inverseEntity="NetworkLivePosts"/>
+        <relationship name="posts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkPosts" inverseName="posts" inverseEntity="NetworkPosts"/>
+        <relationship name="recording" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Recording">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="recording"/>
+            </userInfo>
+        </relationship>
+        <relationship name="scheduledPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkScheduledPosts" inverseName="scheduledPosts" inverseEntity="NetworkScheduledPosts"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="user"/>
+            </userInfo>
+        </relationship>
+        <relationship name="userPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserPosts" inverseName="userPosts" inverseEntity="UserPosts"/>
+    </entity>
+    <entity name="PostBulletin" representedClassName="PostBulletinMO" syncable="YES">
+        <attribute name="hasTiles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="has_tiles"/>
+            </userInfo>
+        </attribute>
+        <attribute name="hasVideo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="has_video"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="updatedAt" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="updated_at"/>
+            </userInfo>
+        </attribute>
+    </entity>
+    <entity name="Radio" representedClassName="RadioMO" syncable="YES">
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="phoneNumber" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="phone_number"/>
+            </userInfo>
+        </attribute>
+        <attribute name="playbackUrl" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="playback_url"/>
+            </userInfo>
+        </attribute>
+        <attribute name="title" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="title"/>
+            </userInfo>
+        </attribute>
+        <relationship name="radios" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkRadios" inverseName="radios" inverseEntity="NetworkRadios"/>
+        <relationship name="streams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stream" inverseName="streams" inverseEntity="Stream">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="streams"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="RecentUsers" representedClassName="RecentUsersMO" syncable="YES">
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="page"/>
+            </userInfo>
+        </attribute>
+        <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="pages"/>
+            </userInfo>
+        </attribute>
+        <relationship name="recentUsers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="recentUsers" inverseEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="recent_users"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="Recording" representedClassName="RecordingMO" syncable="YES">
+        <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="duration"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="publishUrl" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="publish_uri"/>
+            </userInfo>
+        </attribute>
+    </entity>
+    <entity name="RelatedUsers" representedClassName="RelatedUsersMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="relatedUsers" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" inverseName="relatedUsers" inverseEntity="User"/>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="related_users"/>
+        </userInfo>
+    </entity>
+    <entity name="Stream" representedClassName="StreamMO" syncable="YES">
+        <attribute name="coverUrl" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="cover_url"/>
+            </userInfo>
+        </attribute>
+        <attribute name="endAt" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="end_at"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="phoneNumber" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="phone_number"/>
+            </userInfo>
+        </attribute>
+        <attribute name="startAt" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="start_at"/>
+            </userInfo>
+        </attribute>
+        <attribute name="title" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="title"/>
+            </userInfo>
+        </attribute>
+        <relationship name="streams" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Radio" inverseName="streams" inverseEntity="Radio"/>
+    </entity>
+    <entity name="User" representedClassName="UserMO" syncable="YES">
+        <attribute name="bio" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="bio"/>
+            </userInfo>
+        </attribute>
+        <attribute name="external" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="external"/>
+            </userInfo>
+        </attribute>
+        <attribute name="fullName" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="full_name"/>
+            </userInfo>
+        </attribute>
+        <attribute name="hasActiveLive" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="has_active_live"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="isNetwork" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="is_network"/>
+            </userInfo>
+        </attribute>
+        <attribute name="level" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="level"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePicture" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureBig" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_big"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureTiny" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_tiny"/>
+            </userInfo>
+        </attribute>
+        <attribute name="ratingsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="ratings_count"/>
+            </userInfo>
+        </attribute>
+        <attribute name="ratingValue" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="rating_value"/>
+            </userInfo>
+        </attribute>
+        <attribute name="shareLink" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="share_link"/>
+            </userInfo>
+        </attribute>
+        <attribute name="username" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="username"/>
+            </userInfo>
+        </attribute>
+        <attribute name="website" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="website"/>
+            </userInfo>
+        </attribute>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserCategory" inverseName="categories" inverseEntity="UserCategory">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="categories"/>
+            </userInfo>
+        </relationship>
+        <relationship name="featuredUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedUsers" inverseName="featuredUsers" inverseEntity="NetworkFeaturedUsers"/>
+        <relationship name="recentUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecentUsers" inverseName="recentUsers" inverseEntity="RecentUsers"/>
+        <relationship name="relatedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RelatedUsers" inverseName="relatedUsers" inverseEntity="RelatedUsers"/>
+        <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkUsers" inverseName="users" inverseEntity="NetworkUsers"/>
+    </entity>
+    <entity name="UserCategory" representedClassName="UserCategoryMO" syncable="YES">
+        <attribute name="alias" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="alias"/>
+            </userInfo>
+        </attribute>
+        <attribute name="gradientDegree" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="gradient_degree"/>
+            </userInfo>
+        </attribute>
+        <attribute name="gradientFrom" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="gradient_from"/>
+            </userInfo>
+        </attribute>
+        <attribute name="gradientTo" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="gradient_to"/>
+            </userInfo>
+        </attribute>
+        <attribute name="icon" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="icon"/>
+            </userInfo>
+        </attribute>
+        <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="name" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="name"/>
+            </userInfo>
+        </attribute>
+        <attribute name="subCategoriesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="sub_categories_count"/>
+            </userInfo>
+        </attribute>
+        <relationship name="categories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="categories" inverseEntity="User"/>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="categories"/>
+        </userInfo>
+    </entity>
+    <entity name="UserPosts" representedClassName="UserPostsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="page"/>
+            </userInfo>
+        </attribute>
+        <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="pages"/>
+            </userInfo>
+        </attribute>
+        <relationship name="userPosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="userPosts" inverseEntity="Post"/>
+        <userInfo>
+            <entry key="hyper.remoteKey" value="user_posts"/>
+        </userInfo>
+    </entity>
+</model>

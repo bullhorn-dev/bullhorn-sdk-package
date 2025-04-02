@@ -1,0 +1,78 @@
+
+import UIKit
+import Foundation
+
+class BHRadioCell: UITableViewCell {
+    
+    class var reusableIndentifer: String { return String(describing: self) }
+
+    @IBOutlet weak var radioTitleLabel: UILabel!
+    @IBOutlet weak var shadowView: UIView!
+    @IBOutlet weak var streamIcon: UIImageView!
+    @IBOutlet weak var streamTitleLabel: UILabel!
+    @IBOutlet weak var playButton: BHPlayButton!
+
+    var radio: BHRadio? {
+        didSet {
+            update()
+        }
+    }
+
+    fileprivate var placeholderImage: UIImage?
+
+    // MARK: - Lifecycle
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        initialize()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let shadowColor = UIColor.shadow().withAlphaComponent(0.5)
+    
+        shadowView.layer.cornerRadius = 8
+        shadowView.layer.shadowColor = shadowColor.cgColor
+        shadowView.layer.shadowOpacity = 0.5
+        shadowView.layer.shadowOffset = .zero
+        shadowView.layer.shadowRadius = 4
+
+        streamIcon.layer.cornerRadius = 8
+        streamIcon.layer.borderColor = UIColor.tertiary().cgColor
+        streamIcon.layer.borderWidth = 1
+        streamIcon.backgroundColor = .tertiary()
+        streamIcon.contentMode = .scaleToFill
+        streamIcon.clipsToBounds = true
+            
+        radioTitleLabel.textColor = .accent()
+        streamTitleLabel.textColor = .primary()
+        
+        playButton.title = "Listen"
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func initialize() {
+        let bundle = Bundle(for: Self.self)
+        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
+    }
+    
+    fileprivate func update() {
+        guard let validRadio = radio else { return }
+        guard let validStream = radio?.streams.first else { return }
+        
+        radioTitleLabel.text = validRadio.title
+        streamTitleLabel.text = validStream.title
+        streamIcon.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)
+                
+        playButton.post = validRadio.asPost()
+        playButton.isEnabled = true
+    }
+}
+
