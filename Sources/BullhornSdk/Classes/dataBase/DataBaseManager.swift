@@ -11,8 +11,8 @@ class DataBaseManager {
     let dataStack: DataStack
     
     init() {
-        let bundle = Bundle(for: Self.self)
-        self.dataStack = DataStack(modelName: "Bullhorn", bundle: bundle, storeType: .sqLite)
+
+        self.dataStack = DataStack(modelName: "Bullhorn", bundle: Bundle.module, storeType: .sqLite)
         
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(notification:)), name: UIApplication.willTerminateNotification, object: nil)
     }

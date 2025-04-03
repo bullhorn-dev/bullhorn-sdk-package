@@ -19,11 +19,17 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "BullhornSdk", dependencies: [
+            name: "BullhornSdk",
+            dependencies: [
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "Cosmos", package: "Cosmos"),
                 .product(name: "SDWebImage", package: "SDWebImage"),
                 .product(name: "SwiftMessages", package: "SwiftMessages"),
+            ],
+            path: "Sources/BullhornSdk",
+            resources: [
+                .copy("Resources/PrivacyInfo.xcprivacy"),
+                .copy("Resources/Bullhorn.xcdatamodeld"),
             ]),
     ]
 )
