@@ -46,6 +46,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         tableView.register(userCellNib, forCellReuseIdentifier: BHUserCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHExploreHeaderView.reusableIndentifer) as? BHExploreHeaderView
         headerView?.delegate = self

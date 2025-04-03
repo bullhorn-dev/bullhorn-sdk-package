@@ -52,6 +52,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHUserHeaderView.reusableIndentifer) as? BHUserHeaderView
         headerView?.delegate = self

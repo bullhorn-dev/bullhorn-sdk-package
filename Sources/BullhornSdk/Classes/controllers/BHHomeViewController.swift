@@ -45,6 +45,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         tableView.register(gridCellNib, forCellReuseIdentifier: BHUsersGridCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHHomeHeaderView.reusableIndentifer) as? BHHomeHeaderView
         headerView?.initialize()

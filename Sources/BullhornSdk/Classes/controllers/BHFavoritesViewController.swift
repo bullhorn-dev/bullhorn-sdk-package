@@ -34,7 +34,8 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
-        
+        tableView.backgroundColor = .primaryBackground()
+
         footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
 
         configureNavigationItems()

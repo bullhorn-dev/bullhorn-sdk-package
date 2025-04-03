@@ -21,7 +21,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
         
@@ -32,7 +32,8 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
-        
+        tableView.backgroundColor = .primaryBackground()
+
         configureNavigationItems()
         
         BHDownloadsManager.shared.addListener(self)

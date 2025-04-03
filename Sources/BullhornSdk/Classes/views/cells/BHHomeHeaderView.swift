@@ -57,7 +57,9 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     }
 
     func setup(_ hasRadioStreams: Bool = true) {
-                
+        
+        contentView.backgroundColor = .primaryBackground()
+        
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self
         livePostsView.delegate = self

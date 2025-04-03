@@ -1,0 +1,731 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D904E1842B9F1ECB00DEC42A /* DropDownTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */; };
+		D904E1872B9F209300DEC42A /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D904E1862B9F209300DEC42A /* DropDownCell.swift */; };
+		D93CFD042B95CD57006B922D /* UserDefaults+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */; };
+		D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */; };
+		D94E70732D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */; };
+		D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */; };
+		D95D1A0D2D79AFA600DCB282 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A0C2D79AFA600DCB282 /* Globals.swift */; };
+		D95D1A102D79B57000DCB282 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D95D1A0F2D79B57000DCB282 /* CarPlay.framework */; };
+		D982D6BE2B4C4AD300C77130 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */; };
+		D98932342A44244B002D3CC1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932332A44244B002D3CC1 /* SettingsViewController.swift */; };
+		D98932362A442D9B002D3CC1 /* ThemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932352A442D9B002D3CC1 /* ThemesManager.swift */; };
+		D98932382A442E5E002D3CC1 /* ThemesObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932372A442E5E002D3CC1 /* ThemesObserver.swift */; };
+		D989323A2A4470C8002D3CC1 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932392A4470C8002D3CC1 /* TabBarController.swift */; };
+		D9B6353629DDFE9E00304482 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9B6353429DDFE9E00304482 /* LaunchScreen.xib */; };
+		D9B9FE442B5E59F50095AFAB /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE3F2B5E59F40095AFAB /* Roboto-Light.ttf */; };
+		D9B9FE462B5E59F50095AFAB /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE402B5E59F40095AFAB /* Roboto-Regular.ttf */; };
+		D9B9FE482B5E59F50095AFAB /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE412B5E59F40095AFAB /* Roboto-Medium.ttf */; };
+		D9B9FE4A2B5E59F50095AFAB /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE422B5E59F40095AFAB /* Roboto-Thin.ttf */; };
+		D9B9FE4C2B5E59F50095AFAB /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE432B5E59F50095AFAB /* Roboto-Bold.ttf */; };
+		D9B9FE4F2B5E5CF60095AFAB /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE4E2B5E5CF60095AFAB /* Roboto-Black.ttf */; };
+		D9C06CEE2B29E81A0088B159 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */; };
+		D9C06CF12B29E9930088B159 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */; };
+		D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */; };
+		D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */; };
+		D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */; };
+		D9C06D022B2A3DD60088B159 /* ProfileInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */; };
+		D9C06D042B2A3DD60088B159 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFF2B2A3DD60088B159 /* AuthService.swift */; };
+		D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */; };
+		D9C06D102B2A4A6D0088B159 /* FoxKitProfile in Frameworks */ = {isa = PBXBuildFile; productRef = D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */; };
+		D9C936CF2A96463500C32539 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936CE2A96463500C32539 /* LoginViewController.swift */; };
+		D9C936DA2A9667B900C32539 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936D92A9667B900C32539 /* Utils.swift */; };
+		D9C936EF2A9798AD00C32539 /* UserIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936EE2A9798AD00C32539 /* UserIconButton.swift */; };
+		D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */ = {isa = PBXBuildFile; productRef = D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */; };
+		D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884029DD5CF7002A5631 /* AppDelegate.swift */; };
+		D9D7884329DD5CF7002A5631 /* MainWindowSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */; };
+		D9D7884829DD5CF7002A5631 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884629DD5CF7002A5631 /* Main.storyboard */; };
+		D9D7884A29DD5CFA002A5631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884929DD5CFA002A5631 /* Assets.xcassets */; };
+		D9E2C5DE2B39881E005B953D /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5DD2B39881E005B953D /* SignupViewController.swift */; };
+		D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */; };
+		D9E2C5EC2B3C2E96005B953D /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */; };
+		D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */; };
+		D9FADEDC2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D9D7885729DD67C7002A5631 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9F53C342D8C245F002CB44D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownTextField.swift; sourceTree = "<group>"; };
+		D904E1862B9F209300DEC42A /* DropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
+		D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Utils.swift"; sourceTree = "<group>"; };
+		D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperModeViewController.swift; sourceTree = "<group>"; };
+		D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-ConfigPROD.xcconfig"; sourceTree = "<group>"; };
+		D94E70792D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-ConfigPROD.debug.xcconfig"; sourceTree = "<group>"; };
+		D94E707A2D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-ConfigPROD.release.xcconfig"; sourceTree = "<group>"; };
+		D9536E6C2D9BC2C9001F7970 /* VersionConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = VersionConfig.xcconfig; sourceTree = "<group>"; };
+		D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateApplicationSceneDelegate.swift; sourceTree = "<group>"; };
+		D95D1A0C2D79AFA600DCB282 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		D95D1A0F2D79B57000DCB282 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		D98932332A44244B002D3CC1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D98932352A442D9B002D3CC1 /* ThemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesManager.swift; sourceTree = "<group>"; };
+		D98932372A442E5E002D3CC1 /* ThemesObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesObserver.swift; sourceTree = "<group>"; };
+		D98932392A4470C8002D3CC1 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		D9B6353529DDFE9E00304482 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		D9B9FE3F2B5E59F40095AFAB /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		D9B9FE402B5E59F40095AFAB /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		D9B9FE412B5E59F40095AFAB /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		D9B9FE422B5E59F40095AFAB /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		D9B9FE432B5E59F50095AFAB /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		D9B9FE4E2B5E5CF60095AFAB /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
+		D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewController.swift; sourceTree = "<group>"; };
+		D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewCell.swift; sourceTree = "<group>"; };
+		D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConfig.swift; sourceTree = "<group>"; };
+		D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInformation.swift; sourceTree = "<group>"; };
+		D9C06CFF2B2A3DD60088B159 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		D9C936CE2A96463500C32539 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		D9C936D92A9667B900C32539 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		D9C936EE2A9798AD00C32539 /* UserIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIconButton.swift; sourceTree = "<group>"; };
+		D9D3FC152D6DAE1500B2E67E /* BullhornSDK-KeysConfigPROD.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-KeysConfigPROD.xcconfig"; sourceTree = "<group>"; };
+		D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BHSdkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9D7884029DD5CF7002A5631 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowSceneDelegate.swift; sourceTree = "<group>"; };
+		D9D7884729DD5CF7002A5631 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D9D7884929DD5CFA002A5631 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D9D7884E29DD5CFA002A5631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D9E2C5DD2B39881E005B953D /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
+		D9E2C5E62B3C10CB005B953D /* BullhornSdk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BullhornSdk.entitlements; sourceTree = "<group>"; };
+		D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Utils.swift"; sourceTree = "<group>"; };
+		D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailsTableViewCell.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D9D7883B29DD5CF7002A5631 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */,
+				D95D1A102D79B57000DCB282 /* CarPlay.framework in Frameworks */,
+				D9C06D102B2A4A6D0088B159 /* FoxKitProfile in Frameworks */,
+				D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D93CFD022B95CCEC006B922D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		D94E706E2D3E5AF60004D4BA /* config */ = {
+			isa = PBXGroup;
+			children = (
+				D94E70792D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.debug.xcconfig */,
+				D94E707A2D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.release.xcconfig */,
+				D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */,
+				D9D3FC152D6DAE1500B2E67E /* BullhornSDK-KeysConfigPROD.xcconfig */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		D94E70752D3E5D0A0004D4BA /* targetConfig */ = {
+			isa = PBXGroup;
+			children = (
+				D9E2C5E62B3C10CB005B953D /* BullhornSdk.entitlements */,
+				D9D7884E29DD5CFA002A5631 /* Info.plist */,
+			);
+			path = targetConfig;
+			sourceTree = "<group>";
+		};
+		D9B6371C29DE0FD500304482 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D9B9FE422B5E59F40095AFAB /* Roboto-Thin.ttf */,
+				D9B9FE3F2B5E59F40095AFAB /* Roboto-Light.ttf */,
+				D9B9FE402B5E59F40095AFAB /* Roboto-Regular.ttf */,
+				D9B9FE412B5E59F40095AFAB /* Roboto-Medium.ttf */,
+				D9B9FE432B5E59F50095AFAB /* Roboto-Bold.ttf */,
+				D9B9FE4E2B5E5CF60095AFAB /* Roboto-Black.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
+		D9C06CF92B2A3B090088B159 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */,
+				D9C936CE2A96463500C32539 /* LoginViewController.swift */,
+				D98932332A44244B002D3CC1 /* SettingsViewController.swift */,
+				D9E2C5DD2B39881E005B953D /* SignupViewController.swift */,
+				D98932392A4470C8002D3CC1 /* TabBarController.swift */,
+				D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */,
+				D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */,
+				D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		D9C06CFA2B2A3B2F0088B159 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */,
+				D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */,
+				D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */,
+				D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */,
+				D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */,
+				D9C936EE2A9798AD00C32539 /* UserIconButton.swift */,
+				D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */,
+				D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */,
+				D904E1862B9F209300DEC42A /* DropDownCell.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		D9C06CFC2B2A3D8E0088B159 /* foxAuth */ = {
+			isa = PBXGroup;
+			children = (
+				D9C06CFF2B2A3DD60088B159 /* AuthService.swift */,
+				D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */,
+				D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */,
+			);
+			path = foxAuth;
+			sourceTree = "<group>";
+		};
+		D9D787FB29DD409B002A5631 = {
+			isa = PBXGroup;
+			children = (
+				D9536E6C2D9BC2C9001F7970 /* VersionConfig.xcconfig */,
+				D9D7883F29DD5CF7002A5631 /* Client */,
+				D9D7880629DD409B002A5631 /* Products */,
+				D9D7885229DD67C7002A5631 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D9D7880629DD409B002A5631 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D9D7883F29DD5CF7002A5631 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				D94E70752D3E5D0A0004D4BA /* targetConfig */,
+				D94E706E2D3E5AF60004D4BA /* config */,
+				D9C06CFC2B2A3D8E0088B159 /* foxAuth */,
+				D9C06CFA2B2A3B2F0088B159 /* views */,
+				D9C06CF92B2A3B090088B159 /* controllers */,
+				D9B6371C29DE0FD500304482 /* fonts */,
+				D93CFD022B95CCEC006B922D /* utils */,
+				D9B6353429DDFE9E00304482 /* LaunchScreen.xib */,
+				D9D7884029DD5CF7002A5631 /* AppDelegate.swift */,
+				D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */,
+				D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */,
+				D98932352A442D9B002D3CC1 /* ThemesManager.swift */,
+				D98932372A442E5E002D3CC1 /* ThemesObserver.swift */,
+				D95D1A0C2D79AFA600DCB282 /* Globals.swift */,
+				D9C936D92A9667B900C32539 /* Utils.swift */,
+				D9D7884629DD5CF7002A5631 /* Main.storyboard */,
+				D9D7884929DD5CFA002A5631 /* Assets.xcassets */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		D9D7885229DD67C7002A5631 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */,
+				D95D1A0F2D79B57000DCB282 /* CarPlay.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D9D7883D29DD5CF7002A5631 /* BHSdkApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9D7884F29DD5CFA002A5631 /* Build configuration list for PBXNativeTarget "BHSdkApp" */;
+			buildPhases = (
+				D9D7883A29DD5CF7002A5631 /* Sources */,
+				D9D7883B29DD5CF7002A5631 /* Frameworks */,
+				D9D7883C29DD5CF7002A5631 /* Resources */,
+				D9D7885729DD67C7002A5631 /* Embed Frameworks */,
+				D9F53C342D8C245F002CB44D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D9CA69922D9E7E080066E6C5 /* PBXTargetDependency */,
+			);
+			name = BHSdkApp;
+			packageProductDependencies = (
+				D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */,
+				D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */,
+			);
+			productName = BullhornSdkTest;
+			productReference = D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D9D787FC29DD409B002A5631 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					D9D7883D29DD5CF7002A5631 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = D9D787FF29DD409B002A5631 /* Build configuration list for PBXProject "BullhornSdk" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D9D787FB29DD409B002A5631;
+			packageReferences = (
+				D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */,
+				D9536DF72D9AC7B5001F7970 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				D9536DFA2D9ACECC001F7970 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				D9536DFD2D9AD1D2001F7970 /* XCRemoteSwiftPackageReference "SwiftMessages" */,
+				D9536E002D9AD5EE001F7970 /* XCRemoteSwiftPackageReference "Cosmos" */,
+				D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */,
+			);
+			productRefGroup = D9D7880629DD409B002A5631 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D9D7883D29DD5CF7002A5631 /* BHSdkApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D9D7883C29DD5CF7002A5631 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9B9FE482B5E59F50095AFAB /* Roboto-Medium.ttf in Resources */,
+				D9B9FE4C2B5E59F50095AFAB /* Roboto-Bold.ttf in Resources */,
+				D9D7884A29DD5CFA002A5631 /* Assets.xcassets in Resources */,
+				D9B9FE4A2B5E59F50095AFAB /* Roboto-Thin.ttf in Resources */,
+				D9B6353629DDFE9E00304482 /* LaunchScreen.xib in Resources */,
+				D9B9FE4F2B5E5CF60095AFAB /* Roboto-Black.ttf in Resources */,
+				D94E70732D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig in Resources */,
+				D9B9FE462B5E59F50095AFAB /* Roboto-Regular.ttf in Resources */,
+				D9B9FE442B5E59F50095AFAB /* Roboto-Light.ttf in Resources */,
+				D9D7884829DD5CF7002A5631 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D9D7883A29DD5CF7002A5631 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */,
+				D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */,
+				D982D6BE2B4C4AD300C77130 /* AccountViewController.swift in Sources */,
+				D9C936CF2A96463500C32539 /* LoginViewController.swift in Sources */,
+				D904E1872B9F209300DEC42A /* DropDownCell.swift in Sources */,
+				D9E2C5DE2B39881E005B953D /* SignupViewController.swift in Sources */,
+				D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */,
+				D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */,
+				D904E1842B9F1ECB00DEC42A /* DropDownTextField.swift in Sources */,
+				D93CFD042B95CD57006B922D /* UserDefaults+Utils.swift in Sources */,
+				D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */,
+				D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */,
+				D95D1A0D2D79AFA600DCB282 /* Globals.swift in Sources */,
+				D9C06D042B2A3DD60088B159 /* AuthService.swift in Sources */,
+				D9C936EF2A9798AD00C32539 /* UserIconButton.swift in Sources */,
+				D9D7884329DD5CF7002A5631 /* MainWindowSceneDelegate.swift in Sources */,
+				D989323A2A4470C8002D3CC1 /* TabBarController.swift in Sources */,
+				D9FADEDC2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift in Sources */,
+				D9C936DA2A9667B900C32539 /* Utils.swift in Sources */,
+				D9C06CEE2B29E81A0088B159 /* SettingsTableViewCell.swift in Sources */,
+				D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */,
+				D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */,
+				D9C06D022B2A3DD60088B159 /* ProfileInformation.swift in Sources */,
+				D9E2C5EC2B3C2E96005B953D /* AuthViewController.swift in Sources */,
+				D98932382A442E5E002D3CC1 /* ThemesObserver.swift in Sources */,
+				D9C06CF12B29E9930088B159 /* AccountTableViewCell.swift in Sources */,
+				D98932342A44244B002D3CC1 /* SettingsViewController.swift in Sources */,
+				D98932362A442D9B002D3CC1 /* ThemesManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D9CA69922D9E7E080066E6C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = D9CA69912D9E7E080066E6C5 /* BullhornSdk */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D9B6353429DDFE9E00304482 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9B6353529DDFE9E00304482 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		D9D7884629DD5CF7002A5631 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9D7884729DD5CF7002A5631 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D9D7880C29DD409B002A5631 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D9D7880D29DD409B002A5631 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D9D7885029DD5CFA002A5631 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D94E70792D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconFox;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(CODE_SIGN_ENTITLEMENTS)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "$(APP_BUNDLE_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = SD9W4LL7A2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Client/targetConfig/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Fox Podcasts";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "$(APP_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wydevoice.Bullhorn-SDK";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bullhorn SDK CarPlay Dev";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "";
+			};
+			name = Debug;
+		};
+		D9D7885129DD5CFA002A5631 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D94E707A2D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconFox;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(CODE_SIGN_ENTITLEMENTS)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "$(APP_BUNDLE_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = SD9W4LL7A2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Client/targetConfig/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Fox Podcasts";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "$(APP_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wydevoice.Bullhorn-SDK";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "com.wydevoice.bullhorn-sdk.carplay";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D9D787FF29DD409B002A5631 /* Build configuration list for PBXProject "BullhornSdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9D7880C29DD409B002A5631 /* Debug */,
+				D9D7880D29DD409B002A5631 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9D7884F29DD5CFA002A5631 /* Build configuration list for PBXNativeTarget "BHSdkApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9D7885029DD5CFA002A5631 /* Debug */,
+				D9D7885129DD5CFA002A5631 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D9536DF72D9AC7B5001F7970 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.8.1;
+			};
+		};
+		D9536DFA2D9ACECC001F7970 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.0;
+			};
+		};
+		D9536DFD2D9AD1D2001F7970 /* XCRemoteSwiftPackageReference "SwiftMessages" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftKickMobile/SwiftMessages.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.1;
+			};
+		};
+		D9536E002D9AD5EE001F7970 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
+		D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/foxcorp/foxkit-profile-ios-tvos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.15.0;
+			};
+		};
+		D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bullhorn-dev/bullhorn-sdk-package.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */;
+			productName = FoxKitProfile;
+		};
+		D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */;
+			productName = BullhornSdk;
+		};
+		D9CA69912D9E7E080066E6C5 /* BullhornSdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */;
+			productName = BullhornSdk;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D9D787FC29DD409B002A5631 /* Project object */;
+}

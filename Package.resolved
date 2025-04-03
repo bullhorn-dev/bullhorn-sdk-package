@@ -20,6 +20,24 @@
         }
       },
       {
+        "package": "FoxKitCommon",
+        "repositoryURL": "https://github.com/foxcorp/foxkit-lib-common-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "29d227f2a5d04cdc6771e8cf7bea3990ebfaf643",
+          "version": "3.7.0"
+        }
+      },
+      {
+        "package": "FoxKitProfile",
+        "repositoryURL": "https://github.com/foxcorp/foxkit-profile-ios-tvos.git",
+        "state": {
+          "branch": null,
+          "revision": "b62ed12ce4697c77ab8c0dd328169adbea7ae817",
+          "version": "2.30.0"
+        }
+      },
+      {
         "package": "SDWebImage",
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {

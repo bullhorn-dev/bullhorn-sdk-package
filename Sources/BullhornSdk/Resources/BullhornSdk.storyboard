@@ -26,7 +26,7 @@
         <!--Player View Controller-->
         <scene sceneID="Tcj-JK-4KM">
             <objects>
-                <viewController storyboardIdentifier="BHPlayerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H3L-AM-K5q" customClass="BHPlayerViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHPlayerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H3L-AM-K5q" customClass="BHPlayerViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="S6S-xE-4fC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -114,7 +114,7 @@
                                                         <rect key="frame" x="0.0" y="-22" width="390" height="523"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </imageView>
-                                                    <view hidden="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="WGY-KG-0b7" customClass="BHMediaVideoView" customModule="BullhornSdk" customModuleProvider="target">
+                                                    <view hidden="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="WGY-KG-0b7" customClass="BHMediaVideoView" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="44.666666666666657" width="390" height="390"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -252,7 +252,7 @@
                                                                             <action selector="onPreviousButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="X4h-yc-9MV"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sip-qC-siB" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sip-qC-siB" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                                                         <rect key="frame" x="48" y="10" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
@@ -410,7 +410,7 @@
         <!--Home-->
         <scene sceneID="hlX-Gp-Cxg">
             <objects>
-                <viewController storyboardIdentifier="BullhornSdkHomeRootID" title="Home" id="U2I-TR-bcv" customClass="BHHomeViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BullhornSdkHomeRootID" title="Home" id="U2I-TR-bcv" customClass="BHHomeViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jfr-Ob-5pR">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -426,7 +426,7 @@
                                             <outlet property="delegate" destination="U2I-TR-bcv" id="7F2-4g-jLp"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g36-m7-2vo" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g36-m7-2vo" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="703" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -440,7 +440,7 @@
                                     <constraint firstAttribute="trailing" secondItem="g36-m7-2vo" secondAttribute="trailing" id="w0X-yo-nIF"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvm-3y-KYh" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvm-3y-KYh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="407" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -483,7 +483,7 @@
         <!--User Details-->
         <scene sceneID="hdB-Gy-d99">
             <objects>
-                <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" hidesBottomBarWhenPushed="YES" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" hidesBottomBarWhenPushed="YES" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VXZ-pS-Kzd">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -499,7 +499,7 @@
                                             <outlet property="delegate" destination="bIr-LV-sBK" id="hxB-GU-B1o"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KVy-WU-Zhy" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KVy-WU-Zhy" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
@@ -515,7 +515,7 @@
                                     <constraint firstItem="7Ug-Ge-1oP" firstAttribute="top" secondItem="Mem-fg-Z6d" secondAttribute="top" id="dJl-NI-EnP"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z62-Mf-z45" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z62-Mf-z45" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="402" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -567,7 +567,7 @@
         <!--Post Details-->
         <scene sceneID="7H0-aY-EL8">
             <objects>
-                <viewController storyboardIdentifier="BHPostDetailsViewController" title="Post Details" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TEG-MA-Hda" customClass="BHPostDetailsViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHPostDetailsViewController" title="Post Details" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TEG-MA-Hda" customClass="BHPostDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jhH-2Z-9e5">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -583,7 +583,7 @@
                                             <outlet property="delegate" destination="TEG-MA-Hda" id="xm3-Gp-Oxq"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27V-cL-2AF" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27V-cL-2AF" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -599,7 +599,7 @@
                                     <constraint firstItem="27V-cL-2AF" firstAttribute="leading" secondItem="ylv-B0-sUz" secondAttribute="leading" id="jeL-Y5-RsY"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bYr-AN-UN3" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bYr-AN-UN3" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="402" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -649,7 +649,7 @@
         <!--Downloads-->
         <scene sceneID="Eyn-fP-r8X">
             <objects>
-                <viewController storyboardIdentifier="BHDownloadsViewController" title="Downloads" hidesBottomBarWhenPushed="YES" id="cko-RD-0fW" customClass="BHDownloadsViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHDownloadsViewController" title="Downloads" hidesBottomBarWhenPushed="YES" id="cko-RD-0fW" customClass="BHDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="les-XU-KcI">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -665,7 +665,7 @@
                                             <outlet property="delegate" destination="cko-RD-0fW" id="yFu-QU-CZi"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOX-I5-OX6" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOX-I5-OX6" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -681,7 +681,7 @@
                                     <constraint firstItem="BkJ-nH-gI2" firstAttribute="leading" secondItem="gm6-L4-S2g" secondAttribute="leading" id="rnX-YC-Dg4"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nCy-30-Njk" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nCy-30-Njk" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="402" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -774,11 +774,11 @@
                                                             <constraint firstAttribute="height" constant="47" id="JFm-eA-NRX"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk" customModuleProvider="target">
+                                                    <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="47" width="390" height="139"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="186" width="390" height="550.33333333333337"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -806,11 +806,11 @@
                                                             <constraint firstAttribute="height" constant="47" id="Vcr-Qc-Egf"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
+                                                    <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
                                                         <rect key="frame" x="0.0" y="47" width="390" height="344.66666666666669"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="391.66666666666663" width="390" height="344.66666666666663"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -870,7 +870,7 @@
                                                                             <constraint firstAttribute="width" constant="50" id="hlp-6b-8Af"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="AVRoutePickerView" customModule="BullhornSdk" customModuleProvider="target">
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="AVRoutePickerView">
                                                                         <rect key="frame" x="286" y="0.0" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1069,7 +1069,7 @@
                                                     <constraint firstItem="Ctc-KZ-Oxf" firstAttribute="leading" secondItem="fVd-sW-hzf" secondAttribute="leadingMargin" constant="8" id="tfd-eA-BQJ"/>
                                                 </constraints>
                                             </view>
-                                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XzN-Nb-aJp" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XzN-Nb-aJp" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                                 <rect key="frame" x="180" y="368" width="30" height="30"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -1104,7 +1104,7 @@
                                             <constraint firstItem="CpR-df-7yi" firstAttribute="top" secondItem="Sju-uH-8lj" secondAttribute="top" id="mRV-Jm-aFj"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sio-JJ-vAg" customClass="BHTabbedView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sio-JJ-vAg" customClass="BHTabbedView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="766.33333333333337" width="390" height="44"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -1187,7 +1187,7 @@
         <!--Favorites-->
         <scene sceneID="Red-8c-gTz">
             <objects>
-                <viewController restorationIdentifier="BHFavoritesViewController" storyboardIdentifier="BHFavoritesViewController" title="Favorites" hidesBottomBarWhenPushed="YES" id="ISO-h0-mfF" customClass="BHFavoritesViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHFavoritesViewController" storyboardIdentifier="BHFavoritesViewController" title="Favorites" hidesBottomBarWhenPushed="YES" id="ISO-h0-mfF" customClass="BHFavoritesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MhH-QD-bJf">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1203,7 +1203,7 @@
                                             <outlet property="delegate" destination="ISO-h0-mfF" id="WP9-hm-Mte"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="maS-jn-QN0" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="maS-jn-QN0" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
@@ -1219,7 +1219,7 @@
                                     <constraint firstItem="kny-WC-ICj" firstAttribute="top" secondItem="5Lh-fH-nUd" secondAttribute="top" id="vSJ-aj-ubk"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23m-8b-mZx" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23m-8b-mZx" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="402" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1271,7 +1271,7 @@
         <!--Radio-->
         <scene sceneID="Bc1-rf-bte">
             <objects>
-                <viewController storyboardIdentifier="BullhornSdkRadioRootID" title="Radio" id="Kuw-Kf-N3G" customClass="BHRadioViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BullhornSdkRadioRootID" title="Radio" id="Kuw-Kf-N3G" customClass="BHRadioViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="c7K-M3-nor">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1287,7 +1287,7 @@
                                             <outlet property="delegate" destination="Kuw-Kf-N3G" id="mSD-dq-huS"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mh4-rh-oZY" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mh4-rh-oZY" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="703" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -1301,7 +1301,7 @@
                                     <constraint firstAttribute="trailing" secondItem="Mh4-rh-oZY" secondAttribute="trailing" id="xFh-Sh-c5I"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nth-N3-jin" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nth-N3-jin" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="407" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1342,7 +1342,7 @@
         <!--Explore-->
         <scene sceneID="AMX-2w-0tH">
             <objects>
-                <viewController storyboardIdentifier="BullhornSdkExploreRootID" title="Explore" id="HPf-bp-eMy" customClass="BHExploreViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BullhornSdkExploreRootID" title="Explore" id="HPf-bp-eMy" customClass="BHExploreViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sc4-I5-jUa">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1358,7 +1358,7 @@
                                             <outlet property="delegate" destination="HPf-bp-eMy" id="4z4-pK-jbB"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bPM-md-aT4" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bPM-md-aT4" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="703" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -1372,7 +1372,7 @@
                                     <constraint firstAttribute="trailing" secondItem="bPM-md-aT4" secondAttribute="trailing" id="jSH-Im-O5l"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UMW-vt-xHN" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UMW-vt-xHN" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="407" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1416,7 +1416,7 @@
         <!--Profile-->
         <scene sceneID="Yt7-wN-Qus">
             <objects>
-                <viewController storyboardIdentifier="BullhornSdkProfileRootID" title="Profile" id="NwB-ET-QYs" customClass="BHProfileViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BullhornSdkProfileRootID" title="Profile" id="NwB-ET-QYs" customClass="BHProfileViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zgx-FO-0Ig">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1432,7 +1432,7 @@
                                         <color key="sectionIndexColor" name="bhColorPrimary"/>
                                         <color key="sectionIndexBackgroundColor" name="bhColorSecondaryBg"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHAccountCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHAccountCell" rowHeight="84" id="YKU-m9-Tla" customClass="BHAccountCell" customModule="BullhornSdk" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHAccountCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHAccountCell" rowHeight="84" id="YKU-m9-Tla" customClass="BHAccountCell" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="50" width="390" height="84"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YKU-m9-Tla" id="yib-kO-RWb">
@@ -1504,7 +1504,7 @@
                                                     <outlet property="titleLabel" destination="5F6-Zi-dYv" id="heZ-6D-Qzh"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingCell" rowHeight="55" id="MZf-Mj-2s5" customClass="BHSettingCell" customModule="BullhornSdk" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingCell" rowHeight="55" id="MZf-Mj-2s5" customClass="BHSettingCell" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="134" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MZf-Mj-2s5" id="d40-JB-iWd">
@@ -1537,7 +1537,7 @@
                                                     <outlet property="titleLabel" destination="TYL-y4-pHN" id="7NA-61-SFy"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingDetailsCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingDetailsCell" id="jyT-Hh-OPa" customClass="BHSettingDetailsCell" customModule="BullhornSdk" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingDetailsCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingDetailsCell" id="jyT-Hh-OPa" customClass="BHSettingDetailsCell" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="189" width="390" height="74"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jyT-Hh-OPa" id="vL1-zA-3te">
@@ -1587,7 +1587,7 @@
                                         <color key="textColor" name="bhColorSecondary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lQ-5O-eTP" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lQ-5O-eTP" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="703" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
@@ -1629,7 +1629,7 @@
         <!--Recent Users-->
         <scene sceneID="04n-RI-syS">
             <objects>
-                <viewController storyboardIdentifier="BHRecentUsersViewController" title="Recent Users" hidesBottomBarWhenPushed="YES" id="vEi-jC-e0X" customClass="BHRecentUsersViewController" customModule="BullhornSdk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHRecentUsersViewController" title="Recent Users" hidesBottomBarWhenPushed="YES" id="vEi-jC-e0X" customClass="BHRecentUsersViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yIY-X3-kd5">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1645,7 +1645,7 @@
                                             <outlet property="delegate" destination="vEi-jC-e0X" id="qtY-zX-WUc"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yk5-Zz-UKd" customClass="BHMiniPlayerView" customModule="BullhornSdk" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yk5-Zz-UKd" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
@@ -1661,7 +1661,7 @@
                                     <constraint firstAttribute="bottom" secondItem="yk5-Zz-UKd" secondAttribute="bottom" id="pHh-ME-y1T"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GA1-ot-eO8" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GA1-ot-eO8" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                                 <rect key="frame" x="180" y="402" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1712,8 +1712,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="4Qk-s4-pJO"/>
-        <segue reference="spw-UD-OVc"/>
+        <segue reference="W9h-Db-Gfg"/>
+        <segue reference="maU-b5-W5G"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>
@@ -1723,7 +1723,7 @@
         <image name="forward.end" catalog="system" width="128" height="112"/>
         <image name="gobackward.15" catalog="system" width="119" height="128"/>
         <image name="goforward.15" catalog="system" width="119" height="128"/>
-        <image name="ic_avatar_placeholder.png" width="512" height="512"/>
+        <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1759,10 +1759,10 @@
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

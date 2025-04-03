@@ -31,6 +31,15 @@ let package = Package(
                 .copy("Resources/PrivacyInfo.xcprivacy"),
                 .copy("Resources/Bullhorn.xcdatamodeld"),
                 .copy("Resources/BullhornSdk.storyboard"),
+                .copy("Resources/images/ic_avatar_placeholder.png"),
+                .copy("Resources/images/ic_radio_placeholder.png"),
+                .copy("Resources/images/ic_list_placeholder.png"),
+                .copy("Resources/images/ic_tile_placeholder.png"),
+                .copy("Resources/images/ic_downloads_placeholder.png"),
+                .copy("Resources/images/ic_connection_lost.png"),
+                .copy("Resources/images/carplay-home.png"),
+                .copy("Resources/images/carplay-radio.png"),
+                .copy("Resources/images/carplay-downloads.png"),
             ]),
     ]
 )

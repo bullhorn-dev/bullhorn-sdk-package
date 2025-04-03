@@ -30,6 +30,7 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         tableView.register(radioCellNib, forCellReuseIdentifier: BHRadioCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHRadioHeaderView.reusableIndentifer) as? BHRadioHeaderView
         headerView?.initialize()

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -20,7 +20,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHPollVariantCell" rowHeight="40" id="VA7-jD-EbG" customClass="BHPollVariantCell" customModule="BullhornSdk" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHPollVariantCell" rowHeight="40" id="VA7-jD-EbG" customClass="BHPollVariantCell" customModule="BullhornSdk">
             <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VA7-jD-EbG" id="EkE-T0-E0K">
@@ -75,7 +75,7 @@
                         <color key="textColor" name="bhColorPlayerOnDisplayBg"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E6E-3A-S9Y" customClass="BHActivityIndicatorView" customModule="BullhornSdk" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E6E-3A-S9Y" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
                         <rect key="frame" x="358" y="8" width="24" height="24"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>

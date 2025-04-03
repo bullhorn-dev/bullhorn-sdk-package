@@ -15,7 +15,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHRadioCell" rowHeight="201" id="lHJ-6X-D7B" customClass="BHRadioCell" customModule="BullhornSdk" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHRadioCell" rowHeight="201" id="lHJ-6X-D7B" customClass="BHRadioCell" customModule="BullhornSdk">
             <rect key="frame" x="0.0" y="0.0" width="397" height="201"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lHJ-6X-D7B" id="rdJ-JM-pVC">
@@ -53,7 +53,7 @@
                                                         <color key="textColor" name="bhColorPrimary"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gel-lK-mAZ" customClass="BHPlayButton" customModule="BullhornSdk" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gel-lK-mAZ" customClass="BHPlayButton" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="71" width="160.33333333333334" height="36"/>
                                                         <color key="backgroundColor" name="bhColorAccent"/>
                                                         <constraints>
@@ -105,7 +105,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_radio_placeholder.png" width="512" height="340"/>
+        <image name="ic_radio_placeholder.png" width="640" height="358"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

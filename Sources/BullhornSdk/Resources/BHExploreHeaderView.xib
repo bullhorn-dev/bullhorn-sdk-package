@@ -16,7 +16,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHExploreHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHExploreHeaderView" rowHeight="588" id="wk1-wC-qQd" customClass="BHExploreHeaderView" customModule="BullhornSdk" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHExploreHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHExploreHeaderView" rowHeight="588" id="wk1-wC-qQd" customClass="BHExploreHeaderView" customModule="BullhornSdk">
             <rect key="frame" x="0.0" y="0.0" width="474" height="588"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wk1-wC-qQd" id="mCl-FO-1hE">
@@ -58,7 +58,7 @@
                                     <constraint firstAttribute="trailing" secondItem="clM-PB-7yw" secondAttribute="trailing" constant="16" id="q8h-35-5je"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oYR-ET-mF0" customClass="BHUsersCarouselView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oYR-ET-mF0" customClass="BHUsersCarouselView" customModule="BullhornSdk">
                                 <rect key="frame" x="0.0" y="44" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
@@ -82,7 +82,7 @@
                                     <constraint firstAttribute="height" constant="44" id="qbR-CS-w1V"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lkt-zb-uE3" customClass="BHUsersCarouselView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lkt-zb-uE3" customClass="BHUsersCarouselView" customModule="BullhornSdk">
                                 <rect key="frame" x="0.0" y="222" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
@@ -109,14 +109,14 @@
                                     <constraint firstAttribute="height" constant="44" id="UIe-Am-JTE"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gnb-9U-gD1" customClass="BHPagedCarouselView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gnb-9U-gD1" customClass="BHPagedCarouselView" customModule="BullhornSdk">
                                 <rect key="frame" x="0.0" y="400" width="474" height="144"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="Lt5-Yh-I0x"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
                                 <rect key="frame" x="0.0" y="544" width="474" height="44"/>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                                 <constraints>

@@ -18,7 +18,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHUserCell" rowHeight="120" id="lHJ-6X-D7B" customClass="BHUserCell" customModule="BullhornSdk" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHUserCell" rowHeight="120" id="lHJ-6X-D7B" customClass="BHUserCell" customModule="BullhornSdk">
             <rect key="frame" x="0.0" y="0.0" width="390" height="120"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lHJ-6X-D7B" id="rdJ-JM-pVC">
@@ -109,7 +109,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_avatar_placeholder.png" width="512" height="512"/>
+        <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
         <namedColor name="bhColorCardBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

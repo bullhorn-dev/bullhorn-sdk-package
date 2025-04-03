@@ -1,0 +1,11 @@
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+AUTH_ACCESS_TOKEN = XulkjdoijhwalkdjlaksjdasdasdNzjo1ijdkajsdlkajsdiojal
+AUTH_API_KEY = 917ac1f33aa4938858532912ba19dca2
+AUTH_PREFERENCES_API_KEY = 2vmlllt8-h2vq-2c6c-ww9o-q66f06mets4w
+AUTH_APP_ID = BullhornSDK-iOS
+AUTH_NETWORK_ID = 540ea6c1-7e9c-4e2e-b3e0-09a5b1c378cd
+
+BH_SDK_ID = 50cf5b12-409e-41d0-a2b7-6c7b3296e8e4

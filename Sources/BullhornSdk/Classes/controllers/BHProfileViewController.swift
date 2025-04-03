@@ -64,6 +64,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
         tableView.register(accountCellNib, forHeaderFooterViewReuseIdentifier: BHAccountCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         updateVersion()
 
