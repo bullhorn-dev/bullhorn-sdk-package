@@ -117,7 +117,7 @@ public class BullhornSdk: NSObject {
         } else {
             externalUser = sdkUser
             BHTracker.shared.start(with: clientId)
-            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+//            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
         }
         
         BHDownloadsManager.shared.fetchStorageItems()
@@ -131,7 +131,7 @@ public class BullhornSdk: NSObject {
             case .success(account: let account):
                 self.externalUser = sdkUser
                 NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
-                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+//                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
                 completion(.success(user: account.user))
             case .failure(error: let error):
                 completion(.failure(error: error.localizedDescription))
