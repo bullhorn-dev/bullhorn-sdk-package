@@ -75,7 +75,7 @@ class BHLivePostCarouselCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
 
         cntView.addSubview(imageView)

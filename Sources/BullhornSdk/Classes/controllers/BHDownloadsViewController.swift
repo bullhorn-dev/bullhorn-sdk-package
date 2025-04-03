@@ -25,7 +25,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         
         tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
@@ -101,7 +101,7 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if BHDownloadsManager.shared.items.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle(for: Self.self)
+            let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 
             tableView.setEmptyMessage("No episode downloaded yet", image: image)

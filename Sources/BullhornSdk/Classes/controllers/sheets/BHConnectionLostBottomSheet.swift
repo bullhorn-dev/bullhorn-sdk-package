@@ -20,7 +20,7 @@ final class BHConnectionLostBottomSheet: BHBottomSheetController {
 
         // image
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_connection_lost.png", in: bundle, with: nil)
         
         imageView = UIImageView(frame: .zero)
@@ -101,7 +101,7 @@ final class BHConnectionLostBottomSheet: BHBottomSheetController {
     @objc private func onAcceptPress(_ sender: Any) {
         dismiss(animated: true)
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
         let viewController = storyboard.instantiateViewController(withIdentifier: BHDownloadsViewController.storyboardIndentifer)
 

@@ -64,7 +64,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         collapseButton.setTitle("", for: .normal)
         collapseButton.tintColor = .tertiary()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let headerNib = UINib(nibName: "BHDetailsHeaderView", bundle: bundle)
         let postCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHDetailsHeaderView.reusableIndentifer)
@@ -290,7 +290,7 @@ extension BHInteractivePlayerViewController: UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 
         switch selectedTab {

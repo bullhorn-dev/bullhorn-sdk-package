@@ -33,7 +33,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let gridCellNib = UINib(nibName: "BHUsersGridCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHHomeHeaderView", bundle: bundle)
@@ -301,7 +301,7 @@ extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
         switch selectedTab {

@@ -22,7 +22,7 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let radioCellNib = UINib(nibName: "BHRadioCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHRadioHeaderView", bundle: bundle)
 
@@ -162,7 +162,7 @@ extension BHRadioViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
         if BHRadioStreamsManager.shared.otherRadios.count < 1 && !activityIndicator.isAnimating {

@@ -30,6 +30,7 @@ let package = Package(
             resources: [
                 .copy("Resources/PrivacyInfo.xcprivacy"),
                 .copy("Resources/Bullhorn.xcdatamodeld"),
+                .copy("Resources/BullhornSdk.storyboard"),
             ]),
     ]
 )

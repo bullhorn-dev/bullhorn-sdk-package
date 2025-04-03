@@ -27,7 +27,7 @@ class BHFeedEventsPlayableContentProvider: BHPlayableContentProvider {
     // MARK: - Private
 
     fileprivate func convertEvents(_ posts: [BHPost]) -> [CPListItem] {
-        return posts.map { $0.toCPListItem(with: Bundle(for: Self.self)) }
+        return posts.map { $0.toCPListItem(with: Bundle.module) }
     }
 
     fileprivate func feedEventsFilterMethod() -> (BHPost) -> Bool {
@@ -37,7 +37,7 @@ class BHFeedEventsPlayableContentProvider: BHPlayableContentProvider {
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle(for: Self.self))
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module)
     }
 
     func loadItems() {

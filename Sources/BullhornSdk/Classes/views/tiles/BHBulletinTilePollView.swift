@@ -8,7 +8,7 @@ class BHBulletinTilePollView: BHBulletinTileBaseView {
     override init(with tile: BHBulletinTile) {
         super.init(with: tile)
                 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let nib = UINib(nibName: "BHPollVariantCell", bundle: bundle)
         tableView.register(nib, forCellReuseIdentifier: BHPollVariantCell.reusableIndentifer)
 

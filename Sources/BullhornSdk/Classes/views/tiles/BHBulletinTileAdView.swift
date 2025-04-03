@@ -13,7 +13,7 @@ class BHBulletinTileAdView: BHBulletinTileBaseView {
     override init(with tile: BHBulletinTile) {
         super.init(with: tile)
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_tile_placeholder.png", in: bundle, with: nil)
 
         imageView.contentMode = .scaleAspectFit

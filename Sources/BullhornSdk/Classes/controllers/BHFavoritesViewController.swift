@@ -26,7 +26,7 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
@@ -172,7 +172,7 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if feedManager.favorites.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle(for: Self.self)
+            let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
 

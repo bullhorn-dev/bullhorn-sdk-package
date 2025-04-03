@@ -28,13 +28,13 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
     // MARK: - Private
 
     fileprivate func convertDownloadItems(_ downloadItems: [BHDownloadItem]) -> [CPListItem] {
-        return downloadItems.map { $0.post.toCPListItem(with: Bundle(for: Self.self)) }
+        return downloadItems.map { $0.post.toCPListItem(with: Bundle.module) }
     }
 
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle(for: Self.self))
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module)
     }
 
     func loadItems() {

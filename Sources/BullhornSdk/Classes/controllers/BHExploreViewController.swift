@@ -34,7 +34,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHExploreHeaderView", bundle: bundle)
@@ -312,7 +312,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             return 0
         }
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
         switch selectedTab {

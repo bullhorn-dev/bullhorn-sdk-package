@@ -85,7 +85,7 @@ class BHPlayerContainingViewController: UIViewController {
 
         movin = Movin(0.8, TimingCurve(curve: .easeInOut, dampingRatio: 1.0))
                 
-        let bundle = isInteractive ? Bundle(for: BHInteractivePlayerViewController.self) : Bundle(for: BHPlayerViewController.self)
+        let bundle = Bundle.module
         let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
         let identifier = isInteractive ? BHInteractivePlayerViewController.storyboardIndentifer : BHPlayerViewController.storyboardIndentifer
         let modal = storyboard.instantiateViewController(withIdentifier: identifier) as! BHPlayerBaseViewController

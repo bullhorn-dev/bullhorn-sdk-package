@@ -54,7 +54,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let settingsCellNib = UINib(nibName: "BHSettingCell", bundle: bundle)
         let detailsCellNib = UINib(nibName: "BHSettingDetailsCell", bundle: bundle)
         let accountCellNib = UINib(nibName: "BHAccountCell", bundle: bundle)

@@ -32,7 +32,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
         let postCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHPostHeaderView", bundle: bundle)
@@ -181,7 +181,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             return 1
         case .related:
             if postsManager.recommendedUsers.count == 0 {
-                let bundle = Bundle(for: Self.self)
+                let bundle = Bundle.module
                 let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 
                 tableView.setEmptyMessage("There are no similar podcasts", image: image, topOffset: (headerView?.calculateHeight() ?? 120) / 2)

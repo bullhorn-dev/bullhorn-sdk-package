@@ -104,7 +104,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         
         contentView.backgroundColor = .primaryBackground()
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
 
         imageView.addSubview(playButton)

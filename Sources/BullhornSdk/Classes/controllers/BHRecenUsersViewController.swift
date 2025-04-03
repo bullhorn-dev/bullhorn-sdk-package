@@ -24,7 +24,7 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
@@ -172,7 +172,7 @@ extension BHRecentUsersViewController: UITableViewDataSource, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if BHExploreManager.shared.recentUsers.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle(for: Self.self)
+            let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
 

@@ -15,7 +15,7 @@ class BHUsersGridCell: UITableViewCell {
     
     private func initCollectionView() {
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         collectionViewController = BHGridCollectionController(nibName: String(describing: BHGridCollectionController.self), bundle: bundle)
         
         collectionViewController.didLayoutAction = updateRowHeight

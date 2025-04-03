@@ -62,7 +62,7 @@ class BHStreamCarouselCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_radio_placeholder.png", in: bundle, with: nil)
 
         let stackView = UIStackView(arrangedSubviews: [nameLabel, imageView])

@@ -265,7 +265,7 @@ class BHPostCell: UITableViewCell {
     // MARK: - Private
     
     fileprivate func initialize() {
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
         
         BHHybridPlayer.shared.addListener(self)

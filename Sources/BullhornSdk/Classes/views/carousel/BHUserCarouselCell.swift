@@ -64,7 +64,7 @@ class BHUserCarouselCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        let bundle = Bundle(for: Self.self)
+        let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
 
         let stackView = UIStackView(arrangedSubviews: [imageView, nameLabel, categoryLabel])
