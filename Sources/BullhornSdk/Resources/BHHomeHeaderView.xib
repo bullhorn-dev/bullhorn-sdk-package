@@ -152,13 +152,17 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="featuredPostsTitle" destination="9JJ-Re-G9v" id="06Y-Ch-iQ3"/>
+                <outlet property="featuredPostsTitleLabel" destination="0dA-pw-ZZb" id="2cu-xn-t91"/>
                 <outlet property="featuredPostsView" destination="gnb-9U-gD1" id="HCp-u5-bpJ"/>
                 <outlet property="featuredUsersTitle" destination="tj6-ZT-g6Q" id="0On-dn-wnv"/>
+                <outlet property="featuredUsersTitleLabel" destination="hC1-Lp-Gd1" id="goq-RA-7en"/>
                 <outlet property="featuredUsersView" destination="Lkt-zb-uE3" id="e4Y-ZA-b2L"/>
                 <outlet property="livePostsTitle" destination="qA9-BX-8vU" id="ee3-pI-xWC"/>
+                <outlet property="livePostsTitleLabel" destination="4Cu-dC-9Wz" id="l4w-HW-xGE"/>
                 <outlet property="livePostsView" destination="99C-91-bXk" id="vLG-5Z-ZJN"/>
                 <outlet property="radioStreamsView" destination="aI9-ia-iE0" id="U1r-wH-wdQ"/>
                 <outlet property="scheduledPostsTitle" destination="Jcp-Se-jL4" id="xTd-Ka-Uzb"/>
+                <outlet property="scheduledPostsTitleLabel" destination="pAH-V7-E8J" id="IMw-ft-gbh"/>
                 <outlet property="scheduledPostsView" destination="Wr1-qx-pH2" id="SQD-Eh-kND"/>
                 <outlet property="tabbedView" destination="eji-UJ-jlI" id="2wt-vs-rUf"/>
             </connections>
@@ -173,13 +177,13 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

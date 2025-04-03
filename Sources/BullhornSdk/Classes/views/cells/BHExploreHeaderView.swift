@@ -26,11 +26,14 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
     class var reusableIndentifer: String { return String(describing: self) }
     
     @IBOutlet weak var recentUsersTitle: UIView!
+    @IBOutlet weak var recentUsersTitleLabel: UILabel!
     @IBOutlet weak var seeAllRecentsButton: UIButton!
     @IBOutlet weak var recentUsersView: BHUsersCarouselView!
     @IBOutlet weak var featuredUsersTitle: UIView!
+    @IBOutlet weak var featuredUsersTitleLabel: UILabel!
     @IBOutlet weak var featuredUsersView: BHUsersCarouselView!
     @IBOutlet weak var featuredPostsTitle: UIView!
+    @IBOutlet weak var featuredPostsTitleLabel: UILabel!
     @IBOutlet weak var featuredPostsView: BHPagedCarouselView!
     @IBOutlet weak var tabbedView: BHTabbedView!
     
@@ -62,11 +65,17 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
     }
 
     func setup(_ searchActive: Bool) {
-                
+        
+        contentView.backgroundColor = .primaryBackground()
+
         recentUsersView.delegate = self
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self
-        
+
+        recentUsersTitleLabel.textColor = .primary()
+        featuredUsersTitleLabel.textColor = .primary()
+        featuredPostsTitleLabel.textColor = .primary()
+
         seeAllRecentsButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 15)
         seeAllRecentsButton.backgroundColor = .clear
         seeAllRecentsButton.tintColor = .accent()

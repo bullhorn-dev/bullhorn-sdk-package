@@ -35,13 +35,15 @@ class BHRadioCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        contentView.backgroundColor = .primaryBackground()
+
         let shadowColor = UIColor.shadow().withAlphaComponent(0.5)
-    
         shadowView.layer.cornerRadius = 8
         shadowView.layer.shadowColor = shadowColor.cgColor
         shadowView.layer.shadowOpacity = 0.5
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowRadius = 4
+        shadowView.backgroundColor = .cardBackground()
 
         streamIcon.layer.cornerRadius = 8
         streamIcon.layer.borderColor = UIColor.tertiary().cgColor
@@ -66,7 +68,7 @@ class BHRadioCell: UITableViewCell {
     fileprivate func update() {
         guard let validRadio = radio else { return }
         guard let validStream = radio?.streams.first else { return }
-        
+                
         radioTitleLabel.text = validRadio.title
         streamTitleLabel.text = validStream.title
         streamIcon.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)

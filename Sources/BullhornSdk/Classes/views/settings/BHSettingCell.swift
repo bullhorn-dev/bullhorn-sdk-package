@@ -26,8 +26,13 @@ class BHSettingCell: UITableViewCell {
     }
     
     func configure(with model : SettingsOption) {
+
+        backgroundColor = .primaryBackground()
+        
         accessoryType = model.disclosure ? .disclosureIndicator : .none
+
         titleLabel.text = model.title
+        titleLabel.textColor = .primary()
     }
 }
 

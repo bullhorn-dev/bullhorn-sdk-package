@@ -9,6 +9,7 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
 
@@ -23,6 +24,8 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
         
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
+
+        bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)

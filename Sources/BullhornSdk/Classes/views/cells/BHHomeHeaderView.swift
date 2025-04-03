@@ -15,12 +15,16 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     
     @IBOutlet weak var radioStreamsView: BHRadioStreamsView!
     @IBOutlet weak var scheduledPostsTitle: UIView!
+    @IBOutlet weak var scheduledPostsTitleLabel: UILabel!
     @IBOutlet weak var scheduledPostsView: BHPostsCarouselView!
     @IBOutlet weak var livePostsTitle: UIView!
+    @IBOutlet weak var livePostsTitleLabel: UILabel!
     @IBOutlet weak var livePostsView: BHPostsCarouselView!
     @IBOutlet weak var featuredUsersTitle: UIView!
+    @IBOutlet weak var featuredUsersTitleLabel: UILabel!
     @IBOutlet weak var featuredUsersView: BHUsersCarouselView!
     @IBOutlet weak var featuredPostsTitle: UIView!
+    @IBOutlet weak var featuredPostsTitleLabel: UILabel!
     @IBOutlet weak var featuredPostsView: BHPagedCarouselView!
     @IBOutlet weak var tabbedView: BHTabbedView!
     
@@ -59,6 +63,11 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     func setup(_ hasRadioStreams: Bool = true) {
         
         contentView.backgroundColor = .primaryBackground()
+        
+        scheduledPostsTitleLabel.textColor = .primary()
+        livePostsTitleLabel.textColor = .primary()
+        featuredUsersTitleLabel.textColor = .primary()
+        featuredPostsTitleLabel.textColor = .primary()
         
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self

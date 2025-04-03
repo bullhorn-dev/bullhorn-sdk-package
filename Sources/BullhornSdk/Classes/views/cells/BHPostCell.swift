@@ -55,6 +55,8 @@ class BHPostCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        contentView.backgroundColor = .primaryBackground()
+        
         dateLabel.textColor = .secondary()
         titleLabel.textColor = .primary()
         descriptionLabel.textColor = .secondary()
@@ -69,6 +71,7 @@ class BHPostCell: UITableViewCell {
         shadowView.layer.shadowOpacity = 0.5
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowRadius = 4
+        shadowView.backgroundColor = .cardBackground()
         
         userIcon.layer.cornerRadius = 8
         userIcon.layer.borderColor = UIColor.tertiary().cgColor
@@ -113,15 +116,15 @@ class BHPostCell: UITableViewCell {
         likeButton.setImage(image, for: .normal)
         likeButton.setTitle("", for: .normal)
         likeButton.backgroundColor = .clear
-        likeButton.tintColor = .primary()
+        likeButton.configuration?.baseForegroundColor = .primary()
 
         shareButton.setTitle("", for: .normal)
         shareButton.backgroundColor = .clear
-        shareButton.tintColor = .primary()
+        shareButton.configuration?.baseForegroundColor = .primary()
 
         optionsButton.setTitle("", for: .normal)
         optionsButton.backgroundColor = .clear
-        optionsButton.tintColor = .primary()
+        optionsButton.configuration?.baseForegroundColor = .primary()
 
         if validPost.hasRecording() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)

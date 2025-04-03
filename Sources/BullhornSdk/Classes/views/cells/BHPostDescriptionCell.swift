@@ -18,6 +18,8 @@ class BHPostDescriptionCell: UITableViewCell {
 
     fileprivate func setup(with tapHandler: @escaping (URL) -> Void) {
         
+        contentView.backgroundColor = .primaryBackground()
+
         let attributedString = NSMutableAttributedString(string: text ?? "")
         let terms: [(URL, NSRange)] = text?.extractURLs() ?? []
         var termsDictionary: [String : (URL, NSRange)] = [:]
@@ -52,6 +54,7 @@ class BHPostDescriptionCell: UITableViewCell {
         label.attributedText = attributedString
         label.didTapOnURL = tapHandler
         label.textAlignment = .left
+        label.textColor = .primary()
     }
     
     // MARK: - Actions

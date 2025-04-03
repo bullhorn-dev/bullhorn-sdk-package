@@ -26,6 +26,7 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
         collectionView.showsVerticalScrollIndicator = false
         collectionView.isPagingEnabled = false
         collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = .primaryBackground()
         
         collectionView.delegate = self
         collectionView.dataSource = self

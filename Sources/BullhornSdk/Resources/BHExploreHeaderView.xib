@@ -137,10 +137,13 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="featuredPostsTitle" destination="9JJ-Re-G9v" id="06Y-Ch-iQ3"/>
+                <outlet property="featuredPostsTitleLabel" destination="0dA-pw-ZZb" id="3Bc-4l-vZw"/>
                 <outlet property="featuredPostsView" destination="gnb-9U-gD1" id="HCp-u5-bpJ"/>
                 <outlet property="featuredUsersTitle" destination="tj6-ZT-g6Q" id="0On-dn-wnv"/>
+                <outlet property="featuredUsersTitleLabel" destination="hC1-Lp-Gd1" id="HOf-ke-QEV"/>
                 <outlet property="featuredUsersView" destination="Lkt-zb-uE3" id="e4Y-ZA-b2L"/>
                 <outlet property="recentUsersTitle" destination="MqY-6e-geO" id="gfM-iO-x30"/>
+                <outlet property="recentUsersTitleLabel" destination="dKP-DJ-Rfg" id="yPV-d9-cXN"/>
                 <outlet property="recentUsersView" destination="oYR-ET-mF0" id="6dI-Uk-lMe"/>
                 <outlet property="seeAllRecentsButton" destination="clM-PB-7yw" id="3EU-Gv-gR2"/>
                 <outlet property="tabbedView" destination="eji-UJ-jlI" id="2wt-vs-rUf"/>
@@ -156,13 +159,13 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

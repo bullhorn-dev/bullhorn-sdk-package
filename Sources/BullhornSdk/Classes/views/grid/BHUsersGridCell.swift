@@ -20,6 +20,7 @@ class BHUsersGridCell: UITableViewCell {
         
         collectionViewController.didLayoutAction = updateRowHeight
         
+        contentView.backgroundColor = .primaryBackground()
         contentView.addSubview(collectionViewController.view)
         collectionViewController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

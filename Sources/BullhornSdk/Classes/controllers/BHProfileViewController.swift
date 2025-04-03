@@ -44,6 +44,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
 
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var versionLabel: UILabel!
     
@@ -65,6 +66,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
+        tableView.separatorColor = .divider().withAlphaComponent(0.5)
+
+        stackView.backgroundColor = .primaryBackground()
 
         updateVersion()
 

@@ -24,6 +24,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var collapseButton: UIButton!
     @IBOutlet weak var linkView: UIView!
+    @IBOutlet weak var linkIcon: UIImageView!
     @IBOutlet weak var linkButton: UIButton!
     @IBOutlet weak var searchBarView: BHSearchBarView!
     
@@ -109,11 +110,11 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
 
         shareButton.setTitle("", for: .normal)
         shareButton.backgroundColor = .secondaryBackground()
-        shareButton.tintColor = .primary()
+        shareButton.configuration?.baseForegroundColor = .primary()
 
         collapseButton.setTitle("", for: .normal)
         collapseButton.backgroundColor = .secondaryBackground()
-        collapseButton.tintColor = .primary()
+        collapseButton.configuration?.baseForegroundColor = .primary()
 
         ratingView.settings.updateOnTouch = false
         ratingView.settings.fillMode = .half
@@ -125,8 +126,11 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         ratingView.settings.emptyColor = .primaryBackground()
         ratingView.backgroundColor = .primaryBackground()
         
+        titleLabel.textColor = .primary()
+        bioLabel.textColor = .primary()
         ratingLabel.textColor = .secondary()
         categoryLabel.textColor = .secondary()
+        linkIcon.tintColor = .primary()
         
         userView.isHidden = searchActive
         bioView.isHidden = searchActive

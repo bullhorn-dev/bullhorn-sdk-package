@@ -34,13 +34,15 @@ class BHUserCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        contentView.backgroundColor = .primaryBackground()
+
         let shadowColor = UIColor.shadow().withAlphaComponent(0.5)
-        
         shadowView.layer.cornerRadius = 8
         shadowView.layer.shadowColor = shadowColor.cgColor
         shadowView.layer.shadowOpacity = 0.5
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowRadius = 4
+        shadowView.backgroundColor = .cardBackground()
         
         userIcon.layer.cornerRadius = 8
         userIcon.layer.borderColor = UIColor.tertiary().cgColor

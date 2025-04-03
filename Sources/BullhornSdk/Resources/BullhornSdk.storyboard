@@ -555,6 +555,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="Z62-Mf-z45" id="qih-ab-sl9"/>
+                        <outlet property="bottomView" destination="VSj-V3-dTO" id="JEl-TK-N5s"/>
                         <outlet property="miniPlayerView" destination="KVy-WU-Zhy" id="58v-Im-FO5"/>
                         <outlet property="tableView" destination="7Ug-Ge-1oP" id="NVw-57-hGf"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="UserDetailsVC.PostDetailsSegueIdentifier" id="fUD-lq-Ug9"/>
@@ -637,6 +638,7 @@
                     <navigationItem key="navigationItem" id="CoO-bG-Ffs"/>
                     <connections>
                         <outlet property="activityIndicator" destination="bYr-AN-UN3" id="vew-o7-cjh"/>
+                        <outlet property="bottomView" destination="Lmw-eV-e7z" id="wRE-Gh-oTM"/>
                         <outlet property="miniPlayerView" destination="27V-cL-2AF" id="7OI-Ec-eVc"/>
                         <outlet property="tableView" destination="bye-Ao-Yod" id="CVw-46-Tek"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="PostDetailsVC.UserDetailsSegueIdentifier" id="2Ut-JK-cZ6"/>
@@ -721,6 +723,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="nCy-30-Njk" id="Thk-UW-otw"/>
+                        <outlet property="bottomView" destination="Pgt-hl-J3T" id="NuV-Vv-w2Q"/>
                         <outlet property="miniPlayerView" destination="dOX-I5-OX6" id="pOP-rz-NgD"/>
                         <outlet property="tableView" destination="BkJ-nH-gI2" id="KVQ-kY-IQc"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="DownloadsVC.PostDetailsSegueIdentifier" id="80U-wY-S8m"/>
@@ -774,7 +777,7 @@
                                                             <constraint firstAttribute="height" constant="47" id="JFm-eA-NRX"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
+                                                    <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
                                                         <rect key="frame" x="0.0" y="47" width="390" height="139"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -806,7 +809,7 @@
                                                             <constraint firstAttribute="height" constant="47" id="Vcr-Qc-Egf"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
+                                                    <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
                                                         <rect key="frame" x="0.0" y="47" width="390" height="344.66666666666669"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -1259,6 +1262,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="23m-8b-mZx" id="8jw-gF-FTG"/>
+                        <outlet property="bottomView" destination="WmZ-rg-I3X" id="aZH-DX-Ypw"/>
                         <outlet property="miniPlayerView" destination="maS-jn-QN0" id="BxV-Qp-bBZ"/>
                         <outlet property="tableView" destination="kny-WC-ICj" id="8Xw-ay-dQ2"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="FavoritesVC.PostDetailsSegueIdentifier" id="4Qk-s4-pJO"/>
@@ -1496,7 +1500,7 @@
                                                         <constraint firstItem="hKT-ks-qy8" firstAttribute="leading" secondItem="yib-kO-RWb" secondAttribute="leading" constant="20" id="xNe-he-2di"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <outlet property="iconContainer" destination="D7P-zi-GZ4" id="dPM-4E-MLg"/>
                                                     <outlet property="iconLabel" destination="SvP-OK-OTL" id="Xon-VS-WCw"/>
@@ -1532,7 +1536,7 @@
                                                         <constraint firstAttribute="bottom" secondItem="X96-AH-PMq" secondAttribute="bottom" constant="16" id="nEM-Fx-5XV"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <outlet property="titleLabel" destination="TYL-y4-pHN" id="7NA-61-SFy"/>
                                                 </connections>
@@ -1563,6 +1567,7 @@
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </stackView>
                                                     </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="2Oq-pj-7K4" firstAttribute="leading" secondItem="vL1-zA-3te" secondAttribute="leading" constant="20" id="FPA-Gx-WcF"/>
                                                         <constraint firstAttribute="bottom" secondItem="2Oq-pj-7K4" secondAttribute="bottom" constant="16" id="YaQ-WS-PDL"/>
@@ -1580,6 +1585,7 @@
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version 0.0.6 (3)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riA-or-ieg">
                                         <rect key="frame" x="0.0" y="659" width="390" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="IJn-G1-vxT"/>
                                         </constraints>
@@ -1595,7 +1601,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="1lQ-5O-eTP" secondAttribute="trailing" id="PLZ-hI-pec"/>
                                     <constraint firstItem="1lQ-5O-eTP" firstAttribute="leading" secondItem="wW3-Qa-U1a" secondAttribute="leading" id="oWi-xE-Yf9"/>
@@ -1616,6 +1622,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="miniPlayerView" destination="1lQ-5O-eTP" id="geI-RT-VqG"/>
+                        <outlet property="stackView" destination="wW3-Qa-U1a" id="Cke-7r-5Pi"/>
                         <outlet property="tableView" destination="eoT-Yu-FJA" id="K7Z-C7-6qN"/>
                         <outlet property="versionLabel" destination="riA-or-ieg" id="V6R-dH-j3u"/>
                         <segue destination="ISO-h0-mfF" kind="show" identifier="Profile.FavoritesSegueIdentifier" id="mQH-fg-wpb"/>
@@ -1701,6 +1708,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="GA1-ot-eO8" id="epQ-z9-u4m"/>
+                        <outlet property="bottomView" destination="yu3-2E-OZj" id="rtA-8x-Nae"/>
                         <outlet property="miniPlayerView" destination="yk5-Zz-UKd" id="x5s-ur-1Jh"/>
                         <outlet property="tableView" destination="y8D-Bz-ojo" id="Itx-1C-5Rc"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="RecentVC.UserDetailsSegueIdentifier" id="spw-UD-OVc"/>
@@ -1712,8 +1720,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="W9h-Db-Gfg"/>
-        <segue reference="maU-b5-W5G"/>
+        <segue reference="fUD-lq-Ug9"/>
+        <segue reference="spw-UD-OVc"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>
@@ -1759,10 +1767,10 @@
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

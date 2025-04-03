@@ -35,11 +35,19 @@ class BHAccountCell: UITableViewCell {
     }
     
     func configure(with model : SettingsAccountOption) {
-        titleLabel.text = model.title
-        subtitleLabel.text = model.subtitle?.capitalized
-        iconLabel.text = model.initials
-        iconContainer.backgroundColor = model.iconBackgroundColor
 
+        backgroundColor = .primaryBackground()
+
+        titleLabel.text = model.title
+        titleLabel.textColor = .primary()
+
+        subtitleLabel.text = model.subtitle?.capitalized
+        subtitleLabel.textColor = .primary()
+
+        iconLabel.text = model.initials
+        iconLabel.textColor = .primary()
+
+        iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5
         iconContainer.layer.borderColor = UIColor.divider().cgColor
     }

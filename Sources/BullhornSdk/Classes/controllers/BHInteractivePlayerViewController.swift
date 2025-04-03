@@ -71,6 +71,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         tableView.register(postCellNib, forCellReuseIdentifier: BHPostDescriptionCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .primaryBackground()
 
         detailsHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHDetailsHeaderView.reusableIndentifer) as? BHDetailsHeaderView
         detailsHeaderView?.delegate = self

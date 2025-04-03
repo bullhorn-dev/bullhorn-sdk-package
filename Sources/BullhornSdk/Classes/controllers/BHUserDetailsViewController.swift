@@ -9,6 +9,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bottomView: UIView!
 
     fileprivate var searchController: BHSearchController!
     fileprivate var refreshControl: UIRefreshControl?
@@ -41,6 +42,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
+
+        bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)

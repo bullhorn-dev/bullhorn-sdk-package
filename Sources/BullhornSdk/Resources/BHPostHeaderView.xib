@@ -271,6 +271,7 @@
                     <constraint firstAttribute="bottom" secondItem="rnA-fj-jBc" secondAttribute="bottom" id="T0q-gP-gSy"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="dateLabel" destination="vYv-ca-4ko" id="xu2-dz-mLt"/>
                 <outlet property="downloadButton" destination="jF6-nx-3H6" id="K3f-DJ-McF"/>
@@ -317,7 +318,7 @@
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

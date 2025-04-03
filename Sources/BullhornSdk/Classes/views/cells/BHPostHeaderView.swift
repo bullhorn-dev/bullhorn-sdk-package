@@ -86,6 +86,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
     func setup() {
         
+        contentView.backgroundColor = .primaryBackground()
+
         playButton.post = postsManager?.post
         waitingRoomButton.post = postsManager?.post
 
@@ -101,13 +103,16 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         durationLabel.textColor = .primary()
         waitingRoomLabel.textColor = .primary()
         playedLabel.textColor = .primary()
+        tabTitleLabel.textColor = .primary()
 
         shareButton.setTitle("", for: .normal)
         shareButton.backgroundColor = .clear
-        shareButton.tintColor = .primary()
+        shareButton.configuration?.baseForegroundColor = .primary()
 
         separatorView1.addBottomBorder()
         separatorView2.addBottomBorder()
+        separatorView1.backgroundColor = .clear
+        separatorView2.backgroundColor = .clear
 
         tabbedView.tabs = [
             BHTabItemView(title: "Details"),
