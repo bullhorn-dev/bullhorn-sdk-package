@@ -90,6 +90,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         
         BHHybridPlayer.shared.addListener(self)
         BHLivePlayer.shared.addListener(self)
+        
+        self.view.backgroundColor = .playerDisplayBackground()
 
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()

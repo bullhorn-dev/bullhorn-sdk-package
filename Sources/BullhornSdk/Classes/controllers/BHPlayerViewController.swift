@@ -6,13 +6,31 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
     
+    @IBOutlet private(set) weak var nameView: UIView!
     @IBOutlet private(set) weak var nameLabel: UILabel!
+    @IBOutlet private(set) weak var titleView: UIView!
     @IBOutlet private(set) weak var titleLabel: UILabel!
-        
+    @IBOutlet private(set) weak var controlsView: UIView!
+    @IBOutlet private(set) weak var bottomView: UIView!
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        BHLog.p("\(#function) - type: \(type)")
+
+        nameView.backgroundColor = .primaryBackground()
+        titleView.backgroundColor = .primaryBackground()
+        controlsView.backgroundColor = .primaryBackground()
+        titleLabel.textColor = .primary()
+        nameLabel.textColor = .primary()
+        playButton.tintColor = .primary()
+        backwardButton.tintColor = .primary()
+        forwardButton.tintColor = .primary()
+        previousButton.tintColor = .primary()
+        nextButton.tintColor = .primary()
+        bottomView.backgroundColor = .primaryBackground()
     }
     
     override func viewWillAppear(_ animated: Bool) {

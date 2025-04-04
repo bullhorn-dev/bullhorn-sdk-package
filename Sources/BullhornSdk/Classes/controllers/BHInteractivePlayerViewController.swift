@@ -45,6 +45,14 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         
         BHLog.p("\(#function) - type: \(type)")
         
+        view.backgroundColor = .primaryBackground()
+
+        playButton.tintColor = .playerOnDisplayBackground()
+        backwardButton.tintColor = .playerOnDisplayBackground()
+        forwardButton.tintColor = .playerOnDisplayBackground()
+        previousButton.tintColor = .playerOnDisplayBackground()
+        nextButton.tintColor = .playerOnDisplayBackground()
+
         showOverlay(true)
 
         interactiveView.type = type

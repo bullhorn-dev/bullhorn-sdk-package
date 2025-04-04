@@ -152,7 +152,6 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Podcast Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-XQ-ouN">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="36"/>
-                                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="36" id="PeZ-Zb-qsW"/>
                                                         </constraints>
@@ -174,7 +173,6 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY0-ym-zuX">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="20"/>
-                                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="nsJ-21-jbU"/>
                                                         </constraints>
@@ -385,13 +383,16 @@
                     <connections>
                         <outlet property="activityIndicator" destination="Sip-qC-siB" id="kGf-Oa-oVg"/>
                         <outlet property="backwardButton" destination="v8Q-Hi-Ynj" id="M8O-jW-9b4"/>
+                        <outlet property="bottomView" destination="xrJ-JW-9YI" id="5ME-Za-sf5"/>
                         <outlet property="closeButton" destination="jlR-Pj-Vyl" id="PYm-i1-ckJ"/>
+                        <outlet property="controlsView" destination="t9U-L8-Opr" id="vbB-Ey-3Tp"/>
                         <outlet property="durationLabel" destination="L5I-NX-DeK" id="co8-TW-mxk"/>
                         <outlet property="forwardButton" destination="Lr3-8z-Pac" id="7kB-CW-XYB"/>
                         <outlet property="imageLayerView" destination="BVl-tE-9Zl" id="vdV-zB-hum"/>
                         <outlet property="imageView" destination="rch-oU-K4o" id="5aZ-xU-PKo"/>
                         <outlet property="liveTagLabel" destination="R0K-2c-Tik" id="uaa-ME-9cA"/>
                         <outlet property="nameLabel" destination="SBV-XQ-ouN" id="vIp-fa-oMy"/>
+                        <outlet property="nameView" destination="XDK-m3-Q1D" id="VeD-8O-zhl"/>
                         <outlet property="nextButton" destination="8Me-0y-yNY" id="kiP-fx-8Mc"/>
                         <outlet property="optionsButton" destination="gir-R1-i9J" id="Hqk-ef-Und"/>
                         <outlet property="playButton" destination="3Of-Un-IUE" id="loK-vW-laM"/>
@@ -400,6 +401,7 @@
                         <outlet property="routePickerView" destination="zAy-dH-j2B" id="wWX-O0-NGr"/>
                         <outlet property="slider" destination="MaD-9f-YKA" id="8BK-b6-DvQ"/>
                         <outlet property="titleLabel" destination="aY0-ym-zuX" id="rqd-mG-VlN"/>
+                        <outlet property="titleView" destination="JsL-64-ILe" id="EMd-K4-rLe"/>
                         <outlet property="videoView" destination="WGY-KG-0b7" id="Eff-Hg-hka"/>
                     </connections>
                 </viewController>
