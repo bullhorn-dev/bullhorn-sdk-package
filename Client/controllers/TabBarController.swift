@@ -4,18 +4,12 @@ import BullhornSdk
 
 class TabBarController: UITabBarController {
     
-    fileprivate static let LoginSegueIdentifier = "LoginSegueIdentifier"
-    fileprivate static let SignupSegueIdentifier = "SignupSegueIdentifier"
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         startObserving(&ThemesManager.shared)
         
         setupAppearance()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(onLoginRequiredNotification(_:)), name: BullhornSdk.OpenLoginNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onSignUpRequiredNotification(_:)), name: BullhornSdk.OpenSignUpNotification, object: nil)
     }
     
     // MARK: - Private
@@ -39,15 +33,5 @@ class TabBarController: UITabBarController {
 
         tabBar.standardAppearance = tabBarAppearance
         tabBar.scrollEdgeAppearance = tabBarAppearance
-    }
-    
-    // MARK: - Notifications
-    
-    @objc fileprivate func onLoginRequiredNotification(_ notification: Notification) {
-        self.performSegue(withIdentifier: TabBarController.LoginSegueIdentifier, sender: self)
-    }
-
-    @objc fileprivate func onSignUpRequiredNotification(_ notification: Notification) {
-        self.performSegue(withIdentifier: TabBarController.SignupSegueIdentifier, sender: self)
     }
 }

@@ -15,7 +15,6 @@
 		D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */; };
 		D95D1A0D2D79AFA600DCB282 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A0C2D79AFA600DCB282 /* Globals.swift */; };
 		D95D1A102D79B57000DCB282 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D95D1A0F2D79B57000DCB282 /* CarPlay.framework */; };
-		D982D6BE2B4C4AD300C77130 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */; };
 		D98932342A44244B002D3CC1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932332A44244B002D3CC1 /* SettingsViewController.swift */; };
 		D98932362A442D9B002D3CC1 /* ThemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932352A442D9B002D3CC1 /* ThemesManager.swift */; };
 		D98932382A442E5E002D3CC1 /* ThemesObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98932372A442E5E002D3CC1 /* ThemesObserver.swift */; };
@@ -27,28 +26,18 @@
 		D9B9FE4A2B5E59F50095AFAB /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE422B5E59F40095AFAB /* Roboto-Thin.ttf */; };
 		D9B9FE4C2B5E59F50095AFAB /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE432B5E59F50095AFAB /* Roboto-Bold.ttf */; };
 		D9B9FE4F2B5E5CF60095AFAB /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9B9FE4E2B5E5CF60095AFAB /* Roboto-Black.ttf */; };
-		D9C06CEE2B29E81A0088B159 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */; };
-		D9C06CF12B29E9930088B159 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */; };
 		D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */; };
 		D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */; };
 		D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */; };
-		D9C06D022B2A3DD60088B159 /* ProfileInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */; };
-		D9C06D042B2A3DD60088B159 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFF2B2A3DD60088B159 /* AuthService.swift */; };
 		D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */; };
-		D9C06D102B2A4A6D0088B159 /* FoxKitProfile in Frameworks */ = {isa = PBXBuildFile; productRef = D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */; };
-		D9C936CF2A96463500C32539 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936CE2A96463500C32539 /* LoginViewController.swift */; };
 		D9C936DA2A9667B900C32539 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936D92A9667B900C32539 /* Utils.swift */; };
-		D9C936EF2A9798AD00C32539 /* UserIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936EE2A9798AD00C32539 /* UserIconButton.swift */; };
 		D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */ = {isa = PBXBuildFile; productRef = D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */; };
 		D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884029DD5CF7002A5631 /* AppDelegate.swift */; };
 		D9D7884329DD5CF7002A5631 /* MainWindowSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */; };
 		D9D7884829DD5CF7002A5631 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884629DD5CF7002A5631 /* Main.storyboard */; };
 		D9D7884A29DD5CFA002A5631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884929DD5CFA002A5631 /* Assets.xcassets */; };
-		D9E2C5DE2B39881E005B953D /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5DD2B39881E005B953D /* SignupViewController.swift */; };
 		D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */; };
-		D9E2C5EC2B3C2E96005B953D /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */; };
 		D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */; };
-		D9FADEDC2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,7 +75,6 @@
 		D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateApplicationSceneDelegate.swift; sourceTree = "<group>"; };
 		D95D1A0C2D79AFA600DCB282 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		D95D1A0F2D79B57000DCB282 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
-		D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		D98932332A44244B002D3CC1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D98932352A442D9B002D3CC1 /* ThemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesManager.swift; sourceTree = "<group>"; };
 		D98932372A442E5E002D3CC1 /* ThemesObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesObserver.swift; sourceTree = "<group>"; };
@@ -98,30 +86,20 @@
 		D9B9FE422B5E59F40095AFAB /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		D9B9FE432B5E59F50095AFAB /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		D9B9FE4E2B5E5CF60095AFAB /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
-		D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
-		D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
 		D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewController.swift; sourceTree = "<group>"; };
 		D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewCell.swift; sourceTree = "<group>"; };
 		D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConfig.swift; sourceTree = "<group>"; };
-		D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInformation.swift; sourceTree = "<group>"; };
-		D9C06CFF2B2A3DD60088B159 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
-		D9C936CE2A96463500C32539 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D9C936D92A9667B900C32539 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		D9C936EE2A9798AD00C32539 /* UserIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIconButton.swift; sourceTree = "<group>"; };
-		D9D3FC152D6DAE1500B2E67E /* BullhornSDK-KeysConfigPROD.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-KeysConfigPROD.xcconfig"; sourceTree = "<group>"; };
 		D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BHSdkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9D7884029DD5CF7002A5631 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowSceneDelegate.swift; sourceTree = "<group>"; };
 		D9D7884729DD5CF7002A5631 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D9D7884929DD5CFA002A5631 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D9D7884E29DD5CFA002A5631 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D9E2C5DD2B39881E005B953D /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		D9E2C5E62B3C10CB005B953D /* BullhornSdk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BullhornSdk.entitlements; sourceTree = "<group>"; };
 		D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Utils.swift"; sourceTree = "<group>"; };
-		D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
-		D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailsTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +109,6 @@
 			files = (
 				D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */,
 				D95D1A102D79B57000DCB282 /* CarPlay.framework in Frameworks */,
-				D9C06D102B2A4A6D0088B159 /* FoxKitProfile in Frameworks */,
 				D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,6 +119,7 @@
 		D93CFD022B95CCEC006B922D /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */,
 				D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */,
 			);
 			path = utils;
@@ -153,7 +131,6 @@
 				D94E70792D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.debug.xcconfig */,
 				D94E707A2D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.release.xcconfig */,
 				D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */,
-				D9D3FC152D6DAE1500B2E67E /* BullhornSDK-KeysConfigPROD.xcconfig */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -184,12 +161,8 @@
 			isa = PBXGroup;
 			children = (
 				D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */,
-				D9C936CE2A96463500C32539 /* LoginViewController.swift */,
 				D98932332A44244B002D3CC1 /* SettingsViewController.swift */,
-				D9E2C5DD2B39881E005B953D /* SignupViewController.swift */,
 				D98932392A4470C8002D3CC1 /* TabBarController.swift */,
-				D9E2C5EB2B3C2E96005B953D /* AuthViewController.swift */,
-				D982D6BD2B4C4AD300C77130 /* AccountViewController.swift */,
 				D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */,
 			);
 			path = controllers;
@@ -199,26 +172,12 @@
 			isa = PBXGroup;
 			children = (
 				D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */,
-				D9C06CF02B29E9930088B159 /* AccountTableViewCell.swift */,
-				D9C06CED2B29E81A0088B159 /* SettingsTableViewCell.swift */,
-				D9FADEDB2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift */,
 				D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */,
-				D9C936EE2A9798AD00C32539 /* UserIconButton.swift */,
 				D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */,
 				D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */,
 				D904E1862B9F209300DEC42A /* DropDownCell.swift */,
 			);
 			path = views;
-			sourceTree = "<group>";
-		};
-		D9C06CFC2B2A3D8E0088B159 /* foxAuth */ = {
-			isa = PBXGroup;
-			children = (
-				D9C06CFF2B2A3DD60088B159 /* AuthService.swift */,
-				D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */,
-				D9C06CFE2B2A3DD60088B159 /* ProfileInformation.swift */,
-			);
-			path = foxAuth;
 			sourceTree = "<group>";
 		};
 		D9D787FB29DD409B002A5631 = {
@@ -244,7 +203,6 @@
 			children = (
 				D94E70752D3E5D0A0004D4BA /* targetConfig */,
 				D94E706E2D3E5AF60004D4BA /* config */,
-				D9C06CFC2B2A3D8E0088B159 /* foxAuth */,
 				D9C06CFA2B2A3B2F0088B159 /* views */,
 				D9C06CF92B2A3B090088B159 /* controllers */,
 				D9B6371C29DE0FD500304482 /* fonts */,
@@ -292,7 +250,6 @@
 			);
 			name = BHSdkApp;
 			packageProductDependencies = (
-				D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */,
 				D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */,
 			);
 			productName = BullhornSdkTest;
@@ -324,7 +281,6 @@
 			);
 			mainGroup = D9D787FB29DD409B002A5631;
 			packageReferences = (
-				D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */,
 				D9536DF72D9AC7B5001F7970 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D9536DFA2D9ACECC001F7970 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				D9536DFD2D9AD1D2001F7970 /* XCRemoteSwiftPackageReference "SwiftMessages" */,
@@ -367,10 +323,7 @@
 			files = (
 				D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */,
 				D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */,
-				D982D6BE2B4C4AD300C77130 /* AccountViewController.swift in Sources */,
-				D9C936CF2A96463500C32539 /* LoginViewController.swift in Sources */,
 				D904E1872B9F209300DEC42A /* DropDownCell.swift in Sources */,
-				D9E2C5DE2B39881E005B953D /* SignupViewController.swift in Sources */,
 				D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */,
 				D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */,
 				D904E1842B9F1ECB00DEC42A /* DropDownTextField.swift in Sources */,
@@ -378,19 +331,12 @@
 				D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */,
 				D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */,
 				D95D1A0D2D79AFA600DCB282 /* Globals.swift in Sources */,
-				D9C06D042B2A3DD60088B159 /* AuthService.swift in Sources */,
-				D9C936EF2A9798AD00C32539 /* UserIconButton.swift in Sources */,
 				D9D7884329DD5CF7002A5631 /* MainWindowSceneDelegate.swift in Sources */,
 				D989323A2A4470C8002D3CC1 /* TabBarController.swift in Sources */,
-				D9FADEDC2B3C809D00F43E98 /* SettingDetailsTableViewCell.swift in Sources */,
 				D9C936DA2A9667B900C32539 /* Utils.swift in Sources */,
-				D9C06CEE2B29E81A0088B159 /* SettingsTableViewCell.swift in Sources */,
 				D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */,
 				D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */,
-				D9C06D022B2A3DD60088B159 /* ProfileInformation.swift in Sources */,
-				D9E2C5EC2B3C2E96005B953D /* AuthViewController.swift in Sources */,
 				D98932382A442E5E002D3CC1 /* ThemesObserver.swift in Sources */,
-				D9C06CF12B29E9930088B159 /* AccountTableViewCell.swift in Sources */,
 				D98932342A44244B002D3CC1 /* SettingsViewController.swift in Sources */,
 				D98932362A442D9B002D3CC1 /* ThemesManager.swift in Sources */,
 			);
@@ -691,14 +637,6 @@
 				minimumVersion = 25.0.1;
 			};
 		};
-		D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/foxcorp/foxkit-profile-ios-tvos.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.15.0;
-			};
-		};
 		D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bullhorn-dev/bullhorn-sdk-package.git";
@@ -710,11 +648,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D9C06D0F2B2A4A6D0088B159 /* FoxKitProfile */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D9C06CFB2B2A3C760088B159 /* XCRemoteSwiftPackageReference "foxkit-profile-ios-tvos" */;
-			productName = FoxKitProfile;
-		};
 		D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */;

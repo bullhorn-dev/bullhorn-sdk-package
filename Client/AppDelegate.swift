@@ -92,42 +92,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func authorize() {
-
-        if let storedAuth = AuthService.shared.storedFoxAuth() {
-            AuthService.shared.setEncodedProfile(storedAuth)
-        }
-        
-        if AuthService.shared.hasAuth {
-            AuthService.shared.refresh() { [weak self] success in
-                guard let self = self else { return }
-                
-                AuthService.shared.store(foxAuth: (true == success) ? AuthService.shared.encodedProfile : nil)
-                
-                self.bullhornLogin(with: AuthService.shared.profileInfo)
-            }
-        } else {
-            bullhornLogin(with: nil)
-        }
+        bullhornLogin()
     }
     
-    private func bullhornLogin(with foxUser: ProfileInformation?) {
+    private func bullhornLogin() {
 
         var sdkUserId: String
         
-        if let validSdkUserId = UserDefaults.standard.string(forKey: "sdk_user_id"), validSdkUserId.count > 0 {
+        if let validSdkUserId = UserDefaults.standard.string(forKey: "sdk_user_id"), !validSdkUserId.isEmpty {
             sdkUserId = validSdkUserId // use previously logged in user
         } else {
             sdkUserId = UUID().uuidString // generate new user id
             UserDefaults.standard.set(sdkUserId, forKey: "sdk_user_id")
         }
 
-        if let validFoxUser = foxUser {
-            let sdkUser = BHSdkUser(id: validFoxUser.profileId, fullName: validFoxUser.displayName, profilePictureUri: nil, level: .fox)
-            BullhornSdk.shared.restore(sdkUser: sdkUser)
-        } else {
-            let sdkUser = BHSdkUser(id: sdkUserId, fullName: nil, profilePictureUri: nil, level: .anonymous)
-            BullhornSdk.shared.restore(sdkUser: sdkUser)
-        }
+        let sdkUser = BHSdkUser(id: sdkUserId, fullName: nil, profilePictureUri: nil, level: .anonymous)
+        BullhornSdk.shared.restore(sdkUser: sdkUser)
     }
 }
 

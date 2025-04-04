@@ -3,7 +3,6 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 #include "../../VersionConfig.xcconfig"
-#include "BullhornSDK-KeysConfigPROD.xcconfig"
 
 APP_CONFIG_TYPE = ConfigurationTypePROD
 APP_BUNDLE_ID = com.wydevoice.Bullhorn-SDK
