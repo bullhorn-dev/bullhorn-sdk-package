@@ -266,6 +266,46 @@ class BHServerApiUsers: BHServerApiBase {
           })
     }
     
+    func followUser(authToken: String?, userId: String, _ completion: @escaping (UserResult) -> Void) {
+
+        let path = "users/\(userId)/follow"
+        let fullPath = composeFullApiURL(with: path)
+        let headers = self.composeHeaders(authToken)
+        
+        AF.request(fullPath, method: .post, headers: headers)
+          .validate()
+          .responseDecodable(of: User.self, completionHandler: { response in
+              debugPrint(response)
+              switch response.result {
+              case .success(let u):
+                  completion(.success(user: u.user))
+              case .failure(let error):
+                  self.trackError(error)
+                  completion(.failure(error: error))
+              }
+          })
+    }
+
+    func unfollowUser(authToken: String?, userId: String, _ completion: @escaping (UserResult) -> Void) {
+
+        let path = "users/\(userId)/unfollow"
+        let fullPath = composeFullApiURL(with: path)
+        let headers = self.composeHeaders(authToken)
+        
+        AF.request(fullPath, method: .post, headers: headers)
+          .validate()
+          .responseDecodable(of: User.self, completionHandler: { response in
+              debugPrint(response)
+              switch response.result {
+              case .success(let u):
+                  completion(.success(user: u.user))
+              case .failure(let error):
+                  self.trackError(error)
+                  completion(.failure(error: error))
+              }
+          })
+    }
+
     func updatePushToken(authToken token: String?, pushToken: BHPushToken, completion: @escaping (CommonResult) -> Void) {
         
         updateConfig { (configError: ServerApiError?) in

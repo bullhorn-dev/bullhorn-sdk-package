@@ -26,7 +26,12 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     fileprivate var shouldShowHeader: Bool = false
 
-    var user: BHUser?
+    var user: BHUser? {
+        didSet {
+            configureNavigationItems()
+        }
+    }
+
     var context: String?
 
     // MARK: - Lifecycle
@@ -38,8 +43,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Podcast Details"
-
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
@@ -63,6 +66,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         
         footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
 
+        configureNavigationItems()
         configureRefreshControl()
         configureSearchController()
 
@@ -91,6 +95,17 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     // MARK: - Private
     
+    fileprivate func configureNavigationItems() {
+        
+        navigationItem.title = NSLocalizedString("Podcast Details", comment: "")
+        navigationItem.largeTitleDisplayMode = .never
+
+        if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled, let validUser = user {
+            let config = UIImage.SymbolConfiguration(weight: .light)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: validUser.isFollowed ? "bell.slash" : "bell")?.withConfiguration(config), style: .plain, target: self, action: #selector(followButtonAction(_:)))
+        }
+    }
+    
     fileprivate func configureRefreshControl() {
         
         let newRefreshControl = UIRefreshControl()
@@ -106,6 +121,30 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         searchController = BHSearchController.init(with: searchBar)
         searchController.searchResultsUpdater = self
         searchController.delegate = self
+    }
+    
+    @objc fileprivate func followButtonAction(_ sender: Any) {
+        guard let validUser = user else { return }
+        
+        if validUser.isFollowed {
+            userManager.unfollowUser(validUser.id) { response in
+                switch response {
+                case .success(user: let unfollowedUser):
+                    self.user = unfollowedUser
+                case .failure(error: let error):
+                    self.showError("Failed to unfollow podcast. \(error)")
+                }
+            }
+        } else {
+            userManager.followUser(validUser.id) { response in
+                switch response {
+                case .success(user: let followedUser):
+                    self.user = followedUser
+                case .failure(error: let error):
+                    self.showError("Failed to follow podcast. \(error)")
+                }
+            }
+        }
     }
 
     // MARK: - Network

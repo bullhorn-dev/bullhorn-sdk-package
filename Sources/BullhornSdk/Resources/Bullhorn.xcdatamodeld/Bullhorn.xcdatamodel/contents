@@ -519,6 +519,11 @@
                 <entry key="hyper.remoteKey" value="level"/>
             </userInfo>
         </attribute>
+        <attribute name="outgoingStatus" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="outgoing_status"/>
+            </userInfo>
+        </attribute>
         <attribute name="profilePicture" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="profile_picture"/>

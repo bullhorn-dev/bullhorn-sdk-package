@@ -117,7 +117,10 @@ public class BullhornSdk: NSObject {
         } else {
             externalUser = sdkUser
             BHTracker.shared.start(with: clientId)
-//            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+
+            if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+            }
         }
         
         BHDownloadsManager.shared.fetchStorageItems()
@@ -131,7 +134,10 @@ public class BullhornSdk: NSObject {
             case .success(account: let account):
                 self.externalUser = sdkUser
                 NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
-//                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+                
+                if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                    BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+                }
                 completion(.success(user: account.user))
             case .failure(error: let error):
                 completion(.failure(error: error.localizedDescription))
@@ -170,6 +176,18 @@ public class BullhornSdk: NSObject {
         UserDefaults.standard.userInterfaceStyle = style
 
         NotificationCenter.default.post(name: BullhornSdk.UserInterfaceStyleChangedNotification, object: self, userInfo: info)
+    }
+    
+    public func enablePushNotifications(_ isEnable: Bool) {
+        BHLog.p("\(#function) - isEnable: \(isEnable)")
+        
+        UserDefaults.standard.isPushNotificationsEnabled = isEnable
+
+        if isEnable {
+            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+        } else {
+            BHNotificationsManager.shared.forgetPushToken() { _ in }
+        }
     }
     
     public func onPlayerStarted() {

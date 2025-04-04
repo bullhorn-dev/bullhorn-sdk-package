@@ -28,6 +28,7 @@ public class UserMO: NSManagedObject {
         user.website = website != nil ? URL(string: website!) : nil
         user.ratingsCount = ratingsCount?.intValue
         user.ratingValue = ratingValue?.doubleValue
+        user.outgoingStatus = outgoingStatus
 
         var ctgrs: [BHUserCategory] = []
 

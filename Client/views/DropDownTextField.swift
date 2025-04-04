@@ -25,7 +25,12 @@ class DropDownTextField: UIView {
         return textField.text
     }
 
-    private var options: [DropDownItem]
+    var options = [DropDownItem]() {
+        didSet {
+            calculateHeight()
+            setupViews()
+        }
+    }
 
     private var isDroppedDown = false
     private var initialHeight: CGFloat = 0
@@ -74,12 +79,11 @@ class DropDownTextField: UIView {
     }
     
     private override init(frame: CGRect) {
-        options = []
         super.init(frame: frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
         
     func closeOptions() {
@@ -273,3 +277,4 @@ extension UIImage {
         }
     }
 }
+

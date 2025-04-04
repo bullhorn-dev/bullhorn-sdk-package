@@ -121,6 +121,36 @@ class BHUserManager {
             }
         }
     }
+    
+    func followUser(_ userId: String, completion: @escaping (BHServerApiUsers.UserResult) -> Void) {
+
+        apiUsers.followUser(authToken: authToken, userId: userId) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(user: let user):
+                    self.user = user
+                case .failure(error: let error):
+                    BHLog.w("User follow failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+    
+    func unfollowUser(_ userId: String, completion: @escaping (BHServerApiUsers.UserResult) -> Void) {
+
+        apiUsers.unfollowUser(authToken: authToken, userId: userId) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(user: let user):
+                    self.user = user
+                case .failure(error: let error):
+                    BHLog.w("User unfollow failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
 
     // MARK: - Initial fetch for screen
 

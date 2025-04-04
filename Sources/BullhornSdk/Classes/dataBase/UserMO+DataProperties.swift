@@ -23,4 +23,5 @@ extension UserMO {
     @NSManaged public var categories: NSSet?
     @NSManaged public var ratingsCount: NSNumber?
     @NSManaged public var ratingValue: NSNumber?
+    @NSManaged public var outgoingStatus: String?
 }

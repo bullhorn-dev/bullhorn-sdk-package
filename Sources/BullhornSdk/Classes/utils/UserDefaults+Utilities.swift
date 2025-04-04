@@ -7,6 +7,7 @@ extension UserDefaults {
     fileprivate static let numberOfTimesLaunchedKey = "numberOfTimesLaunchedKey"
     fileprivate static let lastVersionPromtedForReviewKey = "lastVersionPromtedForReviewKey"
     fileprivate static let isDevModeEnabledUserDefaultsKey = "isDevModeEnabledUserDefaultsKey"
+    fileprivate static let isPushNotificationsEnabledUserDefaultsKey = "isPushNotificationsEnabledUserDefaultsKey"
     fileprivate static let startSessionTimeUserDefaultsKey = "startSessionTimeUserDefaultsKey"
     fileprivate static let endSessionTimeUserDefaultsKey = "endSessionTimeUserDefaultsKey"
     fileprivate static let isAppInitialAttributesSent = "isAppInitialAttributesSent"
@@ -50,6 +51,15 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.isDevModeEnabledUserDefaultsKey)
+        }
+    }
+    
+    var isPushNotificationsEnabled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.isPushNotificationsEnabledUserDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.isPushNotificationsEnabledUserDefaultsKey)
         }
     }
     

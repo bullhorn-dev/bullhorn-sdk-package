@@ -21,11 +21,18 @@ struct BHUser: Codable, Hashable {
         case categories
         case ratingsCount = "ratings_count"
         case ratingValue = "rating_value"
+        case outgoingStatus = "outgoing_status"
     }
     
     enum Level: Int, Codable {
         case anonymous = 0
         case normal = 1
+    }
+    
+    enum Status: String, Codable {
+        case none = "none"
+        case follows = "follows"
+        case requested = "requested"
     }
 
     let id: String
@@ -44,9 +51,15 @@ struct BHUser: Codable, Hashable {
     var categories: [BHUserCategory]?
     var ratingsCount: Int?
     var ratingValue: Double?
-    
+    var outgoingStatus: String?
+
     var categoryName: String? {
         return categories?.sorted(by: {$0.id < $1.id}).first?.name ?? "News"
+    }
+    
+    var isFollowed: Bool {
+        guard let status = outgoingStatus else { return false }
+        return status == Status.follows.rawValue || status == Status.requested.rawValue
     }
     
     var coverUrl: URL? {

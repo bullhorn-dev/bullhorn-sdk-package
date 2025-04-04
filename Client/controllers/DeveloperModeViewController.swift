@@ -2,12 +2,18 @@
 import UIKit
 import BullhornSdk
 
-class DeveloperModeViewController: UIViewController {
+class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var networkLabel: UILabel!
-
-    private var dropDownTextField: DropDownTextField!
+    @IBOutlet weak var dropDownTextField: DropDownTextField!
+    @IBOutlet weak var pushNotificationsView: UIView!
+    @IBOutlet weak var pushNotificationsLabel: UILabel!
+    @IBOutlet weak var switchControl: UISwitch!
+    
+    @IBOutlet weak var networkHeightConstraint: NSLayoutConstraint!
+    
+    private let networkIdDefaultValue = UserDefaults.standard.networkId
+    private let pushNotificationsEnabledDefaultValue = UserDefaults.standard.pushNotificationsEnabled
 
     private var networks = [
         DropDownItem(value: AuthConfig.shared.networkId, title: "Fox"),
@@ -18,19 +24,22 @@ class DeveloperModeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addDropDown()
         configureNavigationItems()
 
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DeveloperModeViewController.dismissKeyboard)))
-    }
-    
-    private func addDropDown() {
-        let lm = networkLabel.layoutMargins
-        let height: CGFloat = 44.0
-        let dropDownFrame = CGRect(x: 20, y: lm.bottom + 50, width: contentView.bounds.width - 2 * 20, height: height)
-        dropDownTextField = DropDownTextField(frame: dropDownFrame, title: "Enter network ID", options: networks)
         dropDownTextField.delegate = self
-        contentView.addSubview(dropDownTextField)
+        dropDownTextField.textField.placeholder = "Enter network ID"
+        dropDownTextField.options = networks
+
+        networkLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
+        networkLabel.textColor = .label
+
+        pushNotificationsLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
+        pushNotificationsLabel.textColor = .label
+
+        switchControl.setOn(pushNotificationsEnabledDefaultValue, animated: true)
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DeveloperModeViewController.dismissKeyboard)))
+        pushNotificationsView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DeveloperModeViewController.changeSwitch)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,15 +69,34 @@ class DeveloperModeViewController: UIViewController {
     }
 
     @objc func save(_ sender: Any) {
-        guard let networkId = dropDownTextField.text else { return }
         
-        setNetwork(networkId)
+        if let uuid = dropDownTextField.text, !uuid.isEmpty, let _ = UUID(uuidString: uuid), uuid != networkIdDefaultValue {
+            setNetwork(uuid)
+        }
+        
+        if switchControl.isOn != pushNotificationsEnabledDefaultValue {
+            updatePushNotifications(switchControl.isOn)
+        }
+        
+        self.navigationController?.popViewController(animated: true)
     }
-    
+
+    @IBAction func switchAction(_ sender: Any) {
+        validateSaveButton()
+    }
+
     // MARK: - Private
     
     fileprivate func validateSaveButton() {
-        if let uuid = dropDownTextField.text, let _ = UUID(uuidString: uuid) {
+        var changed = false
+
+        if let uuid = dropDownTextField.text, !uuid.isEmpty, let _ = UUID(uuidString: uuid) {
+            changed = true
+        } else if switchControl.isOn != pushNotificationsEnabledDefaultValue {
+            changed = true
+        }
+
+        if changed {
             navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = false
@@ -78,11 +106,20 @@ class DeveloperModeViewController: UIViewController {
     fileprivate func setNetwork(_ networkId: String) {
         BullhornSdk.shared.resetNetwork(with: networkId)
         UserDefaults.standard.networkId = networkId
-        self.navigationController?.popViewController(animated: true)
+    }
+    
+    fileprivate func updatePushNotifications(_ value: Bool) {
+        BullhornSdk.shared.enablePushNotifications(value)
+        UserDefaults.standard.pushNotificationsEnabled = value
     }
     
     @objc fileprivate func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc fileprivate func changeSwitch() {
+        switchControl.setOn(!switchControl.isOn, animated: true)
+        validateSaveButton()
     }
 }
 
@@ -99,6 +136,15 @@ extension DeveloperModeViewController: DropDownTextFieldDelegate {
         validateSaveButton()
     }
     
-    func menuDidAnimate(up: Bool) {}
+    func menuDidAnimate(up: Bool) {
+        debugPrint("menuDidAnimate: \(up)")
+        
+        if up {
+            networkHeightConstraint.constant = 44.0
+        } else {
+            networkHeightConstraint.constant = 44.0 + CGFloat(networks.count) * 40.0
+        }
+    }
 }
+
 
