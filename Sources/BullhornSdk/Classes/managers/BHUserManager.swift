@@ -128,7 +128,7 @@ class BHUserManager {
             DispatchQueue.main.async {
                 switch response {
                 case .success(user: let user):
-                    self.user = user
+                    BHNetworkManager.shared.updateNetworkUser(user)
                 case .failure(error: let error):
                     BHLog.w("User follow failed \(error.localizedDescription)")
                 }
@@ -143,7 +143,7 @@ class BHUserManager {
             DispatchQueue.main.async {
                 switch response {
                 case .success(user: let user):
-                    self.user = user
+                    BHNetworkManager.shared.updateNetworkUser(user)
                 case .failure(error: let error):
                     BHLog.w("User unfollow failed \(error.localizedDescription)")
                 }

@@ -56,6 +56,10 @@ class BHNetworkManager {
     fileprivate var nextUsersPage: Int {
         return min(usersPage + 1, usersPages)
     }
+    
+    var followedUsers: [BHUser] {
+        return users.filter({ $0.isFollowed })
+    }
 
     // MARK: - Initialization
     
@@ -141,6 +145,12 @@ class BHNetworkManager {
                 }
                 completion(response)
             }
+        }
+    }
+    
+    func updateNetworkUser(_ user: BHUser) {
+        if let row = users.firstIndex(where: {$0.id == user.id}) {
+            self.users[row] = user
         }
     }
 

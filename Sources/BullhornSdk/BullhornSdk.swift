@@ -177,19 +177,7 @@ public class BullhornSdk: NSObject {
 
         NotificationCenter.default.post(name: BullhornSdk.UserInterfaceStyleChangedNotification, object: self, userInfo: info)
     }
-    
-    public func enablePushNotifications(_ isEnable: Bool) {
-        BHLog.p("\(#function) - isEnable: \(isEnable)")
         
-        UserDefaults.standard.isPushNotificationsEnabled = isEnable
-
-        if isEnable {
-            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
-        } else {
-            BHNotificationsManager.shared.forgetPushToken() { _ in }
-        }
-    }
-    
     public func onPlayerStarted() {
         BHHybridPlayer.shared.pause()
     }

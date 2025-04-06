@@ -274,13 +274,28 @@ class BHServerApiUsers: BHServerApiBase {
         
         AF.request(fullPath, method: .post, headers: headers)
           .validate()
-          .responseDecodable(of: User.self, completionHandler: { response in
-              debugPrint(response)
+          .responseJSONAPI(completionHandler: { (response) in
               switch response.result {
-              case .success(let u):
-                  completion(.success(user: u.user))
+              case .success(let data):
+                  do {
+                      let user = try JSONDecoder().decode(User.self, from: JSONSerialization.data(withJSONObject: data))
+                      
+                      guard let userJSON = data["user"] as? [String: Any] else {
+                          throw ServerApiError.parseError(m: "\(#function): Failed to parse user data", data: data)
+                      }
+                      guard let userId = userJSON["id"] as? String else {
+                          throw ServerApiError.parseError(m: "\(#function): Failed to parse user ID", data: data)
+                      }
+                      
+                      if !DataBaseManager.shared.updateUser(with: userId, params: userJSON) {
+                          BHLog.w("Save user to storage failed")
+                      }
+                      
+                      completion(.success(user: user.user))
+                  } catch let error {
+                      completion(.failure(error: error))
+                  }
               case .failure(let error):
-                  self.trackError(error)
                   completion(.failure(error: error))
               }
           })
@@ -294,13 +309,28 @@ class BHServerApiUsers: BHServerApiBase {
         
         AF.request(fullPath, method: .post, headers: headers)
           .validate()
-          .responseDecodable(of: User.self, completionHandler: { response in
-              debugPrint(response)
+          .responseJSONAPI(completionHandler: { (response) in
               switch response.result {
-              case .success(let u):
-                  completion(.success(user: u.user))
+              case .success(let data):
+                  do {
+                      let user = try JSONDecoder().decode(User.self, from: JSONSerialization.data(withJSONObject: data))
+                      
+                      guard let userJSON = data["user"] as? [String: Any] else {
+                          throw ServerApiError.parseError(m: "\(#function): Failed to parse user data", data: data)
+                      }
+                      guard let userId = userJSON["id"] as? String else {
+                          throw ServerApiError.parseError(m: "\(#function): Failed to parse user ID", data: data)
+                      }
+                      
+                      if !DataBaseManager.shared.updateUser(with: userId, params: userJSON) {
+                          BHLog.w("Save user to storage failed")
+                      }
+                      
+                      completion(.success(user: user.user))
+                  } catch let error {
+                      completion(.failure(error: error))
+                  }
               case .failure(let error):
-                  self.trackError(error)
                   completion(.failure(error: error))
               }
           })

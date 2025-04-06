@@ -6,14 +6,10 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var networkLabel: UILabel!
     @IBOutlet weak var dropDownTextField: DropDownTextField!
-    @IBOutlet weak var pushNotificationsView: UIView!
-    @IBOutlet weak var pushNotificationsLabel: UILabel!
-    @IBOutlet weak var switchControl: UISwitch!
     
     @IBOutlet weak var networkHeightConstraint: NSLayoutConstraint!
     
     private let networkIdDefaultValue = UserDefaults.standard.networkId
-    private let pushNotificationsEnabledDefaultValue = UserDefaults.standard.pushNotificationsEnabled
 
     private var networks = [
         DropDownItem(value: AuthConfig.shared.networkId, title: "Fox"),
@@ -32,14 +28,8 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
 
         networkLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
         networkLabel.textColor = .label
-
-        pushNotificationsLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
-        pushNotificationsLabel.textColor = .label
-
-        switchControl.setOn(pushNotificationsEnabledDefaultValue, animated: true)
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DeveloperModeViewController.dismissKeyboard)))
-        pushNotificationsView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DeveloperModeViewController.changeSwitch)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,15 +64,7 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
             setNetwork(uuid)
         }
         
-        if switchControl.isOn != pushNotificationsEnabledDefaultValue {
-            updatePushNotifications(switchControl.isOn)
-        }
-        
         self.navigationController?.popViewController(animated: true)
-    }
-
-    @IBAction func switchAction(_ sender: Any) {
-        validateSaveButton()
     }
 
     // MARK: - Private
@@ -91,8 +73,6 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
         var changed = false
 
         if let uuid = dropDownTextField.text, !uuid.isEmpty, let _ = UUID(uuidString: uuid) {
-            changed = true
-        } else if switchControl.isOn != pushNotificationsEnabledDefaultValue {
             changed = true
         }
 
@@ -107,19 +87,9 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
         BullhornSdk.shared.resetNetwork(with: networkId)
         UserDefaults.standard.networkId = networkId
     }
-    
-    fileprivate func updatePushNotifications(_ value: Bool) {
-        BullhornSdk.shared.enablePushNotifications(value)
-        UserDefaults.standard.pushNotificationsEnabled = value
-    }
-    
+        
     @objc fileprivate func dismissKeyboard() {
         view.endEditing(true)
-    }
-    
-    @objc fileprivate func changeSwitch() {
-        switchControl.setOn(!switchControl.isOn, animated: true)
-        validateSaveButton()
     }
 }
 

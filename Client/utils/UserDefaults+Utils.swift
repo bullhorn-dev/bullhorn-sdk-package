@@ -5,7 +5,6 @@ extension UserDefaults {
     
     fileprivate static let numberOfTimesLaunchedKey = "numberOfTimesLaunchedKey"
     fileprivate static let networkIdDefaultsKey = "networkIdDefaultsKey"
-    fileprivate static let pushNotificationsEnabledDefaultsKey = "pushNotificationsEnabledDefaultsKey"
 
     var numberOfTimesLaunched: Int {
         get {
@@ -22,15 +21,6 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.networkIdDefaultsKey)
-        }
-    }
-    
-    var pushNotificationsEnabled: Bool {
-        get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.pushNotificationsEnabledDefaultsKey)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.pushNotificationsEnabledDefaultsKey)
         }
     }
 }

@@ -167,6 +167,43 @@ class BHNotificationsManager: NSObject {
             }
         }
     }
+    
+    fileprivate func performDefaultAction(for info: NotificationInfoCommonObject, completionHandler: @escaping (Bool) -> Void) {
+
+        var handled = false
+
+        switch info.payloadType {
+        case .newEpisodeInvitation:
+            if let infoEvent = info as? NewEpisodeNotificationInfo {
+                handled = true
+                
+                BHPostsManager.shared.getPost(infoEvent.eventUuid, context: nil) { response in
+                    switch response {
+                    case .success(post: let post):
+                        let storyboard = UIStoryboard(name: StoryboardName.main, bundle: Bundle.module)
+                        let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
+                        vc.post = post
+                        UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                    case .failure(error: _):
+                        break
+                    }
+                }
+            }
+            
+        case .newEpisodesReminder:
+            handled = true
+
+        case .liveEpisodeStarted,
+             .liveEpisodeMeetingRoom,
+             .liveEpisodeScheduled:
+            break
+            
+        case .massNotification:
+            handled = true
+        }
+
+        completionHandler(handled)
+    }
 }
 
 // MARK: - Notifications
@@ -229,6 +266,6 @@ extension BHNotificationsManager: BHLocalNotificationsManagerDelegate {
             return
         }
 
-        //handleAction(with: actionIdentifier, for: info, completionHandler: completionHandler)
+        performDefaultAction(for: info, completionHandler: completionHandler)
     }
 }
