@@ -16,10 +16,18 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         BHHybridPlayer.shared.addListener(self)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        BHHybridPlayer.shared.removeListener(self)
+    }
+
     override func loadView() {
         super.loadView()
         
