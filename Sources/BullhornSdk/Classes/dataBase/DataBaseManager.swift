@@ -147,22 +147,64 @@ class DataBaseManager {
             return false
         }
     }
+    
+    // MARK: - Network Channels
 
-    // MARK: - Network Users
-
-    func fetchNetworkUsers(with id: String, completion: @escaping (BHServerApiFeed.PaginatedUsersResult) -> Void) {
+    func fetchNetworkChannels(with id: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
         
         do {
-            let networkUsersMO = try dataStack.fetch(id, inEntityNamed: NetworkUsersMO.entityName) as? NetworkUsersMO
-            if let networkUsers = networkUsersMO?.toNetworkUsers() {
-                completion(.success(users: networkUsers.users, page: networkUsers.page, pages: networkUsers.pages))
+            let channelsMO = try dataStack.fetch(id, inEntityNamed: NetworkChannelsMO.entityName) as? NetworkChannelsMO
+            if let channels = channelsMO?.toChannels() {
+                completion(.success(channels: channels))
             } else {
-                completion(.success(users: [], page: 1, pages: 1))
+                completion(.success(channels: []))
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
             trackError(error)
-            completion(.success(users: [], page: 1, pages: 1))
+            completion(.success(channels: []))
+        }
+    }
+    
+    func insertOrUpdateNetworkChannels(with params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.insertOrUpdate(params, inEntityNamed: NetworkChannelsMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
+
+    func updateNetworkChannels(with id: String, params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.update(id, with: params, inEntityNamed: NetworkChannelsMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
+
+    // MARK: - Network Users
+
+    func fetchNetworkUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
+        
+        do {
+            let networkUsersMO = try dataStack.fetch(id, inEntityNamed: NetworkUsersMO.entityName) as? NetworkUsersMO
+            if let users = networkUsersMO?.toNetworkUsers() {
+                completion(.success(users: users))
+            } else {
+                completion(.success(users: []))
+            }
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            completion(.success(users: []))
         }
     }
     
@@ -170,7 +212,7 @@ class DataBaseManager {
 
         do {
             try dataStack.insertOrUpdate(params, inEntityNamed: NetworkUsersMO.entityName)
-            return updateDownloads()
+            return true
         } catch {
             BHLog.w("\(#function) - \(error)")
             trackError(error)
@@ -182,7 +224,7 @@ class DataBaseManager {
 
         do {
             try dataStack.update(id, with: params, inEntityNamed: NetworkUsersMO.entityName)
-            return updateDownloads()
+            return true
         } catch {
             BHLog.w("\(#function) - \(error)")
             trackError(error)
@@ -499,7 +541,7 @@ class DataBaseManager {
 
         do {
             try dataStack.insertOrUpdate(params, inEntityNamed: RelatedUsersMO.entityName)
-            return updateDownloads()
+            return true
         } catch {
             BHLog.w("\(#function) - \(error)")
             trackError(error)

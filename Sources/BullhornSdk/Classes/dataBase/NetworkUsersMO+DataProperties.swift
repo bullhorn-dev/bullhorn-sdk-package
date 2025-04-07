@@ -8,7 +8,5 @@ extension NetworkUsersMO {
     }
     
     @NSManaged public var id: String?
-    @NSManaged public var page: Int
-    @NSManaged public var pages: Int
     @NSManaged public var users: NSSet?
 }

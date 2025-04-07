@@ -18,6 +18,7 @@ struct BHUser: Codable, Hashable {
         case hasActiveLive = "has_active_live"
         case shareLink = "share_link"
         case website
+        case channel = "network_channel"
         case categories
         case ratingsCount = "ratings_count"
         case ratingValue = "rating_value"
@@ -48,6 +49,7 @@ struct BHUser: Codable, Hashable {
     var hasActiveLive: Bool = false
     var shareLink: URL?
     var website: URL?
+    var channel: BHChannel?
     var categories: [BHUserCategory]?
     var ratingsCount: Int?
     var ratingValue: Double?

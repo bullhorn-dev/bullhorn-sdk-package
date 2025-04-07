@@ -29,6 +29,7 @@ public class UserMO: NSManagedObject {
         user.ratingsCount = ratingsCount?.intValue
         user.ratingValue = ratingValue?.doubleValue
         user.outgoingStatus = outgoingStatus
+        user.channel = channel?.toChannel()
 
         var ctgrs: [BHUserCategory] = []
 

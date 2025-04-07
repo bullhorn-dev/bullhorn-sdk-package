@@ -124,7 +124,7 @@ class BHExploreManager {
         
         usersSearchText = text ?? ""
         
-        apiNetwork.getNetworkUsers(authToken: authToken, networkId: networkId, text: usersSearchText, page: nextUsersPage, perPage: apiNetwork.defaultPageCount, shouldCache: false) { response in
+        apiNetwork.searchNetworkUsers(authToken: authToken, networkId: networkId, text: usersSearchText, page: nextUsersPage, perPage: apiNetwork.defaultPageCount) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(users: let users, page: let page, pages: let pages):

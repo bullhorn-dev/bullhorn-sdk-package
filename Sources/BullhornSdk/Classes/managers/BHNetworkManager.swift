@@ -22,6 +22,7 @@ class BHNetworkManager {
     fileprivate lazy var apiExplore = BHServerApiExplore.init(withApiType: .regular)
     
     var network: BHNetwork?
+    var channels: [BHChannel] = []
     var liveNowPosts: [BHPost] = []
     var scheduledPosts: [BHPost] = []
     var featuredPosts: [BHPost] = []
@@ -94,6 +95,21 @@ class BHNetworkManager {
         }
     }
     
+    func getNetworkChannels(_ networkId: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
+        
+        apiNetwork.getNetworkChannels(authToken: authToken, networkId: networkId) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(channels: let channels):
+                    self.channels = channels
+                case .failure(error: let error):
+                    BHLog.w("Channels load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+    
     func getNetworkRadios(_ networkId: String, completion: @escaping (BHServerApiNetwork.RadiosResult) -> Void) {
         
         apiNetwork.getRadios(authToken: authToken, networkId: networkId) { response in
@@ -131,15 +147,13 @@ class BHNetworkManager {
         }
     }
     
-    func getNetworkUsers(_ networkId: String, completion: @escaping (BHServerApiFeed.PaginatedUsersResult) -> Void) {
+    func getNetworkUsers(_ networkId: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
                 
-        apiNetwork.getNetworkUsers(authToken: authToken, networkId: networkId, text: nil, page: nextUsersPage, perPage: 50) { response in
+        apiNetwork.getNetworkUsers(authToken: authToken, networkId: networkId) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(users: _, page: let page, pages: let pages):
-                    self.usersPage = page
-                    self.usersPages = pages
-                    self.fetchStoragePodcasts(networkId) { _ in }
+                case .success(users: let users):
+                    self.users = users
                 case .failure(error: let error):
                     BHLog.w("Network podcasts load failed \(error.localizedDescription)")
                 }
@@ -249,7 +263,18 @@ class BHNetworkManager {
             }
             fetchGroup.leave()
         }
-                
+
+        fetchGroup.enter()
+        
+        getNetworkChannels(networkId) { response in
+            switch response {
+            case .success(channels: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+
         fetchGroup.enter()
         
         BHRadioStreamsManager.shared.fetch(networkId) { response in
@@ -341,6 +366,18 @@ class BHNetworkManager {
     fileprivate func fetchStorageNetwork(_ networkId: String) {
         network = DataBaseManager.shared.fetchNetwork(with: networkId)
     }
+    
+    fileprivate func fetchStorageChannels(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
+        DataBaseManager.shared.fetchNetworkChannels(with: networkId) { response in
+            switch response {
+            case .success(channels: let channels):
+                self.channels = channels
+                completion(.success)
+            case .failure(error: let error):
+                completion(.failure(error: error))
+            }
+        }
+    }
 
     fileprivate func fetchStorageScheduledEpisodes(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
         DataBaseManager.shared.fetchNetworkScheduledPosts(with: networkId) { response in
@@ -411,14 +448,8 @@ class BHNetworkManager {
     fileprivate func fetchStoragePodcasts(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
         DataBaseManager.shared.fetchNetworkUsers(with: networkId) { response in
             switch response {
-            case .success(users: let users, page: let page, pages: let pages):
-                if page > 1 {
-                    self.users += users
-                } else {
-                    self.users = users
-                }
-                self.usersPage = page
-                self.usersPages = pages
+            case .success(users: let users):
+                self.users = users
                 completion(.success)
             case .failure(error: let error):
                 completion(.failure(error: error))
@@ -436,6 +467,17 @@ class BHNetworkManager {
         fetchStorageNetwork(networkId)
 
         fetchStorageFeaturedPodcasts(networkId) { response in
+            switch response {
+            case .success: break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+
+        fetchGroup.enter()
+
+        fetchStorageChannels(networkId) { response in
             switch response {
             case .success: break
             case .failure(error: let error):

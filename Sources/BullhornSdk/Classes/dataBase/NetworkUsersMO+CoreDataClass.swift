@@ -8,7 +8,7 @@ public class NetworkUsersMO: NSManagedObject {
     
     // MARK: - Public
         
-    func toNetworkUsers() -> (users: [BHUser], page: Int, pages: Int) {
+    func toNetworkUsers() -> [BHUser] {
 
         var usrs: [BHUser] = []
 
@@ -20,6 +20,6 @@ public class NetworkUsersMO: NSManagedObject {
             }
         }
         
-        return (users: usrs, page: page, pages: pages)
+        return usrs
     }
 }
