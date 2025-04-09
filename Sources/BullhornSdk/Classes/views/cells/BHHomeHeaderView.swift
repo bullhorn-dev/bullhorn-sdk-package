@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 
 protocol BHHomeHeaderViewDelegate: AnyObject {
-    func headerView(_ view: BHHomeHeaderView, didSelectTabBarItem item: BHTabs)
+    func headerView(_ view: BHHomeHeaderView, didSelectChannel channel: BHChannel)
     func headerView(_ view: BHHomeHeaderView, didSelectPost post: BHPost)
     func headerView(_ view: BHHomeHeaderView, didSelectUser user: BHUser)
     func headerView(_ view: BHHomeHeaderView, didRequestPlayPost post: BHPost)
@@ -26,11 +26,9 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var featuredPostsTitle: UIView!
     @IBOutlet weak var featuredPostsTitleLabel: UILabel!
     @IBOutlet weak var featuredPostsView: BHPagedCarouselView!
-    @IBOutlet weak var tabbedView: BHTabbedView!
+    @IBOutlet weak var channelsView: BHChannelsView!
     
     weak var delegate: BHHomeHeaderViewDelegate?
-    
-    fileprivate var selectedTab: BHTabs = .podcasts
 
     // MARK: - Lifecycle
 
@@ -58,9 +56,10 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         scheduledPostsView.posts = BHNetworkManager.shared.scheduledPosts
         livePostsView.posts = BHNetworkManager.shared.liveNowPosts
         radioStreamsView.radio = BHRadioStreamsManager.shared.currentRadio
+        channelsView.channels = BHNetworkManager.shared.channels
     }
 
-    func setup(_ hasRadioStreams: Bool = true) {
+    func setup() {
         
         contentView.backgroundColor = .primaryBackground()
         
@@ -74,13 +73,9 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         livePostsView.delegate = self
         scheduledPostsView.delegate = self
         
-        tabbedView.tabs = [
-            BHTabItemView(title: "Podcasts"),
-            BHTabItemView(title: "Episodes")
-        ]
-        tabbedView.delegate = self
+        channelsView.delegate = self
                 
-        radioStreamsView.isHidden = !hasRadioStreams
+        radioStreamsView.isHidden = !hasRadioStreams()
         featuredUsersTitle.isHidden = !hasFeaturedUsers()
         featuredUsersView.isHidden = !hasFeaturedUsers()
         featuredPostsTitle.isHidden = !hasFeaturedPosts()
@@ -93,10 +88,14 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         reloadData()
     }
     
-    func calculateHeight(_ hasRadioStreams: Bool = true) -> CGFloat {
-        var totalHeight: CGFloat = tabbedView.frame.size.height
+    func calculateHeight() -> CGFloat {
+        var totalHeight: CGFloat = 0
 
-        if hasRadioStreams {
+        if hasChannels() {
+            totalHeight += channelsView.frame.size.height
+        }
+
+        if hasRadioStreams() {
             totalHeight += radioStreamsView.calculateHeight()
         }
             
@@ -136,15 +135,24 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     fileprivate func hasFeaturedUsers() -> Bool {
         return BHNetworkManager.shared.featuredUsers.count > 0
     }
+    
+    fileprivate func hasRadioStreams() -> Bool {
+        return BHRadioStreamsManager.shared.hasRadioStreams
+    }
+    
+    fileprivate func hasChannels() -> Bool {
+        return BHNetworkManager.shared.channels.count > 0
+    }
+
 }
 
-// MARK: - BHTabbedViewDelegate
+// MARK: - BHChannelsViewDelegate
 
-extension BHHomeHeaderView: BHTabbedViewDelegate {
+extension BHHomeHeaderView: BHChannelsViewDelegate {
     
-    func tabbedView(_ tabbedView: BHTabbedView, didMoveToTab index: Int) {
-        selectedTab = BHTabs(rawValue: index) ?? .podcasts
-        delegate?.headerView(self, didSelectTabBarItem: selectedTab)
+    func channelsView(_ view: BHChannelsView, didMoveToChannel index: Int) {
+        let selectedChannel = BHNetworkManager.shared.channels[index]
+        delegate?.headerView(self, didSelectChannel: selectedChannel)
     }
 }
 

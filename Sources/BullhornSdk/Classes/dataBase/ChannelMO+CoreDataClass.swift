@@ -13,8 +13,18 @@ public class ChannelMO: NSManagedObject {
         guard let validId = id else { return nil }
         guard let validName = name else { return nil }
         guard let validTitle = title else { return nil }
+        
+        var c: [BHUserCategory] = []
 
-        return BHChannel(id: validId, name: validName, title: validTitle)
+        if let validCategories = categories {
+            for categoryMO in validCategories.compactMap({ $0 as? UserCategoryMO }) {
+                if let category = categoryMO.toUserCategory() {
+                    c.append(category)
+                }
+            }
+        }
+
+        return BHChannel(id: validId, name: validName, title: validTitle, categories: c)
     }
 }
 

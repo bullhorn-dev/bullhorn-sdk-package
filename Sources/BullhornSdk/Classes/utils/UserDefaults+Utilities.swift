@@ -24,6 +24,7 @@ extension UserDefaults {
     fileprivate static let userInterfaceStyleDefaultsKey = "userInterfaceStyleDefaultsKey"
     fileprivate static let userSessionIdDefaultsKey = "userSessionIdDefaultsKey"
     fileprivate static let userSessionTimeDefaultsKey = "userSessionTimeDefaultsKey"
+    fileprivate static let selectedChannelIdDefaultsKey = "selectedChannelIdDefaultsKey"
 
     static let playNextEnabledDefaultsKey = "playNextEnabledDefaultsKey"
 
@@ -218,4 +219,12 @@ extension UserDefaults {
         }
     }
 
+    var selectedChannelId: String {
+        get {
+            return UserDefaults.standard.string(forKey: UserDefaults.selectedChannelIdDefaultsKey) ?? BHChannel.mainChannelId
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.selectedChannelIdDefaultsKey)
+        }
+    }
 }

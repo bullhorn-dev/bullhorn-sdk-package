@@ -29,9 +29,17 @@ public class UserMO: NSManagedObject {
         user.ratingsCount = ratingsCount?.intValue
         user.ratingValue = ratingValue?.doubleValue
         user.outgoingStatus = outgoingStatus
-        user.channel = channel?.toChannel()
 
+        var cnls: [BHChannel] = []
         var ctgrs: [BHUserCategory] = []
+
+        if let validChannels = channels {
+            for channelMO in validChannels.compactMap({ $0 as? ChannelMO }) {
+                if let channel = channelMO.toChannel() {
+                    cnls.append(channel)
+                }
+            }
+        }
 
         if let validCategories = categories {
             for categoryMO in validCategories.compactMap({ $0 as? UserCategoryMO }) {
@@ -41,6 +49,7 @@ public class UserMO: NSManagedObject {
             }
         }
 
+        user.channels = cnls
         user.categories = ctgrs
 
         return user

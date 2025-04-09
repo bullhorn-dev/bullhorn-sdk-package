@@ -12,8 +12,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate var headerView: BHHomeHeaderView?
-    fileprivate var footerView: BHListFooterView?
-    fileprivate var selectedTab: BHTabs = .podcasts
+
+    fileprivate var selectedChannelId: String = UserDefaults.standard.selectedChannelId
 
     fileprivate var refreshControl: UIRefreshControl?
 
@@ -34,14 +34,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         activityIndicator.color = .accent()
 
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let gridCellNib = UINib(nibName: "BHUsersGridCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHHomeHeaderView", bundle: bundle)
-        let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHHomeHeaderView.reusableIndentifer)
-        tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.register(gridCellNib, forCellReuseIdentifier: BHUsersGridCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
@@ -50,8 +46,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHHomeHeaderView.reusableIndentifer) as? BHHomeHeaderView
         headerView?.initialize()
         headerView?.delegate = self
-        
-        footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
 
         configureNavigationItems()
         configureRefreshControl()
@@ -68,7 +62,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         super.viewWillAppear(animated)
         
         refreshControl?.resetUIState()
-        tableView.reloadData()
+        reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -101,10 +95,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         let networkId = BHAppConfiguration.shared.foxNetworkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0
+            self.shouldShowHeader = BHNetworkManager.shared.users.count > 0
             self.refreshControl?.endRefreshing()
             self.defaultHideActivityIndicatorView()
-            self.tableView.reloadData()
+            self.reloadData()
             self.headerView?.reloadData()
         }
 
@@ -115,7 +109,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             BHNetworkManager.shared.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
-                    let showHeader = BHNetworkManager.shared.featuredUsers.count > 0
+                    let showHeader = self.headerView != nil
                     if showHeader || !BHReachabilityManager.shared.isConnected() {
                         completeBlock()
                     }
@@ -139,33 +133,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             completeBlock()
         }
     }
-    
-    fileprivate func fetchPosts() {
-
-        BHNetworkManager.shared.getNetworkPosts(BHAppConfiguration.shared.foxNetworkId) { response in
-            switch response {
-            case .success:
-                self.tableView.reloadData()
-            case .failure(error: _):
-                break
-            }
-
-            self.defaultHideActivityIndicatorView()
-        }
-    }
-
-    fileprivate func fetchUsers() {
-
-        BHNetworkManager.shared.getNetworkUsers(BHAppConfiguration.shared.foxNetworkId) { response in
-            switch response {
-            case .success:
-                self.tableView.reloadData()
-            case .failure(error: _):
-                break
-            }
-            
-            self.defaultHideActivityIndicatorView()
-        }
+        
+    fileprivate func reloadData() {
+        BHNetworkManager.shared.splitUsers(selectedChannelId)
+        tableView.reloadData()
     }
     
     // MARK: - Action handlers
@@ -297,116 +268,75 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 1 + BHNetworkManager.shared.splittedUsers.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        let bundle = Bundle.module
-        let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
-        switch selectedTab {
-        case .podcasts:
-            if BHNetworkManager.shared.users.count == 0 && !activityIndicator.isAnimating {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
-                tableView.setEmptyMessage(message, image: image)
-            } else {
-                tableView.restore()
-            }
-            return BHNetworkManager.shared.users.count > 0 ? 1 : 0
-        case .episodes:
-            if BHNetworkManager.shared.posts.count == 0 && !activityIndicator.isAnimating {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
-                tableView.setEmptyMessage(message, image: image)
-            } else {
-                tableView.restore()
-            }
-            return BHNetworkManager.shared.posts.count
+        if section == 0 { return 0 }
+        
+        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
+            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            tableView.setEmptyMessage(message, image: image)
+        } else {
+            tableView.restore()
         }
+        return BHNetworkManager.shared.splittedUsers.count > 0 ? 1 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch selectedTab {
-        case .podcasts:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
-            cell.collectionViewController.users = BHNetworkManager.shared.users
-            cell.collectionViewController.delegate = self
+        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
+        let uimodel = BHNetworkManager.shared.splittedUsers[indexPath.section - 1]
+        cell.collectionViewController.users = uimodel.users
+        cell.collectionViewController.delegate = self
 
-            if BHNetworkManager.shared.hasMoreUsers {
-                fetchUsers()
-            }
+        return cell
+    }
 
-            return cell
-        case .episodes:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BHPostCell.reusableIndentifer, for: indexPath) as! BHPostCell
-            cell.post = BHNetworkManager.shared.posts[indexPath.row]
-            cell.playlist = BHNetworkManager.shared.posts
-            cell.shareBtnTapClosure = { [weak self] url in
-                self?.presentShareDialog(with: [url], configureBlock: { controller in
-                    controller.popoverPresentationController?.sourceView = cell.shareButton
-                })
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if shouldShowHeader {
+            if section == 0 {
+                return nil
+            } else {
+                return BHNetworkManager.shared.splittedUsers[section - 1].title
             }
-            
-            if BHNetworkManager.shared.hasMorePosts && indexPath.row == BHNetworkManager.shared.posts.count - 1 {
-                fetchPosts()
-            }
-            
-            return cell
+        }
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if shouldShowHeader && section == 0 {
+            headerView?.setup()
+            return headerView
+        } else {
+            return UITableViewHeaderFooterView()
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if shouldShowHeader {
-            headerView?.setup(BHRadioStreamsManager.shared.hasRadioStreams)
-            return headerView
-        } else {
-            return nil
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if shouldShowHeader && section > 0 {
+            let header = view as! UITableViewHeaderFooterView
+            header.contentView.backgroundColor = .primaryBackground()
+            header.textLabel?.textColor = .primary()
+            header.textLabel?.font = UIFont.fontWithName(.robotoBold , size: 18)
+            header.textLabel?.text =  header.textLabel?.text?.capitalized
         }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if shouldShowHeader {
-            return headerView?.calculateHeight(BHRadioStreamsManager.shared.hasRadioStreams) ?? 88
+            if section == 0 {
+                return headerView?.calculateHeight() ?? 0
+            } else {
+                return BHNetworkManager.shared.followedUsers.count > 0 ? 20.0 : 0
+            }
         } else {
             return 0
         }
     }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        switch selectedTab {
-        case .podcasts:
-            if BHNetworkManager.shared.hasMoreUsers {
-                footerView?.setup()
-                return footerView
-            }
-        case .episodes:
-            if BHNetworkManager.shared.hasMorePosts {
-                footerView?.setup()
-                return footerView
-            }
-        }
-
-        return nil
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch selectedTab {
-        case .podcasts:
-            return BHNetworkManager.shared.hasMoreUsers ? 40 : 0
-        case .episodes:
-            return BHNetworkManager.shared.hasMorePosts ? 40 : 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        switch selectedTab {
-        case .podcasts:
-            break
-        case .episodes:
-            openPostDetails(BHNetworkManager.shared.posts[indexPath.row])
-        }
-    }
+        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
@@ -425,9 +355,9 @@ extension BHHomeViewController: BHHomeHeaderViewDelegate {
         openUserDetails(user)
     }
 
-    func headerView(_ view: BHHomeHeaderView, didSelectTabBarItem item: BHTabs) {
-        selectedTab = item
-        tableView.reloadData()
+    func headerView(_ view: BHHomeHeaderView, didSelectChannel channel: BHChannel) {
+        selectedChannelId = channel.id
+        reloadData()
     }
     
     func headerView(_ view: BHHomeHeaderView, didRequestPlayPost post: BHPost) {

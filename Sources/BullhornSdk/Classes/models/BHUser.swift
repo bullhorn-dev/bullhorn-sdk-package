@@ -18,7 +18,7 @@ struct BHUser: Codable, Hashable {
         case hasActiveLive = "has_active_live"
         case shareLink = "share_link"
         case website
-        case channel = "network_channel"
+        case channels = "network_channels"
         case categories
         case ratingsCount = "ratings_count"
         case ratingValue = "rating_value"
@@ -49,14 +49,18 @@ struct BHUser: Codable, Hashable {
     var hasActiveLive: Bool = false
     var shareLink: URL?
     var website: URL?
-    var channel: BHChannel?
+    var channels: [BHChannel]?
     var categories: [BHUserCategory]?
     var ratingsCount: Int?
     var ratingValue: Double?
     var outgoingStatus: String?
 
-    var categoryName: String? {
-        return categories?.sorted(by: {$0.id < $1.id}).first?.name ?? "News"
+    var categoryName: String {
+        return categories?.first?.name ?? "News Updates"
+    }
+    
+    func belongsChannel(_ channelId: String) -> Bool {
+        return channels?.contains(where: { $0.id == channelId }) ?? false
     }
     
     var isFollowed: Bool {

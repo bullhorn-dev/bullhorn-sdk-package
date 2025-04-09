@@ -17,7 +17,13 @@
                 <entry key="hyper.remoteKey" value="title"/>
             </userInfo>
         </attribute>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserCategory" inverseName="ccategories" inverseEntity="UserCategory">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="categories"/>
+            </userInfo>
+        </relationship>
         <relationship name="channels" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="NetworkChannels" inverseName="channels" inverseEntity="NetworkChannels"/>
+        <relationship name="uchannels" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="channels" inverseEntity="User"/>
     </entity>
     <entity name="DownloadItem" representedClassName="DownloadItemMO" syncable="YES">
         <attribute name="file" optional="YES" attributeType="String"/>
@@ -595,7 +601,11 @@
                 <entry key="hyper.remoteKey" value="categories"/>
             </userInfo>
         </relationship>
-        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel"/>
+        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Channel" inverseName="uchannels" inverseEntity="Channel">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="network_channels"/>
+            </userInfo>
+        </relationship>
         <relationship name="featuredUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedUsers" inverseName="featuredUsers" inverseEntity="NetworkFeaturedUsers"/>
         <relationship name="recentUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecentUsers" inverseName="recentUsers" inverseEntity="RecentUsers"/>
         <relationship name="relatedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RelatedUsers" inverseName="relatedUsers" inverseEntity="RelatedUsers"/>
@@ -644,6 +654,7 @@
             </userInfo>
         </attribute>
         <relationship name="categories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="categories" inverseEntity="User"/>
+        <relationship name="ccategories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="categories" inverseEntity="Channel"/>
         <userInfo>
             <entry key="hyper.remoteKey" value="categories"/>
         </userInfo>

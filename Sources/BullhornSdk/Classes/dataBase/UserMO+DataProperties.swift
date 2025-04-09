@@ -20,7 +20,7 @@ extension UserMO {
     @NSManaged public var hasActiveLive: Bool
     @NSManaged public var shareLink: String?
     @NSManaged public var website: String?
-    @NSManaged public var channel: ChannelMO?
+    @NSManaged public var channels: NSSet?
     @NSManaged public var categories: NSSet?
     @NSManaged public var ratingsCount: NSNumber?
     @NSManaged public var ratingValue: NSNumber?

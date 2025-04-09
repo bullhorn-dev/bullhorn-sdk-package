@@ -22,7 +22,6 @@ class BHNetworkManager {
     fileprivate lazy var apiExplore = BHServerApiExplore.init(withApiType: .regular)
     
     var network: BHNetwork?
-    var channels: [BHChannel] = []
     var liveNowPosts: [BHPost] = []
     var scheduledPosts: [BHPost] = []
     var featuredPosts: [BHPost] = []
@@ -61,6 +60,36 @@ class BHNetworkManager {
     var followedUsers: [BHUser] {
         return users.filter({ $0.isFollowed })
     }
+    
+    struct UIUsersModel {
+        let title: String
+        let users: [BHUser]
+    }
+
+    var splittedUsers: [UIUsersModel] = []
+    
+    func splitUsers(_ channelId: String) {
+        
+        splittedUsers.removeAll()
+        
+        if let selectedChannel = channels.first(where: { $0.id == channelId }) {
+            if selectedChannel.isMain() {
+                selectedChannel.parsedCategories.forEach({ category in
+                    let uimodel = UIUsersModel(title: category, users: users.filter({ $0.categoryName == category }))
+                    splittedUsers.append(uimodel)
+                })
+            } else {
+                selectedChannel.parsedCategories.forEach({ category in
+                    let uimodel = UIUsersModel(title: category, users: users.filter({ $0.categoryName == category && $0.belongsChannel(channelId) }))
+                    splittedUsers.append(uimodel)
+                })
+            }
+        }
+    }
+    
+    // MARK: - Channels
+    
+    var channels: [BHChannel] = []
 
     // MARK: - Initialization
     

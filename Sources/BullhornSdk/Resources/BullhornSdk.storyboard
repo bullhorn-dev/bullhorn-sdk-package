@@ -422,7 +422,9 @@
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AUe-Z7-uLB">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="703"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="sectionIndexColor" name="bhColorPrimary"/>
+                                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="U2I-TR-bcv" id="4F8-sc-6e4"/>
                                             <outlet property="delegate" destination="U2I-TR-bcv" id="7F2-4g-jLp"/>
@@ -1787,8 +1789,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="4Qk-s4-pJO"/>
-        <segue reference="2Ut-JK-cZ6"/>
+        <segue reference="TAw-Tl-Zg2"/>
+        <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>
@@ -1833,6 +1835,9 @@
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
