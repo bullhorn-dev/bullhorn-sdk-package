@@ -5,6 +5,11 @@ protocol BHNetworkManagerListener: ObserverProtocol {
     func networkManagerDidFetchPosts(_ manager: BHNetworkManager)
 }
 
+struct UIUsersModel {
+    let title: String
+    let users: [BHUser]
+}
+
 class BHNetworkManager {
 
     static let shared = BHNetworkManager()
@@ -61,11 +66,6 @@ class BHNetworkManager {
         return users.filter({ $0.isFollowed })
     }
     
-    struct UIUsersModel {
-        let title: String
-        let users: [BHUser]
-    }
-
     var splittedUsers: [UIUsersModel] = []
     
     func splitUsers(_ channelId: String) {

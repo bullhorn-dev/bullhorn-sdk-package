@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BHGridCollectionController" customModule="BullhornSdk" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BHSectionHeaderView" id="Lox-Qg-dYi" customClass="BHSectionHeaderView" customModule="BullhornSdk">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TUZ-Q4-RVp">
+                    <rect key="frame" x="16" y="11.5" width="361" height="21"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                    <color key="textColor" name="bhColorPrimary"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="oM7-3v-mkI"/>
+            <constraints>
+                <constraint firstItem="TUZ-Q4-RVp" firstAttribute="leading" secondItem="oM7-3v-mkI" secondAttribute="leading" constant="16" id="0u3-TA-kfv"/>
+                <constraint firstItem="oM7-3v-mkI" firstAttribute="trailing" secondItem="TUZ-Q4-RVp" secondAttribute="trailing" constant="16" id="WYn-0o-xl6"/>
+                <constraint firstItem="TUZ-Q4-RVp" firstAttribute="centerY" secondItem="Lox-Qg-dYi" secondAttribute="centerY" id="bBl-vV-jCE"/>
+                <constraint firstItem="TUZ-Q4-RVp" firstAttribute="centerX" secondItem="Lox-Qg-dYi" secondAttribute="centerX" id="frA-6V-xPu"/>
+            </constraints>
+            <connections>
+                <outlet property="titleLabel" destination="TUZ-Q4-RVp" id="zZv-Ai-rXG"/>
+            </connections>
+            <point key="canvasLocation" x="-133" y="-3"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <namedColor name="bhColorPrimary">
+            <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

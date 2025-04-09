@@ -268,13 +268,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 + BHNetworkManager.shared.splittedUsers.count
+        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if section == 0 { return 0 }
-        
         if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
             let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
@@ -287,55 +284,27 @@ extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
-        let uimodel = BHNetworkManager.shared.splittedUsers[indexPath.section - 1]
-        cell.collectionViewController.users = uimodel.users
+        cell.collectionViewController.uiModels = BHNetworkManager.shared.splittedUsers
         cell.collectionViewController.delegate = self
 
         return cell
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if shouldShowHeader {
-            if section == 0 {
-                return nil
-            } else {
-                return BHNetworkManager.shared.splittedUsers[section - 1].title
-            }
+            headerView?.setup()
+            return headerView
         }
         return nil
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if shouldShowHeader && section == 0 {
-            headerView?.setup()
-            return headerView
-        } else {
-            return UITableViewHeaderFooterView()
-        }
-    }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if shouldShowHeader && section > 0 {
-            let header = view as! UITableViewHeaderFooterView
-            header.contentView.backgroundColor = .primaryBackground()
-            header.textLabel?.textColor = .primary()
-            header.textLabel?.font = UIFont.fontWithName(.robotoBold , size: 18)
-            header.textLabel?.text =  header.textLabel?.text?.capitalized
-        }
-    }
-
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if shouldShowHeader {
-            if section == 0 {
-                return headerView?.calculateHeight() ?? 0
-            } else {
-                return BHNetworkManager.shared.followedUsers.count > 0 ? 20.0 : 0
-            }
-        } else {
-            return 0
+            return headerView?.calculateHeight() ?? 0
         }
+        return 0
     }
-        
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

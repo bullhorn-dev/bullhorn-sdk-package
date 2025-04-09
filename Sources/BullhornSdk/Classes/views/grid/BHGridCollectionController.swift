@@ -10,7 +10,7 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
     
     weak var delegate: BHGridControllerDelegate?
 
-    var users: [BHUser] = [] {
+    var uiModels: [UIUsersModel] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -21,6 +21,9 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let bundle = Bundle.module
+        let headerNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
+        collectionView.register(headerNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer)
         collectionView.register(BHUserCarouselCell.self, forCellWithReuseIdentifier: BHUserCarouselCell.reusableIndentifer)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -42,24 +45,38 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return uiModels.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
+        return uiModels[section].users.count
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+          case UICollectionView.elementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
+
+            guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
+            usersHeaderView.titleLabel.text = uiModels[indexPath.section].title
+
+            return usersHeaderView
+          default:
+            assert(false, "Invalid element type")
+          }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
         
         cell.showCategory = false
-        cell.user = users[indexPath.item]
+        cell.user = uiModels[indexPath.section].users[indexPath.item]
     
         return cell
     }
         
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = users[indexPath.row]
+        let user = uiModels[indexPath.section].users[indexPath.row]
         delegate?.gridController(self, didSelectUser: user)
     }
       
