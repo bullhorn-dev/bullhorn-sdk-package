@@ -26,12 +26,12 @@ class BHNetworkManager {
     fileprivate lazy var apiNetwork = BHServerApiNetwork.init(withApiType: .regular)
     fileprivate lazy var apiExplore = BHServerApiExplore.init(withApiType: .regular)
     
-    var network: BHNetwork?
     var liveNowPosts: [BHPost] = []
     var scheduledPosts: [BHPost] = []
     var featuredPosts: [BHPost] = []
     var featuredUsers: [BHUser] = []
-    
+    var channels: [BHChannel] = []
+
     // MARK: - Posts
     
     var posts: [BHPost] = []
@@ -51,17 +51,6 @@ class BHNetworkManager {
     
     var users: [BHUser] = []
     
-    var hasMoreUsers: Bool {
-        return usersPage < usersPages
-    }
-    
-    fileprivate var usersPage: Int = 0
-    fileprivate var usersPages: Int = 0
-    
-    fileprivate var nextUsersPage: Int {
-        return min(usersPage + 1, usersPages)
-    }
-    
     var followedUsers: [BHUser] {
         return users.filter({ $0.isFollowed })
     }
@@ -71,26 +60,30 @@ class BHNetworkManager {
     func splitUsers(_ channelId: String) {
         
         splittedUsers.removeAll()
+
+        if users.count == 0 { return }
         
         if let selectedChannel = channels.first(where: { $0.id == channelId }) {
             if selectedChannel.isMain() {
-                selectedChannel.parsedCategories.forEach({ category in
-                    let uimodel = UIUsersModel(title: category, users: users.filter({ $0.categoryName == category }))
-                    splittedUsers.append(uimodel)
+                selectedChannel.categories?.forEach({ category in
+                    let cusers = users.filter({ $0.categoryName == category.name })
+                    if let validName = category.name, cusers.count > 0 {
+                        let uimodel = UIUsersModel(title: validName, users: cusers)
+                        splittedUsers.append(uimodel)
+                    }
                 })
             } else {
-                selectedChannel.parsedCategories.forEach({ category in
-                    let uimodel = UIUsersModel(title: category, users: users.filter({ $0.categoryName == category && $0.belongsChannel(channelId) }))
-                    splittedUsers.append(uimodel)
+                selectedChannel.categories?.forEach({ category in
+                    let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
+                    if let validName = category.name, cusers.count > 0 {
+                        let uimodel = UIUsersModel(title: validName, users: cusers)
+                        splittedUsers.append(uimodel)
+                    }
                 })
             }
         }
     }
     
-    // MARK: - Channels
-    
-    var channels: [BHChannel] = []
-
     // MARK: - Initialization
     
     init() {
@@ -108,21 +101,6 @@ class BHNetworkManager {
     }
 
     // MARK: - Public
-    
-    func getNetwork(_ networkId: String, completion: @escaping (BHServerApiNetwork.NetworkResult) -> Void) {
-        
-        apiNetwork.getNetwork(authToken: authToken, networkId: networkId) { response in
-            DispatchQueue.main.async {
-                switch response {
-                case .success(network: let network):
-                    self.network = network
-                case .failure(error: let error):
-                    BHLog.w("Network load failed \(error.localizedDescription)")
-                }
-                completion(response)
-            }
-        }
-    }
     
     func getNetworkChannels(_ networkId: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
         
@@ -276,17 +254,26 @@ class BHNetworkManager {
         
         postsPage = 0
         postsPages = 0
-        usersPage = 0
-        usersPages = 0
         
         let fetchGroup = DispatchGroup()
         var responseError: Error?
+
+        fetchGroup.enter()
+        
+        getFeaturedPosts(networkId) { response in
+            switch response {
+            case .success(posts: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
         
         fetchGroup.enter()
         
-        getNetwork(networkId) { response in
+        getFeaturedUsers(networkId) { response in
             switch response {
-            case .success(network: _): break
+            case .success(users: _): break
             case .failure(error: let error):
                 responseError = error
             }
@@ -337,38 +324,16 @@ class BHNetworkManager {
             fetchGroup.leave()
         }
          
-        fetchGroup.enter()
-         
-        getScheduledPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { response in
-            switch response {
-            case .success(posts: _): break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-
-        fetchGroup.enter()
-        
-        getFeaturedPosts(networkId) { response in
-            switch response {
-            case .success(posts: _): break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-        
-        fetchGroup.enter()
-        
-        getFeaturedUsers(networkId) { response in
-            switch response {
-            case .success(users: _): break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
+//        fetchGroup.enter()
+//         
+//        getScheduledPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { response in
+//            switch response {
+//            case .success(posts: _): break
+//            case .failure(error: let error):
+//                responseError = error
+//            }
+//            fetchGroup.leave()
+//        }
         
         fetchGroup.enter()
         
@@ -392,39 +357,11 @@ class BHNetworkManager {
     
     // MARK: - Storage Providers
     
-    fileprivate func fetchStorageNetwork(_ networkId: String) {
-        network = DataBaseManager.shared.fetchNetwork(with: networkId)
-    }
-    
     fileprivate func fetchStorageChannels(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
         DataBaseManager.shared.fetchNetworkChannels(with: networkId) { response in
             switch response {
             case .success(channels: let channels):
                 self.channels = channels
-                completion(.success)
-            case .failure(error: let error):
-                completion(.failure(error: error))
-            }
-        }
-    }
-
-    fileprivate func fetchStorageScheduledEpisodes(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchNetworkScheduledPosts(with: networkId) { response in
-            switch response {
-            case .success(posts: let posts):
-                self.scheduledPosts = posts
-                completion(.success)
-            case .failure(error: let error):
-                completion(.failure(error: error))
-            }
-        }
-    }
-    
-    fileprivate func fetchStorageLiveEpisodes(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchNetworkLivePosts(with: networkId) { response in
-            switch response {
-            case .success(posts: let posts):
-                self.liveNowPosts = posts
                 completion(.success)
             case .failure(error: let error):
                 completion(.failure(error: error))
@@ -493,7 +430,16 @@ class BHNetworkManager {
         
         fetchGroup.enter()
 
-        fetchStorageNetwork(networkId)
+        fetchStorageChannels(networkId) { response in
+            switch response {
+            case .success: break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+
+        fetchGroup.enter()
 
         fetchStorageFeaturedPodcasts(networkId) { response in
             switch response {
@@ -506,40 +452,7 @@ class BHNetworkManager {
 
         fetchGroup.enter()
 
-        fetchStorageChannels(networkId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-
-        fetchGroup.enter()
-
         fetchStorageFeaturedEpisodes(networkId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-
-        fetchGroup.enter()
-
-        fetchStorageScheduledEpisodes(BHAppConfiguration.shared.foxNetworkId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-
-        fetchGroup.enter()
-
-        fetchStorageLiveEpisodes(BHAppConfiguration.shared.foxNetworkId) { response in
             switch response {
             case .success: break
             case .failure(error: let error):

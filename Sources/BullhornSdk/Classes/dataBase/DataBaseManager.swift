@@ -20,78 +20,7 @@ class DataBaseManager {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    // MARK: - Network
-    
-    func fetchNetwork(with id: String) -> BHNetwork? {
         
-        do {
-            let networkMO = try dataStack.fetch(id, inEntityNamed: NetworkMO.entityName) as? NetworkMO
-            let network = networkMO?.toNetwork()
-            return network
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            trackError(error)
-            return nil
-        }
-    }
-    
-    // MARK: - Network Scheduled Posts
-
-    func fetchNetworkScheduledPosts(with id: String, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
-        
-        do {
-            let postsMO = try dataStack.fetch(id, inEntityNamed: NetworkScheduledPostsMO.entityName) as? NetworkScheduledPostsMO
-            let posts = postsMO?.toPosts() ?? []
-            
-            completion(.success(posts: posts))
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            trackError(error)
-            completion(.failure(error: error))
-        }
-    }
-    
-    func insertOrUpdateNetworkScheduledPosts(with params: [String : Any]) -> Bool {
-
-        do {
-            try dataStack.insertOrUpdate(params, inEntityNamed: NetworkScheduledPostsMO.entityName)
-            return true
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            trackError(error)
-            return false
-        }
-    }
-
-    // MARK: - Network Live Posts
-
-    func fetchNetworkLivePosts(with id: String, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
-        
-        do {
-            let postsMO = try dataStack.fetch(id, inEntityNamed: NetworkLivePostsMO.entityName) as? NetworkLivePostsMO
-            let posts = postsMO?.toPosts() ?? []
-            
-            completion(.success(posts: posts))
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            trackError(error)
-            completion(.failure(error: error))
-        }
-    }
-    
-    func insertOrUpdateNetworkLivePosts(with params: [String : Any]) -> Bool {
-
-        do {
-            try dataStack.insertOrUpdate(params, inEntityNamed: NetworkLivePostsMO.entityName)
-            return true
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            trackError(error)
-            return false
-        }
-    }
-    
     // MARK: - Network Featured Users
 
     func fetchNetworkFeaturedUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {

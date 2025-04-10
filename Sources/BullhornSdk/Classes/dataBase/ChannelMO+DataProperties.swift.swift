@@ -10,6 +10,6 @@ extension ChannelMO {
     @NSManaged public var id: String?
     @NSManaged public var name: String?
     @NSManaged public var title: String?
-    @NSManaged public var categories: NSSet?
+    @NSManaged public var categories: Data?
 }
 

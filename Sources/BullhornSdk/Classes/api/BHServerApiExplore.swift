@@ -25,15 +25,6 @@ class BHServerApiExplore: BHServerApiBase {
                   switch response.result {
                   case .success(let p):
                       let posts = try? p.posts.toDictionaryArray()
-
-                      let params: [String : Any] = [
-                        "id": networkId,
-                        "live_posts": posts ?? []
-                      ]
-
-                      if !DataBaseManager.shared.insertOrUpdateNetworkLivePosts(with: params) {
-                          BHLog.w("Failed to save network live posts")
-                      }
                       completion(.success(posts: p.posts))
                   case .failure(let error):
                       self.trackError(error)
@@ -62,15 +53,6 @@ class BHServerApiExplore: BHServerApiBase {
                   switch response.result {
                   case .success(let p):
                       let posts = try? p.posts.toDictionaryArray()
-
-                      let params: [String : Any] = [
-                        "id": networkId,
-                        "scheduled_posts": posts ?? []
-                      ]
-
-                      if !DataBaseManager.shared.insertOrUpdateNetworkScheduledPosts(with: params) {
-                          BHLog.w("Failed to save network scheduled posts")
-                      }
                       completion(.success(posts: p.posts))
                   case .failure(let error):
                       self.trackError(error)

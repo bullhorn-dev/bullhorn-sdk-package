@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Channel" representedClassName="ChannelMO" syncable="YES">
+        <attribute name="categories" optional="YES" attributeType="Binary">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="categories"/>
+            </userInfo>
+        </attribute>
         <attribute name="id" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.isPrimaryKey" value="true"/>
@@ -17,13 +22,7 @@
                 <entry key="hyper.remoteKey" value="title"/>
             </userInfo>
         </attribute>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserCategory" inverseName="ccategories" inverseEntity="UserCategory">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="categories"/>
-            </userInfo>
-        </relationship>
         <relationship name="channels" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="NetworkChannels" inverseName="channels" inverseEntity="NetworkChannels"/>
-        <relationship name="uchannels" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="channels" inverseEntity="User"/>
     </entity>
     <entity name="DownloadItem" representedClassName="DownloadItemMO" syncable="YES">
         <attribute name="file" optional="YES" attributeType="String"/>
@@ -94,62 +93,6 @@
             <entry key="hyper.remoteKey" value="pages"/>
         </userInfo>
     </entity>
-    <entity name="Network" representedClassName="NetworkMO" syncable="YES">
-        <attribute name="createdAt" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="created_at"/>
-            </userInfo>
-        </attribute>
-        <attribute name="descr" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="description"/>
-            </userInfo>
-        </attribute>
-        <attribute name="id" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.isPrimaryKey" value="true"/>
-                <entry key="hyper.remoteKey" value="id"/>
-            </userInfo>
-        </attribute>
-        <attribute name="name" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="name"/>
-            </userInfo>
-        </attribute>
-        <attribute name="path" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="path"/>
-            </userInfo>
-        </attribute>
-        <attribute name="podcastsCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="podcasts_count"/>
-            </userInfo>
-        </attribute>
-        <attribute name="profilePicture" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="profile_picture"/>
-            </userInfo>
-        </attribute>
-        <attribute name="profilePictureBig" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="profile_picture_big"/>
-            </userInfo>
-        </attribute>
-        <attribute name="profilePictureTiny" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="profile_picture_tiny"/>
-            </userInfo>
-        </attribute>
-        <attribute name="shareLink" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="share_link"/>
-            </userInfo>
-        </attribute>
-        <userInfo>
-            <entry key="hyper.remoteKey" value="created_at"/>
-        </userInfo>
-    </entity>
     <entity name="NetworkChannels" representedClassName="NetworkChannelsMO" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String">
             <userInfo>
@@ -189,18 +132,6 @@
             </userInfo>
         </relationship>
     </entity>
-    <entity name="NetworkLivePosts" representedClassName="NetworkLivePostsMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.isPrimaryKey" value="true"/>
-                <entry key="hyper.remoteKey" value="id"/>
-            </userInfo>
-        </attribute>
-        <relationship name="livePosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="livePosts" inverseEntity="Post"/>
-        <userInfo>
-            <entry key="hyper.remoteKey" value="live_posts"/>
-        </userInfo>
-    </entity>
     <entity name="NetworkPosts" representedClassName="NetworkPostsMO" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String">
             <userInfo>
@@ -234,19 +165,6 @@
         <relationship name="radios" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Radio" inverseName="radios" inverseEntity="Radio">
             <userInfo>
                 <entry key="hyper.remoteKey" value="radios"/>
-            </userInfo>
-        </relationship>
-    </entity>
-    <entity name="NetworkScheduledPosts" representedClassName="NetworkScheduledPostsMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.isPrimaryKey" value="true"/>
-                <entry key="hyper.remoteKey" value="id"/>
-            </userInfo>
-        </attribute>
-        <relationship name="scheduledPosts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Post" inverseName="scheduledPosts" inverseEntity="Post">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="scheduled_posts"/>
             </userInfo>
         </relationship>
     </entity>
@@ -360,14 +278,12 @@
         </relationship>
         <relationship name="featuredPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedPosts" inverseName="featuredPosts" inverseEntity="NetworkFeaturedPosts"/>
         <relationship name="likedPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LikedPosts" inverseName="likedPosts" inverseEntity="LikedPosts"/>
-        <relationship name="livePosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkLivePosts" inverseName="livePosts" inverseEntity="NetworkLivePosts"/>
         <relationship name="posts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkPosts" inverseName="posts" inverseEntity="NetworkPosts"/>
         <relationship name="recording" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Recording">
             <userInfo>
                 <entry key="hyper.remoteKey" value="recording"/>
             </userInfo>
         </relationship>
-        <relationship name="scheduledPosts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkScheduledPosts" inverseName="scheduledPosts" inverseEntity="NetworkScheduledPosts"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User">
             <userInfo>
                 <entry key="hyper.remoteKey" value="user"/>
@@ -520,6 +436,16 @@
                 <entry key="hyper.remoteKey" value="bio"/>
             </userInfo>
         </attribute>
+        <attribute name="categories" optional="YES" attributeType="Binary">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="categories"/>
+            </userInfo>
+        </attribute>
+        <attribute name="channels" optional="YES" attributeType="Binary">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="network_channels"/>
+            </userInfo>
+        </attribute>
         <attribute name="external" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES">
             <userInfo>
                 <entry key="hyper.remoteKey" value="external"/>
@@ -596,47 +522,12 @@
                 <entry key="hyper.remoteKey" value="website"/>
             </userInfo>
         </attribute>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserCategory" inverseName="categories" inverseEntity="UserCategory">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="categories"/>
-            </userInfo>
-        </relationship>
-        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Channel" inverseName="uchannels" inverseEntity="Channel">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="network_channels"/>
-            </userInfo>
-        </relationship>
         <relationship name="featuredUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedUsers" inverseName="featuredUsers" inverseEntity="NetworkFeaturedUsers"/>
         <relationship name="recentUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecentUsers" inverseName="recentUsers" inverseEntity="RecentUsers"/>
         <relationship name="relatedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RelatedUsers" inverseName="relatedUsers" inverseEntity="RelatedUsers"/>
         <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkUsers" inverseName="users" inverseEntity="NetworkUsers"/>
     </entity>
     <entity name="UserCategory" representedClassName="UserCategoryMO" syncable="YES">
-        <attribute name="alias" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="alias"/>
-            </userInfo>
-        </attribute>
-        <attribute name="gradientDegree" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="gradient_degree"/>
-            </userInfo>
-        </attribute>
-        <attribute name="gradientFrom" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="gradient_from"/>
-            </userInfo>
-        </attribute>
-        <attribute name="gradientTo" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="gradient_to"/>
-            </userInfo>
-        </attribute>
-        <attribute name="icon" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="icon"/>
-            </userInfo>
-        </attribute>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
             <userInfo>
                 <entry key="hyper.isPrimaryKey" value="true"/>
@@ -648,13 +539,6 @@
                 <entry key="hyper.remoteKey" value="name"/>
             </userInfo>
         </attribute>
-        <attribute name="subCategoriesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="sub_categories_count"/>
-            </userInfo>
-        </attribute>
-        <relationship name="categories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="categories" inverseEntity="User"/>
-        <relationship name="ccategories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Channel" inverseName="categories" inverseEntity="Channel"/>
         <userInfo>
             <entry key="hyper.remoteKey" value="categories"/>
         </userInfo>

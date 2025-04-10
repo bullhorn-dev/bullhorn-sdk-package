@@ -17,11 +17,13 @@ public class ChannelMO: NSManagedObject {
         var c: [BHUserCategory] = []
 
         if let validCategories = categories {
-            for categoryMO in validCategories.compactMap({ $0 as? UserCategoryMO }) {
-                if let category = categoryMO.toUserCategory() {
+            let categoriesMO = NSKeyedUnarchiver.unarchiveObject(with: validCategories) as? [[String:Any]]
+            
+            categoriesMO?.forEach({ item in
+                if let category = BHUserCategory.fromDictionary(item) {
                     c.append(category)
                 }
-            }
+            })
         }
 
         return BHChannel(id: validId, name: validName, title: validTitle, categories: c)

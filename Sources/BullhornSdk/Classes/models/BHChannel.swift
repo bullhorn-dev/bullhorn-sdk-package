@@ -5,19 +5,6 @@ struct BHChannel: Codable, Hashable {
     
     static let mainChannelId: String = "89f11713-92f7-4568-928d-aa840446ced7"
 
-    enum Title: String {
-        case all = "All"
-        case news = "News"
-        case sports = "Sports"
-        case business = "Business"
-        case entertainment = "Entertainment"
-        case outkick = "Outkick"
-        case television = "Television"
-        case soul = "Soul"
-        case deportes = "Deportes"
-        case weather = "Weather"
-    }
-
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -31,33 +18,6 @@ struct BHChannel: Codable, Hashable {
     let categories: [BHUserCategory]?
     
     func isMain() -> Bool { return id == BHChannel.mainChannelId }
-
-    var parsedCategories: [String] {
-        guard let t = Title(rawValue: title) else { return [] }
-
-        switch t {
-        case .all:
-            return ["News Updates", "News & Politics", "True Crime", "Lifestyle", "People & Culture", "Sports", "Weather", "Business", "Deportes", "Entertainment", "TV", "Soul", "Outkick"]
-        case .news:
-            return ["News Updates", "News & Politics", "True Crime", "Lifestyle", "People & Culture"]
-        case .sports:
-            return ["Sports"]
-        case .business:
-            return ["News Updates", "Business"]
-        case .entertainment:
-            return ["Entertainment"]
-        case .outkick:
-            return ["Outkick"]
-        case .television:
-            return ["TV", "True Crime"]
-        case .soul:
-            return ["Soul"]
-        case .deportes:
-            return ["Deportes"]
-        case .weather:
-            return ["News Updates", "Weather"]
-        }
-    }
     
     var hashValue: Int {
         return id.hashValue
@@ -65,5 +25,23 @@ struct BHChannel: Codable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+    
+    static func fromDictionary(_ params: [String: Any]) -> BHChannel? {
+        guard let validId = params[CodingKeys.id.rawValue] as? String else { return nil }
+        guard let validName = params[CodingKeys.name.rawValue] as? String else { return nil }
+        guard let validTitle = params[CodingKeys.title.rawValue] as? String else { return nil }
+        
+        var validCategories: [BHUserCategory] = []
+
+        if let ctgrs = params[CodingKeys.categories.rawValue] as? [[String:Any]] {
+            ctgrs.forEach({ item in
+                if let category = BHUserCategory.fromDictionary(item) {
+                    validCategories.append(category)
+                }
+            })
+        }
+
+        return BHChannel(id: validId, name: validName, title: validTitle, categories: validCategories)
     }
 }

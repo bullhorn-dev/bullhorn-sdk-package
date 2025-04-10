@@ -39,7 +39,6 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
         super.viewDidLayoutSubviews()
         
         didLayoutAction?()
-        didLayoutAction = nil
     }
 
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
@@ -99,6 +98,6 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: Constants.itemSpacing, left: Constants.paddingHorizontal, bottom: Constants.itemSpacing, right: Constants.paddingHorizontal)
+        return UIEdgeInsets(top: 0, left: Constants.paddingHorizontal, bottom: 0, right: Constants.paddingHorizontal)
     }
 }

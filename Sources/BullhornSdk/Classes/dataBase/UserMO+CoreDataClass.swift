@@ -34,19 +34,21 @@ public class UserMO: NSManagedObject {
         var ctgrs: [BHUserCategory] = []
 
         if let validChannels = channels {
-            for channelMO in validChannels.compactMap({ $0 as? ChannelMO }) {
-                if let channel = channelMO.toChannel() {
+            let channelsMO = NSKeyedUnarchiver.unarchiveObject(with: validChannels) as? [[String:Any]]
+            channelsMO?.forEach({ item in
+                if let channel = BHChannel.fromDictionary(item) {
                     cnls.append(channel)
                 }
-            }
+            })
         }
 
         if let validCategories = categories {
-            for categoryMO in validCategories.compactMap({ $0 as? UserCategoryMO }) {
-                if let category = categoryMO.toUserCategory() {
+            let categoriesMO = NSKeyedUnarchiver.unarchiveObject(with: validCategories) as? [[String:Any]]
+            categoriesMO?.forEach({ item in
+                if let category = BHUserCategory.fromDictionary(item) {
                     ctgrs.append(category)
                 }
-            }
+            })
         }
 
         user.channels = cnls

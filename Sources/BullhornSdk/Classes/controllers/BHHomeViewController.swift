@@ -95,9 +95,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         let networkId = BHAppConfiguration.shared.foxNetworkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.users.count > 0
+            self.shouldShowHeader = BHNetworkManager.shared.featuredPosts.count > 0 && BHRadioStreamsManager.shared.radios.count > 0 && BHNetworkManager.shared.users.count > 0
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.reloadData()
             self.headerView?.reloadData()
         }
@@ -130,6 +129,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                     self.showError("The Internet connection appears to be offline")
                 }
             }
+            self.defaultHideActivityIndicatorView()
             completeBlock()
         }
     }

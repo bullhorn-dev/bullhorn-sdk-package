@@ -14,14 +14,14 @@ public class UserCategoryMO: NSManagedObject {
         
         var userCategory = BHUserCategory(id: validId.intValue)
         
-        userCategory.icon = URL(string: icon ?? "")
-        userCategory.alias = alias
-        userCategory.gradientFrom = gradientFrom
-        userCategory.gradientTo = gradientTo
-        userCategory.gradientDegree = gradientDegree?.intValue
+//        userCategory.icon = URL(string: icon ?? "")
+//        userCategory.alias = alias
+//        userCategory.gradientFrom = gradientFrom
+//        userCategory.gradientTo = gradientTo
+//        userCategory.gradientDegree = gradientDegree?.intValue
         userCategory.name = name
 //        userCategory.users = users.array(of: String.self)
-        userCategory.subCategoriesCount = subCategoriesCount?.intValue
+//        userCategory.subCategoriesCount = subCategoriesCount?.intValue
         
         return userCategory
     }

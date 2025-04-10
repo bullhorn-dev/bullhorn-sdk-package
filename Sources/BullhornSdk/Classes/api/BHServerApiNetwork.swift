@@ -3,22 +3,6 @@ import Foundation
 internal import Alamofire
 
 class BHServerApiNetwork: BHServerApiBase {
-
-    // MARK: - Network Result
-
-    struct Network: Codable {
-        
-        enum CodingKeys: String, CodingKey {
-            case network
-        }
-        
-        var network: BHNetwork
-    }
-
-    enum NetworkResult {
-        case success(network: BHNetwork)
-        case failure(error: Error)
-    }
     
     // MARK: - Radios Result
 
@@ -53,50 +37,6 @@ class BHServerApiNetwork: BHServerApiBase {
     }
 
     // MARK: - Public
-
-    func getNetwork(authToken: String?, networkId: String, _ completion: @escaping (NetworkResult) -> Void) {
-
-        updateConfig { (configError: ServerApiError?) in
-            if let error = configError {
-                completion(.failure(error: error))
-                return
-            }
-            
-            let path = "networks/" + networkId
-            let fullPath = self.composeFullApiURL(with: path)
-
-            let headers = self.composeHeaders(authToken)
-            
-            AF.request(fullPath, method: .get, headers: headers)
-              .validate()
-              .responseJSONAPI(completionHandler: { (response) in
-                  switch response.result {
-                  case .success(let data):
-                      do {
-                          let network = try JSONDecoder().decode(Network.self, from: JSONSerialization.data(withJSONObject: data))
-                          
-                          guard let networkJSON = data["network"] as? [String: Any] else {
-                              throw ServerApiError.parseError(m: "\(#function): Failed to parse network data", data: data)
-                          }
-
-                          DataBaseManager.shared.dataStack.sync([networkJSON], inEntityNamed: NetworkMO.entityName) { error in
-                              if error != nil {
-                                  BHLog.w("Save network to codeData failed: \(String(describing: error))")
-                              }
-                          }
-                          
-                          completion(.success(network: network.network))
-                      } catch let error {
-                          self.trackError(error)
-                          completion(.failure(error: error))
-                                          }
-                  case .failure(let error):
-                      self.trackError(error)
-                      completion(.failure(error: error))
-                  }
-              })
-        }
-    }
     
     func getNetworkChannels(authToken: String?, networkId: String, _ completion: @escaping (ChannelsResult) -> Void) {
 
