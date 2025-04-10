@@ -53,16 +53,16 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
-          case UICollectionView.elementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
 
             guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
             usersHeaderView.titleLabel.text = uiModels[indexPath.section].title
 
             return usersHeaderView
-          default:
-            assert(false, "Invalid element type")
-          }
+        default:
+            return UICollectionReusableView()
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

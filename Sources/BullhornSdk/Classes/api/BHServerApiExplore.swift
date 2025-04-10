@@ -24,7 +24,6 @@ class BHServerApiExplore: BHServerApiBase {
                   debugPrint(response)
                   switch response.result {
                   case .success(let p):
-                      let posts = try? p.posts.toDictionaryArray()
                       completion(.success(posts: p.posts))
                   case .failure(let error):
                       self.trackError(error)
@@ -52,7 +51,6 @@ class BHServerApiExplore: BHServerApiBase {
                   debugPrint(response)
                   switch response.result {
                   case .success(let p):
-                      let posts = try? p.posts.toDictionaryArray()
                       completion(.success(posts: p.posts))
                   case .failure(let error):
                       self.trackError(error)

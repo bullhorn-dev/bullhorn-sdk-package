@@ -127,7 +127,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
             switch response {
             case .success:
                 break
-            case .failure(error: let error):
+            case .failure(error: _):
                 var message: String = ""
                 if BHReachabilityManager.shared.isConnected() {
                     message = "Failed to load episode details. This episode no longer available."
