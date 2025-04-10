@@ -427,12 +427,8 @@ class BHHybridPlayer {
             resume()
         }
         
-        if value > 0 {
-            setSleepTimer(value)
-        } else {
-            stopSleepTimer()
-        }
-
+        setSleepTimer(value)
+ 
         ///graylog tracker
         let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerSleepTimer, context: "\(value)", podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
         BHTracker.shared.trackEvent(with: request)
