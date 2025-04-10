@@ -36,10 +36,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
     // MARK: - Lifecycle
     
-    deinit {
-        userManager.removeListener(self)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -88,9 +84,10 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
         refreshControl?.endRefreshing()
+        userManager.removeListener(self)
+
+        super.viewWillDisappear(animated)
     }
     
     // MARK: - Private
@@ -100,7 +97,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         navigationItem.title = NSLocalizedString("Podcast Details", comment: "")
         navigationItem.largeTitleDisplayMode = .never
 
-        if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled, let validUser = user {
+        if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled, let validUser = user, shouldShowHeader == true {
             let config = UIImage.SymbolConfiguration(weight: .light)
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: validUser.isFollowed ? "bell.slash" : "bell")?.withConfiguration(config), style: .plain, target: self, action: #selector(followButtonAction(_:)))
         }
@@ -131,8 +128,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
                 switch response {
                 case .success(user: let unfollowedUser):
                     self.user = unfollowedUser
-                case .failure(error: let error):
-                    self.showError("Failed to unfollow podcast. \(error)")
+                case .failure(error: _):
+                    self.showError("Failed to unfollow podcast notifications. The internet connection appears to be offline.")
                 }
             }
         } else {
@@ -140,8 +137,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
                 switch response {
                 case .success(user: let followedUser):
                     self.user = followedUser
-                case .failure(error: let error):
-                    self.showError("Failed to follow podcast. \(error)")
+                case .failure(error: _):
+                    self.showError("Failed to follow podcast notifications. The internet connection appears to be offline.")
                 }
             }
         }
@@ -158,6 +155,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
             self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.configureNavigationItems()
         }
 
         if initial {

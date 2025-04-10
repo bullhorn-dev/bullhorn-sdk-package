@@ -15,11 +15,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     fileprivate var selectedPost: BHPost?
     
     // MARK: - Lifecycle
-    
-    deinit {
-        BHDownloadsManager.shared.removeListener(self)
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -53,6 +49,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        BHDownloadsManager.shared.removeListener(self)
         super.viewWillDisappear(animated)
     }
         
