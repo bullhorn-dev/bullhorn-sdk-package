@@ -299,7 +299,7 @@ class BHMiniPlayerView: UIView {
             self.forwardButton.isHidden = true
         }
         
-        if playerItem.isStream {
+        if playerItem.isStream || isLiveStream() {
             self.backwardButton.isHidden = true
             self.forwardButton.isHidden = true
         }
@@ -325,6 +325,10 @@ class BHMiniPlayerView: UIView {
 
     private func isLiveNow() -> Bool {
         return BHLivePlayer.shared.post?.isLiveNow() ?? false
+    }
+    
+    private func isLiveStream() -> Bool {
+        return BHLivePlayer.shared.post?.isLiveStream() ?? false
     }
 
     // MARK: - Actions

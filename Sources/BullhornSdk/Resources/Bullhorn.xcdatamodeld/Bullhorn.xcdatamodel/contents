@@ -266,6 +266,11 @@
                 <entry key="hyper.remoteKey" value="start_time"/>
             </userInfo>
         </attribute>
+        <attribute name="status" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="status"/>
+            </userInfo>
+        </attribute>
         <attribute name="title" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="title"/>

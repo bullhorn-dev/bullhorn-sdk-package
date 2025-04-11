@@ -31,7 +31,7 @@ struct BHRadio: Codable {
 
         let user = BHUser(id: stream.id, fullName: title, profilePicture: stream.coverUrl)
         let recording = BHRecording(id: id, duration: 100000, publishUrl: playbackUrl)
-        let post = BHPost(id: stream.id, title: stream.title, description: nil, postType: .radioStream, alias: nil, startTime: nil, endTime: nil, scheduledAt: nil, hasMeetingRoom: false, originalTime: nil, playbackOffset: 0, isPlaybackCompleted: false, privacy: .public, published: true, publishedAt: "", liked: false, shareLink: playbackUrl!, user: user, recording: recording, bulletin: nil)
+        let post = BHPost(id: stream.id, title: stream.title, description: nil, postType: .radioStream, alias: nil, startTime: nil, endTime: nil, scheduledAt: nil, hasMeetingRoom: false, originalTime: nil, playbackOffset: 0, isPlaybackCompleted: false, privacy: .public, published: true, publishedAt: "", liked: false, shareLink: playbackUrl!, user: user, recording: recording, bulletin: nil, status: .onAir)
 
         return post
     }

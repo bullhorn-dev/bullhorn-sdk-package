@@ -47,7 +47,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         view.addSubview(verticalStackView)
 
         verticalStackView.addArrangedSubview(shareItem)
-        if validPost.hasRecording() {
+        if validPost.hasRecording() && !validPost.isLiveStream() {
             verticalStackView.addArrangedSubview(downloadItem)
             
             NSLayoutConstraint.activate([

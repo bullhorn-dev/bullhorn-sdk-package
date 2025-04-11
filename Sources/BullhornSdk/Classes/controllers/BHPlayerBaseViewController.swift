@@ -122,7 +122,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             durationLabel.isHidden = true
         }
         
-        if type == .stream {
+        if type == .stream || post?.isLiveStream() == true {
             backwardButton.isHidden = true
             forwardButton.isHidden = true
             optionsButton.isHidden = true
@@ -345,12 +345,12 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             routePickerView.isHidden = !controlsEnabled
         }
                 
-        if playerItem.isStream {
+        if playerItem.isStream || post?.isLiveStream() == true {
             self.backwardButton.isHidden = true
             self.forwardButton.isHidden = true
         }
 
-        slider.isEnabled = controlsEnabled && type != .stream
+        slider.isEnabled = controlsEnabled && (type != .stream || post?.isLiveStream() == true)
     }
     
     func onPositionChanged(_ position: Double, duration: Double) {

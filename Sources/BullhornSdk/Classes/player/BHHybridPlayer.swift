@@ -206,7 +206,7 @@ class BHHybridPlayer {
             if fileUrl != nil {
                 let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
                 
-                let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream())
+                let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
                 
                 start(with: playerItem, post: post, playlist: playlist)
                 
@@ -223,7 +223,7 @@ class BHHybridPlayer {
                     }
                     
                     let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                    let playerItem = BHPlayerItem(post: p, playbackSettings: self.settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream())
+                    let playerItem = BHPlayerItem(post: p, playbackSettings: self.settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
                     
                     self.start(with: playerItem, post: post, playlist: playlist)
                     
@@ -246,7 +246,7 @@ class BHHybridPlayer {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
             
-            let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream())
+            let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
             self.playerItem = playerItem
             self.post = post
@@ -508,7 +508,7 @@ class BHHybridPlayer {
         
         guard let validPlayerItem = playerItem else { return }
         guard var urlToPlay = validPlayerItem.post.url else { return }
-        guard post != nil else { return }
+        guard let validPost = post else { return }
 
         if let cachedUrl = validPlayerItem.post.file {
 
@@ -523,7 +523,7 @@ class BHHybridPlayer {
         }
 
         BHID3Parser.isGoodForStream(validPlayerItem.post.url!) { isID3, isGoodForStream, isVideo in
-            if isVideo {
+            if isVideo || validPost.hasVideo() {
                 self.createMediaPlayer(.systemVideo, url: urlToPlay, position: position)
             } else {
                 self.createMediaPlayer(.systemAudio, url: urlToPlay, position: position)
@@ -649,7 +649,7 @@ class BHHybridPlayer {
         let post = BHPlayerItem.Post(postId: p.id, title: p.title, userId: p.user.id, userName: p.user.fullName, userImageUrl: p.user.coverUrl, url: p.recording?.publishUrl, file: fileUrl)
         let settings: BHPlayerItem.PlaybackSettings = settings
             
-        let playerItem = BHPlayerItem(post: post, playbackSettings: settings, position: p.playbackOffset, duration: Double(p.recording?.duration ?? 0), shouldPlay: true, isStream: p.isRadioStream())
+        let playerItem = BHPlayerItem(post: post, playbackSettings: settings, position: p.playbackOffset, duration: Double(p.recording?.duration ?? 0), shouldPlay: true, isStream: p.isRadioStream() || p.isLiveStream())
             
         start(with: playerItem, post: p, playlist: playlist)
             

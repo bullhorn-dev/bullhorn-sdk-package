@@ -330,7 +330,11 @@ extension BHHomeViewController: BHHomeHeaderViewDelegate {
     }
     
     func headerView(_ view: BHHomeHeaderView, didRequestPlayPost post: BHPost) {
-        BHLivePlayer.shared.playRequest(with: post)
+        if post.isLiveStream() {
+            BHHybridPlayer.shared.playRequest(with: post, playlist: [])
+        } else {
+            BHLivePlayer.shared.playRequest(with: post)
+        }
     }
 }
 

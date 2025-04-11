@@ -158,7 +158,16 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     fileprivate func updateControls() {
         guard let validPost = postsManager?.post else { return }
 
-        if validPost.hasRecording() {
+        if validPost.isLiveStream() {
+            let duration: Double = Double(validPost.recording?.duration ?? 0)
+
+            playerView.isHidden = false
+            downloadButton.isHidden = true
+            playButton.isHidden = false
+            durationLabel.text = duration.stringFormatted()
+            durationLabel.isHidden = false
+            playedLabel.isHidden = true
+        } else if validPost.hasRecording() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
 
             playerView.isHidden = false
@@ -214,6 +223,9 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                 text = "LIVE"
                 color = .accent()
             }
+        } else if validPost.isLiveStream() {
+            text = "LIVE"
+            color = .accent()
         } else if validPost.isInteractive() {
             if validPost.hasVideo() && validPost.hasTiles() {
                 text = "VIDEO + INTERACTIVE"
@@ -242,7 +254,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
     fileprivate func hasTag() -> Bool {
         guard let validPost = postsManager?.post else { return false }
-        return validPost.isLiveNow() || validPost.isInteractive()
+        return validPost.isLiveNow() || validPost.isLiveStream() || validPost.isInteractive()
     }
     
     fileprivate func hasWaitingRoom() -> Bool {

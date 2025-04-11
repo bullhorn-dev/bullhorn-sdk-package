@@ -27,5 +27,5 @@ extension PostMO {
     @NSManaged public var user: UserMO?
     @NSManaged public var recording: RecordingMO?
     @NSManaged public var bulletin: PostBulletinMO?
-    
+    @NSManaged public var status: String?    
 }

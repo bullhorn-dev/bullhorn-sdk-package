@@ -20,8 +20,9 @@ public class PostMO: NSManagedObject {
 
         let type = BHPost.PostType(rawValue: validType) ?? .preRecorded
         let pr = BHPost.PostPrivacy(rawValue: validPrivacy) ?? .public
+        let st = BHPost.PostStatus(rawValue: status ?? "") ?? .finished
 
-        let post = BHPost(id: validId, title: validTitle, description: descr, postType: type, alias: alias, startTime: startTime, endTime: endTime, scheduledAt: scheduledAt, hasMeetingRoom: hasMeetingRoom, originalTime: originalTime, playbackOffset: playbackOffset, isPlaybackCompleted: isPlaybackCompleted, privacy: pr, published: published, publishedAt: publishedAt, liked: liked, shareLink: shareLinkUrl, user: validUser, recording: recording?.toRecording(), bulletin: bulletin?.toPostBulletin())
+        let post = BHPost(id: validId, title: validTitle, description: descr, postType: type, alias: alias, startTime: startTime, endTime: endTime, scheduledAt: scheduledAt, hasMeetingRoom: hasMeetingRoom, originalTime: originalTime, playbackOffset: playbackOffset, isPlaybackCompleted: isPlaybackCompleted, privacy: pr, published: published, publishedAt: publishedAt, liked: liked, shareLink: shareLinkUrl, user: validUser, recording: recording?.toRecording(), bulletin: bulletin?.toPostBulletin(), status: st)
                 
         return post
     }

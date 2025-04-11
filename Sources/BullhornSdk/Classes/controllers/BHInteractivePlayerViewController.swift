@@ -66,6 +66,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         ]
         tabbedView.delegate = self
         tabbedView.moveToTab(at: selectedTab.rawValue)
+        tabbedView.isHidden = true
         
         isExpanded = false
         
@@ -187,7 +188,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
             videoStackView.axis = .vertical
             interactiveStackView.axis = .vertical
             isPortrait = true
-            tabbedView.isHidden = false
+            tabbedView.isHidden = true
             topVideoView.isHidden = false
             topInteractiveView.isHidden = false
             collapseButton.isHidden = false

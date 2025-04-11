@@ -36,21 +36,12 @@ class BHLivePostCarouselCell: UICollectionViewCell {
     
     private let tagLabel: BHPaddingLabel = {
         let label = BHPaddingLabel()
-        label.font = .fontWithName(.robotoMedium, size: 8)
+        label.font = .fontWithName(.robotoBold, size: 8)
         label.sizeToFit()
         label.clipsToBounds = true
         return label
     }()
     
-    private let episodeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .fontWithName(.robotoMedium, size: 8)
-        label.textColor = .primary()
-        label.text = "EPISODE"
-        label.addCharacterSpacing()
-        return label
-    }()
-
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .fontWithName(.robotoRegular, size: 12)
@@ -81,11 +72,11 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         cntView.addSubview(imageView)
         cntView.addSubview(tagLabel)
         
-        let stackView = UIStackView(arrangedSubviews: [cntView, episodeLabel, titleLabel])
+        let stackView = UIStackView(arrangedSubviews: [cntView, titleLabel])
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fill
-        stackView.spacing = 3
+        stackView.spacing = 1
 
         contentView.addSubview(stackView)
         
@@ -114,6 +105,7 @@ class BHLivePostCarouselCell: UICollectionViewCell {
     private func update() {
         imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
+        titleLabel.textColor = post?.isLiveStream() == true ? .accent() : .secondary()
         updateTagLabel()
     }
     
@@ -131,6 +123,9 @@ class BHLivePostCarouselCell: UICollectionViewCell {
                 text = "LIVE"
                 color = .accent()
             }
+        } else if validPost.isLiveStream() {
+            text = "LIVE"
+            color = .accent()
         }
 
         tagLabel.isHidden = text.isEmpty

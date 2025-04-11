@@ -58,6 +58,7 @@ struct BHPost: Codable {
         case user
         case recording
         case bulletin
+        case status
     }
     
     enum PostType: String, Codable {
@@ -75,6 +76,11 @@ struct BHPost: Codable {
         case scheduled = 0
         case live
         case liveNow
+    }
+
+    enum PostStatus: String, Codable {
+        case finished = "finished"
+        case onAir = "on_air"
     }
 
     enum PostLiveStatus: Int {
@@ -113,6 +119,7 @@ struct BHPost: Codable {
     let user: BHUser
     let recording: BHRecording?
     let bulletin: BHPostBulletin?
+    let status: PostStatus
     
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)
@@ -142,7 +149,8 @@ struct BHPost: Codable {
 
     func isPreRecorded() -> Bool { postType == .preRecorded }
     func isLive() -> Bool { postType == .liveEpisode }
-    func isLiveNow() -> Bool { isLive() /*&& endTime == nil */ && !hasRecording() }
+    func isLiveNow() -> Bool { isLive() /*&& endTime == nil*/  && !hasRecording() }
+    func isLiveStream() -> Bool { hasRecording() && status == .onAir}
     func isRadioStream() -> Bool { postType == .radioStream }
 
     func liveScheduledInPast() -> Bool {

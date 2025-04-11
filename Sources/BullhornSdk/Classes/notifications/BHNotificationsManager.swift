@@ -176,7 +176,6 @@ class BHNotificationsManager: NSObject {
         case .newEpisodeInvitation:
             if let infoEvent = info as? NewEpisodeNotificationInfo {
                 handled = true
-                
                 BHPostsManager.shared.getPost(infoEvent.eventUuid, context: nil) { response in
                     switch response {
                     case .success(post: let post):
@@ -196,6 +195,21 @@ class BHNotificationsManager: NSObject {
         case .liveEpisodeStarted,
              .liveEpisodeMeetingRoom,
              .liveEpisodeScheduled:
+            if let infoEvent = info as? LiveEpisodeStartedNotificationInfo {
+                handled = true
+                BHNetworkManager.shared.getLiveNowPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { _ in }
+                BHPostsManager.shared.getPost(infoEvent.eventUuid, context: nil) { response in
+                    switch response {
+                    case .success(post: let post):
+                        let storyboard = UIStoryboard(name: StoryboardName.main, bundle: Bundle.module)
+                        let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
+                        vc.post = post
+                        UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                    case .failure(error: _):
+                        break
+                    }
+                }
+            }
             break
             
         case .massNotification:

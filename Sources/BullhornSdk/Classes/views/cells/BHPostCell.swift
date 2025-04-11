@@ -126,9 +126,16 @@ class BHPostCell: UITableViewCell {
         optionsButton.backgroundColor = .clear
         optionsButton.configuration?.baseForegroundColor = .primary()
 
-        if validPost.hasRecording() {
+        if validPost.isLiveStream() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
-
+            downloadButton.isHidden = true
+            optionsButton.isHidden = false
+            playButton.isHidden = false
+            durationLabel.text = duration.stringFormatted()
+            durationLabel.isHidden = false
+            playedLabel.isHidden = true
+        } else if validPost.hasRecording() {
+            let duration: Double = Double(validPost.recording?.duration ?? 0)
             downloadButton.isHidden = false
             optionsButton.isHidden = false
             playButton.isHidden = false
@@ -185,6 +192,9 @@ class BHPostCell: UITableViewCell {
                 text = "LIVE"
                 color = .accent()
             }
+        } else if validPost.isLiveStream() {
+            text = "LIVE"
+            color = .accent()
         } else if validPost.isInteractive() {
             if validPost.hasVideo() && validPost.hasTiles() {
                 text = "VIDEO + INTERACTIVE"
