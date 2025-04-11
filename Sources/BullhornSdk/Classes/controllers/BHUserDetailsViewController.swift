@@ -99,7 +99,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
         if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled, let validUser = user, shouldShowHeader == true {
             let config = UIImage.SymbolConfiguration(weight: .light)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: validUser.isFollowed ? "bell" : "bell.slash")?.withConfiguration(config), style: .plain, target: self, action: #selector(followButtonAction(_:)))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: validUser.isFollowed ? "bell.fill" : "bell")?.withConfiguration(config), style: .plain, target: self, action: #selector(followButtonAction(_:)))
         }
     }
     
