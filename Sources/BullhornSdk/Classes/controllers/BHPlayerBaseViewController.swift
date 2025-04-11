@@ -382,7 +382,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     func updateLayers() {
-        if BHHybridPlayer.shared.isEnded() {
+        if BHHybridPlayer.shared.isEnded() || BHHybridPlayer.shared.isDestroyed() {
             imageLayerView.isHidden = false
         } else {
             imageLayerView.isHidden = hasVideo || hasTile
@@ -390,14 +390,18 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     func updateLayout(_ useLayout: Bool, position: Double) {
-        if useLayout && isPortrait {
-            let layoutEvent = BHHybridPlayer.shared.bulletinLayout?.getLayoutEvent(position)
-            
-            if let validEvent = layoutEvent {
-                self.videoView.emptySpaces = validEvent.getEmptySpaces(isPortrait)
-            }
-        } else {
+        if post?.isLiveStream() == true {
             self.videoView.emptySpaces = BHEmptySpaces.initial()
+        } else {
+            if useLayout && isPortrait {
+                let layoutEvent = BHHybridPlayer.shared.bulletinLayout?.getLayoutEvent(position)
+                
+                if let validEvent = layoutEvent {
+                    self.videoView.emptySpaces = validEvent.getEmptySpaces(isPortrait)
+                }
+            } else {
+                self.videoView.emptySpaces = BHEmptySpaces.initial()
+            }
         }
     }
     

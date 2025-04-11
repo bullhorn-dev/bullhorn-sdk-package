@@ -782,11 +782,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="135"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
+                                                        <rect key="frame" x="0.0" y="182" width="390" height="135"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -799,7 +799,7 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstItem="qYf-GY-7cU" firstAttribute="width" relation="lessThanOrEqual" secondItem="CpR-df-7yi" secondAttribute="width" id="Jsk-MD-Fmz"/>
+                                                    <constraint firstItem="F9x-NY-X0e" firstAttribute="height" relation="greaterThanOrEqual" secondItem="qYf-GY-7cU" secondAttribute="height" id="ChO-U8-ZoI"/>
                                                     <constraint firstItem="F9x-NY-X0e" firstAttribute="width" secondItem="qYf-GY-7cU" secondAttribute="width" id="Jzw-Ts-OMC"/>
                                                 </constraints>
                                             </stackView>
@@ -814,11 +814,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="127"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="119"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="174" width="390" height="127"/>
+                                                        <rect key="frame" x="0.0" y="166" width="390" height="135"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1114,6 +1114,7 @@
                                             <constraint firstAttribute="trailing" secondItem="CpR-df-7yi" secondAttribute="trailing" id="eRZ-zd-msv"/>
                                             <constraint firstItem="fVd-sW-hzf" firstAttribute="leading" secondItem="Sju-uH-8lj" secondAttribute="leading" id="jlR-39-Lw9"/>
                                             <constraint firstItem="CpR-df-7yi" firstAttribute="top" secondItem="Sju-uH-8lj" secondAttribute="top" id="mRV-Jm-aFj"/>
+                                            <constraint firstItem="J65-Nu-rNX" firstAttribute="height" secondItem="F9x-NY-X0e" secondAttribute="height" id="xda-FU-Kqy"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sio-JJ-vAg" customClass="BHTabbedView" customModule="BullhornSdk">
