@@ -23,7 +23,7 @@ public struct Constants {
 
     static let userProfileIconSize: CGFloat = 100
     
-    static let postsCarouselHeight: CGFloat = 146
+    static let postsCarouselHeight: CGFloat = 134
     static let usersCarouselHeight: CGFloat = 134
     
     static let radioAspectRatio: CGFloat = 0.56

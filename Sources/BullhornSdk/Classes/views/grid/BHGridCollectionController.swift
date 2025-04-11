@@ -40,6 +40,14 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
         
         didLayoutAction?()
     }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
 
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
 
@@ -84,7 +92,8 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.frame.size.width - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3
+        let screenWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        let width = (screenWidth - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3
         let height = width + 35
         return CGSize(width: width, height: height)
     }
