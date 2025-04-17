@@ -21,6 +21,7 @@ class BHPostCell: UITableViewCell {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var downloadButton: BHDownloadButton!
     @IBOutlet weak var optionsButton: UIButton!
+    @IBOutlet weak var bottomView: UIStackView!
 
     var post: BHPost? {
         didSet {
@@ -134,6 +135,7 @@ class BHPostCell: UITableViewCell {
             durationLabel.text = duration.stringFormatted()
             durationLabel.isHidden = false
             playedLabel.isHidden = true
+            bottomView.isHidden = true
         } else if validPost.hasRecording() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
             downloadButton.isHidden = false
@@ -142,12 +144,14 @@ class BHPostCell: UITableViewCell {
             durationLabel.text = duration.stringFormatted()
             durationLabel.isHidden = false
             playedLabel.isHidden = !validPost.isPlaybackCompleted
+            bottomView.isHidden = false
         } else {
             downloadButton.isHidden = true
             optionsButton.isHidden = true
             playButton.isHidden = true
             durationLabel.isHidden = true
             playedLabel.isHidden = true
+            bottomView.isHidden = true
         }
         
         if let validDate = validPost.publishedAtDate {

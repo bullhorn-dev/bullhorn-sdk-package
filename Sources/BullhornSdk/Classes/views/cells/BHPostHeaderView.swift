@@ -159,13 +159,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         guard let validPost = postsManager?.post else { return }
 
         if validPost.isLiveStream() {
-            let duration: Double = Double(validPost.recording?.duration ?? 0)
-
             playerView.isHidden = false
             downloadButton.isHidden = true
             playButton.isHidden = false
-            durationLabel.text = duration.stringFormatted()
-            durationLabel.isHidden = false
+            durationLabel.text = ""
             playedLabel.isHidden = true
         } else if validPost.hasRecording() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
