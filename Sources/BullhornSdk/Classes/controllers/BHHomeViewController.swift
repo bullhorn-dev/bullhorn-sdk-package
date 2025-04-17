@@ -92,7 +92,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
     fileprivate func fetch(_ isInitial: Bool = false) {
         
-        let networkId = BHAppConfiguration.shared.foxNetworkId
+        let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
             self.shouldShowHeader = BHNetworkManager.shared.featuredPosts.count > 0 && BHRadioStreamsManager.shared.radios.count > 0 && BHNetworkManager.shared.users.count > 0

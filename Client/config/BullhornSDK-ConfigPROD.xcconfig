@@ -6,7 +6,7 @@
 
 APP_CONFIG_TYPE = ConfigurationTypePROD
 APP_BUNDLE_ID = com.wydevoice.Bullhorn-SDK
-APP_CLIENT_NAME = Fox Podcasts
+APP_CLIENT_NAME = Bullhorn SDK
 
 //////////////////////////////////////////
 // Override Xcode variables
@@ -14,7 +14,7 @@ APP_CLIENT_NAME = Fox Podcasts
 
 CODE_SIGN_ENTITLEMENTS = Client/targetConfig/BullhornSDK.entitlements
 INFOPLIST_FILE = Client/targetConfig/Info.plist
-ASSETCATALOG_COMPILER_APPICON_NAME = AppIconFox
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
 
 DEVELOPMENT_TEAM = SD9W4LL7A2
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) DEBUG_APP_INFO

@@ -94,7 +94,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         models.removeAll()
                 
-        if BullhornSdk.shared.externalUser?.level == .fox, let user = BullhornSdk.shared.externalUser {
+        if BullhornSdk.shared.externalUser?.level == .external, let user = BullhornSdk.shared.externalUser {
             models.append(Section(title: "Account", options: [
                 .accountCell(model: SettingsAccountOption(title: "You're logged in as", subtitle: user.fullName ?? "Anonymous", initials: user.initials, iconBackgroundColor: .secondaryBackground(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAccountNotification, object: self, userInfo: nil)
@@ -111,7 +111,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         }
         
-        if BullhornSdk.shared.externalUser?.level == .fox {
+        if BullhornSdk.shared.externalUser?.level == .external {
             models.append(Section(title: "Collections", options: [
                 .staticCell(model: SettingsOption(title: "Downloaded Episodes", icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)

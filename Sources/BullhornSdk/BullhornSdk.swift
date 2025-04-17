@@ -10,7 +10,7 @@ public struct BHSdkUser {
     
     public enum Level {
         case anonymous
-        case fox
+        case external
     }
 
     let id: String

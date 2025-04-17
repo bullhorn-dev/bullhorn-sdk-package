@@ -78,7 +78,7 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
 
     fileprivate func fetch(_ isInitial: Bool = false) {
         
-        let networkId = BHAppConfiguration.shared.foxNetworkId
+        let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
             self.shouldShowHeader = BHRadioStreamsManager.shared.radios.count > 0

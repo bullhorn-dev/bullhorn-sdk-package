@@ -495,7 +495,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D94E70792D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconFox;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(CODE_SIGN_ENTITLEMENTS)";
@@ -507,7 +507,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = SD9W4LL7A2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Client/targetConfig/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Fox Podcasts";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bullhorn SDK";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -540,7 +540,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D94E707A2D3E5FE10004D4BA /* BullhornSDK-ConfigPROD.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconFox;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(CODE_SIGN_ENTITLEMENTS)";
@@ -552,7 +552,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = SD9W4LL7A2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Client/targetConfig/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Fox Podcasts";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bullhorn SDK";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

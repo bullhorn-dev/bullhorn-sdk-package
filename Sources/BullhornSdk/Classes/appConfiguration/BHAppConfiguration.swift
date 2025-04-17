@@ -69,7 +69,7 @@ public class BHAppConfiguration {
         return BHConfigManager.shared.configData?.serverApiSdkV1String ?? ""
     }
 
-    var foxNetworkId: String {
+    var networkId: String {
         switch BHAppConfiguration.type {
         case .qa:
             return "be2901fe-8b37-4597-89ff-63a2931a631f"

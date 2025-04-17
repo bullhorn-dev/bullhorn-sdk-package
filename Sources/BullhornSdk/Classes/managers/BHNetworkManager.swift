@@ -315,7 +315,7 @@ class BHNetworkManager {
         
         fetchGroup.enter()
          
-        getLiveNowPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { response in
+        getLiveNowPosts(BHAppConfiguration.shared.networkId, text: nil) { response in
             switch response {
             case .success(posts: _): break
             case .failure(error: let error):
@@ -326,7 +326,7 @@ class BHNetworkManager {
          
 //        fetchGroup.enter()
 //         
-//        getScheduledPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { response in
+//        getScheduledPosts(BHAppConfiguration.shared.networkId, text: nil) { response in
 //            switch response {
 //            case .success(posts: _): break
 //            case .failure(error: let error):

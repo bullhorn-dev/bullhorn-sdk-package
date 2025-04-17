@@ -84,7 +84,7 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
     
     fileprivate func fetchUsers(initial: Bool = false) {
 
-        let networkId = BHAppConfiguration.shared.foxNetworkId
+        let networkId = BHAppConfiguration.shared.networkId
 
         let completeBlock = {
             self.refreshControl?.endRefreshing()

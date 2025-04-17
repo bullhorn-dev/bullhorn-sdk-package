@@ -31,7 +31,7 @@ class BHRadioStreamsManager {
     }
 
     var hasRadioStreams: Bool {
-        return /*streams.count > 0 &&*/ shouldLoadRadios()
+        return radios.count > 0
     }
 
     private let observersContainer: ObserversContainerNotifyingOnQueue<BHRadioStreamsListener>
@@ -59,12 +59,7 @@ class BHRadioStreamsManager {
     }
 
     // MARK: - Public
-    
-    func shouldLoadRadios() -> Bool {
-        let networkId = BHAppConfiguration.shared.foxNetworkId
-        return networkId == "540ea6c1-7e9c-4e2e-b3e0-09a5b1c378cd"
-    }
-    
+        
     func updateCurrentStream() {
         BHLog.p("\(#function)")
 
@@ -87,7 +82,7 @@ class BHRadioStreamsManager {
     
     fileprivate func getRadios(_ networkId: String, completion: @escaping (BHServerApiNetwork.RadiosResult) -> Void) {
         
-        BHNetworkManager.shared.getNetworkRadios(BHAppConfiguration.shared.foxNetworkId) { response in
+        BHNetworkManager.shared.getNetworkRadios(BHAppConfiguration.shared.networkId) { response in
             switch response {
             case .success(radios: _):
                 self.fetchStorageRadios(networkId) { _ in }
@@ -105,17 +100,13 @@ class BHRadioStreamsManager {
         
         fetchGroup.enter()
 
-        if shouldLoadRadios() {
-            getRadios(networkId) { response in
-                switch response {
-                case .success(radios: _):
-                    break
-                case .failure(error: let error):
-                    responseError = error
-                }
-                fetchGroup.leave()
+        getRadios(networkId) { response in
+            switch response {
+            case .success(radios: _):
+                break
+            case .failure(error: let error):
+                responseError = error
             }
-        } else {
             fetchGroup.leave()
         }
         
@@ -150,17 +141,13 @@ class BHRadioStreamsManager {
         
         fetchGroup.enter()
 
-        if shouldLoadRadios() {
-            fetchStorageRadios(networkId) { response in
-                switch response {
-                case .success:
-                    break
-                case .failure(error: let error):
-                    responseError = error
-                }
-                fetchGroup.leave()
+        fetchStorageRadios(networkId) { response in
+            switch response {
+            case .success:
+                break
+            case .failure(error: let error):
+                responseError = error
             }
-        } else {
             fetchGroup.leave()
         }
         
@@ -204,7 +191,7 @@ class BHRadioStreamsManager {
         guard let validStream = currentStream else { return }
         
         if validStream.isTimeToUpdate() {
-            getRadios(BHAppConfiguration.shared.foxNetworkId) { response in
+            getRadios(BHAppConfiguration.shared.networkId) { response in
                 switch response {
                 case .success(radios: let radios):
                     self.radios = radios

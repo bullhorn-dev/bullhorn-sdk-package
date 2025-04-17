@@ -148,7 +148,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
 
     fileprivate func fetch(_ isInitial: Bool = false) {
         
-        let networkId = BHAppConfiguration.shared.foxNetworkId
+        let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
             self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0
@@ -191,7 +191,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     }
     
     fileprivate func fetchRecents() {
-        BHExploreManager.shared.getRecentUsers(BHAppConfiguration.shared.foxNetworkId, isFirstPage: true) { response in
+        BHExploreManager.shared.getRecentUsers(BHAppConfiguration.shared.networkId, isFirstPage: true) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -208,7 +208,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             defaultShowActivityIndicatorView()
         }
 
-        BHExploreManager.shared.getPosts(BHAppConfiguration.shared.foxNetworkId, text: searchController.searchBar.text) { response in
+        BHExploreManager.shared.getPosts(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -226,7 +226,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             defaultShowActivityIndicatorView()
         }
 
-        BHExploreManager.shared.getUsers(BHAppConfiguration.shared.foxNetworkId, text: searchController.searchBar.text) { response in
+        BHExploreManager.shared.getUsers(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()

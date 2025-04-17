@@ -34,8 +34,8 @@ public class BHCarPlayCoordinator {
         initProviders()
 
         downloadsManager.fetchStorageItems()
-        feedManager.fetchStorageEpisodes(BHAppConfiguration.shared.foxNetworkId) { _ in }
-        radioManager.fetchStorageRadios(BHAppConfiguration.shared.foxNetworkId) { _ in }
+        feedManager.fetchStorageEpisodes(BHAppConfiguration.shared.networkId) { _ in }
+        radioManager.fetchStorageRadios(BHAppConfiguration.shared.networkId) { _ in }
 
         carPlayController.connect(to: interfaceController, with: providers)
         

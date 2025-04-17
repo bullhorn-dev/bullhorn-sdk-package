@@ -197,7 +197,7 @@ class BHNotificationsManager: NSObject {
              .liveEpisodeScheduled:
             if let infoEvent = info as? LiveEpisodeStartedNotificationInfo {
                 handled = true
-                BHNetworkManager.shared.getLiveNowPosts(BHAppConfiguration.shared.foxNetworkId, text: nil) { _ in }
+                BHNetworkManager.shared.getLiveNowPosts(BHAppConfiguration.shared.networkId, text: nil) { _ in }
                 BHPostsManager.shared.getPost(infoEvent.eventUuid, context: nil) { response in
                     switch response {
                     case .success(post: let post):

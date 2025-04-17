@@ -104,7 +104,7 @@ class BHPostCell: UITableViewCell {
         let mediumConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .medium)
         var image: UIImage? = nil
 
-        if BullhornSdk.shared.externalUser?.level == .fox {
+        if BullhornSdk.shared.externalUser?.level == .external {
             if validPost.liked {
                 image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
             } else {
@@ -226,7 +226,7 @@ class BHPostCell: UITableViewCell {
         guard let validPost = post else { return }
         
         if BHReachabilityManager.shared.isConnected() {
-            if BullhornSdk.shared.externalUser?.level == .fox {
+            if BullhornSdk.shared.externalUser?.level == .external {
                 if validPost.liked {
                     BHPostsManager.shared.postLikeOff(validPost.id) { result in
                         self.post?.liked = false
