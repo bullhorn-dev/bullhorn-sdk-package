@@ -111,16 +111,16 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         var totalHeight: CGFloat = 0
 
         if searchActive {
-            return tabbedView.frame.size.height
+            return tabbedView.frame.size.height > 0 ? tabbedView.frame.size.height : Constants.panelHeight
         } else {
             if hasRecentUsers() {
-                totalHeight += recentUsersTitle.frame.size.height + recentUsersView.frame.size.height
+                totalHeight += recentUsersView.calculateHeight() + (recentUsersTitle.frame.size.height > 0 ? recentUsersTitle.frame.size.height : Constants.panelHeight)
             }
             if hasFeaturedUsers() {
-                totalHeight += featuredUsersTitle.frame.size.height + featuredUsersView.frame.size.height
+                totalHeight += featuredUsersView.calculateHeight() + (featuredUsersTitle.frame.size.height > 0 ? featuredUsersTitle.frame.size.height : Constants.panelHeight)
             }
             if hasFeaturedPosts() {
-                totalHeight += featuredPostsTitle.frame.size.height + featuredPostsView.frame.size.height
+                totalHeight += featuredPostsView.calculateHeight() + (featuredPostsTitle.frame.size.height > 0 ? featuredPostsTitle.frame.size.height : Constants.panelHeight)
             }
 
             return totalHeight

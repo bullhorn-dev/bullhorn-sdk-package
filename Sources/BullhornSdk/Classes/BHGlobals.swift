@@ -25,6 +25,7 @@ public struct Constants {
     
     static let postsCarouselHeight: CGFloat = 134
     static let usersCarouselHeight: CGFloat = 134
-    
+    static let pagedCarouselHeight: CGFloat = 144
+
     static let radioAspectRatio: CGFloat = 0.56
 }

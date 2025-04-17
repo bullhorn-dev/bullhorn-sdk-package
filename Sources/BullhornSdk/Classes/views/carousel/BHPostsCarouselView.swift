@@ -72,6 +72,10 @@ class BHPostsCarouselView: UIView, UICollectionViewDelegateFlowLayout, UICollect
         ])
     }
     
+    func calculateHeight() -> CGFloat {
+        return frame.size.height > 0 ? frame.size.height : Constants.postsCarouselHeight
+    }
+    
     // MARK: - Data Source
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

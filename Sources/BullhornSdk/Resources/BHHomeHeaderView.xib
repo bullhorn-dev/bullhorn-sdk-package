@@ -27,11 +27,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="474" height="1000"/>
                         <subviews>
                             <view contentMode="scaleToFill" restorationIdentifier="BHRadioView" translatesAutoresizingMaskIntoConstraints="NO" id="aI9-ia-iE0" customClass="BHRadioStreamsView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="0.0" width="474" height="208"/>
+                                <rect key="frame" x="0.0" y="0.0" width="474" height="222"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qA9-BX-8vU">
-                                <rect key="frame" x="0.0" y="208" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="222" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Cu-dC-9Wz">
                                         <rect key="frame" x="15.999999999999993" y="11.333333333333341" width="111.33333333333331" height="21.333333333333329"/>
@@ -48,14 +48,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="99C-91-bXk" customClass="BHPostsCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="252" width="474" height="134"/>
+                                <rect key="frame" x="0.0" y="266" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="134" id="Neo-9g-3JF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jcp-Se-jL4">
-                                <rect key="frame" x="0.0" y="386" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="400" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upcoming Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pAH-V7-E8J">
                                         <rect key="frame" x="16" y="11.333333333333313" width="160.33333333333334" height="21.333333333333329"/>
@@ -72,10 +72,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wr1-qx-pH2" customClass="BHPostsCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="430" width="474" height="148"/>
+                                <rect key="frame" x="0.0" y="444" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="148" id="wbd-a1-yE2"/>
+                                    <constraint firstAttribute="height" constant="134" id="wbd-a1-yE2"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tj6-ZT-g6Q">

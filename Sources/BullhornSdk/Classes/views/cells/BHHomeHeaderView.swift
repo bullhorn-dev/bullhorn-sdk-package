@@ -92,7 +92,7 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         var totalHeight: CGFloat = 0
 
         if hasChannels() {
-            totalHeight += channelsView.frame.size.height
+            totalHeight += channelsView.calculateHeight()
         }
 
         if hasRadioStreams() {
@@ -100,19 +100,19 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         }
             
         if hasFeaturedUsers() {
-            totalHeight += featuredUsersTitle.frame.size.height + featuredUsersView.frame.size.height
+            totalHeight += featuredUsersView.calculateHeight() + (featuredUsersTitle.frame.size.height > 0 ? featuredUsersTitle.frame.size.height : Constants.panelHeight)
         }
             
         if hasFeaturedPosts() {
-            totalHeight += featuredPostsTitle.frame.size.height + featuredPostsView.frame.size.height
+            totalHeight += featuredPostsView.calculateHeight() + (featuredPostsTitle.frame.size.height > 0 ? featuredPostsTitle.frame.size.height : Constants.panelHeight)
         }
 
         if hasScheduledPosts() {
-            totalHeight += scheduledPostsTitle.frame.size.height + scheduledPostsView.frame.size.height
+            totalHeight += scheduledPostsView.calculateHeight() + (scheduledPostsTitle.frame.size.height > 0 ? scheduledPostsTitle.frame.size.height : Constants.panelHeight)
         }
             
         if hasLivePosts() {
-                totalHeight += livePostsTitle.frame.size.height + livePostsView.frame.size.height
+            totalHeight += livePostsView.calculateHeight() + (livePostsTitle.frame.size.height > 0 ? livePostsTitle.frame.size.height : Constants.panelHeight)
         }
 
         return totalHeight

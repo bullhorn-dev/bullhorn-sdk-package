@@ -60,13 +60,17 @@ class BHChannelsView: UIView {
     
     // MARK: - Action
 
-    public func moveToChannel(at index: Int) {
+    func moveToChannel(at index: Int) {
         self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: true)
 
         UserDefaults.standard.selectedChannelId = channels[index].id
         self.currentlySelectedIndex = index
         
         collectionView.reloadData()
+    }
+    
+    func calculateHeight() -> CGFloat {
+        return frame.size.height > 0 ? frame.size.height : 56.0
     }
     
     // MARK: UI Setup

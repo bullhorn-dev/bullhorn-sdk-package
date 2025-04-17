@@ -81,6 +81,10 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
         ])
     }
     
+    func calculateHeight() -> CGFloat {
+        return Constants.pagedCarouselHeight
+    }
+    
     // MARK: - BHPagerView DataSource
         
     func numberOfItems(in pagerView: BHPagerView) -> Int {
