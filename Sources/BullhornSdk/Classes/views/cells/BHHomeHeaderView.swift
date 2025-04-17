@@ -72,7 +72,6 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         featuredPostsView.delegate = self
         livePostsView.delegate = self
         scheduledPostsView.delegate = self
-        
         channelsView.delegate = self
                 
         radioStreamsView.isHidden = !hasRadioStreams()
@@ -86,6 +85,7 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         livePostsView.isHidden = !hasLivePosts()
         
         reloadData()
+        channelsView.moveToChannel(UserDefaults.standard.selectedChannelId)
     }
     
     func calculateHeight() -> CGFloat {

@@ -59,9 +59,17 @@ class BHChannelsView: UIView {
     }
     
     // MARK: - Action
+    
+    func moveToChannel(_ channelId: String) {
+        if let index = channels.firstIndex(where: { channel in
+            return channel.id == channelId
+        }) {
+            moveToChannel(at: index)
+        }
+    }
 
     func moveToChannel(at index: Int) {
-        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: true)
+        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
 
         UserDefaults.standard.selectedChannelId = channels[index].id
         self.currentlySelectedIndex = index
