@@ -337,11 +337,11 @@
             </objects>
             <point key="canvasLocation" x="-1615" y="333"/>
         </scene>
-        <!--Live NC-->
+        <!--Radio NC-->
         <scene sceneID="PmQ-Kn-68d">
             <objects>
-                <navigationController title="Live NC" id="mkh-k3-kzc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Live" image="ic_radio" id="ZYc-c8-9Sm"/>
+                <navigationController title="Radio NC" id="mkh-k3-kzc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Radio" image="ic_radio" id="ZYc-c8-9Sm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tuh-Bw-gt0">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
