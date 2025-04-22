@@ -53,10 +53,14 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+    }
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
         refreshControl?.resetUIState()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 

@@ -52,8 +52,16 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         super.viewWillAppear(animated)
     }
     
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
+        refreshControl?.resetUIState()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        refreshControl?.endRefreshing()
     }
     
     // MARK: - Private

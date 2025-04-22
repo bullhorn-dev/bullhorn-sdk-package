@@ -61,10 +61,15 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        refreshControl?.resetUIState()
         reloadData()
     }
-    
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
+        refreshControl?.resetUIState()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 

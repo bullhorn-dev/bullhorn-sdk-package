@@ -47,10 +47,15 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        refreshControl?.resetUIState()
         tableView.reloadData()
     }
-    
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
+        refreshControl?.resetUIState()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
