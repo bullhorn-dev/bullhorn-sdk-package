@@ -100,6 +100,22 @@ class BHServerApiBase: NSObject {
         case success(users: [BHUser])
         case failure(error: Error)
     }
+    
+    // MARK: - Short Users Result
+
+    struct ShortUsers: Codable {
+        
+        enum CodingKeys: String, CodingKey {
+            case users
+        }
+        
+        var users: [BHUserShort]
+    }
+
+    enum ShortUsersResult {
+        case success(users: [BHUserShort])
+        case failure(error: Error)
+    }
 
     // MARK: - Paginated Users Result
 

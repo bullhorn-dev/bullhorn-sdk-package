@@ -186,3 +186,44 @@ public class BHSelfUser: NSObject, Codable {
         }
     }
 }
+
+struct BHUserShort: Codable, Hashable {
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case username
+        case fullName = "full_name"
+        case profilePicture = "profile_picture"
+        case profilePictureBig = "profile_picture_big"
+        case profilePictureTiny = "profile_picture_tiny"
+        case hasActiveLive = "has_active_live"
+        case newEpisodesCount = "new_episodes_count"
+    }
+    
+    let id: String
+    var username: String?
+    var fullName: String?
+    var profilePicture: URL?
+    var profilePictureBig: URL?
+    var profilePictureTiny: URL?
+    var hasActiveLive: Bool = false
+    var newEpisodesCount: Int?
+    
+    var coverUrl: URL? {
+        if profilePicture != nil {
+            return profilePicture
+        } else if profilePictureTiny != nil {
+            return profilePictureTiny
+        } else {
+            return profilePictureBig
+        }
+    }
+
+    var hashValue: Int {
+        return id.hashValue
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}

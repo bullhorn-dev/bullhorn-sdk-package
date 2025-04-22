@@ -18,9 +18,11 @@ class BHUserManager {
 
     fileprivate lazy var apiUsers = BHServerApiUsers.init(withApiType: .regular)
 
-    var posts: [BHPost] = []
-
     var user: BHUser?
+    
+    ///
+
+    var posts: [BHPost] = []
 
     var hasMore: Bool {
         return page < pages
@@ -33,6 +35,10 @@ class BHUserManager {
     fileprivate var nextPage: Int {
         return min(page + 1, pages)
     }
+    
+    ///
+    
+    var followedUsers: [BHUserShort] = []
 
     init() {
         observersContainer = .init(notifyQueue: workingQueue)
@@ -144,6 +150,7 @@ class BHUserManager {
                 switch response {
                 case .success(user: let user):
                     BHNetworkManager.shared.updateNetworkUser(user)
+                    self.followedUsers.removeAll(where: { $0.id == userId })
                 case .failure(error: let error):
                     BHLog.w("User unfollow failed \(error.localizedDescription)")
                 }
@@ -151,6 +158,22 @@ class BHUserManager {
             }
         }
     }
+    
+    func getFollowedUsers(_ completion: @escaping (BHServerApiBase.ShortUsersResult) -> Void) {
+
+        apiUsers.getFollowedUsers(authToken: authToken) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(users: let users):
+                    self.followedUsers = users
+                case .failure(error: let error):
+                    BHLog.w("User subscriptions load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
 
     // MARK: - Initial fetch for screen
 

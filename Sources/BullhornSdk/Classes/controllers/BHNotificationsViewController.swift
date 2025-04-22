@@ -9,6 +9,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
+    fileprivate var refreshControl: UIRefreshControl?
     fileprivate var headerView: BHNotificationHeaderView?
 
     fileprivate var userManager = BHUserManager()
@@ -38,8 +39,9 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         headerView?.delegate = self
 
         configureNavigationItems()
-        
-        tableView.reloadData()
+        configureRefreshControl()
+
+        fetch(initial: true)
 
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openNotifications)
@@ -61,7 +63,44 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         navigationItem.largeTitleDisplayMode = .never
     }
     
+    fileprivate func configureRefreshControl() {
+        let newRefreshControl = UIRefreshControl()
+        newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
+        refreshControl = newRefreshControl
+        refreshControl?.tintColor = .accent()
+        tableView.addSubview(newRefreshControl)
+    }
+    
     // MARK: - Network
+    
+    fileprivate func fetch(initial: Bool = false) {
+        let completeBlock = {
+            self.refreshControl?.endRefreshing()
+            self.defaultHideActivityIndicatorView()
+            self.tableView.reloadData()
+        }
+
+        if initial {
+            self.defaultShowActivityIndicatorView()
+        }
+
+        userManager.getFollowedUsers() { response in
+            switch response {
+            case .success(users: _):
+                break
+            case .failure(error: let error):
+                var message: String = ""
+                if BHReachabilityManager.shared.isConnected() {
+                    message = "Failed to fetch user subscriptions from backend. \(error.localizedDescription)"
+                    self.showError(message)
+                } else if !initial {
+                    message = "The Internet connection appears to be offline"
+                    self.showError(message)
+                }
+            }
+            completeBlock()
+        }
+    }
 
     fileprivate func unfollowUser(_ userId: String) {
         BHLog.p("\(#function) - userID: \(userId)")
@@ -78,6 +117,12 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
             self.defaultHideActivityIndicatorView()
         }
     }
+    
+    // MARK: - Action handlers
+    
+    @objc fileprivate func onRefreshControlAction(_ sender: Any) {
+        fetch(initial: false)
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -92,14 +137,14 @@ extension BHNotificationsViewController: UITableViewDataSource, UITableViewDeleg
         if section == 0 {
             return 0
         } else if section == 1 {
-            return BHNetworkManager.shared.followedUsers.count
+            return userManager.followedUsers.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHNotificationUserCell", for: indexPath) as! BHNotificationUserCell
-        let user = BHNetworkManager.shared.followedUsers[indexPath.row]
+        let user = userManager.followedUsers[indexPath.row]
         cell.user = user
         cell.switchChangeClosure = { [weak self] isOn in
             if !isOn {
@@ -134,7 +179,7 @@ extension BHNotificationsViewController: UITableViewDataSource, UITableViewDeleg
         if section == 0 {
             return headerView?.calculateHeight() ?? 60.0
         } else {
-            return BHNetworkManager.shared.followedUsers.count > 0 ? 44.0 : 0
+            return userManager.followedUsers.count > 0 ? 44.0 : 0
         }
     }
 

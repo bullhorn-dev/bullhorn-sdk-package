@@ -12,7 +12,7 @@ class BHNotificationUserCell: UITableViewCell {
     
     var switchChangeClosure: ((Bool)->())?
 
-    var user: BHUser? {
+    var user: BHUserShort? {
         didSet {
             update()
         }
@@ -62,7 +62,7 @@ class BHNotificationUserCell: UITableViewCell {
     fileprivate func update() {
         nameLabel.text = user?.fullName
         userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
-        switchControl.setOn(user?.isFollowed ?? false, animated: false)
+        switchControl.setOn(true, animated: false)
         switchControl.isEnabled = UserDefaults.standard.isPushNotificationsEnabled
     }
 }

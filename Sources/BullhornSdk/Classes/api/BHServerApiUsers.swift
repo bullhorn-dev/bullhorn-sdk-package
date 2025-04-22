@@ -392,4 +392,23 @@ class BHServerApiUsers: BHServerApiBase {
               })
         }
     }
+    
+    func getFollowedUsers(authToken token: String, completion: @escaping (ShortUsersResult) -> Void) {
+        let path = "users/self/shows"
+        let fullPath = composeFullApiURL(with: path)
+        let headers = composeHeaders(token)
+        
+        AF.request(fullPath, method: .get, headers: headers)
+          .validate()
+          .responseDecodable(of: ShortUsers.self, completionHandler: { response in
+              debugPrint(response)
+              switch response.result {
+              case .success(let users):
+                  completion(.success(users: users.users))
+              case .failure(let error):
+                  self.trackError(error)
+                  completion(.failure(error: error))
+              }
+          })
+    }
 }
