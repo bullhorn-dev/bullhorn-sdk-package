@@ -50,6 +50,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         super.viewWillAppear(animated)
         
         BHDownloadsManager.shared.updateItems()
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

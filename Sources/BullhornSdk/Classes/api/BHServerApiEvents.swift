@@ -21,8 +21,6 @@ class BHServerApiEvents: BHServerApiBase {
             AF.request(fullPath, method: .post, parameters: events, encoding: JSONEncoding.default, headers: headers)
               .validate()
               .responseData(completionHandler: { response in
-                  debugPrint(response)
-                  
                   switch response.result {
                   case .success(_):
                       completion(.success)

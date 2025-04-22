@@ -5,6 +5,8 @@ class BHFeedManager {
 
     var dispatchQueue = DispatchQueue.global()
 
+    static let shared = BHFeedManager()
+
     fileprivate var authToken: String {
         BHAccountManager.shared.authToken
     }
@@ -97,6 +99,10 @@ class BHFeedManager {
                 completion(response)
             }
         }
+    }
+    
+    func remoeLikedPost(_ post: BHPost) {
+        likedPosts?.removeAll(where: {$0.id == post.id})
     }
     
     // MARK: - Initial fetch for screen

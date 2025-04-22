@@ -20,7 +20,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var headerView: BHUserHeaderView?
     fileprivate var footerView: BHListFooterView?
 
-    fileprivate var userManager = BHUserManager()
+    fileprivate var userManager = BHUserManager.shared
 
     fileprivate var selectedPost: BHPost?
     
@@ -79,6 +79,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        tableView.reloadData()
     }
 
     override func viewIsAppearing(_ animated: Bool) {

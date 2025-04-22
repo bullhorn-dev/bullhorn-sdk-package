@@ -68,6 +68,13 @@ class BHDownloadsManager {
         fetchStorageItems()
     }
     
+    func updatePost(_ post: BHPost) {
+        if let row = downloadsQueue.firstIndex(where: {$0.post.id == post.id}) {
+            self.downloadsQueue[row].post = post
+            self.updateStorageItem(self.downloadsQueue[row])
+        }
+    }
+    
     func download(_ post: BHPost) {
         
         guard let recordingUrl = post.recording?.publishUrl else {

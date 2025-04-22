@@ -58,6 +58,16 @@ class BHPostsManager {
     func postLikeOn(_ postId: String, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
         apiPosts.postLikeOn(authToken: authToken, postId: postId) { response in
             DispatchQueue.main.async {
+                switch response {
+                case .success(post: let post):
+                    self.post = post
+                    BHNetworkManager.shared.updateNetworkPost(post)
+                    BHExploreManager.shared.updatePost(post)
+                    BHUserManager.shared.updatePost(post)
+                    BHDownloadsManager.shared.updatePost(post)
+                case .failure(error: let error):
+                    BHLog.w("Post like failed \(error.localizedDescription)")
+                }
                 completion(response)
             }
         }
@@ -66,6 +76,17 @@ class BHPostsManager {
     func postLikeOff(_ postId: String, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
         apiPosts.postLikeOff(authToken: authToken, postId: postId) { response in
             DispatchQueue.main.async {
+                switch response {
+                case .success(post: let post):
+                    self.post = post
+                    BHNetworkManager.shared.updateNetworkPost(post)
+                    BHExploreManager.shared.updatePost(post)
+                    BHUserManager.shared.updatePost(post)
+                    BHDownloadsManager.shared.updatePost(post)
+                    BHFeedManager.shared.remoeLikedPost(post)
+                case .failure(error: let error):
+                    BHLog.w("Post unlike failed \(error.localizedDescription)")
+                }
                 completion(response)
             }
         }

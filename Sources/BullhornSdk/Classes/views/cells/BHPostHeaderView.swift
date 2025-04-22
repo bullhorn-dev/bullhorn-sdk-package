@@ -28,6 +28,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var downloadButton: BHDownloadButton!
     @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var waitingRoomView: UIView!
     @IBOutlet weak var waitingRoomLabel: UILabel!
     @IBOutlet weak var waitingRoomButton: BHWaitingRoomButton!
@@ -96,7 +97,11 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         userIcon.layer.borderWidth = 1
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
-        
+
+        likeButton.setTitle("", for: .normal)
+        likeButton.backgroundColor = .clear
+        likeButton.configuration?.baseForegroundColor = .primary()
+
         userLabel.textColor = .primary()
         dateLabel.textColor = .secondary()
         titleLabel.textColor = .primary()
@@ -157,6 +162,20 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
     fileprivate func updateControls() {
         guard let validPost = postsManager?.post else { return }
+
+        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .medium)
+        var image: UIImage? = nil
+
+        if BullhornSdk.shared.externalUser?.level == .external {
+            if validPost.liked {
+                image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
+            } else {
+                image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+            }
+        } else {
+            image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+        }
+        likeButton.setImage(image, for: .normal)
 
         if validPost.isLiveStream() {
             playerView.isHidden = false
@@ -283,6 +302,40 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         
         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
         BHTracker.shared.trackEvent(with: request)
+    }
+
+    @IBAction func onLikeButton(_ sender: UIButton) {
+        guard let validPost = postsManager?.post else { return }
+        
+        if BHReachabilityManager.shared.isConnected() {
+            if BullhornSdk.shared.externalUser?.level == .external {
+                if validPost.liked {
+                    BHPostsManager.shared.postLikeOff(validPost.id) { result in
+                        self.postsManager?.post?.liked = false
+                        self.updateControls()
+                        
+                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .dislikeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
+                        BHTracker.shared.trackEvent(with: request)
+                    }
+                } else {
+                    BHPostsManager.shared.postLikeOn(validPost.id) { result in
+                        self.postsManager?.post?.liked = true
+                        self.updateControls()
+                        
+                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .likeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
+                        BHTracker.shared.trackEvent(with: request)
+                    }
+                }
+            } else {
+                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
+            }
+        } else {
+            let connectionSheet = BHConnectionLostBottomSheet()
+            connectionSheet.preferredSheetSizing = .fit
+            connectionSheet.panToDismissEnabled = true
+
+            UIApplication.topNavigationController()?.present(connectionSheet, animated: true)
+        }
     }
 }
 

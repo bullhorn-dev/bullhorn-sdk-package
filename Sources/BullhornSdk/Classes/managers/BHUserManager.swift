@@ -12,6 +12,8 @@ class BHUserManager {
 
     private var dispatchQueue = DispatchQueue.global()
 
+    static let shared = BHUserManager()
+
     fileprivate var authToken: String {
         BHAccountManager.shared.authToken
     }
@@ -110,6 +112,12 @@ class BHUserManager {
                 }
                 completion(response)
             }
+        }
+    }
+    
+    func updatePost(_ post: BHPost) {
+        if let row = posts.firstIndex(where: {$0.id == post.id}) {
+            self.posts[row] = post
         }
     }
     

@@ -115,6 +115,12 @@ class BHExploreManager {
         }
     }
     
+    func updatePost(_ post: BHPost) {
+        if let row = posts.firstIndex(where: {$0.id == post.id}) {
+            self.posts[row] = post
+        }
+    }
+
     func getUsers(_ networkId: String, text: String?, completion: @escaping (BHServerApiFeed.PaginatedUsersResult) -> Void) {
         
         if let validText = text, validText != usersSearchText {

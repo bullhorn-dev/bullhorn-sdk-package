@@ -15,7 +15,7 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
 
     fileprivate var footerView: BHListFooterView?
 
-    fileprivate var feedManager = BHFeedManager()
+    fileprivate var feedManager = BHFeedManager.shared
 
     fileprivate var selectedPost: BHPost?
 
@@ -55,6 +55,8 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        tableView.reloadData()
     }
 
     override func viewIsAppearing(_ animated: Bool) {

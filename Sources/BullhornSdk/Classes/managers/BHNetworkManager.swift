@@ -154,6 +154,12 @@ class BHNetworkManager {
         }
     }
     
+    func updateNetworkPost(_ post: BHPost) {
+        if let row = posts.firstIndex(where: {$0.id == post.id}) {
+            self.posts[row] = post
+        }
+    }
+    
     func getNetworkUsers(_ networkId: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
                 
         apiNetwork.getNetworkUsers(authToken: authToken, networkId: networkId) { response in
