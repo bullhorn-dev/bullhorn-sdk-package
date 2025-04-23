@@ -14,15 +14,18 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
 
     let manager: BHRadioStreamsManager
 
+    var carplayInterfaceController: CPInterfaceController?
+
     var items = [CPListItem]()
 
     var listTemplate: CPListTemplate!
 
     // MARK: - Initialization
 
-    init(manager: BHRadioStreamsManager) {
+    init(with manager: BHRadioStreamsManager, interfaceController: CPInterfaceController) {
         self.manager = manager
         self.listTemplate = composeCPListTemplate()
+        self.carplayInterfaceController = interfaceController
     }
 
     // MARK: - Private

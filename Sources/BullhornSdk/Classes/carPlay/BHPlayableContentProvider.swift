@@ -13,6 +13,8 @@ protocol BHPlayableContentProvider {
 
     var items: [CPListItem] { get }
 
+    var carplayInterfaceController: CPInterfaceController? { get }
+
     var listTemplate: CPListTemplate! { get }
 
     func composeCPListTemplate() -> CPListTemplate
@@ -40,8 +42,14 @@ extension BHPlayableContentProvider {
             item.handler = { item, completion in
                 BHLog.p("CarPlay item selected")
                 
-                if let post = self.playlist?[index], !BHHybridPlayer.shared.isPostPlaying(post.id) {
-                    BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist)
+                if let post = self.playlist?[index] {
+                    if BHHybridPlayer.shared.isPostPlaying(post.id) {
+                        if let topTemplate = carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
+                            carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
+                        }
+                    } else {
+                        BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist)
+                    }
                 }
                 
                 if let listItem = item as? CPListItem {

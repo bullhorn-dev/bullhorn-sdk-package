@@ -14,15 +14,18 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     let manager: BHDownloadsManager
 
+    var carplayInterfaceController: CPInterfaceController?
+
     var items = [CPListItem]()
 
     var listTemplate: CPListTemplate!
 
     // MARK: - Initialization
 
-    init(manager: BHDownloadsManager) {
+    init(with manager: BHDownloadsManager, interfaceController: CPInterfaceController) {
         self.manager = manager
         self.listTemplate = composeCPListTemplate()
+        self.carplayInterfaceController = interfaceController
     }
 
     // MARK: - Private

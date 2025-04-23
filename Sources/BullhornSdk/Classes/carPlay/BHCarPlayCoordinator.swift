@@ -31,7 +31,7 @@ public class BHCarPlayCoordinator {
     public func connect(_ interfaceController: CPInterfaceController) {
         BHLog.p("Connected to CarPlay window.")
 
-        initProviders()
+        initProviders(interfaceController)
 
         downloadsManager.fetchStorageItems()
         feedManager.fetchStorageEpisodes(BHAppConfiguration.shared.networkId) { _ in }
@@ -57,11 +57,11 @@ public class BHCarPlayCoordinator {
 
     // MARK: - Private
 
-    fileprivate func initProviders() {
+    fileprivate func initProviders(_ interfaceController: CPInterfaceController) {
 
-        let postEvents = BHFeedEventsPlayableContentProvider.init(manager: feedManager)
-        let radioEvents = BHRadioPlayableContentProvider(manager: radioManager)
-        let downloads = BHDownloadsPlayableContentProvider(manager: downloadsManager)
+        let postEvents = BHFeedEventsPlayableContentProvider.init(with: feedManager, interfaceController: interfaceController)
+        let radioEvents = BHRadioPlayableContentProvider(with: radioManager, interfaceController: interfaceController)
+        let downloads = BHDownloadsPlayableContentProvider(with: downloadsManager, interfaceController: interfaceController)
 
         providers = [postEvents, radioEvents, downloads]
     }

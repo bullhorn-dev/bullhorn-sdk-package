@@ -14,15 +14,19 @@ class BHFeedEventsPlayableContentProvider: BHPlayableContentProvider {
 
     let manager: BHNetworkManager
 
+    var carplayInterfaceController: CPInterfaceController?
+
     var items = [CPListItem]()
 
     var listTemplate: CPListTemplate!
 
     // MARK: - Initialization
 
-    init(manager: BHNetworkManager) {
+    init(with manager: BHNetworkManager, interfaceController: CPInterfaceController) {
         self.manager = manager
-        self.listTemplate = composeCPListTemplate()    }
+        self.listTemplate = composeCPListTemplate()
+        self.carplayInterfaceController = interfaceController
+    }
 
     // MARK: - Private
 
