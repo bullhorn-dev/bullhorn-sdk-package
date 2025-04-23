@@ -85,6 +85,10 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         livePostsView.isHidden = !hasLivePosts()
         
         reloadData()
+        scrollToSelectedChannel()
+    }
+    
+    func scrollToSelectedChannel() {
         channelsView.moveToChannel(UserDefaults.standard.selectedChannelId)
     }
     

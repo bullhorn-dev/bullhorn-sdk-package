@@ -56,6 +56,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         NotificationCenter.default.addObserver(self, selector: #selector(onNetworkIdChangedNotification(notification:)), name: BullhornSdk.NetworkIdChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(notification:)), name: BHAccountManager.AccountChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onUniversalLinkNotification(notification:)), name: BHLinkResolver.UniversalLinkNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -266,6 +267,9 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         }
     }
 
+    @objc private func onApplicationDidBecomeActive(_ notification: Notification) {
+        headerView?.scrollToSelectedChannel()
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
