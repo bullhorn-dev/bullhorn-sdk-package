@@ -19,7 +19,7 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var scheduledPostsView: BHPostsCarouselView!
     @IBOutlet weak var livePostsTitle: UIView!
     @IBOutlet weak var livePostsTitleLabel: UILabel!
-    @IBOutlet weak var livePostsView: BHPostsCarouselView!
+    @IBOutlet weak var livePostsView: BHLiveCarouselView!
     @IBOutlet weak var featuredUsersTitle: UIView!
     @IBOutlet weak var featuredUsersTitleLabel: UILabel!
     @IBOutlet weak var featuredUsersView: BHUsersCarouselView!
@@ -184,5 +184,16 @@ extension BHHomeHeaderView: BHPostCarouselViewDelegate {
     
     func postsCarouselView(_ view: BHPostsCarouselView, didSelectPost post: BHPost) {
         delegate?.headerView(self, didRequestPlayPost: post)
+    }
+}
+
+// MARK: - BHLiveCarouselViewDelegate
+
+extension BHHomeHeaderView : BHLiveCarouselViewDelegate {
+
+    func liveCarouselView(_ view: BHLiveCarouselView, didMoveToPage index: Int) {}
+    
+    func liveCarouselView(_ view: BHLiveCarouselView, didSelectPost post: BHPost) {
+        delegate?.headerView(self, didSelectPost: post)
     }
 }

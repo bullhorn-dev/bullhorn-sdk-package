@@ -19,11 +19,16 @@ class BHLivePostCarouselCell: UICollectionViewCell {
 
     // MARK: - Private Properties
 
-    private let cntView: UIView = {
-        let view = UIView(frame: .zero)
+    private let shadowView: UIView = {
+        let view = UIView()
         view.layer.cornerRadius = 8
-        view.layer.borderWidth = 2
-        view.clipsToBounds = true
+        view.layer.shadowColor = UIColor.shadow().withAlphaComponent(0.5).cgColor
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowOffset = .zero
+        view.layer.shadowRadius = 4
+        view.backgroundColor = .cardBackground()
+        view.layer.masksToBounds = false
+        view.clipsToBounds = false
         return view
     }()
 
@@ -31,24 +36,35 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .tertiary()
+        imageView.layer.cornerRadius = 8
+        imageView.layer.borderWidth = 1
+        imageView.clipsToBounds = true
+        imageView.layer.borderColor = UIColor.tertiary().cgColor
         return imageView
     }()
-    
-    private let tagLabel: BHPaddingLabel = {
-        let label = BHPaddingLabel()
-        label.font = .fontWithName(.robotoBold, size: 8)
-        label.sizeToFit()
-        label.clipsToBounds = true
-        return label
-    }()
-    
+        
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoRegular, size: 12)
-        label.textColor = .secondary()
+        label.font = .fontWithName(.robotoMedium, size: 15)
+        label.textColor = .primary()
+        label.numberOfLines = 1
+        return label
+    }()
+
+    private let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = .fontWithName(.robotoRegular, size: 13)
+        label.textColor = .primary()
         label.numberOfLines = 2
         return label
     }()
+
+    let playButton: BHPlayButton = {
+        let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 140, height: 36))
+        button.title = "Watch Now!"
+        return button
+    }()
+
         
     // MARK: - Initializers
     
@@ -61,85 +77,58 @@ class BHLivePostCarouselCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        shadowView.frame = CGRect(x: 0, y: Int(Constants.paddingVertical / 2), width: Int(frame.size.width), height: Int(frame.size.height - Constants.paddingVertical))
+    }
         
     // MARK: - Private
     
     private func setupUI() {
         
+        let iconSize: CGFloat = 94.0
+
         let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
 
-        cntView.addSubview(imageView)
-        cntView.addSubview(tagLabel)
+        let vStackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, playButton])
+        vStackView.axis = .vertical
+        vStackView.alignment = .fill
+        vStackView.distribution = .fill
+        vStackView.spacing = 4
         
-        let stackView = UIStackView(arrangedSubviews: [cntView, titleLabel])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 1
+        let hStackView = UIStackView(arrangedSubviews: [imageView, vStackView])
+        hStackView.axis = .horizontal
+        hStackView.alignment = .fill
+        hStackView.distribution = .fill
+        hStackView.spacing = 16
+        
+        shadowView.addSubview(hStackView)
+        contentView.addSubview(shadowView)
 
-        contentView.addSubview(stackView)
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        tagLabel.translatesAutoresizingMaskIntoConstraints = false
-        cntView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        hStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            cntView.widthAnchor.constraint(equalToConstant: Constants.userProfileIconSize),
-            cntView.heightAnchor.constraint(equalToConstant: Constants.userProfileIconSize),
-            imageView.widthAnchor.constraint(equalToConstant: Constants.userProfileIconSize - 4),
-            imageView.heightAnchor.constraint(equalToConstant: Constants.userProfileIconSize - 4),
-            imageView.topAnchor.constraint(equalTo: cntView.topAnchor, constant: 2),
-            imageView.centerXAnchor.constraint(equalTo: cntView.centerXAnchor),
-            tagLabel.centerXAnchor.constraint(equalTo: cntView.centerXAnchor),
-            tagLabel.bottomAnchor.constraint(equalTo: cntView.bottomAnchor),
-            tagLabel.heightAnchor.constraint(equalToConstant: 16),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leftAnchor.constraint(equalTo: leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            hStackView.centerYAnchor.constraint(equalTo: shadowView.centerYAnchor),
+            hStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
+            hStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
+            hStackView.heightAnchor.constraint(equalToConstant: iconSize),
+            imageView.widthAnchor.constraint(equalToConstant: iconSize),
+            imageView.heightAnchor.constraint(equalToConstant: iconSize),
+            titleLabel.heightAnchor.constraint(equalToConstant: 22.0),
+            playButton.heightAnchor.constraint(equalToConstant: 36.0),
         ])
     }
 
     private func update() {
+        playButton.post = post
         imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
-        titleLabel.textColor = post?.isLiveStream() == true ? .accent() : .secondary()
-        updateTagLabel()
-    }
-    
-    private func updateTagLabel() {
-        guard let validPost = post else { return }
-        
-        var text: String = "UPCOMING"
-        var color: UIColor = .clear
-
-        if validPost.isLiveNow() {
-            if validPost.liveStatus.isScheduled() {
-                text = "UPCOMING"
-                color = .defaultBlue()
-            } else {
-                text = "LIVE"
-                color = .accent()
-            }
-        } else if validPost.isLiveStream() {
-            text = "LIVE"
-            color = .accent()
-        }
-
-        tagLabel.isHidden = text.isEmpty
-        tagLabel.text = text
-        tagLabel.textColor = .onAccent()
-        tagLabel.backgroundColor = color
-        tagLabel.layer.cornerRadius = 4
-        tagLabel.addCharacterSpacing()
-        
-        tagLabel.paddingLeft = 6
-        tagLabel.paddingRight = 6
-        tagLabel.paddingTop = 3
-        tagLabel.paddingBottom = 3
-        
-        cntView.layer.borderColor = color.cgColor
+        titleLabel.sizeToFit()
+        descriptionLabel.text = post?.description
     }
 }
