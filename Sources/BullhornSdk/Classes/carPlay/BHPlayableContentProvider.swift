@@ -40,7 +40,7 @@ extension BHPlayableContentProvider {
             item.handler = { item, completion in
                 BHLog.p("CarPlay item selected")
                 
-                if let post = self.playlist?[index] {
+                if let post = self.playlist?[index], !BHHybridPlayer.shared.isPostPlaying(post.id) {
                     BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist)
                 }
                 
