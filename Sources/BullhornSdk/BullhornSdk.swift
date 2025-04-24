@@ -145,7 +145,7 @@ public class BullhornSdk: NSObject {
         }
     }
     
-    public func logout() {
+    public func logout(_ sdkUser: BHSdkUser) {
         BHLog.p("\(#function)")
         
         externalUser = nil
@@ -154,6 +154,12 @@ public class BullhornSdk: NSObject {
         BHLivePlayer.shared.close()
         
         NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
+        
+        login(sdkUser: sdkUser) { _ in
+            if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+            }
+        }
     }
     
     public func getSelfUser() -> BHSelfUser? {

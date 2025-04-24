@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bullhorn SDK Client" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHJ-RZ-n4S">
-                    <rect key="frame" x="74" y="598" width="227.5" height="29"/>
+                    <rect key="frame" x="74" y="379" width="227.5" height="29"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
                     <color key="textColor" name="bhColorAppBarTitle"/>
                     <nil key="highlightedColor"/>
@@ -24,7 +24,7 @@
             <color key="backgroundColor" name="bhColorAppBarBg"/>
             <constraints>
                 <constraint firstItem="LHJ-RZ-n4S" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="OCw-xH-1FJ"/>
-                <constraint firstAttribute="bottom" secondItem="LHJ-RZ-n4S" secondAttribute="bottom" constant="40" id="tg3-f9-hs7"/>
+                <constraint firstItem="LHJ-RZ-n4S" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="60" id="tu7-kw-1Lc"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="547.20000000000005" y="454.27286356821594"/>
