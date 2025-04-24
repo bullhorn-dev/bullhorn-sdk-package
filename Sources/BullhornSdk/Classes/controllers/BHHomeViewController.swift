@@ -57,6 +57,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(notification:)), name: BHAccountManager.AccountChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onUniversalLinkNotification(notification:)), name: BHLinkResolver.UniversalLinkNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onExternalAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -219,6 +220,9 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         }
     }
     
+    @objc fileprivate func onExternalAccountChangedNotification(_ notification: Notification) {
+        fetch(true)
+    }
     
     @objc fileprivate func onUniversalLinkNotification(notification: Notification) {
         BHLog.p("\(#function)")

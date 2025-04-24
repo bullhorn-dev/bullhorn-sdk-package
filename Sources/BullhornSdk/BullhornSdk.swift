@@ -133,10 +133,13 @@ public class BullhornSdk: NSObject {
             switch result {
             case .success(account: let account):
                 self.externalUser = sdkUser
-                NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
                 
-                if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
-                    BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
+                    
+                    if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                        BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+                    }
                 }
                 completion(.success(user: account.user))
             case .failure(error: let error):
@@ -152,12 +155,14 @@ public class BullhornSdk: NSObject {
 
         BHHybridPlayer.shared.close()
         BHLivePlayer.shared.close()
-        
-        NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
-        
+                
         login(sdkUser: sdkUser) { _ in
-            if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
-                BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
+
+                if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                    BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+                }
             }
         }
     }
