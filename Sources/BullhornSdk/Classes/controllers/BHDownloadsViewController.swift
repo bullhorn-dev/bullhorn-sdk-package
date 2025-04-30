@@ -126,6 +126,9 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
                 controller.popoverPresentationController?.sourceView = cell.shareButton
             })
         }
+        cell.errorClosure = { [weak self] message in
+            self?.showError(message)
+        }
         
         return cell
     }
