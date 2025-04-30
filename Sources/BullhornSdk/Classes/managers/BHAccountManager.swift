@@ -124,11 +124,7 @@ class BHAccountManager {
         
     func loginSdkUser(clientId: String, sdkUserId: String, fullName: String?, profilePictureUri: String?, completion: @escaping (AccountResult) -> Void) {
         
-        var anonymousAuthToken: String?
-
-        if let currentSdkUserId = UserDefaults.standard.sdkUserId, currentSdkUserId == sdkUserId {
-            anonymousAuthToken = UserDefaults.standard.authToken
-        }
+        let anonymousAuthToken = UserDefaults.standard.authToken
 
         serverSdk.loginSdkUser(clientId: clientId, authToken: anonymousAuthToken, sdkUserId: sdkUserId, fullName: fullName, profilePictureUri: profilePictureUri) { (response: BHServerApiUsers.SelfUserResult) in
             switch response {
