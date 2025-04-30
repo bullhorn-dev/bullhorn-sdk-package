@@ -37,6 +37,11 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var separatorView1: UIView!
     @IBOutlet weak var separatorView2: UIView!
     @IBOutlet weak var playedLabel: UILabel!
+    
+    @IBOutlet weak var progressView: UIView!
+    @IBOutlet weak var progressBgView: UIView!
+    @IBOutlet weak var progressActiveView: UIView!
+    @IBOutlet weak var progressViewWidthConstraint: NSLayoutConstraint!
 
     weak var delegate: BHPostHeaderViewDelegate?
 
@@ -125,6 +130,16 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         ]
         tabbedView.delegate = self
         
+        progressBgView.layer.cornerRadius = progressBgView.frame.height / 2
+        progressBgView.layer.borderColor = UIColor.primaryBackground().cgColor
+        progressBgView.layer.borderWidth = 1
+        progressBgView.backgroundColor = .divider()
+        progressBgView.clipsToBounds = true
+            
+        progressActiveView.layer.cornerRadius = progressActiveView.frame.height / 2
+        progressActiveView.backgroundColor = .secondary()
+        progressActiveView.clipsToBounds = true
+        
         reloadData()
     }
     
@@ -158,6 +173,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     fileprivate func initialize() {
         let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
+        
+        BHHybridPlayer.shared.addListener(self)
     }
 
     fileprivate func updateControls() {
@@ -222,6 +239,24 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             }
         } else {
             waitingRoomView.isHidden = true
+        }
+        
+        if UserDefaults.standard.isDevModeEnabled {
+            if let duration = validPost.recording?.duration, validPost.playbackOffset > 0, duration > 0, abs(duration - Int(validPost.playbackOffset)) > 5 {
+                let fullWidth = progressBgView.frame.size.width
+                let progressWidth = validPost.playbackOffset * fullWidth / Double(duration)
+                
+                if progressWidth > 0 {
+                    progressViewWidthConstraint.constant =  progressWidth < fullWidth ? progressWidth : 0
+                    progressView.isHidden = false
+                } else {
+                    progressView.isHidden = true
+                }
+            } else {
+                progressView.isHidden = true
+            }
+        } else {
+            progressView.isHidden = true
         }
     }
 
@@ -346,5 +381,26 @@ extension BHPostHeaderView: BHTabbedViewDelegate {
     func tabbedView(_ tabbedView: BHTabbedView, didMoveToTab index: Int) {
         selectedTab = Tabs(rawValue: index) ?? .details
         delegate?.postHeaderView(self, didSelectTabBarItem: selectedTab)
+    }
+}
+
+// MARK: - BHHybridPlayerListener
+
+extension BHPostHeaderView: BHHybridPlayerListener {
+
+    func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
+    
+    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
+        if UserDefaults.standard.isDevModeEnabled {
+            guard let playerPost = player.post else { return }
+            guard let validPost = postsManager?.post else { return }
+            
+            if playerPost.id == validPost.id {
+                DispatchQueue.main.async {
+                    self.postsManager?.post?.updatePlaybackOffset(position, completed: false)
+                    self.reloadData()
+                }
+            }
+        }
     }
 }

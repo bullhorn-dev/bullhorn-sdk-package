@@ -94,14 +94,16 @@ class BHPostsManager {
     
     func postPlaybackOffset(_ postId: String, position: Double, playbackCompleted: Bool, completion: @escaping (BHServerApiPosts.PlaybackOffsetResult) -> Void) {
         
+        let timestamp = Date().timeIntervalSince1970
+
         let offset: Parameters = [
-            "timestamp": Date().timeIntervalSince1970.rounded(),
+            "timestamp": timestamp,
             "offset": position.rounded(),
             "playback_completed": playbackCompleted
         ]
         let params: Parameters = ["playback_offset": offset]
         
-        apiPosts.postPlaybackOffset(authToken: authToken, postId: postId, parameters: params) { response in
+        apiPosts.postPlaybackOffset(authToken: authToken, postId: postId, parameters: offset) { response in
             self.dispatchQueue.async {
                 completion(response)
             }
@@ -110,7 +112,7 @@ class BHPostsManager {
     
     func getPlaybackOffset(_ postId: String, offset: Double, completion: @escaping (BHServerApiPosts.PlaybackOffsetResult) -> Void) {
         
-        let timestamp = Date().timeIntervalSince1970
+        let timestamp = Date().timeIntervalSince1970.rounded()
         
         apiPosts.getPlaybackOffset(authToken: authToken, postId: postId, timestamp: timestamp, offset: offset) { response in
             self.dispatchQueue.async {

@@ -153,9 +153,9 @@ class BHDownloadsManager {
         return nil
     }
     
-    func updatePlaybackCompleted(_ postId: String, completed: Bool) {
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
         if let item = downloadsQueue.first(where: { $0.post.id == postId }) {
-            item.post.isPlaybackCompleted = completed
+            item.post.updatePlaybackOffset(offset, completed: completed)
             
             if let row = downloadsQueue.firstIndex(where: {$0.post.id == postId}) {
                 DispatchQueue.main.async {

@@ -159,11 +159,30 @@
                                         <rect key="frame" x="0.0" y="293" width="328" height="14"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Yesterday" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqg-cq-Xl0">
-                                                <rect key="frame" x="0.0" y="0.0" width="222.33333333333334" height="14"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="14"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                 <color key="textColor" name="bhColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NH8-3N-Shi">
+                                                <rect key="frame" x="102.33333333333334" y="0.0" width="120" height="14"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TPB-XO-f4H">
+                                                        <rect key="frame" x="0.0" y="3" width="60" height="8"/>
+                                                        <color key="backgroundColor" name="bhColorPrimary"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="60" id="baZ-kD-BH7"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" name="bhColorTertiary"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="120" id="OeJ-ip-5ad"/>
+                                                    <constraint firstItem="TPB-XO-f4H" firstAttribute="centerY" secondItem="NH8-3N-Shi" secondAttribute="centerY" id="beL-qK-c1e"/>
+                                                    <constraint firstItem="TPB-XO-f4H" firstAttribute="leading" secondItem="NH8-3N-Shi" secondAttribute="leading" id="qfD-il-SdI"/>
+                                                    <constraint firstItem="TPB-XO-f4H" firstAttribute="top" secondItem="NH8-3N-Shi" secondAttribute="top" constant="3" id="x75-6f-hVy"/>
+                                                </constraints>
+                                            </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Played" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAG-sz-9tV">
                                                 <rect key="frame" x="234.33333333333331" y="0.0" width="38.666666666666686" height="14"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
@@ -221,6 +240,9 @@
                 <outlet property="optionsButton" destination="mEj-2d-LHH" id="Lk5-KQ-fTu"/>
                 <outlet property="playButton" destination="57e-ml-0Hv" id="RBc-wX-7fS"/>
                 <outlet property="playedLabel" destination="hAG-sz-9tV" id="nXh-Zt-b3r"/>
+                <outlet property="progressBgView" destination="NH8-3N-Shi" id="lZW-jY-F2T"/>
+                <outlet property="progressView" destination="TPB-XO-f4H" id="kDx-L4-l33"/>
+                <outlet property="progressViewWidthConstraint" destination="baZ-kD-BH7" id="6VC-c7-zpC"/>
                 <outlet property="shadowView" destination="a5j-cc-Oxa" id="7I6-19-E6R"/>
                 <outlet property="shareButton" destination="a2Z-8N-oOX" id="hFe-gR-Kes"/>
                 <outlet property="tagLabel" destination="Yg5-jn-KFC" id="vwU-4B-Ted"/>

@@ -157,11 +157,42 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="0:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwn-FG-CrT">
-                                                <rect key="frame" x="52" y="0.0" width="367.33333333333331" height="40"/>
+                                                <rect key="frame" x="52.000000000000014" y="0.0" width="195.33333333333337" height="40"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                 <color key="textColor" name="bhColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hHh-2C-ZY7">
+                                                <rect key="frame" x="259.33333333333331" y="0.0" width="160" height="40"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rmE-dl-Pa9">
+                                                        <rect key="frame" x="0.0" y="15" width="160" height="10"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sfp-kN-fDN">
+                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="10"/>
+                                                                <color key="backgroundColor" name="bhColorPrimary"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="60" id="gXw-On-Uya"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                        <color key="backgroundColor" name="bhColorTertiary"/>
+                                                        <constraints>
+                                                            <constraint firstItem="Sfp-kN-fDN" firstAttribute="centerY" secondItem="rmE-dl-Pa9" secondAttribute="centerY" id="5X3-8W-KZT"/>
+                                                            <constraint firstItem="Sfp-kN-fDN" firstAttribute="top" secondItem="rmE-dl-Pa9" secondAttribute="top" id="GAd-3n-vjf"/>
+                                                            <constraint firstAttribute="height" constant="10" id="NxD-Fp-xVD"/>
+                                                            <constraint firstItem="Sfp-kN-fDN" firstAttribute="leading" secondItem="rmE-dl-Pa9" secondAttribute="leading" id="aON-aW-zHJ"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="rmE-dl-Pa9" firstAttribute="leading" secondItem="hHh-2C-ZY7" secondAttribute="leading" id="Wj0-NK-Ql9"/>
+                                                    <constraint firstAttribute="trailing" secondItem="rmE-dl-Pa9" secondAttribute="trailing" id="Y4d-Dt-fQf"/>
+                                                    <constraint firstAttribute="width" constant="160" id="g47-bp-sbe"/>
+                                                    <constraint firstItem="rmE-dl-Pa9" firstAttribute="centerY" secondItem="hHh-2C-ZY7" secondAttribute="centerY" id="mLF-AI-axp"/>
+                                                </constraints>
+                                            </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Played" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QxX-Tl-bzt">
                                                 <rect key="frame" x="431.33333333333331" y="0.0" width="41.666666666666686" height="40"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
@@ -297,6 +328,10 @@
                 <outlet property="playButton" destination="Z4b-CL-xvy" id="qRY-A2-eFm"/>
                 <outlet property="playedLabel" destination="QxX-Tl-bzt" id="MWy-qz-BUN"/>
                 <outlet property="playerView" destination="1vp-In-pPt" id="4vf-wJ-Snm"/>
+                <outlet property="progressActiveView" destination="Sfp-kN-fDN" id="jWB-Pm-dZn"/>
+                <outlet property="progressBgView" destination="rmE-dl-Pa9" id="Ggq-XB-2n7"/>
+                <outlet property="progressView" destination="hHh-2C-ZY7" id="Xrh-8N-KE1"/>
+                <outlet property="progressViewWidthConstraint" destination="gXw-On-Uya" id="2fP-jx-rv6"/>
                 <outlet property="separatorView1" destination="P5X-12-DS4" id="LR6-8G-g8H"/>
                 <outlet property="separatorView2" destination="Nbi-8o-LqY" id="jAc-xE-BjU"/>
                 <outlet property="shareButton" destination="8i4-4t-l0O" id="neS-0V-dnz"/>
@@ -336,6 +371,9 @@
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

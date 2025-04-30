@@ -24,6 +24,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
     
+    fileprivate let exploreManager = BHExploreManager.shared
+    
     fileprivate var shouldShowHeader: Bool = false
     
     // MARK: - Lifecycle
@@ -31,6 +33,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        exploreManager.addListener(self)
+
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
@@ -168,7 +172,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             self.shouldShowHeader = false
             self.defaultShowActivityIndicatorView()
 
-            BHExploreManager.shared.fetchStorage(networkId) { response in
+            exploreManager.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
                     let showHeader = BHNetworkManager.shared.featuredUsers.count > 0
@@ -183,7 +187,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             }
         }
 
-        BHExploreManager.shared.fetch(networkId) { response in
+        exploreManager.fetch(networkId) { response in
             switch response {
             case .success:
                 break
@@ -197,7 +201,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     }
     
     fileprivate func fetchRecents() {
-        BHExploreManager.shared.getRecentUsers(BHAppConfiguration.shared.networkId, isFirstPage: true) { response in
+        exploreManager.getRecentUsers(BHAppConfiguration.shared.networkId, isFirstPage: true) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -214,7 +218,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             defaultShowActivityIndicatorView()
         }
 
-        BHExploreManager.shared.getPosts(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
+        exploreManager.getPosts(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -232,7 +236,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             defaultShowActivityIndicatorView()
         }
 
-        BHExploreManager.shared.getUsers(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
+        exploreManager.getUsers(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -328,21 +332,21 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch selectedTab {
         case .podcasts:
-            if BHExploreManager.shared.users.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.users.count == 0 && !activityIndicator.isAnimating {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 tableView.setEmptyMessage(message, image: image)
             } else {
                 tableView.restore()
             }
-            return BHExploreManager.shared.users.count
+            return exploreManager.users.count
         case .episodes:
-            if BHExploreManager.shared.posts.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.posts.count == 0 && !activityIndicator.isAnimating {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 tableView.setEmptyMessage(message, image: image)
             } else {
                 tableView.restore()
             }
-            return BHExploreManager.shared.posts.count
+            return exploreManager.posts.count
         }
     }
     
@@ -350,24 +354,24 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         switch selectedTab {
         case .podcasts:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHUserCell.reusableIndentifer, for: indexPath) as! BHUserCell
-            cell.user = BHExploreManager.shared.users[indexPath.row]
+            cell.user = exploreManager.users[indexPath.row]
 
-            if BHExploreManager.shared.hasMoreUsers && indexPath.row == BHExploreManager.shared.users.count - 1 {
+            if exploreManager.hasMoreUsers && indexPath.row == exploreManager.users.count - 1 {
                 fetchUsers()
             }
 
             return cell
         case .episodes:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostCell.reusableIndentifer, for: indexPath) as! BHPostCell
-            cell.post = BHExploreManager.shared.posts[indexPath.row]
-            cell.playlist = BHExploreManager.shared.posts
+            cell.post = exploreManager.posts[indexPath.row]
+            cell.playlist = exploreManager.posts
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
                     controller.popoverPresentationController?.sourceView = cell.shareButton
                 })
             }
             
-            if BHExploreManager.shared.hasMorePosts && indexPath.row == BHExploreManager.shared.posts.count - 1 {
+            if exploreManager.hasMorePosts && indexPath.row == exploreManager.posts.count - 1 {
                 fetchPosts()
             }
             
@@ -400,12 +404,12 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
 
         switch selectedTab {
         case .podcasts:
-            if BHExploreManager.shared.hasMoreUsers {
+            if exploreManager.hasMoreUsers {
                 footerView?.setup()
                 return footerView
             }
         case .episodes:
-            if BHExploreManager.shared.hasMorePosts {
+            if exploreManager.hasMorePosts {
                 footerView?.setup()
                 return footerView
             }
@@ -422,9 +426,9 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch selectedTab {
         case .podcasts:
-            return BHExploreManager.shared.hasMoreUsers ? 40 : 0
+            return exploreManager.hasMoreUsers ? 40 : 0
         case .episodes:
-            return BHExploreManager.shared.hasMorePosts ? 40 : 0
+            return exploreManager.hasMorePosts ? 40 : 0
         }
     }
     
@@ -432,9 +436,21 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
 
         switch selectedTab {
         case .podcasts:
-            openUserDetails(BHExploreManager.shared.users[indexPath.row])
+            openUserDetails(exploreManager.users[indexPath.row])
         case .episodes:
-            openPostDetails(BHExploreManager.shared.posts[indexPath.row])
+            openPostDetails(exploreManager.posts[indexPath.row])
+        }
+    }
+}
+
+// MARK: - BHExploreManagerListener
+
+extension BHExploreViewController: BHExploreManagerListener {
+    func exploreManagerDidFetchItems(_ manager: BHExploreManager) {}
+    
+    func exploreManagerDidUpdateItems(_ manager: BHExploreManager) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
 }
@@ -522,8 +538,8 @@ extension BHExploreViewController: UISearchBarDelegate {
         searchActive = false
         shouldShowHeader = true
         
-//        if (selectedTab == .podcasts && BHExploreManager.shared.users.count > 0) ||
-//            (selectedTab == .episodes && BHExploreManager.shared.posts.count > 0) {
+//        if (selectedTab == .podcasts && exploreManager.users.count > 0) ||
+//            (selectedTab == .episodes && exploreManager.posts.count > 0) {
 //            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
 //        }
         tableView.reloadData()

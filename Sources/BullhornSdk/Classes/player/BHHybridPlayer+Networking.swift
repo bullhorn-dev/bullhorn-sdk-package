@@ -116,18 +116,23 @@ extension BHHybridPlayer {
     func getPlaybackOffset() {
         BHLog.p("\(#function)")
 
-        guard let item = playerItem else { return }
+        guard let validPost = post else { return }
+        guard let validItem = playerItem else { return }
         
-        postsManager.getPlaybackOffset(item.post.postId, offset: item.position) { response in
+        postsManager.getPlaybackOffset(validPost.id, offset: validPost.playbackOffset) { response in
+
             switch response {
             case .success(offset: let playbackOffset):
-                let position = playbackOffset.offset
+//                self.post?.playbackOffset = playbackOffset.offset
+//                self.post?.isPlaybackCompleted = playbackOffset.playbackCompleted
+//
+//                let position = playbackOffset.offset
                 
                 BHLog.p("BHPlaybackOffset loaded, offset: \(playbackOffset.offset)")
 
-                if position != -1 && position != item.position {
-                    self.seek(to: position)
-                }
+//                if position != -1 && position != validItem.position {
+//                    self.seek(to: position)
+//                }
             case .failure(error: let e):
                 BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
             }
@@ -144,27 +149,38 @@ extension BHHybridPlayer {
         let position = player.playerCurrentTime()
         let duration = player.playerDuration()
         let isCompleted = validPost.isPlaybackCompleted || ((duration - position) < 5)
-        
-        postsManager.postPlaybackOffset(item.post.postId, position: player.playerCurrentTime(), playbackCompleted: isCompleted) { response in
+                
+        postsManager.postPlaybackOffset(item.post.postId, position: position, playbackCompleted: isCompleted) { response in
             switch response {
             case .success(offset: let playbackOffset):
                 BHLog.p("BHPlaybackOffset posted, offset: \(playbackOffset.offset), completed: \(playbackOffset.playbackCompleted)")
-                self.post?.isPlaybackCompleted = playbackOffset.playbackCompleted
                 
-                if playbackOffset.playbackCompleted, let item = self.playerItem {
+                if playbackOffset.playbackCompleted {
                     self.observersContainer.notifyObserversAsync {
                         $0.hybridPlayer(self, playerItem: item, playbackCompleted: playbackOffset.playbackCompleted)
                     }
-                    
-                    BHNetworkManager.shared.updatePlaybackCompleted(validPost.id, completed: playbackOffset.playbackCompleted)
-                    BHDownloadsManager.shared.updatePlaybackCompleted(validPost.id, completed: playbackOffset.playbackCompleted)
                 }
             case .failure(error: let e):
                 BHLog.w("BHPlaybackOffset post failed \(e.localizedDescription)")
             }
         }
-    }
+        
+        post?.updatePlaybackOffset(position, completed: isCompleted)
+        BHNetworkManager.shared.updatePostPlayback(validPost.id, offset: position, completed: isCompleted)
+        BHExploreManager.shared.updatePostPlayback(validPost.id, offset: position, completed: isCompleted)
+        BHDownloadsManager.shared.updatePostPlayback(validPost.id, offset: position, completed: isCompleted)
+        BHFeedManager.shared.updatePostPlayback(validPost.id, offset: position, completed: isCompleted)
+        BHUserManager.shared.updatePostPlayback(validPost.id, offset: position, completed: isCompleted)
 
+        do {
+            let params = try validPost.toDictionary()
+            if !DataBaseManager.shared.updatePost(with: validPost.id, params: params) {
+                BHLog.w("Failed to save post playback offset to persistent storage")
+            }
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+        }
+    }
 }
 
 

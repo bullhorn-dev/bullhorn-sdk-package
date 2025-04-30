@@ -185,7 +185,7 @@ class BHHybridPlayer {
 
     func playRequest(with post: BHPost, playlist: [BHPost]?) {
         
-        BHLog.p("\(#function) id: \(post.id), title: \(post.title)")
+        BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
         
         BHLivePlayer.shared.close()
         
@@ -203,32 +203,15 @@ class BHHybridPlayer {
             
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             
-            if fileUrl != nil {
-                let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                
-                let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+            if BHReachabilityManager.shared.isConnected() || fileUrl != nil {
+
+                let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
                 
                 start(with: playerItem, post: post, playlist: playlist)
                 
                 BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
-            } else if BHReachabilityManager.shared.isConnected() {
-                
-                BHPostsManager.shared.getPost(post.id, context: nil) { result in
-                    switch result {
-                    case .success(post: let post):
-                        self.post = post
-                    case .failure(error: _):
-                        self.post = post
-                        break
-                    }
-                    
-                    let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                    let playerItem = BHPlayerItem(post: p, playbackSettings: self.settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
-                    
-                    self.start(with: playerItem, post: post, playlist: playlist)
-                    
-                    BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
-                }
+
             } else {
                 let vc = BHConnectionLostBottomSheet()
                 vc.preferredSheetSizing = .fit
@@ -244,9 +227,9 @@ class BHHybridPlayer {
 
         if isActive() {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
-            let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+            let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
             
-            let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
             self.playerItem = playerItem
             self.post = post
@@ -476,16 +459,13 @@ class BHHybridPlayer {
         
         stop()
         
-        guard var validItem = item else {
+        guard let validItem = item else {
             BHLog.w("\(#function) - empty player item")
             return
         }
                 
         lastSentPosition = validItem.position
         lastSentDuration = validItem.duration
-
-        validItem.position = validItem.position.fromMs()
-        validItem.duration = validItem.duration.fromMs()
 
         settings = validItem.playbackSettings
         playerItem = validItem
@@ -643,15 +623,15 @@ class BHHybridPlayer {
         return false
     }
     
-    @discardableResult fileprivate func performStart(with p: BHPost) -> Bool {
+    @discardableResult fileprivate func performStart(with post: BHPost) -> Bool {
         
-        let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(p.id)
-        let post = BHPlayerItem.Post(postId: p.id, title: p.title, userId: p.user.id, userName: p.user.fullName, userImageUrl: p.user.coverUrl, url: p.recording?.publishUrl, file: fileUrl)
+        let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
+        let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
         let settings: BHPlayerItem.PlaybackSettings = settings
             
-        let playerItem = BHPlayerItem(post: post, playbackSettings: settings, position: p.playbackOffset, duration: Double(p.recording?.duration ?? 0), shouldPlay: true, isStream: p.isRadioStream() || p.isLiveStream())
+        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
-        start(with: playerItem, post: p, playlist: playlist)
+        start(with: playerItem, post: post, playlist: playlist)
             
         return true
     }

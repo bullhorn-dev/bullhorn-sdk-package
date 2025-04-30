@@ -71,6 +71,12 @@ public class BHCarPlayCoordinator {
 
 extension BHCarPlayCoordinator: BHNetworkManagerListener {
 
+    func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {
+        DispatchQueue.main.async {
+            self.carPlayController.reload()
+        }
+    }
+    
     func networkManagerDidFetchPosts(_ manager: BHNetworkManager) {
         DispatchQueue.main.async {
             self.carPlayController.reload()

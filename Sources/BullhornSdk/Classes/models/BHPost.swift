@@ -109,7 +109,7 @@ struct BHPost: Codable {
     let hasMeetingRoom: Bool
     let originalTime: String?
 //    let playbackTimestamp: Double
-    let playbackOffset: Double
+    var playbackOffset: Double
     var isPlaybackCompleted: Bool
     let privacy: PostPrivacy
     let published: Bool
@@ -184,6 +184,11 @@ struct BHPost: Codable {
 
     func hasVideo() -> Bool {
         return bulletin != nil ? bulletin!.hasVideo : false
+    }
+    
+    mutating func updatePlaybackOffset(_ offset: Double, completed: Bool) {
+        playbackOffset = offset
+        isPlaybackCompleted = isPlaybackCompleted ? true : completed
     }
     
     var postDateFormatter: DateFormatter = {

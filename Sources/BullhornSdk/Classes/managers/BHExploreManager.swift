@@ -2,7 +2,8 @@
 import Foundation
 
 protocol BHExploreManagerListener: ObserverProtocol {
-    func exploreManagerDidFetch(_ manager: BHExploreManager)
+    func exploreManagerDidFetchItems(_ manager: BHExploreManager)
+    func exploreManagerDidUpdateItems(_ manager: BHExploreManager)
 }
 
 class BHExploreManager {
@@ -120,7 +121,20 @@ class BHExploreManager {
             self.posts[row] = post
         }
     }
-
+    
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        var post = posts.first(where: { $0.id == postId })
+        post?.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
+            posts[row] = validPost
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.exploreManagerDidUpdateItems(self)
+            }
+        }
+    }
+    
     func getUsers(_ networkId: String, text: String?, completion: @escaping (BHServerApiFeed.PaginatedUsersResult) -> Void) {
         
         if let validText = text, validText != usersSearchText {
@@ -216,7 +230,7 @@ class BHExploreManager {
         }
         
         observersContainer.notifyObserversAsync {
-            $0.exploreManagerDidFetch(self)
+            $0.exploreManagerDidFetchItems(self)
         }
         
         fetchGroup.notify(queue: .main) {
@@ -227,20 +241,7 @@ class BHExploreManager {
             }
         }
     }
-    
-    func updatePlaybackCompleted(_ postId: String, completed: Bool) {
-        var post = posts.first(where: { $0.id == postId })
-        post?.isPlaybackCompleted = completed
         
-        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
-            posts[row] = validPost
-            
-            self.observersContainer.notifyObserversAsync {
-                $0.exploreManagerDidFetch(self)
-            }
-        }
-    }
-    
     // MARK: - Storage Providers
     
     func fetchStorageRecentUsers(_ networkId: String, completion: @escaping (CommonResult) -> Void) {

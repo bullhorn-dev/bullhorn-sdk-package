@@ -3,6 +3,7 @@ import Foundation
 
 protocol BHNetworkManagerListener: ObserverProtocol {
     func networkManagerDidFetchPosts(_ manager: BHNetworkManager)
+    func networkManagerDidUpdatePosts(_ manager: BHNetworkManager)
 }
 
 struct UIUsersModel {
@@ -160,6 +161,19 @@ class BHNetworkManager {
         }
     }
     
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        var post = posts.first(where: { $0.id == postId })
+        post?.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
+            posts[row] = validPost
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.networkManagerDidUpdatePosts(self)
+            }
+        }
+    }
+    
     func getNetworkUsers(_ networkId: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
                 
         apiNetwork.getNetworkUsers(authToken: authToken, networkId: networkId) { response in
@@ -240,20 +254,7 @@ class BHNetworkManager {
             }
         }
     }
-    
-    func updatePlaybackCompleted(_ postId: String, completed: Bool) {
-        var post = posts.first(where: { $0.id == postId })
-        post?.isPlaybackCompleted = completed
         
-        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
-            posts[row] = validPost
-            
-            self.observersContainer.notifyObserversAsync {
-                $0.networkManagerDidFetchPosts(self)
-            }
-        }
-    }
-    
     // MARK: - Initial fetch for screen
     
     func fetch(_ networkId: String, completion: @escaping (CommonResult) -> Void) {

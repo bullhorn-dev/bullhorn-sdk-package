@@ -3,6 +3,7 @@ import Foundation
 
 protocol BHUserManagerListener: ObserverProtocol {
     func userManagerDidFetchPosts(_ manager: BHUserManager)
+    func userManagerDidUpdatePosts(_ manager: BHUserManager)
 }
 
 class BHUserManager {
@@ -121,6 +122,19 @@ class BHUserManager {
         }
     }
     
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        var post = posts.first(where: { $0.id == postId })
+        post?.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
+            posts[row] = validPost
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.userManagerDidUpdatePosts(self)
+            }
+        }
+    }
+    
     func getUserRecommendations(_ userId: String, completion: @escaping (BHServerApiBase.UsersResult) -> Void) {
 
         apiUsers.getUserRecommendations(authToken: authToken, userId: userId) { response in
@@ -223,20 +237,7 @@ class BHUserManager {
             }
         }
     }
-    
-    func updatePlaybackCompleted(_ postId: String, completed: Bool) {
-        var post = posts.first(where: { $0.id == postId })
-        post?.isPlaybackCompleted = completed
         
-        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
-            posts[row] = validPost
-            
-            self.observersContainer.notifyObserversAsync {
-                $0.userManagerDidFetchPosts(self)
-            }
-        }
-    }
-    
     // MARK: - Storage Providers
     
     fileprivate func fetchStorageUser(_ userId: String) {

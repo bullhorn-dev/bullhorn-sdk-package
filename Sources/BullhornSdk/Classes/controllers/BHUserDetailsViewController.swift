@@ -400,8 +400,14 @@ extension BHUserDetailsViewController: BHSearchControllerDelegate {
 // MARK: - BHUserManagerListener
 
 extension BHUserDetailsViewController: BHUserManagerListener {
-
+    
     func userManagerDidFetchPosts(_ manager: BHUserManager) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func userManagerDidUpdatePosts(_ manager: BHUserManager) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

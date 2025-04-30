@@ -105,6 +105,15 @@ class BHFeedManager {
         likedPosts?.removeAll(where: {$0.id == post.id})
     }
     
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        var post = likedPosts?.first(where: { $0.id == postId })
+        post?.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validPost = post, let row = likedPosts?.firstIndex(where: {$0.id == postId}) {
+            likedPosts?[row] = validPost
+        }
+    }
+    
     // MARK: - Initial fetch for screen
 
     func fetch(completion: @escaping (CommonResult) -> Void) {
