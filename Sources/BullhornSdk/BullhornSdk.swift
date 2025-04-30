@@ -155,8 +155,8 @@ public class BullhornSdk: NSObject {
 
         BHHybridPlayer.shared.close()
         BHLivePlayer.shared.close()
-                
-        login(sdkUser: sdkUser) { _ in
+
+        BHAccountManager.shared.loginAnonymously() { _ in
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
 

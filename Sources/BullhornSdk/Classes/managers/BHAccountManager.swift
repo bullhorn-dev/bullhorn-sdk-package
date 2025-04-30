@@ -124,9 +124,7 @@ class BHAccountManager {
         
     func loginSdkUser(clientId: String, sdkUserId: String, fullName: String?, profilePictureUri: String?, completion: @escaping (AccountResult) -> Void) {
         
-        let anonymousAuthToken = UserDefaults.standard.authToken
-
-        serverSdk.loginSdkUser(clientId: clientId, authToken: anonymousAuthToken, sdkUserId: sdkUserId, fullName: fullName, profilePictureUri: profilePictureUri) { (response: BHServerApiUsers.SelfUserResult) in
+        serverSdk.loginSdkUser(clientId: clientId, authToken: authToken, sdkUserId: sdkUserId, fullName: fullName, profilePictureUri: profilePictureUri) { (response: BHServerApiUsers.SelfUserResult) in
             switch response {
             case .success(user: let user):
                 let account = BHAccount.parse(from: user)
