@@ -1,6 +1,7 @@
 
 import UIKit
 import SDWebImage
+import FLAnimatedImage
 import Foundation
 
 class BHLivePostCarouselCell: UICollectionViewCell {
@@ -16,6 +17,7 @@ class BHLivePostCarouselCell: UICollectionViewCell {
     }
 
     fileprivate var placeholderImage: UIImage?
+    fileprivate var gifUrl: URL?
 
     // MARK: - Private Properties
 
@@ -32,9 +34,9 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         return view
     }()
 
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+    private let imageView: FLAnimatedImageView = {
+        let imageView = FLAnimatedImageView()
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .tertiary()
         imageView.layer.cornerRadius = 8
         imageView.layer.borderWidth = 1
@@ -91,7 +93,8 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         let iconSize: CGFloat = 94.0
 
         let bundle = Bundle.module
-        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
+        placeholderImage = UIImage(named: "ic_radio_placeholder.png", in: bundle, with: nil)
+        gifUrl = bundle.url(forResource: "ic_the_will_cain_live", withExtension: "gif")
 
         let vStackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, playButton])
         vStackView.axis = .vertical
@@ -117,7 +120,7 @@ class BHLivePostCarouselCell: UICollectionViewCell {
             hStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
             hStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
             hStackView.heightAnchor.constraint(equalToConstant: iconSize),
-            imageView.widthAnchor.constraint(equalToConstant: iconSize),
+            imageView.widthAnchor.constraint(equalToConstant: iconSize / 0.75),
             imageView.heightAnchor.constraint(equalToConstant: iconSize),
             titleLabel.heightAnchor.constraint(equalToConstant: 22.0),
             playButton.heightAnchor.constraint(equalToConstant: 36.0),
@@ -126,7 +129,7 @@ class BHLivePostCarouselCell: UICollectionViewCell {
 
     private func update() {
         playButton.post = post
-        imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
+        imageView.sd_setImage(with: gifUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
         titleLabel.sizeToFit()
         descriptionLabel.text = post?.description
