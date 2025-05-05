@@ -74,10 +74,23 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
             guard let validPost = self.post else { return }
 
-            let vc = UIActivityViewController(activityItems: [validPost.shareLink], applicationActivities: nil)
-            vc.popoverPresentationController?.sourceView = self.view
-                    
-            self.present(vc, animated: true, completion: nil)
+            if BHReachabilityManager.shared.isConnected() {
+                BHPostsManager.shared.getPost(validPost.id, context: nil) { result in
+                    switch result {
+                    case .success(post: let post):
+                        DispatchQueue.main.async {
+                            let vc = UIActivityViewController(activityItems: [post.shareLink], applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
+                                    
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                    case .failure(error: _):
+                        DispatchQueue.main.async {
+                            self.showError("Failed to share episode. This episode is no longer available.")
+                        }
+                    }
+                }
+            }
         })
     }
     

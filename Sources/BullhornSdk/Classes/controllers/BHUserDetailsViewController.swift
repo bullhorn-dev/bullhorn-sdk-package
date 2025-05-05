@@ -288,7 +288,10 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
                 controller.popoverPresentationController?.sourceView = cell.shareButton
             })
         }
-        
+        cell.errorClosure = { [weak self] message in
+            self?.showError(message)
+        }
+
         if userManager.hasMore && indexPath.row == userManager.posts.count - 1 {
             fetchPosts()
         }

@@ -41,6 +41,7 @@ class BHPostCell: UITableViewCell {
     
     var shareBtnTapClosure: ((URL)->())?
     var likeBtnTapClosure: ((Bool)->())?
+    var errorClosure: ((String)->())?
 
     fileprivate lazy var dateFormatter: DateFormatter = DateFormatter()
     fileprivate var placeholderImage: UIImage?
@@ -273,18 +274,28 @@ class BHPostCell: UITableViewCell {
             if BullhornSdk.shared.externalUser?.level == .external {
                 if validPost.liked {
                     BHPostsManager.shared.postLikeOff(validPost.id) { result in
-                        self.post?.liked = false
-                        self.updateControls()
-                        self.likeBtnTapClosure?(false)
+                        switch result {
+                        case .success(post: _):
+                            self.post?.liked = false
+                            self.updateControls()
+                            self.likeBtnTapClosure?(false)
+                        case .failure(error: _):
+                            self.errorClosure?("Failed to unlike episode. This episode is no longer available.")
+                        }
                         
                         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .dislikeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
                         BHTracker.shared.trackEvent(with: request)
                     }
                 } else {
                     BHPostsManager.shared.postLikeOn(validPost.id) { result in
-                        self.post?.liked = true
-                        self.updateControls()
-                        self.likeBtnTapClosure?(true)
+                        switch result {
+                        case .success(post: _):
+                            self.post?.liked = true
+                            self.updateControls()
+                            self.likeBtnTapClosure?(true)
+                        case .failure(error: _):
+                            self.errorClosure?("Failed to like episode. This episode is no longer available.")
+                        }
                         
                         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .likeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
                         BHTracker.shared.trackEvent(with: request)
@@ -304,7 +315,24 @@ class BHPostCell: UITableViewCell {
 
     @IBAction func onShareButton(_ sender: UIButton) {
         guard let validPost = post else { return }
-        shareBtnTapClosure?(validPost.shareLink)
+        
+        if BHReachabilityManager.shared.isConnected() {
+            BHPostsManager.shared.getPost(validPost.id, context: nil) { result in
+                switch result {
+                case .success(post: let post):
+                    DispatchQueue.main.async {
+                        self.shareBtnTapClosure?(post.shareLink)
+                    }
+                case .failure(error: _):
+                    DispatchQueue.main.async {
+                        self.errorClosure?("Failed to share episode. This episode is no longer available.")
+                    }
+                }
+                
+                let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
+                BHTracker.shared.trackEvent(with: request)
+            }
+        }
         
         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
         BHTracker.shared.trackEvent(with: request)

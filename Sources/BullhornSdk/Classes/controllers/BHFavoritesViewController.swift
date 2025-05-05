@@ -206,7 +206,10 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
         cell.likeBtnTapClosure = { [weak self] liked in
             self?.fetchPosts(initial: true)
         }
-        
+        cell.errorClosure = { [weak self] message in
+            self?.showError(message)
+        }
+
         if feedManager.hasMore && indexPath.row == feedManager.favorites.count - 1 {
             fetchPosts()
         }

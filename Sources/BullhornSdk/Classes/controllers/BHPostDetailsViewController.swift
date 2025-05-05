@@ -134,7 +134,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
             case .failure(error: _):
                 var message: String = ""
                 if BHReachabilityManager.shared.isConnected() {
-                    message = "Failed to load episode details. This episode no longer available."
+                    message = "Failed to load episode details. This episode is no longer available."
                     self.showError(message)
                 } else if !initial {
                     message = "The Internet connection appears to be offline"
@@ -245,7 +245,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
 // MARK: - BHPostHeaderViewDelegate
 
 extension BHPostDetailsViewController: BHPostHeaderViewDelegate {
-
+    
     func postHeaderView(_ view: BHPostHeaderView, didSelectShare shareLink: URL) {
         presentShareDialog(with: [shareLink], configureBlock: { controller in
             controller.popoverPresentationController?.sourceView = view.shareButton
@@ -259,6 +259,10 @@ extension BHPostDetailsViewController: BHPostHeaderViewDelegate {
     func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostHeaderView.Tabs) {
         selectedTab = item
         tableView.reloadData()
+    }
+    
+    func postHeaderView(_ view: BHPostHeaderView, didGetError message: String) {
+        showError(message)
     }
 }
 

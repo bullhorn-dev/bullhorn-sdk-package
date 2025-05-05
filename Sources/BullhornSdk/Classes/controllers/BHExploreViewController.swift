@@ -370,6 +370,9 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
                     controller.popoverPresentationController?.sourceView = cell.shareButton
                 })
             }
+            cell.errorClosure = { [weak self] message in
+                self?.showError(message)
+            }
             
             if exploreManager.hasMorePosts && indexPath.row == exploreManager.posts.count - 1 {
                 fetchPosts()

@@ -16,6 +16,7 @@ let package = Package(
         .package(url: "https://github.com/evgenyneu/Cosmos.git", from: "25.0.1"),
         .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.21.0"),
         .package(url: "https://github.com/SwiftKickMobile/SwiftMessages.git", from: "10.0.1"),
+        .package(url: "https://github.com/Flipboard/FLAnimatedImage.git", from: "1.0.17")
     ],
     targets: [
         .target(
@@ -25,6 +26,7 @@ let package = Package(
                 .product(name: "Cosmos", package: "Cosmos"),
                 .product(name: "SDWebImage", package: "SDWebImage"),
                 .product(name: "SwiftMessages", package: "SwiftMessages"),
+                .product(name: "FLAnimatedImage", package: "FLAnimatedImage")
             ],
             path: "Sources/BullhornSdk",
             resources: [
@@ -40,6 +42,7 @@ let package = Package(
                 .copy("Resources/images/carplay-home.png"),
                 .copy("Resources/images/carplay-radio.png"),
                 .copy("Resources/images/carplay-downloads.png"),
+                .copy("Resources/images/ic_the_will_cain_live.gif"),
             ]),
     ]
 )
