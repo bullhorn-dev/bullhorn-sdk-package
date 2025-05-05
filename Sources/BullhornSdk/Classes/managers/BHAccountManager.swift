@@ -34,7 +34,6 @@ class BHAccountManager {
     var authToken: String { return account?.authToken ?? "" }
     var user: BHSelfUser? { return account?.user }
     var isLoggedIn: Bool { return account?.isValid ?? false }
-    var isNewUser: Bool = false
 
     fileprivate(set) var account: BHAccount? { willSet { assert(Thread.isMainThread, "Account object must be set in main thread only") } }
 
@@ -68,7 +67,6 @@ class BHAccountManager {
         notifyAccountChanged(with: .all, reason: .logout)
 
         account = nil
-        isNewUser = false
         storeAccountData()
     }
     
@@ -77,17 +75,16 @@ class BHAccountManager {
         guard let anonymousAuthToken = UserDefaults.standard.authToken,
               let anonymousUserId = UserDefaults.standard.userId,
               let sdkUserId = UserDefaults.standard.sdkUserId else {
-            isNewUser = true
             return false
         }
         
         BHLog.p("\(#function) - userId: \(anonymousUserId), sdkUserId: \(sdkUserId)")
         
-        if userId != sdkUserId {
-            BHLog.p("\(#function) - Login is necessary")
-            isNewUser = true
-            return false
-        }
+//        if userId != sdkUserId {
+//            BHLog.p("\(#function) - Login is necessary")
+//            isNewUser = true
+//            return false
+//        }
 
         let user = BHSelfUser.init(withIdentifier: anonymousUserId)
         user.sdkUserId = sdkUserId
@@ -100,7 +97,6 @@ class BHAccountManager {
 
         let result = account != nil
         if result {
-            isNewUser = false
             notifyAccountChanged(with: .all, reason: .restore)
         }
 
@@ -159,13 +155,11 @@ extension BHAccountManager {
         
     fileprivate func storeAccountData() {
 
-        if let validAccount = account {
-            UserDefaults.standard.authToken = validAccount.authToken
-            UserDefaults.standard.userId = validAccount.user.id
-            UserDefaults.standard.sdkUserId = validAccount.user.sdkUserId
-            UserDefaults.standard.sdkUserName = validAccount.user.fullName
-            UserDefaults.standard.sdkUserIcon = validAccount.user.profilePicture?.absoluteString
-        }
+        UserDefaults.standard.authToken = account?.authToken
+        UserDefaults.standard.userId = account?.user.id
+        UserDefaults.standard.sdkUserId = account?.user.sdkUserId
+        UserDefaults.standard.sdkUserName = account?.user.fullName
+        UserDefaults.standard.sdkUserIcon = account?.user.profilePicture?.absoluteString
     }
 
     fileprivate func setAccount(with accountResult: AccountResult, reason: AccountChangedNotificationInfo.Reason) -> AccountResult {
