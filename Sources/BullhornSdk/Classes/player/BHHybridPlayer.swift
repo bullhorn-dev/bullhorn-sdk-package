@@ -203,15 +203,31 @@ class BHHybridPlayer {
             
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             
-            if BHReachabilityManager.shared.isConnected() || fileUrl != nil {
-
+            if fileUrl != nil {
                 let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
-                
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+                             
                 start(with: playerItem, post: post, playlist: playlist)
-                
+                             
                 BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
+            } else if BHReachabilityManager.shared.isConnected() {
 
+                BHPostsManager.shared.getPost(post.id, context: nil) { result in
+                    switch result {
+                    case .success(post: let post):
+                        self.post = post
+                    case .failure(error: _):
+                        self.post = post
+                        break
+                    }
+
+                    let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+
+                    self.start(with: playerItem, post: post, playlist: playlist)
+
+                    BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
+                }
             } else {
                 let vc = BHConnectionLostBottomSheet()
                 vc.preferredSheetSizing = .fit
@@ -629,7 +645,7 @@ class BHHybridPlayer {
         let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
         let settings: BHPlayerItem.PlaybackSettings = settings
             
-        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
         start(with: playerItem, post: post, playlist: playlist)
             
@@ -875,14 +891,13 @@ class BHHybridPlayer {
             stopTrackTimer()
             setSleepTimer(0)
             playerPositionChanged(true)
-            needUpdatePosition = self.state.isActive()
+            needUpdatePosition = self.state.isPlaying()
 
         case .ended:
             playerState = .ended
             playerStateFlags = .complete
             stopTrackTimer()
             setSleepTimer(0)
-            needUpdatePosition = self.state.isActive()
             observersContainer.notifyObserversAsync {
                 $0.hybridPlayerDidFinishPlaying(self)
             }
@@ -892,7 +907,6 @@ class BHHybridPlayer {
 
             playerState = .destroyed
             playerStateFlags = .error
-            needUpdatePosition = self.state.isActive()
             
             let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .playerFailed, context: error.debugDescription, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
             BHTracker.shared.trackEvent(with: request)

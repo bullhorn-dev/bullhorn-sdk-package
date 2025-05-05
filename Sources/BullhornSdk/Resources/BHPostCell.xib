@@ -168,10 +168,10 @@
                                                 <rect key="frame" x="102.33333333333334" y="0.0" width="120" height="14"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TPB-XO-f4H">
-                                                        <rect key="frame" x="0.0" y="3" width="60" height="8"/>
+                                                        <rect key="frame" x="0.0" y="3" width="0.0" height="8"/>
                                                         <color key="backgroundColor" name="bhColorPrimary"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="60" id="baZ-kD-BH7"/>
+                                                            <constraint firstAttribute="width" id="baZ-kD-BH7"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>

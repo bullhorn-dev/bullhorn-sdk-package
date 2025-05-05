@@ -157,22 +157,22 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="0:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwn-FG-CrT">
-                                                <rect key="frame" x="52.000000000000014" y="0.0" width="195.33333333333337" height="40"/>
+                                                <rect key="frame" x="52.000000000000014" y="0.0" width="215.33333333333337" height="40"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                 <color key="textColor" name="bhColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hHh-2C-ZY7">
-                                                <rect key="frame" x="259.33333333333331" y="0.0" width="160" height="40"/>
+                                                <rect key="frame" x="279.33333333333331" y="0.0" width="140" height="40"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rmE-dl-Pa9">
-                                                        <rect key="frame" x="0.0" y="15" width="160" height="10"/>
+                                                        <rect key="frame" x="0.0" y="15" width="140" height="10"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sfp-kN-fDN">
-                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="10"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="10"/>
                                                                 <color key="backgroundColor" name="bhColorPrimary"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="60" id="gXw-On-Uya"/>
+                                                                    <constraint firstAttribute="width" id="gXw-On-Uya"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -189,7 +189,7 @@
                                                 <constraints>
                                                     <constraint firstItem="rmE-dl-Pa9" firstAttribute="leading" secondItem="hHh-2C-ZY7" secondAttribute="leading" id="Wj0-NK-Ql9"/>
                                                     <constraint firstAttribute="trailing" secondItem="rmE-dl-Pa9" secondAttribute="trailing" id="Y4d-Dt-fQf"/>
-                                                    <constraint firstAttribute="width" constant="160" id="g47-bp-sbe"/>
+                                                    <constraint firstAttribute="width" constant="140" id="g47-bp-sbe"/>
                                                     <constraint firstItem="rmE-dl-Pa9" firstAttribute="centerY" secondItem="hHh-2C-ZY7" secondAttribute="centerY" id="mLF-AI-axp"/>
                                                 </constraints>
                                             </view>

@@ -119,22 +119,32 @@ extension BHHybridPlayer {
         guard let validPost = post else { return }
         guard let validItem = playerItem else { return }
         
-        postsManager.getPlaybackOffset(validPost.id, offset: validPost.playbackOffset) { response in
-
-            switch response {
-            case .success(offset: let playbackOffset):
-//                self.post?.playbackOffset = playbackOffset.offset
-//                self.post?.isPlaybackCompleted = playbackOffset.playbackCompleted
-//
-//                let position = playbackOffset.offset
+        let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(validPost.id)
+        
+        if fileUrl != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if validPost.playbackOffset > 0 {
+                    self.seek(to: validPost.playbackOffset)
+                }
+            }
+        } else {
+            postsManager.getPlaybackOffset(validPost.id, offset: validPost.playbackOffset) { response in
                 
-                BHLog.p("BHPlaybackOffset loaded, offset: \(playbackOffset.offset)")
-
-//                if position != -1 && position != validItem.position {
-//                    self.seek(to: position)
-//                }
-            case .failure(error: let e):
-                BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
+                switch response {
+                case .success(offset: let playbackOffset):
+                    //                self.post?.playbackOffset = playbackOffset.offset
+                    //                self.post?.isPlaybackCompleted = playbackOffset.playbackCompleted
+                    //
+                    let position = playbackOffset.offset
+                    
+                    BHLog.p("BHPlaybackOffset loaded, offset: \(playbackOffset.offset)")
+                    
+                    if position != -1 && position != validItem.position {
+                        self.seek(to: position)
+                    }
+                case .failure(error: let e):
+                    BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
+                }
             }
         }
     }
