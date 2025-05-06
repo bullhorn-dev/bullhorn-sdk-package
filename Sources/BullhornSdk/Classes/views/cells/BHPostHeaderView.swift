@@ -347,11 +347,13 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                         self.delegate?.postHeaderView(self, didGetError: "Failed to share episode. This episode is no longer available.")
                     }
                 }
-                
-                let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                BHTracker.shared.trackEvent(with: request)
             }
+        } else {
+            delegate?.postHeaderView(self, didSelectShare: validPost.shareLink)
         }
+        
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
+        BHTracker.shared.trackEvent(with: request)
     }
 
     @IBAction func onLikeButton(_ sender: UIButton) {
@@ -360,7 +362,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         if BHReachabilityManager.shared.isConnected() {
             if BullhornSdk.shared.externalUser?.level == .external {
                 if validPost.liked {
-                    BHPostsManager.shared.postLikeOff(validPost.id) { result in
+                    BHPostsManager.shared.postLikeOff(validPost) { result in
                         switch result {
                         case .success(post: _):
                             self.postsManager?.post?.liked = false
@@ -370,12 +372,9 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                                 self.delegate?.postHeaderView(self, didGetError: "Failed to unlike episode. This episode is no longer available.")
                             }
                         }
-                        
-                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .dislikeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                        BHTracker.shared.trackEvent(with: request)
                     }
                 } else {
-                    BHPostsManager.shared.postLikeOn(validPost.id) { result in
+                    BHPostsManager.shared.postLikeOn(validPost) { result in
                         switch result {
                         case .success(post: _):
                             self.postsManager?.post?.liked = true
@@ -385,9 +384,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                                 self.delegate?.postHeaderView(self, didGetError: "Failed to like episode. This episode is no longer available.")
                             }
                         }
-                        
-                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .likeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                        BHTracker.shared.trackEvent(with: request)
                     }
                 }
             } else {

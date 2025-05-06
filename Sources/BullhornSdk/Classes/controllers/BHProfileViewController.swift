@@ -87,6 +87,14 @@ class BHProfileViewController: BHPlayerContainingViewController {
         configure()
         tableView.reloadData()
     }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openAccount)
+        BHTracker.shared.trackEvent(with: request)
+    }
         
     // MARK: - Private
 

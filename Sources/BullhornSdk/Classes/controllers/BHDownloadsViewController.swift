@@ -42,7 +42,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         BHDownloadsManager.shared.addListener(self)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openDownloads)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openDownloads)
         BHTracker.shared.trackEvent(with: request)
     }
     

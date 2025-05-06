@@ -39,8 +39,8 @@ public class BHCarPlayCoordinator {
 
         carPlayController.connect(to: interfaceController, with: providers)
         
-        /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .connectCarPlay)
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .carplay, action: .ui, banner: .carplayConnect)
         BHTracker.shared.trackEvent(with: request)
     }
     
@@ -53,6 +53,10 @@ public class BHCarPlayCoordinator {
         feedManager.removeListener(self)
         radioManager.removeListener(self)
         downloadsManager.removeListener(self)
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .carplay, action: .ui, banner: .carplayDisconnect)
+        BHTracker.shared.trackEvent(with: request)
     }
 
     // MARK: - Private

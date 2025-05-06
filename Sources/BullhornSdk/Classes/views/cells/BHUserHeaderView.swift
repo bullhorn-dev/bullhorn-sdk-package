@@ -226,7 +226,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
 
         delegate?.userHeaderViewOnShareButtonPressed(self, shareLink: shareLink)
 
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: shareLink.absoluteString, podcastId: user.id, podcastTitle: user.fullName)
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: shareLink.absoluteString, podcastId: user.id, podcastTitle: user.username)
         BHTracker.shared.trackEvent(with: request)
     }
 

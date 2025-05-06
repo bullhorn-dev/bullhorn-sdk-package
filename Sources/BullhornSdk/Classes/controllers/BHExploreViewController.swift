@@ -78,6 +78,10 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         super.viewIsAppearing(animated)
 
         refreshControl?.resetUIState()
+        
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .opennSearch)
+        BHTracker.shared.trackEvent(with: request)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

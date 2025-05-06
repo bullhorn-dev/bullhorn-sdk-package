@@ -64,6 +64,10 @@ class BHAccountManager {
     func logout() {
 
         guard isLoggedIn else { return }
+        
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .account, action: .ui, banner: .logout, context: account?.user.id)
+        BHTracker.shared.trackEvent(with: request)
 
         notifyAccountChanged(with: .all, reason: .logout)
 
@@ -123,7 +127,11 @@ class BHAccountManager {
     }
         
     func loginSdkUser(clientId: String, sdkUserId: String, fullName: String?, profilePictureUri: String?, completion: @escaping (AccountResult) -> Void) {
-        
+
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .account, action: .ui, banner: .login, context: sdkUserId)
+        BHTracker.shared.trackEvent(with: request)
+
         serverSdk.loginSdkUser(clientId: clientId, authToken: authToken, sdkUserId: sdkUserId, fullName: fullName, profilePictureUri: profilePictureUri) { (response: BHServerApiUsers.SelfUserResult) in
             switch response {
             case .success(user: let user):
@@ -159,13 +167,11 @@ extension BHAccountManager {
         
     fileprivate func storeAccountData() {
 
-        if let validAccount = account {
-            UserDefaults.standard.authToken = validAccount.authToken
-            UserDefaults.standard.userId = validAccount.user.id
-            UserDefaults.standard.sdkUserId = validAccount.user.sdkUserId
-            UserDefaults.standard.sdkUserName = validAccount.user.fullName
-            UserDefaults.standard.sdkUserIcon = validAccount.user.profilePicture?.absoluteString
-        }
+        UserDefaults.standard.authToken = account?.authToken
+        UserDefaults.standard.userId = account?.user.id
+        UserDefaults.standard.sdkUserId = account?.user.sdkUserId
+        UserDefaults.standard.sdkUserName = account?.user.fullName
+        UserDefaults.standard.sdkUserIcon = account?.user.profilePicture?.absoluteString
     }
 
     fileprivate func setAccount(with accountResult: AccountResult, reason: AccountChangedNotificationInfo.Reason) -> AccountResult {

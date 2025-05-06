@@ -183,16 +183,12 @@ class BHHybridPlayer {
         
     // MARK: - Public
 
-    func playRequest(with post: BHPost, playlist: [BHPost]?) {
+    func playRequest(with post: BHPost, playlist: [BHPost]?, context: String? = "app") {
         
         BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
         
         BHLivePlayer.shared.close()
         
-        /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openPlayer, context: post.shareLink.absoluteString, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, extraParams: ["type" : post.postType.rawValue])
-        BHTracker.shared.trackEvent(with: request)
-
         if isPostActive(post.id) {
             if isPlaying() {
                 pause()
@@ -200,7 +196,12 @@ class BHHybridPlayer {
                 resume()
             }
         } else {
-            
+
+            /// track event
+            let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
+            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context, podcastId: post.user.id, podcastTitle: post.user.username, episodeId: post.id, episodeTitle: post.title, episodeType: type)
+            BHTracker.shared.trackEvent(with: request)
+
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             
             if fileUrl != nil {
@@ -304,10 +305,18 @@ class BHHybridPlayer {
             
             BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
         }
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlay, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+        BHTracker.shared.trackEvent(with: request)
     }
 
     func pause() {
         performPause()
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPause, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+        BHTracker.shared.trackEvent(with: request)
     }
     
     func stop() {
@@ -908,7 +917,8 @@ class BHHybridPlayer {
             playerState = .destroyed
             playerStateFlags = .error
             
-            let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .playerFailed, context: error.debugDescription, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+            /// track stats
+            let request = BHTrackEventRequest.createRequest(category: .player, action: .error, banner: .playerFailed, context: error.debugDescription, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
             BHTracker.shared.trackEvent(with: request)
 
             observersContainer.notifyObserversAsync {

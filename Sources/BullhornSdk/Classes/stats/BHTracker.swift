@@ -77,7 +77,6 @@ class BHTracker {
         
         var params: [String : Any] = [
             "client": "mobile",
-            "service": "bullhorn_sdk",
             "app_version": BHAppConfiguration.shared.appVersion(useBuildNumber: true),
             "hardware": BHDeviceUtils.shared.getDeviceName(),
             "os_platform": BHDeviceUtils.shared.getOSPlatform(),
@@ -119,12 +118,8 @@ class BHTracker {
 //            params["extra_params"] = request.extraParams
 //        }
 
-        if request.action == .sessionGen {
-            params["mcc"] = BHTelephonyUtils.shared.getMCC()
-            params["mnc"] = BHTelephonyUtils.shared.getMNC()
-        }
-
         params["subscription_id"] = BHAccountManager.shared.user?.id ?? ""
+        params["bullhorn_sdk_id"] = BullhornSdk.shared.clientId
         params["is_anonymous"] = String(BHAccountManager.shared.user?.isAnonymous ?? true)
         
         return params

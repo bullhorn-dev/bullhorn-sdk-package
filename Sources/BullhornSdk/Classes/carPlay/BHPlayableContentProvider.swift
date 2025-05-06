@@ -48,7 +48,7 @@ extension BHPlayableContentProvider {
                             carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
                         }
                     } else {
-                        BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist)
+                        BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist, context: "carplay")
                     }
                 }
                 

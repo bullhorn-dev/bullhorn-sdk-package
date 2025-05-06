@@ -55,8 +55,8 @@ class BHPostsManager {
         }
     }
     
-    func postLikeOn(_ postId: String, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
-        apiPosts.postLikeOn(authToken: authToken, postId: postId) { response in
+    func postLikeOn(_ item: BHPost, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
+        apiPosts.postLikeOn(authToken: authToken, postId: item.id) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(post: let post):
@@ -71,10 +71,14 @@ class BHPostsManager {
                 completion(response)
             }
         }
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .likeEpisode, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.username, episodeId: item.id, episodeTitle: item.title)
+        BHTracker.shared.trackEvent(with: request)
     }
     
-    func postLikeOff(_ postId: String, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
-        apiPosts.postLikeOff(authToken: authToken, postId: postId) { response in
+    func postLikeOff(_ item: BHPost, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
+        apiPosts.postLikeOff(authToken: authToken, postId: item.id) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(post: let post):
@@ -90,6 +94,10 @@ class BHPostsManager {
                 completion(response)
             }
         }
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .dislikeEpisode, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.username, episodeId: item.id, episodeTitle: item.title)
+        BHTracker.shared.trackEvent(with: request)
     }
     
     func postPlaybackOffset(_ postId: String, position: Double, playbackCompleted: Bool, completion: @escaping (BHServerApiPosts.PlaybackOffsetResult) -> Void) {

@@ -44,7 +44,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         fetch(initial: true)
 
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openNotifications)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openNotifications)
         BHTracker.shared.trackEvent(with: request)
     }
     

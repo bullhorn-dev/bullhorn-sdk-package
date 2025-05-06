@@ -210,15 +210,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         
         if BHHybridPlayer.shared.isPlaying() {
             BHHybridPlayer.shared.pause()
-            
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPause, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
-            BHTracker.shared.trackEvent(with: request)
-
         } else {
-            BHHybridPlayer.shared.resume()
-            
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlay, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
-            BHTracker.shared.trackEvent(with: request)
+            BHHybridPlayer.shared.resume()            
         }
     }
 

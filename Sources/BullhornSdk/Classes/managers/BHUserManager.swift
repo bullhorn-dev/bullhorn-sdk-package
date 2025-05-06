@@ -157,6 +157,11 @@ class BHUserManager {
                 switch response {
                 case .success(user: let user):
                     BHNetworkManager.shared.updateNetworkUser(user)
+                    
+                    /// track event
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .followPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    BHTracker.shared.trackEvent(with: request)
+
                 case .failure(error: let error):
                     BHLog.w("User follow failed \(error.localizedDescription)")
                 }
@@ -173,6 +178,11 @@ class BHUserManager {
                 case .success(user: let user):
                     BHNetworkManager.shared.updateNetworkUser(user)
                     self.followedUsers.removeAll(where: { $0.id == userId })
+                                        
+                    /// track event
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .unfollowPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    BHTracker.shared.trackEvent(with: request)
+
                 case .failure(error: let error):
                     BHLog.w("User unfollow failed \(error.localizedDescription)")
                 }

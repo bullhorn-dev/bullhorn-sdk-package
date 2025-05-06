@@ -273,7 +273,7 @@ class BHPostCell: UITableViewCell {
         if BHReachabilityManager.shared.isConnected() {
             if BullhornSdk.shared.externalUser?.level == .external {
                 if validPost.liked {
-                    BHPostsManager.shared.postLikeOff(validPost.id) { result in
+                    BHPostsManager.shared.postLikeOff(validPost) { result in
                         switch result {
                         case .success(post: _):
                             self.post?.liked = false
@@ -281,13 +281,10 @@ class BHPostCell: UITableViewCell {
                             self.likeBtnTapClosure?(false)
                         case .failure(error: _):
                             self.errorClosure?("Failed to unlike episode. This episode is no longer available.")
-                        }
-                        
-                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .dislikeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                        BHTracker.shared.trackEvent(with: request)
+                        }                        
                     }
                 } else {
-                    BHPostsManager.shared.postLikeOn(validPost.id) { result in
+                    BHPostsManager.shared.postLikeOn(validPost) { result in
                         switch result {
                         case .success(post: _):
                             self.post?.liked = true
@@ -295,10 +292,7 @@ class BHPostCell: UITableViewCell {
                             self.likeBtnTapClosure?(true)
                         case .failure(error: _):
                             self.errorClosure?("Failed to like episode. This episode is no longer available.")
-                        }
-                        
-                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .likeEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                        BHTracker.shared.trackEvent(with: request)
+                        }                        
                     }
                 }
             } else {
@@ -328,13 +322,13 @@ class BHPostCell: UITableViewCell {
                         self.errorClosure?("Failed to share episode. This episode is no longer available.")
                     }
                 }
-                
-                let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
-                BHTracker.shared.trackEvent(with: request)
             }
+        } else {
+            shareBtnTapClosure?(validPost.shareLink)
         }
         
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
         BHTracker.shared.trackEvent(with: request)
     }
 

@@ -4,12 +4,13 @@ import Foundation
 // MARK: - Category
 
 enum BHTrackCategory: String, Codable {
-    case initiation
-    case account
-    case explore
-    case player
-    case interactive
-    case live
+    case initiation /// events generated during startup (specifically starting a new session)
+    case account /// everything related with account (register, login logout)
+    case explore /// everything about podcasts and episodes
+    case player /// everything about recordings playback
+    case interactive /// everything related to user
+    case live /// everything related to live episodes
+    case carplay /// everything related to carPlay
 }
 
 // MARK: - Action
@@ -23,35 +24,47 @@ enum BHTrackAction: String, Codable {
 // MARK: - Banner
 
 enum BHTrackBanner: String, Codable {
-    //ui
-    case openPlayer        = "open_player"
-    case openPodcast       = "open_podcast"
-    case openEpisode       = "open_episode"
+    /// ui-account
+    case login             = "log_in"
+    case logout            = "log_out"
+    /// ui-interactive
+    case openHome          = "open_home"
+    case opennSearch       = "open_search"
     case openRadio         = "open_radio"
+    case openAccount       = "open_account"
     case openFavorites     = "open_favorites"
     case openNotifications = "open_notifications"
     case openDownloads     = "open_downloads"
     case openRecent        = "open_recent"
+    /// ui-explore
+    case openPodcast       = "open_podcast"
+    case openEpisode       = "open_episode"
     case sharePodcast      = "share_podcast"
-    case followPodcast     = "follow_podcast"
-    case unfollowPodcast   = "unfollow_podcast"
     case shareEpisode      = "share_episode"
+    case followPodcast     = "enable_notifications"
+    case unfollowPodcast   = "disable_notifications"
     case downloadEpisode   = "download_episode"
     case likeEpisode       = "like_episode"
     case dislikeEpisode    = "dislike_episode"
-    case connectCarPlay    = "connect_carplay"
-    //error
-    case playerFailed      = "player_failed"
-    case downloadFailed    = "download_failed"
-    case contentLoadFailed = "content_load_failed"
-    case storageFailed     = "storage_operation_failed"
-    //player
+    /// ui-player
+    case playerOpen        = "player_open"
     case playerPlay        = "player_play"
     case playerPause       = "player_pause"
     case playerSeek        = "player_seek"
     case playerClose       = "player_close"
     case playerSleepTimer  = "player_sleep_timer"
     case playerSpeed       = "player_playback_speed"
+    /// ui-carplay
+    case carplayConnect    = "carplay_connect"
+    case carplayDisconnect = "carplay_disconnect"
+    case carplayOpenHome   = "carplay_open_home"
+    case carplayOpenRadio  = "carplay_open_radio"
+    case carplayOpenDownloads = "carplay_open_downloads"
+    /// error-explore
+    case playerFailed      = "player_failed"
+    case downloadFailed    = "download_failed"
+    case contentLoadFailed = "content_load_failed"
+    case storageFailed     = "storage_operation_failed"
 }
 
 // MARK: - Keys

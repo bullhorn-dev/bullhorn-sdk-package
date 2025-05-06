@@ -49,7 +49,7 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openFavorites)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openFavorites)
         BHTracker.shared.trackEvent(with: request)
     }
     

@@ -298,7 +298,7 @@ class BHServerApiUsers: BHServerApiBase {
               case .failure(let error):
                   completion(.failure(error: error))
               }
-          })
+          })        
     }
 
     func unfollowUser(authToken: String?, userId: String, _ completion: @escaping (UserResult) -> Void) {

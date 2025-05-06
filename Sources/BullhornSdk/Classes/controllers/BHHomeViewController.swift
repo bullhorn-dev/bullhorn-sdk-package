@@ -70,6 +70,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         super.viewIsAppearing(animated)
 
         refreshControl?.resetUIState()
+        
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openHome)
+        BHTracker.shared.trackEvent(with: request)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -89,6 +89,10 @@ class BHDownloadsManager {
         
         performDownload(downloadItem)
         fetchStorageItems()
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .downloadEpisode, context: post.shareLink.absoluteString, podcastId: post.user.id, podcastTitle: post.user.username, episodeId: post.id, episodeTitle: post.title)
+        BHTracker.shared.trackEvent(with: request)
     }
     
     func removeFromDownloads(_ post: BHPost) {
@@ -218,6 +222,10 @@ class BHDownloadsManager {
 
                         item.status = .failure
                         item.prevStatus = .progress
+                        
+                        /// track stats
+                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .downloadFailed, context: error.localizedDescription, podcastId: item.post.user.id, podcastTitle: item.post.user.username, episodeId: item.post.id, episodeTitle: item.post.title)
+                        BHTracker.shared.trackEvent(with: request)
                     }
 
                     prevProgress = 0

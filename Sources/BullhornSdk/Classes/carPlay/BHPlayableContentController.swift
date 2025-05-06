@@ -141,7 +141,7 @@ extension BHPlayableContentController: CPNowPlayingTemplateObserver {
 extension BHPlayableContentController: CPInterfaceControllerDelegate {
 
     func templateWillAppear(_ aTemplate: CPTemplate, animated: Bool) {
-        BHLog.p("CarPlay \(aTemplate.classForCoder) will appear.")
+        BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") will appear.")
         
         if aTemplate.isMember(of: CPNowPlayingTemplate.self) {
             updatePlaybackRateButton()
@@ -149,15 +149,31 @@ extension BHPlayableContentController: CPInterfaceControllerDelegate {
     }
 
     func templateDidAppear(_ aTemplate: CPTemplate, animated: Bool) {
-        BHLog.p("CarPlay \(aTemplate.classForCoder) did appear.")
+        BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") did appear.")
+        
+        if let title = aTemplate.tabTitle {
+            var banner: BHTrackBanner
+
+            if title == "Home" {
+                banner = .carplayOpenHome
+            } else if title == "Radio" {
+                banner = .carplayOpenRadio
+            } else {
+                banner = .carplayOpenDownloads
+            }
+            
+            /// track stats
+            let request = BHTrackEventRequest.createRequest(category: .carplay, action: .ui, banner: banner)
+            BHTracker.shared.trackEvent(with: request)
+        }
     }
 
     func templateWillDisappear(_ aTemplate: CPTemplate, animated: Bool) {
-        BHLog.p("CarPlay \(aTemplate.classForCoder) will disappear.")
+        BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") will disappear.")
     }
 
     func templateDidDisappear(_ aTemplate: CPTemplate, animated: Bool) {
-        BHLog.p("CarPlay \(aTemplate.classForCoder) did disappear.")
+        BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") did disappear.")
     }
 }
 

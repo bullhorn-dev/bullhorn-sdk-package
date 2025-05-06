@@ -47,7 +47,7 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openDownloads)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openRecent)
         BHTracker.shared.trackEvent(with: request)
     }
     
