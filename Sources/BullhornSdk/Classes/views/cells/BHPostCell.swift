@@ -270,9 +270,9 @@ class BHPostCell: UITableViewCell {
     @IBAction func onLikeButton(_ sender: UIButton) {
         guard let validPost = post else { return }
         
-        if BHReachabilityManager.shared.isConnected() {
-            if BullhornSdk.shared.externalUser?.level == .external {
-                if validPost.liked {
+        if BullhornSdk.shared.externalUser?.level == .external {
+            if validPost.liked {
+                if BHReachabilityManager.shared.isConnected() {
                     BHPostsManager.shared.postLikeOff(validPost) { result in
                         switch result {
                         case .success(post: _):
@@ -281,9 +281,13 @@ class BHPostCell: UITableViewCell {
                             self.likeBtnTapClosure?(false)
                         case .failure(error: _):
                             self.errorClosure?("Failed to unlike episode. This episode is no longer available.")
-                        }                        
+                        }
                     }
                 } else {
+                    errorClosure?("Failed to unlike episode. The Internet connection appears to be offline.")
+                }
+            } else {
+                if BHReachabilityManager.shared.isConnected() {
                     BHPostsManager.shared.postLikeOn(validPost) { result in
                         switch result {
                         case .success(post: _):
@@ -292,18 +296,14 @@ class BHPostCell: UITableViewCell {
                             self.likeBtnTapClosure?(true)
                         case .failure(error: _):
                             self.errorClosure?("Failed to like episode. This episode is no longer available.")
-                        }                        
+                        }
                     }
+                } else {
+                    errorClosure?("Failed to like episode. The Internet connection appears to be offline.")
                 }
-            } else {
-                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
             }
         } else {
-            let connectionSheet = BHConnectionLostBottomSheet()
-            connectionSheet.preferredSheetSizing = .fit
-            connectionSheet.panToDismissEnabled = true
-
-            UIApplication.topNavigationController()?.present(connectionSheet, animated: true)
+            NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
         }
     }
 
@@ -323,13 +323,14 @@ class BHPostCell: UITableViewCell {
                     }
                 }
             }
+            
+            /// track stats
+            let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
+            BHTracker.shared.trackEvent(with: request)
+
         } else {
-            shareBtnTapClosure?(validPost.shareLink)
+            errorClosure?("Failed to share episode. The Internet connection appears to be offline.")
         }
-        
-        /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
-        BHTracker.shared.trackEvent(with: request)
     }
 
     @IBAction func onOptionsButton(_ sender: UIButton) {

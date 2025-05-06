@@ -348,20 +348,21 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                     }
                 }
             }
+            
+            let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
+            BHTracker.shared.trackEvent(with: request)
+
         } else {
-            delegate?.postHeaderView(self, didSelectShare: validPost.shareLink)
+            self.delegate?.postHeaderView(self, didGetError: "Failed to share episode. The Internet connection appears to be offline.")
         }
-        
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
-        BHTracker.shared.trackEvent(with: request)
     }
 
     @IBAction func onLikeButton(_ sender: UIButton) {
         guard let validPost = postsManager?.post else { return }
         
-        if BHReachabilityManager.shared.isConnected() {
-            if BullhornSdk.shared.externalUser?.level == .external {
-                if validPost.liked {
+        if BullhornSdk.shared.externalUser?.level == .external {
+            if validPost.liked {
+                if BHReachabilityManager.shared.isConnected() {
                     BHPostsManager.shared.postLikeOff(validPost) { result in
                         switch result {
                         case .success(post: _):
@@ -374,6 +375,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                         }
                     }
                 } else {
+                    self.delegate?.postHeaderView(self, didGetError: "Failed to unlike episode. The Internet connection appears to be offline.")
+                }
+            } else {
+                if BHReachabilityManager.shared.isConnected() {
                     BHPostsManager.shared.postLikeOn(validPost) { result in
                         switch result {
                         case .success(post: _):
@@ -385,16 +390,12 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                             }
                         }
                     }
+                } else {
+                    self.delegate?.postHeaderView(self, didGetError: "Failed to like episode. The Internet connection appears to be offline.")
                 }
-            } else {
-                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
             }
         } else {
-            let connectionSheet = BHConnectionLostBottomSheet()
-            connectionSheet.preferredSheetSizing = .fit
-            connectionSheet.panToDismissEnabled = true
-
-            UIApplication.topNavigationController()?.present(connectionSheet, animated: true)
+                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
         }
     }
 }

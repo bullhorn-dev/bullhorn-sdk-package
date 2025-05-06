@@ -90,6 +90,13 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
                         }
                     }
                 }
+                
+                /// track stats
+                let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
+                BHTracker.shared.trackEvent(with: request)
+
+            } else {
+                self.showError("Failed to share episode. The Internet connection appears to be offline.")
             }
         })
     }
