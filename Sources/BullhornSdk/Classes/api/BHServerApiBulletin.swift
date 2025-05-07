@@ -78,7 +78,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let bulletin):
                   completion(.success(bulletin: bulletin))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -104,7 +104,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let tile):
                   completion(.success(tile: tile))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -126,7 +126,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let variant):
                   completion(.success(variant: variant))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -148,7 +148,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let events):
                   completion(.success(events: events))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -175,7 +175,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let question):
                   completion(.success(question: question))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -198,7 +198,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let question):
                   completion(.success(question: question))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -225,7 +225,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let events):
                   completion(.success(events: events))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -252,7 +252,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let message):
                   completion(.success(message: message))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -272,7 +272,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let events):
                   completion(.success(events: events))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           }
@@ -292,7 +292,7 @@ class BHServerApiBulletin: BHServerApiBase {
               case .success(let events):
                   completion(.success(events: events))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })

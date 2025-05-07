@@ -159,7 +159,7 @@ class BHUserManager {
                     BHNetworkManager.shared.updateNetworkUser(user)
                     
                     /// track event
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .followPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .notificationsOn, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):
@@ -180,7 +180,7 @@ class BHUserManager {
                     self.followedUsers.removeAll(where: { $0.id == userId })
                                         
                     /// track event
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .unfollowPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .notificationsOff, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):

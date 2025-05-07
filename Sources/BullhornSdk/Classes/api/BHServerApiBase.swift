@@ -347,8 +347,8 @@ class BHServerApiBase: NSObject {
         AF.cancelAllRequests()
     }
     
-    func trackError(_ error: Error) {
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .contentLoadFailed, context: error.localizedDescription)
+    func trackError(url: String,  error: Error) {
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .contentLoadFailed, context: "\(url) - error: \(error.localizedDescription)")
         BHTracker.shared.trackEvent(with: request)
     }
  }

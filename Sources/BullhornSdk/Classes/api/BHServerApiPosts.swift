@@ -79,11 +79,11 @@ class BHServerApiPosts: BHServerApiBase {
                       
                       completion(.success(post: p.post))
                   } catch let error {
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                                       }
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -113,11 +113,11 @@ class BHServerApiPosts: BHServerApiBase {
                       
                       completion(.success(post: p.post))
                   } catch let error {
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                                       }
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -136,7 +136,7 @@ class BHServerApiPosts: BHServerApiBase {
               case .success(let p):
                   completion(.success(post: p.post))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -155,7 +155,7 @@ class BHServerApiPosts: BHServerApiBase {
               case .success(let p):
                   completion(.success(post: p.post))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -174,7 +174,7 @@ class BHServerApiPosts: BHServerApiBase {
               case .success(let offset):
                   completion(.success(offset: offset.playbackOffset))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -193,7 +193,7 @@ class BHServerApiPosts: BHServerApiBase {
               case .success(let offset):
                   completion(.success(offset: offset.playbackOffset))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -221,7 +221,7 @@ class BHServerApiPosts: BHServerApiBase {
               case .success(let phoneNumber):
                   completion(.success(phoneNumber: phoneNumber.data))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })

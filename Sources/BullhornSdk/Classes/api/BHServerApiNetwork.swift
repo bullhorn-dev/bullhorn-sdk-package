@@ -74,11 +74,11 @@ class BHServerApiNetwork: BHServerApiBase {
 
                           completion(.success(channels: c.channels))
                       } catch let error {
-                          self.trackError(error)
+                          self.trackError(url: fullPath, error: error)
                           completion(.failure(error: error))
                                           }
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -126,11 +126,11 @@ class BHServerApiNetwork: BHServerApiBase {
 
                           completion(.success(posts: pp.posts, page: pp.meta.page, pages: pp.meta.pages))
                       } catch let error {
-                          self.trackError(error)
+                          self.trackError(url: fullPath, error: error)
                           completion(.failure(error: error))
                                           }
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -173,11 +173,11 @@ class BHServerApiNetwork: BHServerApiBase {
 
                           completion(.success(users: pu.users))
                       } catch let error {
-                          self.trackError(error)
+                          self.trackError(url: fullPath, error: error)
                           completion(.failure(error: error))
                                           }
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -213,11 +213,11 @@ class BHServerApiNetwork: BHServerApiBase {
                           
                           completion(.success(users: pu.users, page: pu.meta.page, pages: pu.meta.pages))
                       } catch let error {
-                          self.trackError(error)
+                          self.trackError(url: fullPath, error: error)
                           completion(.failure(error: error))
                                           }
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -257,11 +257,11 @@ class BHServerApiNetwork: BHServerApiBase {
                           
                           completion(.success(radios: r.radios))
                       } catch let error {
-                          self.trackError(error)
+                          self.trackError(url: fullPath, error: error)
                           completion(.failure(error: error))
                                           }
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })

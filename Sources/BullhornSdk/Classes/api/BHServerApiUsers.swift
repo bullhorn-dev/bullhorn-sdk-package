@@ -57,7 +57,7 @@ class BHServerApiUsers: BHServerApiBase {
                   case .success(let user):
                       completion(.success(user: user.user))
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
             })
@@ -87,7 +87,7 @@ class BHServerApiUsers: BHServerApiBase {
                   case .success(let user):
                       completion(.success(user: user.user))
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
             })
@@ -106,7 +106,7 @@ class BHServerApiUsers: BHServerApiBase {
               case .success(let user):
                   completion(.success(user: user.user))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -140,11 +140,11 @@ class BHServerApiUsers: BHServerApiBase {
                             
                             completion(.success(user: user.user))
                         } catch let error {
-                            self.trackError(error)
+                            self.trackError(url: fullPath, error: error)
                             completion(.failure(error: error))
                         }
                     case .failure(let error):
-                        self.trackError(error)
+                        self.trackError(url: fullPath, error: error)
                         completion(.failure(error: error))
                     }
                 })
@@ -221,11 +221,11 @@ class BHServerApiUsers: BHServerApiBase {
 
                       completion(.success(posts: pp.posts, page: pp.meta.page, pages: pp.meta.pages))
                   } catch let error {
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                                       }
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -256,11 +256,11 @@ class BHServerApiUsers: BHServerApiBase {
 
                       completion(.success(users: u.users))
                   } catch let error {
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                                       }
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })
@@ -357,7 +357,7 @@ class BHServerApiUsers: BHServerApiBase {
                 case .success(_):
                     completion(.success)
                 case .failure(let error):
-                    self.trackError(error)
+                    self.trackError(url: fullPath, error: error)
                     completion(.failure(error: error))
                 }
             })
@@ -386,7 +386,7 @@ class BHServerApiUsers: BHServerApiBase {
                   case .success(_):
                       completion(.success)
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -406,7 +406,7 @@ class BHServerApiUsers: BHServerApiBase {
               case .success(let users):
                   completion(.success(users: users.users))
               case .failure(let error):
-                  self.trackError(error)
+                  self.trackError(url: fullPath, error: error)
                   completion(.failure(error: error))
               }
           })

@@ -25,7 +25,7 @@ class BHServerApiEvents: BHServerApiBase {
                   case .success(_):
                       completion(.success)
                   case .failure(let error):
-                      self.trackError(error)
+                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
