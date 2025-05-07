@@ -114,8 +114,6 @@ extension BHLocalNotificationsManager: UNUserNotificationCenterDelegate {
             BHLog.w("\(#function) - Failed to recognize notification from background")
             return
         }
-
-        cleanAllNotifications()
         
         delegate?.localNotificationsManager(self, performActionForNotification: info, actionIdentifier: response.actionIdentifier) { performed in
 
