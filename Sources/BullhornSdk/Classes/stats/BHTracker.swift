@@ -83,6 +83,7 @@ class BHTracker {
             "os_version": BHDeviceUtils.shared.getOSVersion(),
             "device_id": BHDeviceUtils.shared.getDeviceId(),
             "message": "Bullhorn SDK event",
+            "service": "bullhorn_sdk",
             "session_id": UserDefaults.standard.userSessionId ?? BHUserSessionManager.defaultSessionId,
             "timestamp": Int(Date().timeIntervalSince1970),
         ]
