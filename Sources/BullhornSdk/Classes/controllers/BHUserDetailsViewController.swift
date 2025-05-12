@@ -5,6 +5,8 @@ import SDWebImage
 
 class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
+    class var storyboardIndentifer: String { return String(describing: self) }
+
     fileprivate static let PostDetailsSegueIdentifier = "UserDetailsVC.PostDetailsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!

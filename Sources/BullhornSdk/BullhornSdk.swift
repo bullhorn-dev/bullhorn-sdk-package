@@ -218,9 +218,9 @@ public class BullhornSdk: NSObject {
         return false
     }
     
-    public func shouldContinueUserActivity(_ userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    public func shouldContinueUserActivity(_ url: URL?) -> Bool {
 
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb, let webURL = userActivity.webpageURL {
+        if let webURL = url {
             if let webURL1FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL1String), let webURL2FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL2String) {
 
                 if webURL1FromConfiguration.host == webURL.host || webURL2FromConfiguration.host == webURL.host {

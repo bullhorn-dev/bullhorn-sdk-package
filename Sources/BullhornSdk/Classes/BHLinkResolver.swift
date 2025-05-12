@@ -1,5 +1,6 @@
 
 import Foundation
+import UIKit
 
 // MARK: - UniversalLinkType
 
@@ -21,8 +22,6 @@ struct UniversalNotificationInfo {
 // MARK: - BHLinkResolver
 
 class BHLinkResolver {
-
-    public static let UniversalLinkNotification = Notification.Name(rawValue: "LinkResolver.UniversalLinkNotification")
 
     enum LinkResolverResult {
         case success(p: [String : Any])
@@ -85,10 +84,27 @@ class BHLinkResolver {
 
         if pathComponentsWithoutDelimiters.count == podcastLinkDelimitersCount {
             let username = pathComponentsWithoutDelimiters[0]
-            let infoObject = UniversalNotificationInfo(type: .podcast, username: username, alias: nil)
-            let info = ["info" : infoObject]
-            NotificationCenter.default.post(name: BHLinkResolver.UniversalLinkNotification, object: self, userInfo: info)
-            result = true
+            
+            if !username.isEmpty {
+                BHUserManager.shared.getUserByUsername(username) { result in
+                    switch result {
+                    case .success(user: let user):
+                        DispatchQueue.main.async {
+                            let bundle = Bundle.module
+                            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                            let vc = storyboard.instantiateViewController(withIdentifier: BHUserDetailsViewController.storyboardIndentifer) as! BHUserDetailsViewController
+                            vc.user = user
+                            
+                            UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                        }
+                        
+                    case .failure(error: let e):
+                        BHLog.w(e)
+                        break
+                    }
+                }
+                result = true
+            }
         } else {
             BHLog.w("Failed to read username from universal link")
         }
@@ -103,10 +119,27 @@ class BHLinkResolver {
         if pathComponentsWithoutDelimiters.count == episodeLinkDelimitersCount {
             let username = pathComponentsWithoutDelimiters[0]
             let alias = pathComponentsWithoutDelimiters[2]
-            let infoObject = UniversalNotificationInfo(type: .episode, username: username, alias: alias)
-            let info = ["info" : infoObject]
-            NotificationCenter.default.post(name: BHLinkResolver.UniversalLinkNotification, object: self, userInfo: info)
-            result = true
+
+            if !username.isEmpty && !alias.isEmpty {
+                BHPostsManager.shared.getPostByAlias(username, postAlias: alias) { result in
+                    switch result {
+                    case .success(post: let post):
+                        DispatchQueue.main.async {
+                            let bundle = Bundle.module
+                            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                            let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
+                            vc.post = post
+                            
+                            UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                        }
+                        
+                    case .failure(error: let e):
+                        BHLog.w(e)
+                        break
+                    }
+                }
+                result = true
+            }
         } else {
             BHLog.w("Failed to read username and alias from universal link")
         }

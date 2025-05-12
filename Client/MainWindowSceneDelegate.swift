@@ -1,5 +1,6 @@
 
 import UIKit
+import BullhornSdk
 
 class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,8 +19,12 @@ class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = initialViewController
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        
+                
         debugPrint("Main window scene will connect.")
+        
+        if let url = connectionOptions.userActivities.first?.webpageURL {
+            handleDeepLink(url)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -49,6 +54,31 @@ class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {
         if scene.session.configuration.name == SceneConfiguration.main {
             debugPrint("Main window scene did enter background.")
+        }
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            handleDeepLink(url)
+        }
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return }
+        guard let url = userActivity.webpageURL else { return }
+        
+        handleDeepLink(url)
+    }
+    
+    // MARK: - Private
+    
+    private func handleDeepLink(_ url: URL) {
+        debugPrint("Handle deep link: \(url.absoluteString)")
+
+        if BullhornSdk.shared.shouldContinueUserActivity(url) {
+            debugPrint("Main window scene: handle deep link \(url)")
+        } else {
+            debugPrint("Main window scene: failed to handle deep link \(url)")
         }
     }
 }

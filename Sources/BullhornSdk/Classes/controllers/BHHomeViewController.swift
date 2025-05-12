@@ -55,7 +55,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onNetworkIdChangedNotification(notification:)), name: BullhornSdk.NetworkIdChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(notification:)), name: BHAccountManager.AccountChangedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onUniversalLinkNotification(notification:)), name: BHLinkResolver.UniversalLinkNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onExternalAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
     }
@@ -226,53 +225,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     
     @objc fileprivate func onExternalAccountChangedNotification(_ notification: Notification) {
         fetch(true)
-    }
-    
-    @objc fileprivate func onUniversalLinkNotification(notification: Notification) {
-        BHLog.p("\(#function)")
-
-        guard let notificationInfo = notification.userInfo as? [String : UniversalNotificationInfo] else { return }
-        guard let info = notificationInfo["info"] else { return }
-        
-        switch info.type {
-        case .podcast:
-            defaultShowActivityIndicatorView()
-            userManager.getUserByUsername(info.username) { result in
-                
-                self.defaultHideActivityIndicatorView()
-
-                switch result {
-                case .success(user: let podcast):
-                    self.selectedUser = podcast
-                    self.performSegue(withIdentifier: BHHomeViewController.UserDetailsSegueIdentifier, sender: self)
-
-                case .failure(error: let e):
-                    self.showWarning(e.localizedDescription)
-                    break
-                }
-            }
-
-        case .episode:
-            guard let postAlias = info.alias else { return }
-
-            defaultShowActivityIndicatorView()
-            postManager.getPostByAlias(info.username, postAlias: postAlias) { result in
-                
-                self.defaultHideActivityIndicatorView()
-
-                switch result {
-                case .success(post: let post):
-                    self.selectedPost = post
-                    self.performSegue(withIdentifier: BHHomeViewController.PostDetailsSegueIdentifier, sender: self)
-
-                case .failure(error: let e):
-                    self.showWarning(e.localizedDescription)
-                    break
-                }
-            }
-
-        case .unknown: break
-        }
     }
 
     @objc private func onApplicationDidBecomeActive(_ notification: Notification) {
