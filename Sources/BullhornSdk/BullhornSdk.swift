@@ -95,8 +95,9 @@ public class BullhornSdk: NSObject {
         BHLog.p("\(#function) - AppConfig: \(BHAppConfiguration.shared.appVersion(useBuildNumber: true))")
 
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnteredBackgound), name: UIApplication.didEnterBackgroundNotification, object: nil)
-
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnteredForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
 
         setupAppearance()
         
@@ -247,6 +248,15 @@ public class BullhornSdk: NSObject {
         backgroundTaskStartTime = nil
         BHDownloadsManager.shared.restartFailedItemsIfNeeded()
     }
+    
+    @objc func appDidBecomeActive() {
+        BHPlaybacksManager.shared.restorePlaybacks()
+    }
+
+    @objc func appWillTerminate() {
+        BHPlaybacksManager.shared.savePlaybacks()
+    }
+
 
     // MARK: - Private
     

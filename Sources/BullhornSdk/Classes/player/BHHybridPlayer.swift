@@ -36,6 +36,7 @@ class BHHybridPlayer {
     static let shared: BHHybridPlayer = BHHybridPlayer.init()
     
     let trackTimerInterval: Double = 0.9
+    let playbackRecreateInterval: Double = 10.0
     let nowPlayingInfoUpdateInterval: Double = 5.0
 
     enum PlayerType: Int {
@@ -87,6 +88,9 @@ class BHHybridPlayer {
     fileprivate var sleepTimer: Timer?
     var sleepTimerInterval: TimeInterval = 0
     
+    fileprivate var currentPlayback: BHPostPlayback?
+    fileprivate var playbackRecreateCounter: Double = 0.0
+
     fileprivate var nowPlayingInfoUpdateCounter: Double = 0.0
 
     var lastSentPosition: TimeInterval = 0
@@ -813,7 +817,13 @@ class BHHybridPlayer {
 
         playerPositionChanged()
 
+        playbackRecreateCounter += trackTimerInterval
         nowPlayingInfoUpdateCounter += trackTimerInterval
+
+        if playbackRecreateCounter >= playbackRecreateInterval {
+            stopPlayback(send: false)
+            startPlayback()
+        }
         
         if nowPlayingInfoUpdateCounter >= nowPlayingInfoUpdateInterval {
             nowPlayingInfoUpdateCounter = 0
@@ -869,6 +879,36 @@ class BHHybridPlayer {
         sleepTimerInterval = 0
     }
     
+    // MARK: - Playback CDRs
+    
+    fileprivate func startPlayback() {
+        guard let item = playerItem else { return }
+
+        let uuid = UUID.init()
+        let timeNow = Date().timeIntervalSince1970
+        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow)
+
+        playbackRecreateCounter = 0
+    }
+    
+    fileprivate func stopPlayback(send: Bool) {
+
+        guard let player = mediaPlayer else { return }
+
+        let position = player.currentTime()
+        if position > 0 {
+            if let validPlayback = currentPlayback {
+                validPlayback.finishedAt = Date().timeIntervalSince1970
+
+                BHPlaybacksManager.shared.add(playback: validPlayback, shouldSend: send)
+                currentPlayback = nil
+            }
+            else if send {
+                BHPlaybacksManager.shared.send()
+            }
+        }
+    }
+    
     // MARK: - Handle player state
     
     fileprivate func handlePlayerState(_ state: BHMediaPlayerBase.State) {
@@ -892,12 +932,14 @@ class BHHybridPlayer {
 
         case .playing:
             playerState = .playing
+            startPlayback()
             startTrackTimer()
             startSleepTimerIfNeeded()
 
         case .paused:
             playerState = .paused
             stopTrackTimer()
+            stopPlayback(send: false)
             setSleepTimer(0)
             playerPositionChanged(true)
             needUpdatePosition = self.state.isPlaying()
@@ -907,6 +949,7 @@ class BHHybridPlayer {
             playerStateFlags = .complete
             stopTrackTimer()
             setSleepTimer(0)
+            stopPlayback(send: true)
             observersContainer.notifyObserversAsync {
                 $0.hybridPlayerDidFinishPlaying(self)
             }

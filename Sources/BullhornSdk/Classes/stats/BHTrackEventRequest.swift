@@ -54,6 +54,7 @@ enum BHTrackBanner: String, Codable {
     case playerClose       = "player_close"
     case playerSleepTimer  = "player_sleep_timer"
     case playerSpeed       = "player_playback_speed"
+    case playerPlayback    = "player_playback"
     /// ui-carplay
     case carplayConnect    = "carplay_connect"
     case carplayDisconnect = "carplay_disconnect"
@@ -95,6 +96,8 @@ struct BHTrackEventRequest: Codable {
         case episodeId = "episode_id"
         case episodeTitle = "episode_title"
         case episodeType = "episode_type"
+        case startedAt = "started_at"
+        case finishedAt = "finished_at"
     }
 
     let category: BHTrackCategory
@@ -107,10 +110,12 @@ struct BHTrackEventRequest: Codable {
     let episodeId: String?
     let episodeTitle: String?
     let episodeType: String?
+    let startedAt: Double?
+    var finishedAt: Double?
     let extraParams: [String : String]?
     
-    static func createRequest(category: BHTrackCategory, action: BHTrackAction, banner: BHTrackBanner? = nil, context: String? = nil, variant: String? = nil, podcastId: String? = nil, podcastTitle: String? = nil, episodeId: String? = nil, episodeTitle: String? = nil, episodeType: String? = nil, extraParams: [String : String]? = [:]) -> BHTrackEventRequest {
+    static func createRequest(category: BHTrackCategory, action: BHTrackAction, banner: BHTrackBanner? = nil, context: String? = nil, variant: String? = nil, podcastId: String? = nil, podcastTitle: String? = nil, episodeId: String? = nil, episodeTitle: String? = nil, episodeType: String? = nil, startedAt: Double? = 0, finishedAt: Double? = 0, extraParams: [String : String]? = [:]) -> BHTrackEventRequest {
 
-        return BHTrackEventRequest(category: category, action: action, banner: banner, context: context, variant: variant, podcastId: podcastId, podcastTitle: podcastTitle, episodeId: episodeId, episodeTitle: episodeTitle, episodeType: episodeType, extraParams: extraParams)
+        return BHTrackEventRequest(category: category, action: action, banner: banner, context: context, variant: variant, podcastId: podcastId, podcastTitle: podcastTitle, episodeId: episodeId, episodeTitle: episodeTitle, episodeType: episodeType, startedAt: startedAt, finishedAt: finishedAt, extraParams: extraParams)
     }
 }
