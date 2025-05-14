@@ -338,12 +338,22 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             routePickerView.isHidden = !controlsEnabled
         }
                 
-        if playerItem.isStream || post?.isLiveStream() == true {
-            self.backwardButton.isHidden = true
-            self.forwardButton.isHidden = true
+        if playerItem.isStream || post?.isLiveStream() == true || type == .waitingRoom {
+            backwardButton.isHidden = true
+            forwardButton.isHidden = true
+            optionsButton.isHidden = true
+            slider.isHidden = true
+            slider.isEnabled = false
+            positionLabel.isHidden = true
+            durationLabel.isHidden = true
+            liveTagLabel.isHidden = false
+        } else {
+            slider.isHidden = false
+            positionLabel.isHidden = false
+            durationLabel.isHidden = false
+            liveTagLabel.isHidden = true
+            slider.isEnabled = controlsEnabled
         }
-
-        slider.isEnabled = controlsEnabled && (type != .stream || post?.isLiveStream() == true)
     }
     
     func onPositionChanged(_ position: Double, duration: Double) {
@@ -460,6 +470,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             self.hasTile = false
             self.hasVideo = false
             self.videoView.reset()
+            self.resetUI()
         }
     }
 }
