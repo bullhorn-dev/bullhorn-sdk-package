@@ -32,10 +32,17 @@ public class BHCarPlayCoordinator {
         BHLog.p("Connected to CarPlay window.")
 
         initProviders(interfaceController)
+        
+        let networkId = BHAppConfiguration.shared.networkId
 
+        if BHReachabilityManager.shared.isConnected() {
+            feedManager.fetchPosts(networkId) { _ in }
+            radioManager.fetch(networkId) { _ in }
+        } else {
+            feedManager.fetchStorageEpisodes(networkId) { _ in }
+            radioManager.fetchStorageRadios(networkId) { _ in }
+        }
         downloadsManager.updateItems()
-        feedManager.fetchStorageEpisodes(BHAppConfiguration.shared.networkId) { _ in }
-        radioManager.fetchStorageRadios(BHAppConfiguration.shared.networkId) { _ in }
 
         carPlayController.connect(to: interfaceController, with: providers)
         
@@ -76,12 +83,16 @@ public class BHCarPlayCoordinator {
 extension BHCarPlayCoordinator: BHNetworkManagerListener {
 
     func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
         DispatchQueue.main.async {
             self.carPlayController.reload()
         }
     }
     
     func networkManagerDidFetchPosts(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
         DispatchQueue.main.async {
             self.carPlayController.reload()
         }
@@ -93,6 +104,8 @@ extension BHCarPlayCoordinator: BHNetworkManagerListener {
 extension BHCarPlayCoordinator: BHRadioStreamsListener {
     
     func radioStreamsManager(_ manager: BHRadioStreamsManager, radioDidChange radio: BHRadio) {
+        BHLog.p("CarPlay \(#function)")
+
         DispatchQueue.main.async {
             self.carPlayController.reload()
         }

@@ -362,6 +362,34 @@ class BHNetworkManager {
         }
     }
     
+    func fetchPosts(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
+        
+        postsPage = 0
+        postsPages = 0
+        
+        let fetchGroup = DispatchGroup()
+        var responseError: Error?
+
+        fetchGroup.enter()
+
+        getNetworkPosts(networkId) { response in
+            switch response {
+            case .success(posts: _, page: _, pages: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+                                
+        fetchGroup.notify(queue: .main) {
+            if let error = responseError {
+                completion(.failure(error: error))
+            } else {
+                completion(.success)
+            }
+        }
+    }
+    
     // MARK: - Storage Providers
     
     fileprivate func fetchStorageChannels(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
