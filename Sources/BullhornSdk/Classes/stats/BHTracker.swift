@@ -115,12 +115,6 @@ class BHTracker {
         if let episodeType = request.episodeType {
             params["episode_type"] = episodeType
         }
-        if let startedAt = request.startedAt, startedAt > 0 {
-            params["started_at"] = startedAt
-        }
-        if let finishedAt = request.finishedAt, finishedAt > 0 {
-            params["finished_at"] = finishedAt
-        }
 //        if let extraParams = request.extraParams {
 //            params["extra_params"] = request.extraParams
 //        }

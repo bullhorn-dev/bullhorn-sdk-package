@@ -882,11 +882,13 @@ class BHHybridPlayer {
     // MARK: - Playback CDRs
     
     fileprivate func startPlayback() {
+        guard let validPost = post else { return }
         guard let item = playerItem else { return }
 
         let uuid = UUID.init()
         let timeNow = Date().timeIntervalSince1970
-        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow)
+        let type = validPost.isLiveStream() ? "live-stream" : validPost.isRadioStream() ? "radio" : "pre-recorded"
+        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", episodeType: type, podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow)
 
         playbackRecreateCounter = 0
     }
