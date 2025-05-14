@@ -271,7 +271,7 @@ class BHDownloadsManager {
     
     // MARK: - Storage Providers
     
-    func fetchStorageItems() {
+    fileprivate func fetchStorageItems() {
         DataBaseManager.shared.fetchDownloads() { items in
             self.downloadsQueue = items
         }

@@ -505,6 +505,87 @@ class DataBaseManager {
             return false
         }
     }
+    
+    // MARK: - Offsets
+    
+    func fetchOffsets(completion: @escaping ([BHOffset]) -> Void) {
+        
+        var items: [BHOffset] = []
+        let request: NSFetchRequest<OffsetMO> = OffsetMO.fetchRequest()
+
+        if let moObjects = try? dataStack.viewContext.fetch(request) {
+            for itemMO in moObjects {
+                if let item = itemMO.toOffset() {
+                    items.append(item)
+                }
+            }
+        }
+        
+        completion(items)
+    }
+
+    func fetchOffset(with id: String) -> BHOffset? {
+        
+        do {
+            let itemMO = try dataStack.fetch(id, inEntityNamed: OffsetMO.entityName) as? OffsetMO
+            let item = itemMO?.toOffset()
+            return item
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return nil
+        }
+    }
+    
+    func insertOrUpdateOffset(with item: BHOffset) -> Bool {
+
+        do {
+            let params = try item.toDictionary()
+            try dataStack.insertOrUpdate(params, inEntityNamed: OffsetMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
+
+    func updateOffsets() -> Bool {
+        
+        var result: Bool = true
+        let items = BHOffsetsManager.shared.offsets
+
+        for item in items {
+            result = updateOffset(with: item)
+        }
+        
+        return result
+    }
+
+    func updateOffset(with item: BHOffset) -> Bool {
+
+        do {
+            let params = try item.toDictionary()
+            try dataStack.update(item.id, with: params, inEntityNamed: OffsetMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
+
+    func removeOffset(with id: String) -> Bool {
+
+        do {
+            try dataStack.delete(id, inEntityNamed: OffsetMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
 
     // MARK: - Core Data stack
 

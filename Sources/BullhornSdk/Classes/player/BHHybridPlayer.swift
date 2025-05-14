@@ -329,7 +329,7 @@ class BHHybridPlayer {
     
     func seek(to position: Double, resume: Bool = true) {
         isSeek = true
-        performSeek(to: position.fromMs(), forceResume: resume)
+        performSeek(to: position, forceResume: resume)
     }
     
     func seekForward() {
@@ -748,8 +748,8 @@ class BHHybridPlayer {
 
         let duration = max(totalDuration(), player.currentTime())
 
-        lastSentPosition = position.toMs()
-        lastSentDuration = duration.toMs()
+        lastSentPosition = position
+        lastSentDuration = duration
         
         if isSliding {
             return
@@ -990,54 +990,10 @@ class BHHybridPlayer {
         }
     }
     
-    // MARK: - Cache player position
-    
-    fileprivate func cachePosition() {
-        
-        guard let validPlayer = mediaPlayer else {
-            resetCachedPosition()
-            return
-        }
-        guard let validPlayerItem = playerItem else {
-            resetCachedPosition()
-            return
-        }
-
-        UserDefaults.standard.playerPostId = validPlayerItem.post.postId
-        UserDefaults.standard.playerPosition = validPlayer.currentTime()
-        UserDefaults.standard.playerTimestamp = Date().timeIntervalSince1970.toMs()
-    }
-    
-    fileprivate func resetCachedPosition() {
-        
-        UserDefaults.standard.playerPostId = ""
-        UserDefaults.standard.playerPosition = Constants.invalidPosition
-        UserDefaults.standard.playerTimestamp = 0
-    }
-    
-    func getCachedPosition() -> [String : Any]? {
-        
-        if UserDefaults.standard.playerPostId.count > 0 && UserDefaults.standard.playerPosition != Constants.invalidPosition {
-            
-            let cachedPlayer = [
-                BHPlayerKeys.postId.rawValue: UserDefaults.standard.playerPostId,
-                BHPlayerKeys.position.rawValue: UserDefaults.standard.playerPosition,
-                BHPlayerKeys.timestamp.rawValue: UserDefaults.standard.playerTimestamp
-            ] as [String : Any]
-            
-            resetCachedPosition()
-
-            return cachedPlayer
-        }
-        
-        return nil
-    }
-    
     // MARK: - Notifications
     
     @objc fileprivate func onApplicationWillTerminate(_ notification: Notification) {
         if isActive() {
-            cachePosition()
             stop()
         }
     }

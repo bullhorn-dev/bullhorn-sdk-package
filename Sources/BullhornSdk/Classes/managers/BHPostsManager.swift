@@ -118,9 +118,7 @@ class BHPostsManager {
         }
     }
     
-    func getPlaybackOffset(_ postId: String, offset: Double, completion: @escaping (BHServerApiPosts.PlaybackOffsetResult) -> Void) {
-        
-        let timestamp = Date().timeIntervalSince1970.rounded()
+    func getPlaybackOffset(_ postId: String, offset: Double, timestamp: Double, completion: @escaping (BHServerApiPosts.PlaybackOffsetResult) -> Void) {
         
         apiPosts.getPlaybackOffset(authToken: authToken, postId: postId, timestamp: timestamp, offset: offset) { response in
             self.dispatchQueue.async {

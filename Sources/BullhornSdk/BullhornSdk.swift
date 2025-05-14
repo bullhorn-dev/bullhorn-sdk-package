@@ -124,7 +124,8 @@ public class BullhornSdk: NSObject {
             }
         }
         
-        BHDownloadsManager.shared.fetchStorageItems()
+        BHDownloadsManager.shared.updateItems()
+        BHOffsetsManager.shared.updateOffsets()
     }
     
     public func login(sdkUser: BHSdkUser, completion: @escaping (SdkUserResult) -> Void) {

@@ -245,3 +245,21 @@ struct BHPlaybackOffset: Codable {
     let playbackCompleted: Bool
 }
 
+// MARK: - Post Offset
+
+struct BHOffset: Codable {
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case offset
+        case timestamp
+        case completed
+    }
+
+    let id: String
+    let offset: Double
+    let timestamp: Double
+    let completed: Bool
+}
+
+

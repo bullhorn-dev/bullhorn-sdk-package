@@ -17,10 +17,10 @@ extension TimeInterval {
     }
     
     func toMs() -> Double {
-        return self //* 1000
+        return self * 1000
     }
     
     func fromMs() -> Double {
-        return self /// 1000
+        return self / 1000
     }
 }

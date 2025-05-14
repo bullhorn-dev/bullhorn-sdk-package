@@ -33,7 +33,7 @@ public class BHCarPlayCoordinator {
 
         initProviders(interfaceController)
 
-        downloadsManager.fetchStorageItems()
+        downloadsManager.updateItems()
         feedManager.fetchStorageEpisodes(BHAppConfiguration.shared.networkId) { _ in }
         radioManager.fetchStorageRadios(BHAppConfiguration.shared.networkId) { _ in }
 
