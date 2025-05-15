@@ -109,7 +109,7 @@ public class BullhornSdk: NSObject {
     }
     
     public func restore(sdkUser: BHSdkUser) {
-        BHLog.p("\(#function)")
+        BHLog.p("\(#function) sdkUserId: \(sdkUser.id)")
 
         if !BHAccountManager.shared.restoreAccount(with: sdkUser.id) {
             login(sdkUser: sdkUser) { [self] _ in
@@ -128,10 +128,10 @@ public class BullhornSdk: NSObject {
         BHOffsetsManager.shared.updateOffsets()
     }
     
-    public func login(sdkUser: BHSdkUser, completion: @escaping (SdkUserResult) -> Void) {
+    public func login(sdkUser: BHSdkUser, force: Bool = false, completion: @escaping (SdkUserResult) -> Void) {
         BHLog.p("\(#function)")
         
-        BHAccountManager.shared.loginSdkUser(clientId: clientId, sdkUserId: sdkUser.id, fullName: sdkUser.fullName, profilePictureUri: sdkUser.profilePictureUri) { result in
+        BHAccountManager.shared.loginSdkUser(clientId: clientId, sdkUserId: sdkUser.id, fullName: sdkUser.fullName, profilePictureUri: sdkUser.profilePictureUri, force: force) { result in
             switch result {
             case .success(account: let account):
                 self.externalUser = sdkUser

@@ -126,7 +126,12 @@ class BHAccountManager {
         }
     }
         
-    func loginSdkUser(clientId: String, sdkUserId: String, fullName: String?, profilePictureUri: String?, completion: @escaping (AccountResult) -> Void) {
+    func loginSdkUser(clientId: String, sdkUserId: String, fullName: String?, profilePictureUri: String?, force: Bool, completion: @escaping (AccountResult) -> Void) {
+        
+        if force {
+            account = nil
+            storeAccountData()
+        }
 
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .account, action: .ui, banner: .login, context: sdkUserId)

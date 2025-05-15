@@ -95,11 +95,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         var sdkUserId: String
         
-        if let validSdkUserId = UserDefaults.standard.string(forKey: "sdk_user_id"), !validSdkUserId.isEmpty {
+        if let validSdkUserId = UserDefaults.standard.sdkUserId, !validSdkUserId.isEmpty {
             sdkUserId = validSdkUserId // use previously logged in user
         } else {
             sdkUserId = UUID().uuidString // generate new user id
-            UserDefaults.standard.set(sdkUserId, forKey: "sdk_user_id")
+            UserDefaults.standard.sdkUserId = sdkUserId
         }
 
         let sdkUser = BHSdkUser(id: sdkUserId, fullName: nil, profilePictureUri: nil, level: .anonymous)
