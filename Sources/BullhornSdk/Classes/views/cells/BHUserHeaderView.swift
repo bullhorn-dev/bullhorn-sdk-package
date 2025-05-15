@@ -106,6 +106,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     func setup(_ searchActive: Bool = false) {
         
         contentView.backgroundColor = .primaryBackground()
+        userView.backgroundColor = .primaryBackground()
         
         updateCollapseButton()
 

@@ -213,7 +213,7 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! UITableViewHeaderFooterView
-        header.contentView.backgroundColor = .secondaryBackground()
+        header.contentView.backgroundColor = .fxPrimaryBackground()
         header.textLabel?.textColor = .primary()
         header.textLabel?.font = UIFont.fontWithName(.robotoBold , size: 18)
     }

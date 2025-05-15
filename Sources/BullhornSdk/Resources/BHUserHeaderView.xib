@@ -187,7 +187,7 @@
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="1eM-l8-pYj" firstAttribute="top" secondItem="qrc-BL-aaD" secondAttribute="top" id="0GD-av-e3L"/>
                                                     <constraint firstAttribute="bottom" secondItem="pF7-hx-3bl" secondAttribute="bottom" id="3Sg-OH-L92"/>
@@ -207,7 +207,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="iVf-ig-dEg" secondAttribute="trailing" constant="16" id="2ZJ-tk-LAL"/>
                                     <constraint firstAttribute="bottom" secondItem="iVf-ig-dEg" secondAttribute="bottom" id="WRK-jt-ZCc"/>
@@ -359,9 +359,6 @@
         <namedColor name="bhColorSecondary">
             <color red="0.53333333333333333" green="0.59999999999999998" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemCyanColor">
             <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

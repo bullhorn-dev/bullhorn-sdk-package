@@ -199,4 +199,8 @@ extension UIColor {
     static func toastBackground() -> UIColor {
         return UIColor.init(named: "bhToastBg") ?? .defaultBlue()
     }
+    
+    static func fxPrimaryBackground() -> UIColor {
+        return UIColor.init(named: "fxColorPrimaryBg") ?? .white
+    }
 }
