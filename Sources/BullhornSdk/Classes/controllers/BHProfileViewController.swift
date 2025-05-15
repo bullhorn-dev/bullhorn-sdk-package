@@ -43,6 +43,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
+    fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
     fileprivate static let NotificationsSegueIdentifier = "Profile.NotificationsSegueIdentifier"
 
     @IBOutlet weak var stackView: UIStackView!
@@ -126,6 +127,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Liked Episodes", icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.FavoritesSegueIdentifier, sender: self)
+                }, disclosure: true)),
+                .staticCell(model: SettingsOption(title: "Followed Podcasts", icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         } else {

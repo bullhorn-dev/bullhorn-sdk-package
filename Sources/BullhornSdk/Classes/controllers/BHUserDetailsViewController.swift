@@ -101,14 +101,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        
         navigationItem.title = NSLocalizedString("Podcast Details", comment: "")
         navigationItem.largeTitleDisplayMode = .never
-
-        if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled, let validUser = user, shouldShowHeader == true {
-            let config = UIImage.SymbolConfiguration(weight: .light)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: validUser.isFollowed ? "bell.fill" : "bell")?.withConfiguration(config), style: .plain, target: self, action: #selector(followButtonAction(_:)))
-        }
     }
     
     fileprivate func configureRefreshControl() {
@@ -126,30 +120,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         searchController = BHSearchController.init(with: searchBar)
         searchController.searchResultsUpdater = self
         searchController.delegate = self
-    }
-    
-    @objc fileprivate func followButtonAction(_ sender: Any) {
-        guard let validUser = user else { return }
-        
-        if validUser.isFollowed {
-            userManager.unfollowUser(validUser.id) { response in
-                switch response {
-                case .success(user: let unfollowedUser):
-                    self.user = unfollowedUser
-                case .failure(error: _):
-                    self.showError("Failed to unfollow podcast notifications. The internet connection appears to be offline.")
-                }
-            }
-        } else {
-            userManager.followUser(validUser.id) { response in
-                switch response {
-                case .success(user: let followedUser):
-                    self.user = followedUser
-                case .failure(error: _):
-                    self.showError("Failed to follow podcast notifications. The internet connection appears to be offline.")
-                }
-            }
-        }
     }
 
     // MARK: - Network
@@ -336,6 +306,14 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
 // MARK: - BHUserHeaderViewDelegate
 
 extension BHUserDetailsViewController: BHUserHeaderViewDelegate {
+
+    func userHeaderViewOnFollowButtonPressed(_ view: BHUserHeaderView, user: BHUser) {
+        self.user?.outgoingStatus = user.outgoingStatus
+    }
+    
+    func userHeaderViewOnErrorOccured(_ view: BHUserHeaderView, message: String) {
+        showError(message)
+    }
     
     func userHeaderViewOnLinkButtonPressed(_ view: BHUserHeaderView, websiteLink: URL) {
         presentSafari(websiteLink)

@@ -27,14 +27,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="474" height="1000"/>
                         <subviews>
                             <view contentMode="scaleToFill" restorationIdentifier="BHRadioView" translatesAutoresizingMaskIntoConstraints="NO" id="aI9-ia-iE0" customClass="BHRadioStreamsView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="0.0" width="474" height="212"/>
+                                <rect key="frame" x="0.0" y="0.0" width="474" height="34"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qA9-BX-8vU">
-                                <rect key="frame" x="0.0" y="212" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="34" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Cu-dC-9Wz">
-                                        <rect key="frame" x="15.999999999999993" y="11.333333333333341" width="111.33333333333331" height="21.333333333333329"/>
+                                        <rect key="frame" x="15.999999999999993" y="11.333333333333334" width="111.33333333333331" height="21.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
@@ -48,17 +48,17 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="99C-91-bXk" customClass="BHLiveCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="256" width="474" height="144"/>
+                                <rect key="frame" x="0.0" y="78" width="474" height="144"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="Neo-9g-3JF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jcp-Se-jL4">
-                                <rect key="frame" x="0.0" y="400" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="222" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upcoming Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pAH-V7-E8J">
-                                        <rect key="frame" x="16" y="11.333333333333313" width="160.33333333333334" height="21.333333333333329"/>
+                                        <rect key="frame" x="16" y="11.333333333333341" width="160.33333333333334" height="21.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
@@ -72,10 +72,49 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wr1-qx-pH2" customClass="BHPostsCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="444" width="474" height="134"/>
+                                <rect key="frame" x="0.0" y="266" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="134" id="wbd-a1-yE2"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EqG-6J-eaL">
+                                <rect key="frame" x="0.0" y="400" width="474" height="44"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Followed Podcasts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRV-dQ-ftk">
+                                        <rect key="frame" x="16" y="11.333333333333313" width="152.66666666666666" height="21.333333333333329"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
+                                        <color key="textColor" name="bhColorPrimary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wVl-Zb-tfZ">
+                                        <rect key="frame" x="398" y="0.0" width="60" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="wuL-NW-40Q"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="See All"/>
+                                        <connections>
+                                            <action selector="tapFollowedSeeAllButton" destination="wk1-wC-qQd" eventType="touchUpInside" id="lCg-vw-MqI"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="tRV-dQ-ftk" firstAttribute="leading" secondItem="EqG-6J-eaL" secondAttribute="leading" constant="16" id="3Vw-R1-NdG"/>
+                                    <constraint firstAttribute="bottom" secondItem="wVl-Zb-tfZ" secondAttribute="bottom" id="A0V-bv-WVE"/>
+                                    <constraint firstItem="tRV-dQ-ftk" firstAttribute="centerY" secondItem="EqG-6J-eaL" secondAttribute="centerY" id="GwZ-Px-NP2"/>
+                                    <constraint firstItem="wVl-Zb-tfZ" firstAttribute="top" secondItem="EqG-6J-eaL" secondAttribute="top" id="Sda-yv-QLa"/>
+                                    <constraint firstAttribute="trailing" secondItem="wVl-Zb-tfZ" secondAttribute="trailing" constant="16" id="mGL-7e-FYC"/>
+                                    <constraint firstAttribute="height" constant="44" id="rK0-to-cD8"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mTX-or-nFC" customClass="BHUsersCarouselView" customModule="BullhornSdk">
+                                <rect key="frame" x="0.0" y="444" width="474" height="134"/>
+                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="134" id="WBF-Df-Ipo"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tj6-ZT-g6Q">
@@ -158,6 +197,9 @@
                 <outlet property="featuredUsersTitle" destination="tj6-ZT-g6Q" id="0On-dn-wnv"/>
                 <outlet property="featuredUsersTitleLabel" destination="hC1-Lp-Gd1" id="goq-RA-7en"/>
                 <outlet property="featuredUsersView" destination="Lkt-zb-uE3" id="e4Y-ZA-b2L"/>
+                <outlet property="followedUsersTitle" destination="EqG-6J-eaL" id="r0i-z4-HSH"/>
+                <outlet property="followedUsersTitleLabel" destination="tRV-dQ-ftk" id="Jfr-eC-Zel"/>
+                <outlet property="followedUsersView" destination="mTX-or-nFC" id="R2D-Us-Sfh"/>
                 <outlet property="livePostsTitle" destination="qA9-BX-8vU" id="ee3-pI-xWC"/>
                 <outlet property="livePostsTitleLabel" destination="4Cu-dC-9Wz" id="l4w-HW-xGE"/>
                 <outlet property="livePostsView" destination="99C-91-bXk" id="vLG-5Z-ZJN"/>
@@ -165,6 +207,7 @@
                 <outlet property="scheduledPostsTitle" destination="Jcp-Se-jL4" id="xTd-Ka-Uzb"/>
                 <outlet property="scheduledPostsTitleLabel" destination="pAH-V7-E8J" id="IMw-ft-gbh"/>
                 <outlet property="scheduledPostsView" destination="Wr1-qx-pH2" id="SQD-Eh-kND"/>
+                <outlet property="seeAllFollowedButton" destination="wVl-Zb-tfZ" id="I4N-Um-j33"/>
             </connections>
             <point key="canvasLocation" x="427.69230769230768" y="-68.957345971563981"/>
         </tableViewCell>

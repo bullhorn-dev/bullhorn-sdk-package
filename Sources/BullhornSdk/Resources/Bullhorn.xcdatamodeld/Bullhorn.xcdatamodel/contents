@@ -71,6 +71,19 @@
             <entry key="hyper.remoteKey" value="file"/>
         </userInfo>
     </entity>
+    <entity name="FollowedUsers" representedClassName="FollowedUsersMO" syncable="YES">
+        <attribute name="id" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="followedUsers" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" inverseName="followedUsers" inverseEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="followed_users"/>
+            </userInfo>
+        </relationship>
+    </entity>
     <entity name="LikedPosts" representedClassName="LikedPostsMO" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String">
             <userInfo>
@@ -551,6 +564,7 @@
             </userInfo>
         </attribute>
         <relationship name="featuredUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedUsers" inverseName="featuredUsers" inverseEntity="NetworkFeaturedUsers"/>
+        <relationship name="followedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FollowedUsers" inverseName="followedUsers" inverseEntity="FollowedUsers"/>
         <relationship name="recentUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecentUsers" inverseName="recentUsers" inverseEntity="RecentUsers"/>
         <relationship name="relatedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RelatedUsers" inverseName="relatedUsers" inverseEntity="RelatedUsers"/>
         <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkUsers" inverseName="users" inverseEntity="NetworkUsers"/>

@@ -7,6 +7,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     
     fileprivate static let UserDetailsSegueIdentifier = "Home.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Home.PostDetailsSegueIdentifier"
+    fileprivate static let FollowedPodcastsSegueIdentifier = "Home.FollowedPodcastsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -178,7 +179,11 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         selectedPost = post
         performSegue(withIdentifier: BHHomeViewController.PostDetailsSegueIdentifier, sender: self)
     }
-    
+
+    private func openFollowedPodcasts() {
+        performSegue(withIdentifier: BHHomeViewController.FollowedPodcastsSegueIdentifier, sender: self)
+    }
+
     // MARK: - Notifications
     
     @objc fileprivate func onConnectionChangedNotification(notification: Notification) {
@@ -284,6 +289,15 @@ extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
 // MARK: - BHHomeHeaderViewDelegate
 
 extension BHHomeViewController: BHHomeHeaderViewDelegate {
+
+    func headerView(_ view: BHHomeHeaderView, didSelectSeeAll section: Sections) {
+        switch section {
+        case .followedUsers:
+            openFollowedPodcasts()
+        default:
+            break
+        }
+    }
 
     func headerView(_ view: BHHomeHeaderView, didSelectPost post: BHPost) {
         openPostDetails(post)

@@ -393,22 +393,47 @@ class BHServerApiUsers: BHServerApiBase {
         }
     }
     
-    func getFollowedUsers(authToken token: String, completion: @escaping (ShortUsersResult) -> Void) {
-        let path = "users/self/shows"
-        let fullPath = composeFullApiURL(with: path)
-        let headers = composeHeaders(token)
+    func getFollowedUsers(_ userId: String, authToken token: String, completion: @escaping (UsersResult) -> Void) {
         
-        AF.request(fullPath, method: .get, headers: headers)
-          .validate()
-          .responseDecodable(of: ShortUsers.self, completionHandler: { response in
-              debugPrint(response)
-              switch response.result {
-              case .success(let users):
-                  completion(.success(users: users.users))
-              case .failure(let error):
-                  self.trackError(url: fullPath, error: error)
-                  completion(.failure(error: error))
-              }
-          })
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+            let path = "users/self/shows?format=extended"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composeHeaders(token)
+            
+            AF.request(fullPath, method: .get, headers: headers)
+                .validate()
+                .responseJSONAPI(completionHandler: { (response) in
+                    debugPrint(response)
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let pu = try JSONDecoder().decode(Users.self, from: JSONSerialization.data(withJSONObject: data))
+                            
+                            let users = try? pu.users.toDictionaryArray()
+                            
+                            let params: [String : Any] = [
+                                "id": userId,
+                                "followed_users": users ?? []
+                            ]
+                            
+                            if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
+                                BHLog.w("Failed to save followed users")
+                            }
+                            
+                            completion(.success(users: pu.users))
+                        } catch let error {
+                            self.trackError(url: fullPath, error: error)
+                            completion(.failure(error: error))
+                        }
+                    case .failure(let error):
+                        self.trackError(url: fullPath, error: error)
+                        completion(.failure(error: error))
+                    }
+                })
+        }
     }
 }

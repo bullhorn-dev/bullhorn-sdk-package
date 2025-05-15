@@ -7,6 +7,8 @@ protocol BHUserHeaderViewDelegate: AnyObject {
     func userHeaderViewOnCollapseButtonPressed(_ view: BHUserHeaderView)
     func userHeaderViewOnShareButtonPressed(_ view: BHUserHeaderView, shareLink: URL)
     func userHeaderViewOnLinkButtonPressed(_ view: BHUserHeaderView, websiteLink: URL)
+    func userHeaderViewOnFollowButtonPressed(_ view: BHUserHeaderView, user: BHUser)
+    func userHeaderViewOnErrorOccured(_ view: BHUserHeaderView, message: String)
 }
 
 class BHUserHeaderView: UITableViewHeaderFooterView {
@@ -21,6 +23,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var ratingView: CosmosView!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var followButton: UIButton!
+    @IBOutlet weak var unfollowButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var collapseButton: UIButton!
     @IBOutlet weak var linkView: UIView!
@@ -57,6 +61,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     override func layoutSubviews() {
         super.layoutSubviews()
         shareButton.layer.cornerRadius = shareButton.frame.size.height / 2
+        followButton.layer.cornerRadius = followButton.frame.size.height / 2
+        unfollowButton.layer.cornerRadius = unfollowButton.frame.size.height / 2
         collapseButton.layer.cornerRadius = collapseButton.frame.size.height / 2
     }
     
@@ -70,6 +76,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         categoryLabel.text = userManager?.user?.categoryName
         
         setupBio(with: didTap)
+        updateFollowButton()
         
         if BHUserHeaderView.shouldCollapse() {
             if let bio = userManager?.user?.bio {
@@ -115,6 +122,26 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         collapseButton.setTitle("", for: .normal)
         collapseButton.backgroundColor = .secondaryBackground()
         collapseButton.configuration?.baseForegroundColor = .primary()
+
+        followButton.setTitle("Follow", for: .normal)
+        followButton.configuration?.image = nil
+        followButton.configuration?.imagePadding = 0
+        followButton.backgroundColor = .navigationBackground()
+        followButton.tintColor = .navigationText()
+        followButton.configuration?.baseForegroundColor = .navigationText()
+        followButton.titleLabel?.font = .fontWithName(.robotoBold, size: 16)
+
+        let config = UIImage.SymbolConfiguration(scale: .small)
+        unfollowButton.setTitle("Following ", for: .normal)
+        unfollowButton.setImage(UIImage(systemName: "chevron.down")?.withConfiguration(config), for: .normal)
+        unfollowButton.configuration?.imagePlacement = .trailing
+        unfollowButton.configuration?.imagePadding = 4.0
+        unfollowButton.backgroundColor = .secondaryBackground()
+        unfollowButton.tintColor = .primary()
+        unfollowButton.configuration?.baseForegroundColor = .primary()
+        unfollowButton.titleLabel?.font = .fontWithName(.robotoBold, size: 16)
+
+        updateFollowButton()
 
         ratingView.settings.updateOnTouch = false
         ratingView.settings.fillMode = .half
@@ -174,7 +201,19 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             numberOfLines = 0
         }
     }
-    
+
+    fileprivate func updateFollowButton() {
+        guard let user = userManager?.user else { return }
+
+        if user.isFollowed {
+            followButton.isHidden = true
+            unfollowButton.isHidden = false
+        } else {
+            followButton.isHidden = false
+            unfollowButton.isHidden = true
+        }
+    }
+
     fileprivate func setupBio(with tapHandler: @escaping (URL) -> Void) {
         
         let attributedString = NSMutableAttributedString(string: userManager?.user?.bio ?? "")
@@ -221,6 +260,39 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
 
     @IBAction func onShareButton(_ sender: UIButton) {
+        share()
+    }
+    
+    @IBAction func onFollowButton(_ sender: UIButton) {
+        guard let validUser = userManager?.user else { return }
+
+        if validUser.isFollowed {
+            let optionsSheet = BHUserOptionsBottomSheet()
+            optionsSheet.user = validUser
+            optionsSheet.preferredSheetSizing = .fit
+            optionsSheet.panToDismissEnabled = true
+            optionsSheet.unfollowPressedClosure = { [weak self] _ in
+                self?.unfollow(validUser.id)
+            }
+            UIApplication.topNavigationController()?.present(optionsSheet, animated: true)
+        } else {
+            if BullhornSdk.shared.externalUser?.level == .external {
+                follow(validUser.id)
+            } else {
+                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
+            }
+        }
+    }
+
+    @IBAction func onCollapseButton(_ sender: UIButton) {
+        isCollapsed = !isCollapsed
+        updateCollapseButton()
+        delegate?.userHeaderViewOnCollapseButtonPressed(self)
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func share() {
         guard let user = userManager?.user else { return }
         guard let shareLink = userManager?.user?.shareLink else { return }
 
@@ -230,10 +302,42 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: shareLink.absoluteString, podcastId: user.id, podcastTitle: user.username)
         BHTracker.shared.trackEvent(with: request)
     }
-
-    @IBAction func onCollapseButton(_ sender: UIButton) {
-        isCollapsed = !isCollapsed
-        updateCollapseButton()
-        delegate?.userHeaderViewOnCollapseButtonPressed(self)
+    
+    fileprivate func follow(_ userId: String) {
+        BHLog.p("\(#function)")
+        
+        userManager?.followUser(userId) { response in
+            switch response {
+            case .success(user: let user):
+                DispatchQueue.main.async {
+                    self.userManager?.updateFollowedUser(user)
+                    self.reloadData()
+                    self.delegate?.userHeaderViewOnFollowButtonPressed(self, user: user)
+                }
+            case .failure(error: let error):
+                DispatchQueue.main.async {
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to follow podcast. \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    fileprivate func unfollow(_ userId: String) {
+        BHLog.p("\(#function)")
+        
+        userManager?.unfollowUser(userId) { response in
+            switch response {
+            case .success(user: let user):
+                DispatchQueue.main.async {
+                    self.userManager?.updateFollowedUser(user)
+                    self.reloadData()
+                    self.delegate?.userHeaderViewOnFollowButtonPressed(self, user: user)
+                }
+            case .failure(error: let error):
+                DispatchQueue.main.async {
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to unfollow podcast. \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }

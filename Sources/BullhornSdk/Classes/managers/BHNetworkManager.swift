@@ -308,6 +308,20 @@ class BHNetworkManager {
             }
             fetchGroup.leave()
         }
+                
+        if let user = BHAccountManager.shared.user {
+            
+            fetchGroup.enter()
+
+            BHUserManager.shared.fetchFollowed(user.id) { response in
+                switch response {
+                case .success: break
+                case .failure(error: let error):
+                    responseError = error
+                }
+                fetchGroup.leave()
+            }
+        }
         
         fetchGroup.enter()
         
@@ -527,6 +541,19 @@ class BHNetworkManager {
                 responseError = error
             }
             fetchGroup.leave()
+        }
+        
+        if let user = BHAccountManager.shared.user {
+            fetchGroup.enter()
+
+            BHUserManager.shared.fetchStorageFollowedPodcasts(user.id) { response in
+                switch response {
+                case .success: break
+                case .failure(error: let error):
+                    responseError = error
+                }
+                fetchGroup.leave()
+            }
         }
         
         fetchGroup.notify(queue: .main) {

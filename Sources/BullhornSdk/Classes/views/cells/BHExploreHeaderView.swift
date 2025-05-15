@@ -11,6 +11,7 @@ enum Sections {
     case recentUsers
     case featuredUsers
     case featuredPosts
+    case followedUsers
 }
 
 protocol BHExploreHeaderViewDelegate: AnyObject {

@@ -586,6 +586,48 @@ class DataBaseManager {
             return false
         }
     }
+    
+    // MARK: - Followed Users
+
+    func fetchFollowedUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
+        
+        do {
+            let usersMO = try dataStack.fetch(id, inEntityNamed: FollowedUsersMO.entityName) as? FollowedUsersMO
+            if let users = usersMO?.toUsers() {
+                completion(.success(users: users))
+            } else {
+                completion(.success(users: []))
+            }
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            completion(.success(users: []))
+        }
+    }
+    
+    func insertOrUpdateFollowedUsers(with params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.insertOrUpdate(params, inEntityNamed: FollowedUsersMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
+
+    func updateFollowedUsers(with id: String, params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.update(id, with: params, inEntityNamed: FollowedUsersMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            trackError(error)
+            return false
+        }
+    }
 
     // MARK: - Core Data stack
 

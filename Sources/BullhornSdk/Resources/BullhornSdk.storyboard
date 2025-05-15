@@ -478,6 +478,7 @@
                         <outlet property="tableView" destination="AUe-Z7-uLB" id="QYk-vB-ODu"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="Home.PostDetailsSegueIdentifier" id="TAw-Tl-Zg2"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="Home.UserDetailsSegueIdentifier" id="vP2-ST-MEt"/>
+                        <segue destination="Q2p-ct-dwZ" kind="show" identifier="Home.FollowedPodcastsSegueIdentifier" id="Tnh-iY-7ke"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oG8-2N-PZW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -735,7 +736,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="loP-fN-X82" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-20" y="1446"/>
+            <point key="canvasLocation" x="-20" y="1857"/>
         </scene>
         <!--Interactive Player View Controller-->
         <scene sceneID="LYA-Cu-K8d">
@@ -782,11 +783,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="135"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="182" width="390" height="135"/>
+                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -814,11 +815,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="119"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="166" width="390" height="135"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1281,7 +1282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hln-z2-W3r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3" y="2227"/>
+            <point key="canvasLocation" x="-20" y="2667"/>
         </scene>
         <!--Notifications-->
         <scene sceneID="t2A-3b-TGo">
@@ -1703,6 +1704,7 @@
                         <segue destination="ISO-h0-mfF" kind="show" identifier="Profile.FavoritesSegueIdentifier" id="mQH-fg-wpb"/>
                         <segue destination="cko-RD-0fW" kind="show" identifier="Profile.DownloadsSegueIdentifier" id="NTL-B9-tFj"/>
                         <segue destination="Fzv-mz-Aod" kind="show" identifier="Profile.NotificationsSegueIdentifier" id="ohg-JO-SKf"/>
+                        <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-Q0-eO2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1794,9 +1796,95 @@
             </objects>
             <point key="canvasLocation" x="654" y="-173"/>
         </scene>
+        <!--Followed Podcasts-->
+        <scene sceneID="Lbf-VW-w1q">
+            <objects>
+                <viewController restorationIdentifier="BHFollowedViewController" storyboardIdentifier="BHFollowedViewController" title="Followed Podcasts" hidesBottomBarWhenPushed="YES" id="Q2p-ct-dwZ" customClass="BHFollowedViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QdS-3I-jbE">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="mCb-6o-gKL">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="OJJ-3B-xrL">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="ISO-h0-mfF" id="jHo-ze-oGq"/>
+                                            <outlet property="delegate" destination="ISO-h0-mfF" id="hWr-qu-kem"/>
+                                        </connections>
+                                    </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6i2-ux-668" customClass="BHMiniPlayerView" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <color key="backgroundColor" systemColor="systemMintColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="lnT-NZ-hpO"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="6i2-ux-668" secondAttribute="trailing" id="BWC-dR-vE0"/>
+                                    <constraint firstItem="6i2-ux-668" firstAttribute="leading" secondItem="mCb-6o-gKL" secondAttribute="leading" id="Pg7-qK-4hY"/>
+                                    <constraint firstAttribute="bottom" secondItem="6i2-ux-668" secondAttribute="bottom" id="R9o-Ei-sLu"/>
+                                    <constraint firstItem="OJJ-3B-xrL" firstAttribute="top" secondItem="mCb-6o-gKL" secondAttribute="top" id="VHN-8m-P0d"/>
+                                </constraints>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4sZ-Ff-mnh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="AQA-B4-Y4R"/>
+                                    <constraint firstAttribute="height" constant="30" id="Txd-wp-L8J"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" name="bhColorAccent"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Mq-UC-Y2D">
+                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="axM-Jt-joA"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="k8v-ct-NE8"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <constraints>
+                            <constraint firstItem="mCb-6o-gKL" firstAttribute="leading" secondItem="k8v-ct-NE8" secondAttribute="leading" id="Beb-SP-kWI"/>
+                            <constraint firstItem="k8v-ct-NE8" firstAttribute="bottom" secondItem="mCb-6o-gKL" secondAttribute="bottom" id="DeV-cD-1JF"/>
+                            <constraint firstItem="mCb-6o-gKL" firstAttribute="trailing" secondItem="k8v-ct-NE8" secondAttribute="trailing" id="InZ-bj-syR"/>
+                            <constraint firstItem="4sZ-Ff-mnh" firstAttribute="centerY" secondItem="QdS-3I-jbE" secondAttribute="centerY" id="JL9-sp-7YH"/>
+                            <constraint firstItem="7Mq-UC-Y2D" firstAttribute="trailing" secondItem="k8v-ct-NE8" secondAttribute="trailing" id="OH7-kR-xKQ"/>
+                            <constraint firstItem="7Mq-UC-Y2D" firstAttribute="leading" secondItem="k8v-ct-NE8" secondAttribute="leading" id="Pxr-zw-73A"/>
+                            <constraint firstItem="4sZ-Ff-mnh" firstAttribute="centerX" secondItem="QdS-3I-jbE" secondAttribute="centerX" id="Vr1-0b-Z0W"/>
+                            <constraint firstItem="7Mq-UC-Y2D" firstAttribute="top" secondItem="mCb-6o-gKL" secondAttribute="bottom" id="fBy-hd-foe"/>
+                            <constraint firstItem="mCb-6o-gKL" firstAttribute="top" secondItem="k8v-ct-NE8" secondAttribute="top" id="vaq-Io-WgH"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="aLw-S5-5Uy">
+                        <barButtonItem key="backBarButtonItem" id="7Ec-fJ-dgZ"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicator" destination="4sZ-Ff-mnh" id="Gip-hg-1OX"/>
+                        <outlet property="bottomView" destination="7Mq-UC-Y2D" id="Tr3-yO-OCh"/>
+                        <outlet property="miniPlayerView" destination="6i2-ux-668" id="VE8-M6-rui"/>
+                        <outlet property="tableView" destination="OJJ-3B-xrL" id="g1W-cU-gg0"/>
+                        <segue destination="bIr-LV-sBK" kind="show" identifier="FollowedVC.UserDetailsSegueIdentifier" id="wUD-3Y-hGb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2lc-3c-r63" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-20" y="1095"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="TAw-Tl-Zg2"/>
+        <segue reference="Tnh-iY-7ke"/>
+        <segue reference="fUD-lq-Ug9"/>
         <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -1837,7 +1925,7 @@
             <color red="0.53333333333333333" green="0.59999999999999998" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorSecondaryBg">
-            <color red="0.96470588235294119" green="0.97254901960784312" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1846,10 +1934,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

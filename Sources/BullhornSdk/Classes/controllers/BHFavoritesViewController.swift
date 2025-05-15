@@ -184,7 +184,7 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
         if feedManager.favorites.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            let message = BHReachabilityManager.shared.isConnected() ? "No episode liked yet" : "The Internet connection appears to be offline"
 
             tableView.setEmptyMessage(message, image: image)
         } else {

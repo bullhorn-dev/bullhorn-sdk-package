@@ -41,7 +41,7 @@ class BHUserManager {
     
     ///
     
-    var followedUsers: [BHUserShort] = []
+    var followedUsers: [BHUser] = []
 
     init() {
         observersContainer = .init(notifyQueue: workingQueue)
@@ -159,7 +159,7 @@ class BHUserManager {
                     BHNetworkManager.shared.updateNetworkUser(user)
                     
                     /// track event
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .notificationsOn, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .followPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):
@@ -180,7 +180,7 @@ class BHUserManager {
                     self.followedUsers.removeAll(where: { $0.id == userId })
                                         
                     /// track event
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .notificationsOff, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .unfollowPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):
@@ -191,18 +191,44 @@ class BHUserManager {
         }
     }
     
-    func getFollowedUsers(_ completion: @escaping (BHServerApiBase.ShortUsersResult) -> Void) {
+    func getFollowedUsers(_ userId: String, completion: @escaping (BHServerApiBase.UsersResult) -> Void) {
 
-        apiUsers.getFollowedUsers(authToken: authToken) { response in
+        apiUsers.getFollowedUsers(userId, authToken: authToken) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(users: let users):
                     self.followedUsers = users
                 case .failure(error: let error):
-                    BHLog.w("User subscriptions load failed \(error.localizedDescription)")
+                    BHLog.w("User following load failed \(error.localizedDescription)")
                 }
                 completion(response)
             }
+        }
+    }
+    
+    func updateFollowedUser(_ user: BHUser) {
+        guard let validUser = self.user else { return }
+        
+        if validUser.id == user.id {
+            self.user?.outgoingStatus = user.outgoingStatus
+        }
+        
+        if user.isFollowed {
+            let row = followedUsers.firstIndex(where: {$0.id == user.id})
+            if row == nil {
+                self.followedUsers.append(user)
+            }
+        } else {
+            followedUsers.removeAll(where: { $0.id == user.id })
+        }
+        
+        let params: [String : Any] = [
+            "id": validUser.id,
+            "followed_users": followedUsers
+        ]
+        
+        if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
+            BHLog.w("Failed to save followed users")
         }
     }
 
@@ -247,6 +273,31 @@ class BHUserManager {
             }
         }
     }
+    
+    func fetchFollowed(_ userId: String, completion: @escaping (CommonResult) -> Void) {
+
+        let fetchGroup = DispatchGroup()
+        var responseError: Error?
+        
+        fetchGroup.enter()
+
+        getFollowedUsers(userId) { response in
+            switch response {
+            case .success(users: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+
+        fetchGroup.notify(queue: .main) {
+            if let error = responseError {
+                completion(.failure(error: error))
+            } else {
+                completion(.success)
+            }
+        }
+    }
         
     // MARK: - Storage Providers
     
@@ -265,6 +316,18 @@ class BHUserManager {
                 }
                 self.page = page
                 self.pages = pages
+                completion(.success)
+            case .failure(error: let error):
+                completion(.failure(error: error))
+            }
+        }
+    }
+    
+    func fetchStorageFollowedPodcasts(_ userId: String, completion: @escaping (CommonResult) -> Void) {
+        DataBaseManager.shared.fetchFollowedUsers(with: userId) { response in
+            switch response {
+            case .success(users: let users):
+                self.followedUsers = users
                 completion(.success)
             case .failure(error: let error):
                 completion(.failure(error: error))

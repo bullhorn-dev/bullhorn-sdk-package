@@ -34,6 +34,7 @@ enum BHTrackBanner: String, Codable {
     case openAccount       = "open_account"
     case openFavorites     = "open_favorites"
     case openNotifications = "open_notifications"
+    case openFollowed      = "open_followed"
     case openDownloads     = "open_downloads"
     case openRecent        = "open_recent"
     /// ui-explore
@@ -43,6 +44,8 @@ enum BHTrackBanner: String, Codable {
     case shareEpisode      = "share_episode"
     case notificationsOn   = "podcast_notifications_on"
     case notificationsOff  = "podcast_notifications_off"
+    case followPodcast     = "podcast_follow"
+    case unfollowPodcast   = "podcast_unfollow"
     case downloadEpisode   = "download_episode"
     case episodeLikeOn     = "episode_like_on"
     case episodeLikeOff    = "episode_like_off"

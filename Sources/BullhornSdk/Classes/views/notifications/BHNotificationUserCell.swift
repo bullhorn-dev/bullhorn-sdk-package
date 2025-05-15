@@ -12,7 +12,7 @@ class BHNotificationUserCell: UITableViewCell {
     
     var switchChangeClosure: ((Bool)->())?
 
-    var user: BHUserShort? {
+    var user: BHUser? {
         didSet {
             update()
         }

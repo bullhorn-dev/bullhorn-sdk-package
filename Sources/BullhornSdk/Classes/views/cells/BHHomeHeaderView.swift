@@ -7,6 +7,7 @@ protocol BHHomeHeaderViewDelegate: AnyObject {
     func headerView(_ view: BHHomeHeaderView, didSelectPost post: BHPost)
     func headerView(_ view: BHHomeHeaderView, didSelectUser user: BHUser)
     func headerView(_ view: BHHomeHeaderView, didRequestPlayPost post: BHPost)
+    func headerView(_ view: BHHomeHeaderView, didSelectSeeAll section: Sections)
 }
 
 class BHHomeHeaderView: UITableViewHeaderFooterView {
@@ -20,6 +21,10 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var livePostsTitle: UIView!
     @IBOutlet weak var livePostsTitleLabel: UILabel!
     @IBOutlet weak var livePostsView: BHLiveCarouselView!
+    @IBOutlet weak var followedUsersTitle: UIView!
+    @IBOutlet weak var followedUsersTitleLabel: UILabel!
+    @IBOutlet weak var seeAllFollowedButton: UIButton!
+    @IBOutlet weak var followedUsersView: BHUsersCarouselView!
     @IBOutlet weak var featuredUsersTitle: UIView!
     @IBOutlet weak var featuredUsersTitleLabel: UILabel!
     @IBOutlet weak var featuredUsersView: BHUsersCarouselView!
@@ -57,6 +62,8 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         livePostsView.posts = BHNetworkManager.shared.liveNowPosts
         radioStreamsView.radio = BHRadioStreamsManager.shared.currentRadio
         channelsView.channels = BHNetworkManager.shared.channels
+        followedUsersView.users = BHUserManager.shared.followedUsers
+        seeAllFollowedButton.isHidden = BHUserManager.shared.followedUsers.count < 6
     }
 
     func setup() {
@@ -67,13 +74,19 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         livePostsTitleLabel.textColor = .primary()
         featuredUsersTitleLabel.textColor = .primary()
         featuredPostsTitleLabel.textColor = .primary()
-        
+        followedUsersTitleLabel.textColor = .primary()
+
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self
         livePostsView.delegate = self
         scheduledPostsView.delegate = self
         channelsView.delegate = self
-                
+        followedUsersView.delegate = self
+
+        seeAllFollowedButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 15)
+        seeAllFollowedButton.backgroundColor = .clear
+        seeAllFollowedButton.tintColor = .accent()
+
         radioStreamsView.isHidden = !hasRadioStreams()
         featuredUsersTitle.isHidden = !hasFeaturedUsers()
         featuredUsersView.isHidden = !hasFeaturedUsers()
@@ -83,7 +96,9 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         scheduledPostsView.isHidden = !hasScheduledPosts()
         livePostsTitle.isHidden = !hasLivePosts()
         livePostsView.isHidden = !hasLivePosts()
-        
+        followedUsersTitle.isHidden = !hasFollowedUsers()
+        followedUsersView.isHidden = !hasFollowedUsers()
+
         reloadData()
         scrollToSelectedChannel()
     }
@@ -118,6 +133,10 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         if hasLivePosts() {
             totalHeight += livePostsView.calculateHeight() + (livePostsTitle.frame.size.height > 0 ? livePostsTitle.frame.size.height : Constants.panelHeight)
         }
+        
+        if hasFollowedUsers() {
+            totalHeight += followedUsersView.calculateHeight() + (followedUsersTitle.frame.size.height > 0 ? followedUsersTitle.frame.size.height : Constants.panelHeight)
+        }
 
         return totalHeight
     }
@@ -148,6 +167,15 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         return BHNetworkManager.shared.channels.count > 0
     }
 
+    fileprivate func hasFollowedUsers() -> Bool {
+        return BHUserManager.shared.followedUsers.count > 0 && BullhornSdk.shared.externalUser?.level == .external
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func tapFollowedSeeAllButton() {
+        delegate?.headerView(self, didSelectSeeAll: .followedUsers)
+    }
 }
 
 // MARK: - BHChannelsViewDelegate
