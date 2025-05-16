@@ -12,8 +12,8 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
     fileprivate var refreshControl: UIRefreshControl?
     fileprivate var headerView: BHNotificationHeaderView?
 
-    fileprivate var userManager = BHUserManager()
-    
+    fileprivate var settingsManager = BHSettingsManager.shared
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -35,7 +35,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         tableView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHNotificationHeaderView.reusableIndentifer) as? BHNotificationHeaderView
-        headerView?.setup()
+        headerView?.updateControls()
         headerView?.delegate = self
 
         configureNavigationItems()
@@ -93,7 +93,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         }
 
         if let user = BHAccountManager.shared.user {
-            userManager.getFollowedUsers(user.id) { response in
+            BHUserManager.shared.getFollowedUsers(user.id) { response in
                 switch response {
                 case .success(users: _):
                     break
@@ -114,17 +114,18 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         }
     }
 
-    fileprivate func unfollowUser(_ userId: String) {
-        BHLog.p("\(#function) - userID: \(userId)")
+    fileprivate func enableUserNotifications(_ userId: String, enable: Bool) {
+        BHLog.p("\(#function) - userID: \(userId), enable: \(enable)")
         
         defaultShowActivityIndicatorView()
 
-        userManager.unfollowUser(userId) { response in
+        settingsManager.enableUserNotifications(userId, enable: enable) { response in
             switch response {
-            case .success(user: _):
+            case .success(user: let user):
+                BHUserManager.shared.updateUserNotifications(user)
                 self.tableView.reloadData()
             case .failure(error: let error):
-                self.showError("Failed to unfollow podcast. \(error)")
+                self.showError("Failed to enable podcast notifications. \(error)")
             }
             self.defaultHideActivityIndicatorView()
         }
@@ -149,19 +150,17 @@ extension BHNotificationsViewController: UITableViewDataSource, UITableViewDeleg
         if section == 0 {
             return 0
         } else if section == 1 {
-            return userManager.followedUsers.count
+            return BHUserManager.shared.followedUsers.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHNotificationUserCell", for: indexPath) as! BHNotificationUserCell
-        let user = userManager.followedUsers[indexPath.row]
+        let user = BHUserManager.shared.followedUsers[indexPath.row]
         cell.user = user
         cell.switchChangeClosure = { [weak self] isOn in
-            if !isOn {
-                self?.unfollowUser(user.id)
-            }
+            self?.enableUserNotifications(user.id, enable: isOn)
         }
         
         return cell
@@ -180,7 +179,7 @@ extension BHNotificationsViewController: UITableViewDataSource, UITableViewDeleg
             return headerView
         } else {
             let header = UITableViewHeaderFooterView()
-            header.contentView.backgroundColor = .secondaryBackground()
+            header.contentView.backgroundColor = .fxPrimaryBackground()
             header.textLabel?.textColor = .secondary()
             header.textLabel?.font = UIFont.fontWithName(.robotoThin , size: 15)
             return header
@@ -189,9 +188,9 @@ extension BHNotificationsViewController: UITableViewDataSource, UITableViewDeleg
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return headerView?.calculateHeight() ?? 60.0
+            return headerView?.calculateHeight() ?? 50.0
         } else {
-            return userManager.followedUsers.count > 0 ? 44.0 : 0
+            return BHUserManager.shared.followedUsers.count > 0 ? 44.0 : 0
         }
     }
 

@@ -207,10 +207,10 @@ class BHUserManager {
     }
     
     func updateFollowedUser(_ user: BHUser) {
-        guard let validUser = self.user else { return }
         
-        if validUser.id == user.id {
+        if let validUser = self.user, validUser.id == user.id {
             self.user?.outgoingStatus = user.outgoingStatus
+            self.user?.receiveNotifications = user.receiveNotifications
         }
         
         if user.isFollowed {
@@ -222,13 +222,37 @@ class BHUserManager {
             followedUsers.removeAll(where: { $0.id == user.id })
         }
         
-        let params: [String : Any] = [
-            "id": validUser.id,
-            "followed_users": followedUsers
-        ]
+        if let selfUserId = BHAccountManager.shared.user?.id {
+            let params: [String : Any] = [
+                "id": selfUserId,
+                "followed_users": followedUsers
+            ]
+            
+            if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
+                BHLog.w("Failed to save followed users")
+            }
+        }
+    }
+    
+    func updateUserNotifications(_ user: BHUser) {
+
+        if let validUser = self.user, validUser.id == user.id {
+            self.user?.receiveNotifications = user.receiveNotifications
+        }
         
-        if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
-            BHLog.w("Failed to save followed users")
+        if let row = followedUsers.firstIndex(where: {$0.id == user.id}) {
+            self.followedUsers[row] = user
+        }
+
+        if let selfUserId = BHAccountManager.shared.user?.id {
+            let params: [String : Any] = [
+                "id": selfUserId,
+                "followed_users": followedUsers
+            ]
+            
+            if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
+                BHLog.w("Failed to save followed users")
+            }
         }
     }
 

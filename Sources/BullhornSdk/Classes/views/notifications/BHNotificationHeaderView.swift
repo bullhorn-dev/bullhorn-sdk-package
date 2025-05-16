@@ -10,9 +10,8 @@ class BHNotificationHeaderView: UITableViewHeaderFooterView {
     
     class var reusableIndentifer: String { return String(describing: self) }
     
-    @IBOutlet weak var notificationsView: UIView!
-    @IBOutlet weak var notificationsLabel: UILabel!
-    @IBOutlet weak var switchControl: UISwitch!
+    @IBOutlet weak var notificationsView: UIStackView!
+    @IBOutlet weak var enableNotificationsButton: UIButton!
     
     weak var delegate: BHNotificationHeaderViewDelegate?
 
@@ -30,39 +29,35 @@ class BHNotificationHeaderView: UITableViewHeaderFooterView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        enableNotificationsButton.layer.cornerRadius = enableNotificationsButton.frame.size.height / 2
     }
     
     // MARK: - Public
     
-    func setup() {
+    func updateControls() {
         
         contentView.backgroundColor = .primaryBackground()
 
-        notificationsLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
-        notificationsLabel.textColor = .primary()
-
-        switchControl.onTintColor = .accent()
-        switchControl.setOn(notificationsEnabledDefaultValue, animated: true)
+        let enable = UserDefaults.standard.isPushNotificationsEnabled
+        let title = enable ? "Disable Push Notifications" : "Enable Push Notifications"
+        let color = enable ? UIColor.accent() : UIColor.primary()
         
-        notificationsView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BHNotificationHeaderView.changeSwitch)))
+        enableNotificationsButton.setTitle(title, for: .normal)
+        enableNotificationsButton.backgroundColor = .fxPrimaryBackground()
+        enableNotificationsButton.setTitleColor(color, for: .normal)
+        enableNotificationsButton.titleLabel?.font = .fontWithName(.robotoBold, size: 17)
     }
     
     func calculateHeight(_ hasRadioStreams: Bool = true) -> CGFloat {
-        return 60.0
+        return 50.0
     }
     
     // MARK: - Actions
     
-    @IBAction func switchAction(_ sender: Any) {
-        updateNotifications(switchControl.isOn)
+    @IBAction func onEnableNotificationsButton(_ sender: UIButton) {
+        updateNotifications(!UserDefaults.standard.isPushNotificationsEnabled)
     }
-    
-    @objc fileprivate func changeSwitch() {
-        let newValue = !switchControl.isOn
-        switchControl.setOn(newValue, animated: true)
-        updateNotifications(newValue)
-    }
-    
+        
     // MARK: - Private
     
     private func updateNotifications(_ isEnable: Bool) {
@@ -76,6 +71,7 @@ class BHNotificationHeaderView: UITableViewHeaderFooterView {
             BHNotificationsManager.shared.forgetPushToken() { _ in }
         }
         
+        updateControls()
         delegate?.headerView(self, didChange: isEnable)
     }
 }

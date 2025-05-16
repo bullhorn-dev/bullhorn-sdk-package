@@ -272,6 +272,9 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             optionsSheet.user = validUser
             optionsSheet.preferredSheetSizing = .fit
             optionsSheet.panToDismissEnabled = true
+            optionsSheet.notificationsPressedClosure = { [weak self] _ in
+                self?.enableUserNotifications(validUser.id, enable: !validUser.receiveNotifications)
+            }
             optionsSheet.unfollowPressedClosure = { [weak self] _ in
                 self?.unfollow(validUser.id)
             }
@@ -305,7 +308,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
     
     fileprivate func follow(_ userId: String) {
-        BHLog.p("\(#function)")
+        BHLog.p("\(#function) - userID: \(userId)")
         
         userManager?.followUser(userId) { response in
             switch response {
@@ -324,7 +327,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
     
     fileprivate func unfollow(_ userId: String) {
-        BHLog.p("\(#function)")
+        BHLog.p("\(#function) - userID: \(userId)")
         
         userManager?.unfollowUser(userId) { response in
             switch response {
@@ -337,6 +340,26 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             case .failure(error: let error):
                 DispatchQueue.main.async {
                     self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to unfollow podcast. \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    fileprivate func enableUserNotifications(_ userId: String, enable: Bool) {
+        BHLog.p("\(#function) - userID: \(userId), enable: \(enable)")
+        
+        if enable && !UserDefaults.standard.isPushNotificationsEnabled {
+            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+        }
+
+        BHSettingsManager.shared.enableUserNotifications(userId, enable: enable) { response in
+            switch response {
+            case .success(user: let user):
+                BHUserManager.shared.updateUserNotifications(user)
+                self.reloadData()
+            case .failure(error: let error):
+                DispatchQueue.main.async {
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to enable podcast notifications. \(error.localizedDescription)")
                 }
             }
         }

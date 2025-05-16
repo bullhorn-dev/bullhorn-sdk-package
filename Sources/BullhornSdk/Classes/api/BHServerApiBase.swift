@@ -119,6 +119,22 @@ class BHServerApiBase: NSObject {
         case failure(error: Error)
     }
 
+    // MARK: - User Result
+
+    struct User: Codable {
+        
+        enum CodingKeys: String, CodingKey {
+            case user
+        }
+        
+        let user: BHUser
+    }
+
+    enum UserResult {
+        case success(user: BHUser)
+        case failure(error: Error)
+    }
+
     private var baseApiURL = BHConfigManager.shared.configData?.serverApiV1String ?? ""
     private var baseApiInteractiveURL = BHConfigManager.shared.configData?.serverApiInteractiveV1String ?? ""
     private var baseApiSdkUrl = BHConfigManager.shared.configData?.serverApiSdkV1String ?? ""

@@ -60,9 +60,11 @@ class BHNotificationUserCell: UITableViewCell {
     }
     
     fileprivate func update() {
-        nameLabel.text = user?.fullName
-        userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
-        switchControl.setOn(true, animated: false)
+        guard let validUser = user else { return }
+
+        nameLabel.text = validUser.fullName
+        userIcon.sd_setImage(with: validUser.coverUrl, placeholderImage: placeholderImage)
+        switchControl.setOn(validUser.receiveNotifications, animated: false)
         switchControl.isEnabled = UserDefaults.standard.isPushNotificationsEnabled
     }
 }

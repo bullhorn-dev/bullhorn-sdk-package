@@ -57,7 +57,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="News" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aU5-x1-tbq">
-                                                        <rect key="frame" x="0.0" y="46" width="342" height="16"/>
+                                                        <rect key="frame" x="0.0" y="44" width="342" height="16"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="ZAQ-n3-N1M"/>
@@ -67,7 +67,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tpe-pb-Clu">
-                                                        <rect key="frame" x="0.0" y="68" width="342" height="16"/>
+                                                        <rect key="frame" x="0.0" y="64" width="342" height="16"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BzB-Wj-nsO" customClass="CosmosView" customModule="Cosmos">
                                                                 <rect key="frame" x="0.0" y="0.0" width="80" height="16"/>
@@ -194,12 +194,12 @@
                                                     <constraint firstItem="1eM-l8-pYj" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="5dC-dO-qdu"/>
                                                     <constraint firstAttribute="trailing" secondItem="Tpe-pb-Clu" secondAttribute="trailing" id="FZZ-6z-Ssm"/>
                                                     <constraint firstItem="pF7-hx-3bl" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="LYc-19-a55"/>
-                                                    <constraint firstItem="pF7-hx-3bl" firstAttribute="top" secondItem="Tpe-pb-Clu" secondAttribute="bottom" constant="6" id="N4g-2K-0eZ"/>
-                                                    <constraint firstItem="aU5-x1-tbq" firstAttribute="top" secondItem="1eM-l8-pYj" secondAttribute="bottom" constant="6" id="QDO-PV-rEa"/>
+                                                    <constraint firstItem="aU5-x1-tbq" firstAttribute="top" secondItem="1eM-l8-pYj" secondAttribute="bottom" constant="4" id="QDO-PV-rEa"/>
                                                     <constraint firstAttribute="trailing" secondItem="aU5-x1-tbq" secondAttribute="trailing" id="SjI-gp-SwJ"/>
                                                     <constraint firstAttribute="trailing" secondItem="pF7-hx-3bl" secondAttribute="trailing" id="Viv-Rt-quu"/>
                                                     <constraint firstAttribute="trailing" secondItem="1eM-l8-pYj" secondAttribute="trailing" id="Zrb-mW-Foy"/>
                                                     <constraint firstItem="aU5-x1-tbq" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="fR6-Q1-5as"/>
+                                                    <constraint firstItem="Tpe-pb-Clu" firstAttribute="top" secondItem="aU5-x1-tbq" secondAttribute="bottom" constant="4" id="uy7-Fr-M0W"/>
                                                     <constraint firstItem="Tpe-pb-Clu" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="w9t-uz-vpT"/>
                                                 </constraints>
                                             </view>

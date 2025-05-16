@@ -23,6 +23,7 @@ struct BHUser: Codable, Hashable {
         case ratingsCount = "ratings_count"
         case ratingValue = "rating_value"
         case outgoingStatus = "outgoing_status"
+        case receiveNotifications = "receive_notifications"
     }
     
     enum Level: Int, Codable {
@@ -54,6 +55,7 @@ struct BHUser: Codable, Hashable {
     var ratingsCount: Int?
     var ratingValue: Double?
     var outgoingStatus: String?
+    var receiveNotifications: Bool = false
 
     var categoryName: String {
         return categories?.first?.name ?? "News Updates"

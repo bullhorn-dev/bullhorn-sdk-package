@@ -548,6 +548,11 @@
                 <entry key="hyper.remoteKey" value="rating_value"/>
             </userInfo>
         </attribute>
+        <attribute name="receiveNotifications" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="receive_notifications"/>
+            </userInfo>
+        </attribute>
         <attribute name="shareLink" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="share_link"/>

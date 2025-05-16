@@ -4,22 +4,6 @@ internal import Alamofire
 
 class BHServerApiUsers: BHServerApiBase {
     
-    // MARK: - User Result
-
-    struct User: Codable {
-        
-        enum CodingKeys: String, CodingKey {
-            case user
-        }
-        
-        let user: BHUser
-    }
-
-    enum UserResult {
-        case success(user: BHUser)
-        case failure(error: Error)
-    }
-
     // MARK: - Self User Result
 
     struct SelfUser: Codable {
