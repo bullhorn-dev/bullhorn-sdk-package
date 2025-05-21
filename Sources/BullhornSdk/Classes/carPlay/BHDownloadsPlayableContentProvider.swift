@@ -12,8 +12,6 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     var playlist: [BHPost]?
 
-    let manager: BHDownloadsManager
-
     var carplayInterfaceController: CPInterfaceController?
 
     var items = [CPListItem]()
@@ -22,8 +20,7 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     // MARK: - Initialization
 
-    init(with manager: BHDownloadsManager, interfaceController: CPInterfaceController) {
-        self.manager = manager
+    init(with interfaceController: CPInterfaceController) {
         self.listTemplate = composeCPListTemplate()
         self.carplayInterfaceController = interfaceController
     }
@@ -42,10 +39,31 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     func loadItems() {
 
-        let data = self.manager.completedItems
+        let data = BHDownloadsManager.shared.completedItems
         self.items = self.convertDownloadItems(data)
-        self.playlist = self.manager.items.map({ $0.post })
+        self.playlist = BHDownloadsManager.shared.items.map({ $0.post })
         
         updateSectionsForList()
+    }
+    
+    func updateSectionsForList() {
+        
+        listTemplate.updateSections([CPListSection(items: items)])
+        
+        for (index,item) in items.enumerated() {
+            item.handler = { item, completion in
+                BHLog.p("CarPlay item selected")
+                
+                if let post = self.playlist?[index] {
+                    self.play(post, playlist: self.playlist)
+                }
+                
+                if let listItem = item as? CPListItem {
+                    self.updatePlayingItem(listItem, items: self.items)
+                }
+
+                completion()
+            }
+        }
     }
 }

@@ -119,7 +119,7 @@ extension BHPlayableContentController: BHHybridPlayerListener {
     func hybridPlayerDidClose(_ player: BHHybridPlayer) {
         guard let topTemplate = carplayInterfaceController?.topTemplate else { return }
 
-        providers.forEach({ $0.updatePlayingItem(nil) })
+        providers.forEach({ $0.updatePlayingItem(nil, items: $0.items) })
 
         if topTemplate.isMember(of: CPNowPlayingTemplate.self) {
             carplayInterfaceController?.popToRootTemplate(animated: true)
@@ -156,6 +156,8 @@ extension BHPlayableContentController: CPInterfaceControllerDelegate {
 
             if title == "Home" {
                 banner = .carplayOpenHome
+            } else if title == "Browse" {
+                banner = .carplayOpenBrowse
             } else if title == "Radio" {
                 banner = .carplayOpenRadio
             } else {

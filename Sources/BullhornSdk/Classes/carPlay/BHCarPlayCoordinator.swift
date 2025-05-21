@@ -4,7 +4,7 @@ import Foundation
 
 public class BHCarPlayCoordinator {
     
-    let feedManager: BHNetworkManager
+    let networkManager: BHNetworkManager
     let radioManager: BHRadioStreamsManager
     let downloadsManager: BHDownloadsManager
 
@@ -16,11 +16,11 @@ public class BHCarPlayCoordinator {
 
     public init() {
 
-        feedManager = BHNetworkManager.shared
+        networkManager = BHNetworkManager.shared
         radioManager = BHRadioStreamsManager.shared
         downloadsManager = BHDownloadsManager.shared
 
-        feedManager.addListener(self)
+        networkManager.addListener(self)
         radioManager.addListener(self)
         downloadsManager.addListener(self)
     }
@@ -36,11 +36,17 @@ public class BHCarPlayCoordinator {
         let networkId = BHAppConfiguration.shared.networkId
 
         if BHReachabilityManager.shared.isConnected() {
-            feedManager.fetchPosts(networkId) { _ in }
-            radioManager.fetch(networkId) { _ in }
+            networkManager.fetch(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.carPlayController.reload()
+                }
+            }
         } else {
-            feedManager.fetchStorageEpisodes(networkId) { _ in }
-            radioManager.fetchStorageRadios(networkId) { _ in }
+            networkManager.fetchStorage(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.carPlayController.reload()
+                }
+            }
         }
         downloadsManager.updateItems()
 
@@ -57,7 +63,7 @@ public class BHCarPlayCoordinator {
         
         carPlayController.disconnect()
         
-        feedManager.removeListener(self)
+        networkManager.removeListener(self)
         radioManager.removeListener(self)
         downloadsManager.removeListener(self)
         
@@ -70,11 +76,12 @@ public class BHCarPlayCoordinator {
 
     fileprivate func initProviders(_ interfaceController: CPInterfaceController) {
 
-        let postEvents = BHFeedEventsPlayableContentProvider.init(with: feedManager, interfaceController: interfaceController)
-        let radioEvents = BHRadioPlayableContentProvider(with: radioManager, interfaceController: interfaceController)
-        let downloads = BHDownloadsPlayableContentProvider(with: downloadsManager, interfaceController: interfaceController)
+        let home = BHHomePlayableContentProvider.init(with: interfaceController)
+        let browse = BHBrowsePlayableContentProvider.init(with: interfaceController)
+        let radio = BHRadioPlayableContentProvider(with: interfaceController)
+        let downloads = BHDownloadsPlayableContentProvider(with: interfaceController)
 
-        providers = [postEvents, radioEvents, downloads]
+        providers = [home, browse, radio, downloads]
     }
 }
 
@@ -83,14 +90,6 @@ public class BHCarPlayCoordinator {
 extension BHCarPlayCoordinator: BHNetworkManagerListener {
 
     func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {
-        BHLog.p("CarPlay \(#function)")
-
-        DispatchQueue.main.async {
-            self.carPlayController.reload()
-        }
-    }
-    
-    func networkManagerDidFetchPosts(_ manager: BHNetworkManager) {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {

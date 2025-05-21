@@ -40,6 +40,7 @@ let package = Package(
                 .copy("Resources/images/ic_downloads_placeholder.png"),
                 .copy("Resources/images/ic_connection_lost.png"),
                 .copy("Resources/images/carplay-home.png"),
+                .copy("Resources/images/carplay-library.png"),
                 .copy("Resources/images/carplay-radio.png"),
                 .copy("Resources/images/carplay-downloads.png"),
                 .copy("Resources/images/ic_the_will_cain_live.gif"),

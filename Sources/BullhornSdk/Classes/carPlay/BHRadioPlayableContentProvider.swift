@@ -10,29 +10,25 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     fileprivate(set) var iconName: String = "carplay-radio.png"
     fileprivate(set) var emptyListText: String = NSLocalizedString("There is nothing here", comment: "")
     
-    var playlist: [BHPost]?
-
-    let manager: BHRadioStreamsManager
-
     var carplayInterfaceController: CPInterfaceController?
 
     var items = [CPListItem]()
 
+    var streams = [BHStream]()
+    var streamsRowItem = CPListImageRowItem()
+
     var listTemplate: CPListTemplate!
+    var placeholderImage: UIImage!
 
     // MARK: - Initialization
 
-    init(with manager: BHRadioStreamsManager, interfaceController: CPInterfaceController) {
-        self.manager = manager
-        self.listTemplate = composeCPListTemplate()
+    init(with interfaceController: CPInterfaceController) {
         self.carplayInterfaceController = interfaceController
+        self.listTemplate = composeCPListTemplate()
+        self.placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
     }
 
     // MARK: - Private
-
-    fileprivate func convertEvents(_ posts: [BHPost]) -> [CPListItem] {
-        return posts.map { $0.toCPListItem(with: Bundle.module) }
-    }
 
     fileprivate func feedEventsFilterMethod() -> (BHPost) -> Bool {
         return { $0.recording?.publishUrl != nil }
@@ -46,11 +42,27 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
 
     func loadItems() {
         
-        let data = self.manager.radios.map({ $0.asPost()! })
-        self.items = self.convertEvents(data)
-        self.playlist = data
+        let post = BHRadioStreamsManager.shared.radios.first?.asPost()
+        streams = BHRadioStreamsManager.shared.radios.first?.streams ?? []
+        streamsRowItem = convertRadioStreamsToImageRowItem("Live Radio Streams", streams: streams, post: post, placeholderImage: placeholderImage)
+
+        let radios = BHRadioStreamsManager.shared.otherRadios.map({ $0.asPost()! })
+        self.items = self.convertEpisodes(radios)
         
         updateSectionsForList()
+    }
+    
+    func updateSectionsForList() {
+        
+        var sections: [CPListSection] = []
+
+        if streams.count > 0 {
+            sections.append(CPListSection(items: [streamsRowItem]))
+        }
+
+        sections.append(CPListSection(items: items))
+
+        listTemplate.updateSections(sections)
     }
 }
 

@@ -59,10 +59,11 @@ enum BHTrackBanner: String, Codable {
     case playerSpeed       = "player_playback_speed"
     case playerPlayback    = "player_playback"
     /// ui-carplay
-    case carplayConnect    = "carplay_connect"
-    case carplayDisconnect = "carplay_disconnect"
-    case carplayOpenHome   = "carplay_open_home"
-    case carplayOpenRadio  = "carplay_open_radio"
+    case carplayConnect       = "carplay_connect"
+    case carplayDisconnect    = "carplay_disconnect"
+    case carplayOpenHome      = "carplay_open_home"
+    case carplayOpenBrowse    = "carplay_open_browse"
+    case carplayOpenRadio     = "carplay_open_radio"
     case carplayOpenDownloads = "carplay_open_downloads"
     /// error-explore
     case playerFailed      = "player_failed"

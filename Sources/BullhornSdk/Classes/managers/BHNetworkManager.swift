@@ -2,7 +2,6 @@
 import Foundation
 
 protocol BHNetworkManagerListener: ObserverProtocol {
-    func networkManagerDidFetchPosts(_ manager: BHNetworkManager)
     func networkManagerDidUpdatePosts(_ manager: BHNetworkManager)
 }
 
@@ -51,13 +50,9 @@ class BHNetworkManager {
     // MARK: - Users
     
     var users: [BHUser] = []
-    
-    var followedUsers: [BHUser] {
-        return users.filter({ $0.isFollowed })
-    }
-    
+        
     var splittedUsers: [UIUsersModel] = []
-    
+
     func splitUsers(_ channelId: String) {
         
         splittedUsers.removeAll()
@@ -84,7 +79,26 @@ class BHNetworkManager {
             }
         }
     }
-    
+
+    var carPlaySplittedUsers: [UIUsersModel] = []
+
+    func splitUsersForCarPlay() {
+        
+        carPlaySplittedUsers.removeAll()
+
+        if users.count == 0 { return }
+        
+        if let selectedChannel = channels.first(where: { $0.id == BHChannel.mainChannelId }) {
+            selectedChannel.categories?.forEach({ category in
+                let cusers = users.filter({ $0.categoryName == category.name })
+                if let validName = category.name, cusers.count > 0 {
+                    let uimodel = UIUsersModel(title: validName, users: cusers)
+                    carPlaySplittedUsers.append(uimodel)
+                }
+            })
+        }
+    }
+
     // MARK: - Initialization
     
     init() {
@@ -144,10 +158,6 @@ class BHNetworkManager {
                     self.fetchStorageEpisodes(networkId) { _ in }
                 case .failure(error: let error):
                     BHLog.w("Network episodes load failed \(error.localizedDescription)")
-                }
-
-                self.observersContainer.notifyObserversAsync {
-                    $0.networkManagerDidFetchPosts(self)
                 }
 
                 completion(response)

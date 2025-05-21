@@ -9,8 +9,14 @@ extension BHPost {
         
         let placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
 
-        let accessoryType: CPListItemAccessoryType = (isDownloaded || isRadioStream()) ? .cloud : .none
-        let accessoryImage = isDownloaded ? UIImage(systemName: "arrow.down.circle.fill") : (isRadioStream() ? UIImage(systemName: "radio") : nil)
+        let accessoryType: CPListItemAccessoryType = (isDownloaded || isRadioStream() || isLiveStream()) ? .cloud : .none
+        var accessoryImage: UIImage? = nil
+        
+        if isDownloaded {
+            accessoryImage = UIImage(systemName: "arrow.down.circle.fill")
+        } else if isRadioStream() || isLiveStream() {
+            accessoryImage = UIImage(systemName: "dot.radiowaves.forward")
+        }
         
         let item = CPListItem(text: title, detailText: user.fullName, image: placeholderImage, accessoryImage: accessoryImage, accessoryType: accessoryType)
         

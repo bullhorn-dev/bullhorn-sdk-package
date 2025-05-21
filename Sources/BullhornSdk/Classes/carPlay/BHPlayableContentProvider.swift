@@ -1,6 +1,14 @@
 
 import CarPlay
 import Foundation
+import SDWebImage
+
+// MARK: - Images Result
+
+enum ImagesResult {
+    case success(images: [UIImage])
+    case failure(error: Error)
+}
 
 protocol BHPlayableContentProvider {
 
@@ -8,13 +16,8 @@ protocol BHPlayableContentProvider {
     var title: String { get }
     var iconName: String { get }
     var emptyListText: String { get }
-    
-    var playlist: [BHPost]? { get }
-
     var items: [CPListItem] { get }
-
     var carplayInterfaceController: CPInterfaceController? { get }
-
     var listTemplate: CPListTemplate! { get }
 
     func composeCPListTemplate() -> CPListTemplate
@@ -22,58 +25,303 @@ protocol BHPlayableContentProvider {
 }
 
 extension BHPlayableContentProvider {
+    
+    // MARK: - Tab
 
-    func composeCPListTemplateForTab(sections: [CPListSection], in bundle: Bundle) -> CPListTemplate {
-        let configuration = CPAssistantCellConfiguration(position: .top, visibility: .off, assistantAction: .playMedia)
-        let playlistTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
+    func composeCPListTemplateForTab(sections: [CPListSection], in bundle: Bundle, hasSearch: Bool = false) -> CPListTemplate {
+        let configuration = CPAssistantCellConfiguration(position: .top, visibility: hasSearch ? .always: .off, assistantAction: .playMedia)
+        let listTemplate = CPListTemplate(title: title, sections: sections, assistantCellConfiguration: configuration)
 
-        playlistTemplate.tabTitle = title
-        playlistTemplate.emptyViewSubtitleVariants = [emptyListText]
-        playlistTemplate.tabImage = UIImage.init(named: iconName, in: bundle, with: nil)
+        listTemplate.tabTitle = title
+        listTemplate.emptyViewSubtitleVariants = [emptyListText]
+        listTemplate.tabImage = UIImage.init(named: iconName, in: bundle, with: nil)
 
-        return playlistTemplate
+        return listTemplate
     }
     
-    func updateSectionsForList() {
+    // MARK: - Streams
+
+    func convertRadioStreamsToImageRowItem(_ title: String, streams: [BHStream], post: BHPost?, placeholderImage: UIImage, imagesCount: Int = CPMaximumNumberOfGridImages) -> CPListImageRowItem {
+        let allowedItems = streams.prefix(imagesCount)
+        let images = allowedItems.map({ _ in placeholderImage })
         
-        listTemplate.updateSections([CPListSection(items: items)])
+        var listImageRowItem: CPListImageRowItem
         
-        for (index,item) in items.enumerated() {
-            item.handler = { item, completion in
-                BHLog.p("CarPlay item selected")
-                
-                if let post = self.playlist?[index] {
-                    if BHHybridPlayer.shared.isPostPlaying(post.id) {
-                        if let topTemplate = carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-                            carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
-                        }
-                    } else {
-                        BHHybridPlayer.shared.playRequest(with: post, playlist: self.playlist, context: "carplay")
-                    }
+        if #available(iOS 17.4, *) {
+            let titles = allowedItems.enumerated().map({
+                if $0 == 0 {
+                    return "Live Now"
+                } else if $0 == 1 {
+                    return "Next \($1.localStartTime())"
+                } else {
+                    return "Later \($1.localStartTime())"
                 }
+            })
+            listImageRowItem = CPListImageRowItem(text: title, images: images, imageTitles: titles)
+        } else {
+            listImageRowItem = CPListImageRowItem(text: title, images: images)
+        }
+        
+        let urls = allowedItems.map({ $0.coverUrl! })
+        fetchImages(urls, placeholderImage: placeholderImage) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(images: let images):
+                    listImageRowItem.update(images)
+                case .failure(error: let error):
+                    BHLog.w("CarPlay failed to load images for ImageRowItem. \(error)")
+                }
+            }
+        }
+        
+        listImageRowItem.listImageRowHandler = { item, index, completion in
+            BHLog.p("CarPlay \(title) image radio item \(index) selected")
+            
+            if index == 0 && index < streams.count, let validPost = post {
+                self.play(validPost, playlist: nil)
+            }
+            completion()
+        }
+        listImageRowItem.handler = { item, completion in
+            BHLog.p("CarPlay \(title) list radio item selected")
+            if let validPost = post {
+                self.play(validPost, playlist: nil)
+            }
+            completion()
+        }
+        
+        return listImageRowItem
+    }
+
+    // MARK: - Episodes
+
+    func convertEpisodes(_ episodes: [BHPost]) -> [CPListItem] {
+        let items = episodes.map { $0.toCPListItem(with: Bundle.module) }
+
+        for (index, item) in items.enumerated() {
+            item.handler = { item, completion in
+                BHLog.p("CarPlay \(title) item selected")
                 
-                if let listItem = item as? CPListItem {
-                    self.updatePlayingItem(listItem)
+                if index < episodes.count {
+                    let post = episodes[index]
+                    
+                    self.play(post, playlist: episodes)
+                    
+                    /// update playing item
+                    if let listItem = item as? CPListItem {
+                        updatePlayingItem(listItem, items: items)
+                    }
                 }
 
                 completion()
             }
         }
+        
+        /// update playing item
+        updatePlayingItem(nil, items: items)
+
+        return items
+    }
+
+    func convertEpisodesToCPListTemplate(_ episodes: [BHPost], title: String) {
+        let items = self.convertEpisodes(episodes)
+        let configuration = CPAssistantCellConfiguration(position: .top, visibility: .off, assistantAction: .playMedia)
+        let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
+        listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
+
+        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true)
     }
     
-    func updatePlayingItem(_ item: CPListItem?) {
+    func convertEpisodesToListItem(_ title: String, episodes: [BHPost]) -> CPListItem {
+        let listItem = CPListItem(text: title, detailText: "", image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
+
+        listItem.handler = { item, completion in
+            BHLog.p("CarPlay \(title) list item selected")
+            convertEpisodesToCPListTemplate(episodes, title: title)
+            completion()
+        }
         
-        items.forEach({ $0.isPlaying = false })
+        return listItem
+    }
+    
+    // MARK: - Podcasts
+
+    func convertPodcasts(_ podcasts: [BHUser]) -> [CPListItem] {
+        let items = podcasts.map { $0.toCPListItem(with: Bundle.module) }
+
+        for (index, item) in items.enumerated() {
+            item.handler = { item, completion in
+                BHLog.p("CarPlay \(title) item selected")
+                
+                if index < podcasts.count {
+                    let user = podcasts[index]
+                    let userManager = BHUserManager()
+                    
+                    userManager.getUserPosts(user.id, text: "") { response in
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(posts: let posts, page: _, pages: _):
+                                convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
+                            case .failure(error: let error):
+                                BHLog.w("User posts load failed \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+                completion()
+            }
+        }
+        
+        return items
+    }
+    
+    func convertPodcastsToCPListTemplate(title: String, podcasts: [BHUser]) {
+        let items = self.convertPodcasts(podcasts)
+        let configuration = CPAssistantCellConfiguration(position: .top, visibility: .off, assistantAction: .playMedia)
+        let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
+        listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
+
+        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true)
+    }
+    
+    func convertPodcastsToImageRowItem(_ title: String, podcasts: [BHUser], placeholderImage: UIImage, imagesCount: Int = CPMaximumNumberOfGridImages) -> CPListImageRowItem {
+        let allowedPodcasts = podcasts.prefix(imagesCount)
+        let images = allowedPodcasts.map({ _ in placeholderImage })
+
+        let listImageRowItem = CPListImageRowItem(text: title, images: images)
+
+        let urls = allowedPodcasts.map({ $0.coverUrl! })
+        fetchImages(urls, placeholderImage: placeholderImage) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(images: let images):
+                    listImageRowItem.update(images)
+                case .failure(error: let error):
+                    BHLog.w("CarPlay failed to load images for ImageRowItem. \(error)")
+                }
+            }
+        }
+
+        listImageRowItem.listImageRowHandler = { item, index, completion in
+            BHLog.p("CarPlay \(title) image item \(index) selected")
             
-        guard let validItem = item else { return }
+            if index < podcasts.count {
+                let user = podcasts[index]
+                let userManager = BHUserManager()
+                
+                userManager.getUserPosts(user.id, text: "") { response in
+                    DispatchQueue.main.async {
+                        switch response {
+                        case .success(posts: let posts, page: _, pages: _):
+                            convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
+                        case .failure(error: let error):
+                            BHLog.w("User posts load failed \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }
+            completion()
+        }
+        listImageRowItem.handler = { item, completion in
+            BHLog.p("CarPlay \(title) list item selected")
+            self.convertPodcastsToCPListTemplate(title: title, podcasts: podcasts)
+            completion()
+        }
         
-        validItem.isPlaying = true
-        validItem.playingIndicatorLocation = .trailing
+        return listImageRowItem
+    }
+
+    // MARK: - Categories
+    
+    func convertCategories(_ models: [UIUsersModel]) -> [CPListItem] {
+        let items = models.map { $0.toCPListItem() }
+
+        for (index, item) in items.enumerated() {
+            item.handler = { item, completion in
+                BHLog.p("CarPlay \(title) category item selected")
+                
+                if index < models.count {
+                    let model = models[index]
+                    
+                    convertPodcastsToCPListTemplate(title: model.title, podcasts: model.users)
+                }
+                completion()
+            }
+        }
+        
+        return items
+    }
+
+    // MARK: - Utils
+
+    func play(_ episode: BHPost, playlist: [BHPost]?) {
+        if BHHybridPlayer.shared.isPostPlaying(episode.id) {
+            if let topTemplate = self.carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
+                self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
+            }
+        } else {
+            BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: "carplay")
+        }
+    }
+
+    func updatePlayingItem(_ item: CPListItem?, items: [CPListItem]) {
+        
+        if item != nil {
+            items.forEach({ $0.isPlaying = false })
+            
+            item?.isPlaying = true
+            item?.playingIndicatorLocation = .trailing
+            
+            return
+        }
+        
+        if let validPost = BHHybridPlayer.shared.post {
+            items.forEach({
+                if $0.text == validPost.title {
+                    $0.isPlaying = true
+                    $0.playingIndicatorLocation = .trailing
+                } else {
+                    $0.isPlaying = false
+                }
+            })
+        } else {
+            items.forEach({ $0.isPlaying = false })
+        }
     }
     
     func updatePlayingItemForEpisode(_ title: String) {
 
         let item = items.first(where: { $0.text == title })
-        updatePlayingItem(item)
+        updatePlayingItem(item, items: items)
+    }
+        
+    internal func fetchImages(_ urls: [URL], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {
+
+        let fetchGroup = DispatchGroup()
+        var responseError: Error?
+        var images = [UIImage]()
+        
+        for url in urls {
+            fetchGroup.enter()
+
+            SDWebImageManager.shared.loadImage(with: url) { _, _, _ in
+                //
+            } completed: { image, data, error, _, finished, _ in
+                if finished && error == nil {
+                    images.append(image ?? placeholderImage)
+                } else if error != nil {
+                    responseError = error
+                }
+                fetchGroup.leave()
+            }
+        }
+                                
+        fetchGroup.notify(queue: .main) {
+            if let error = responseError {
+                completion(.failure(error: error))
+            } else {
+                completion(.success(images: images))
+            }
+        }
     }
 }
