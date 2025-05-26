@@ -383,6 +383,8 @@ extension BHUserDetailsViewController: BHSearchControllerDelegate {
 // MARK: - BHUserManagerListener
 
 extension BHUserDetailsViewController: BHUserManagerListener {
+
+    func userManagerDidUpdateFollowedUsers(_ manager: BHUserManager) {}
     
     func userManagerDidFetchPosts(_ manager: BHUserManager) {
         DispatchQueue.main.async {

@@ -2,7 +2,8 @@
 import Foundation
 
 protocol BHExploreManagerListener: ObserverProtocol {
-    func exploreManagerDidFetchItems(_ manager: BHExploreManager)
+    func exploreManagerDidFetch(_ manager: BHExploreManager)
+    func exploreManagerDidFetchRecent(_ manager: BHExploreManager)
     func exploreManagerDidUpdateItems(_ manager: BHExploreManager)
 }
 
@@ -119,6 +120,10 @@ class BHExploreManager {
     func updatePost(_ post: BHPost) {
         if let row = posts.firstIndex(where: {$0.id == post.id}) {
             self.posts[row] = post
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.exploreManagerDidUpdateItems(self)
+            }
         }
     }
     
@@ -228,12 +233,13 @@ class BHExploreManager {
             }
             fetchGroup.leave()
         }
-        
-        observersContainer.notifyObserversAsync {
-            $0.exploreManagerDidFetchItems(self)
-        }
-        
+                
         fetchGroup.notify(queue: .main) {
+        
+            self.observersContainer.notifyObserversAsync {
+                $0.exploreManagerDidFetch(self)
+            }
+            
             if let error = responseError {
                 completion(.failure(error: error))
             } else {
@@ -241,7 +247,40 @@ class BHExploreManager {
             }
         }
     }
+
+    func fetchRecent(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
         
+        recentPage = 0
+        recentPages = 0
+        
+        let fetchGroup = DispatchGroup()
+        var responseError: Error?
+                        
+        fetchGroup.enter()
+        
+        getRecentUsers(networkId, isFirstPage: true) { response in
+            switch response {
+            case .success(users: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+        
+        fetchGroup.notify(queue: .main) {
+
+            self.observersContainer.notifyObserversAsync {
+                $0.exploreManagerDidFetchRecent(self)
+            }
+            
+            if let error = responseError {
+                completion(.failure(error: error))
+            } else {
+                completion(.success)
+            }
+        }
+    }
+
     // MARK: - Storage Providers
     
     func fetchStorageRecentUsers(_ networkId: String, completion: @escaping (CommonResult) -> Void) {

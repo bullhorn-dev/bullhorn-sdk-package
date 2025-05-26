@@ -4,6 +4,7 @@ import Foundation
 protocol BHUserManagerListener: ObserverProtocol {
     func userManagerDidFetchPosts(_ manager: BHUserManager)
     func userManagerDidUpdatePosts(_ manager: BHUserManager)
+    func userManagerDidUpdateFollowedUsers(_ manager: BHUserManager)
 }
 
 class BHUserManager {
@@ -119,6 +120,10 @@ class BHUserManager {
     func updatePost(_ post: BHPost) {
         if let row = posts.firstIndex(where: {$0.id == post.id}) {
             self.posts[row] = post
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.userManagerDidUpdatePosts(self)
+            }
         }
     }
     
@@ -231,6 +236,10 @@ class BHUserManager {
             if !DataBaseManager.shared.insertOrUpdateFollowedUsers(with: params) {
                 BHLog.w("Failed to save followed users")
             }
+        }
+
+        self.observersContainer.notifyObserversAsync {
+            $0.userManagerDidUpdateFollowedUsers(self)
         }
     }
     

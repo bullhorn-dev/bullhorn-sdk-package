@@ -20,12 +20,17 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     var listTemplate: CPListTemplate!
     var placeholderImage: UIImage!
 
+    let radioManager: BHRadioStreamsManager!
+
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
-        self.carplayInterfaceController = interfaceController
-        self.listTemplate = composeCPListTemplate()
-        self.placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
+        radioManager = BHRadioStreamsManager.shared
+        radioManager.addListener(self)
+
+        carplayInterfaceController = interfaceController
+        listTemplate = composeCPListTemplate()
+        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
     }
 
     // MARK: - Private
@@ -38,6 +43,11 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
 
     func composeCPListTemplate() -> CPListTemplate {
         return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module)
+    }
+    
+    func disconnect() {
+        BHLog.p("CarPlay \(#function)")
+        radioManager.removeListener(self)
     }
 
     func loadItems() {
@@ -66,3 +76,15 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     }
 }
 
+// MARK: - BHRadioStreamsListener
+
+extension BHRadioPlayableContentProvider: BHRadioStreamsListener {
+    
+    func radioStreamsManager(_ manager: BHRadioStreamsManager, radioDidChange radio: BHRadio) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+}

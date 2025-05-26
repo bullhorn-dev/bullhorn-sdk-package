@@ -205,7 +205,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     }
     
     fileprivate func fetchRecents() {
-        exploreManager.getRecentUsers(BHAppConfiguration.shared.networkId, isFirstPage: true) { response in
+        exploreManager.fetchRecent(BHAppConfiguration.shared.networkId) { response in
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -453,8 +453,11 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
 // MARK: - BHExploreManagerListener
 
 extension BHExploreViewController: BHExploreManagerListener {
-    func exploreManagerDidFetchItems(_ manager: BHExploreManager) {}
     
+    func exploreManagerDidFetch(_ manager: BHExploreManager) {}
+    
+    func exploreManagerDidFetchRecent(_ manager: BHExploreManager) {}
+
     func exploreManagerDidUpdateItems(_ manager: BHExploreManager) {
         DispatchQueue.main.async {
             self.tableView.reloadData()

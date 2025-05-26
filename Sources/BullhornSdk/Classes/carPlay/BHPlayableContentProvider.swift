@@ -22,6 +22,7 @@ protocol BHPlayableContentProvider {
 
     func composeCPListTemplate() -> CPListTemplate
     func loadItems()
+    func disconnect()
 }
 
 extension BHPlayableContentProvider {
@@ -132,13 +133,15 @@ extension BHPlayableContentProvider {
         self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true)
     }
     
-    func convertEpisodesToListItem(_ title: String, episodes: [BHPost]) -> CPListItem {
+    func convertEpisodesToListItem(_ title: String, episodes: [BHPost], handler: Bool = true) -> CPListItem {
         let listItem = CPListItem(text: title, detailText: "", image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
 
-        listItem.handler = { item, completion in
-            BHLog.p("CarPlay \(title) list item selected")
-            convertEpisodesToCPListTemplate(episodes, title: title)
-            completion()
+        if handler {
+            listItem.handler = { item, completion in
+                BHLog.p("CarPlay \(title) list item selected")
+                convertEpisodesToCPListTemplate(episodes, title: title)
+                completion()
+            }
         }
         
         return listItem

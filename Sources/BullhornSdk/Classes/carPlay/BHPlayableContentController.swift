@@ -54,7 +54,8 @@ class BHPlayableContentController: NSObject {
     /// Called when CarPlay disconnects.
     func disconnect() {
         BHLog.p("Disconnected from CarPlay window.")
-                
+        
+        providers.forEach({ $0.disconnect() })
         providers = []
         nowPlayingItemObserver = nil
         playbackObserver = nil
@@ -90,6 +91,14 @@ class BHPlayableContentController: NSObject {
             playbackRateButton.isEnabled = true
             CPNowPlayingTemplate.shared.updateNowPlayingButtons([playbackRateButton])
         }
+    }
+}
+
+extension BHPlayableContentController: CPSessionConfigurationDelegate {
+
+    internal func sessionConfiguration(_ sessionConfiguration: CPSessionConfiguration,
+                              limitedUserInterfacesChanged limitedUserInterfaces: CPLimitableUserInterface) {
+        BHLog.w("CarPlay limited UI changed: \(limitedUserInterfaces)")
     }
 }
 
@@ -176,15 +185,5 @@ extension BHPlayableContentController: CPInterfaceControllerDelegate {
 
     func templateDidDisappear(_ aTemplate: CPTemplate, animated: Bool) {
         BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") did disappear.")
-    }
-}
-
-// MARK: - CPSessionConfigurationDelegate
-
-extension BHPlayableContentController: CPSessionConfigurationDelegate {
-
-    func sessionConfiguration(_ sessionConfiguration: CPSessionConfiguration,
-                              limitedUserInterfacesChanged limitedUserInterfaces: CPLimitableUserInterface) {
-        BHLog.p("CarPlay Limited UI changed: \(limitedUserInterfaces)")
     }
 }

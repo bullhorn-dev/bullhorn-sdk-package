@@ -20,19 +20,50 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     var listTemplate: CPListTemplate!
 
     var placeholderImage: UIImage!
+    
+    let networkManager: BHNetworkManager!
+    let exploreManager: BHExploreManager!
 
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
-        self.listTemplate = composeCPListTemplate()
-        self.carplayInterfaceController = interfaceController
-        self.placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
+        networkManager = BHNetworkManager.shared
+        exploreManager = BHExploreManager.shared
+        
+        networkManager.addListener(self)
+        exploreManager.addListener(self)
+
+        listTemplate = composeCPListTemplate()
+        carplayInterfaceController = interfaceController
+        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
+        
+        let networkId = BHAppConfiguration.shared.networkId
+
+        if BHReachabilityManager.shared.isConnected() {
+            exploreManager.fetch(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.loadItems()
+                }
+            }
+        } else {
+            exploreManager.fetchStorage(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.loadItems()
+                }
+            }
+        }
     }
 
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module)
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: false)
+    }
+    
+    func disconnect() {
+        BHLog.p("CarPlay \(#function)")
+        networkManager.removeListener(self)
+        exploreManager.removeListener(self)
     }
 
     func loadItems() {
@@ -53,8 +84,14 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
         var sections: [CPListSection] = []
         
         if recentPodcasts.count > 0 {
-            sections.append(CPListSection(items: [recentPodcastsRowItem]))
-            sections.append(CPListSection(items: items, header: "Categories", sectionIndexTitle: nil))
+            if recentPodcasts.count > 2 {
+                sections.append(CPListSection(items: [recentPodcastsRowItem]))
+            } else {
+                let model = UIUsersModel(title: "Recent Searches", users: recentPodcasts)
+                let recent = self.convertCategories([model])
+                sections.append(CPListSection(items: recent))
+            }
+            sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
         } else {
             sections.append(CPListSection(items: items))
         }
@@ -63,3 +100,42 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     }
 }
 
+// MARK: - BHNetworkManagerListener
+
+extension BHBrowsePlayableContentProvider: BHNetworkManagerListener {
+
+    func networkManagerDidFetch(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {}
+    
+    func networkManagerDidUpdateUsers(_ manager: BHNetworkManager) {}
+}
+
+// MARK: - BHExploreManagerListener
+
+extension BHBrowsePlayableContentProvider: BHExploreManagerListener {
+
+    func exploreManagerDidFetch(_ manager: BHExploreManager) {
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func exploreManagerDidFetchRecent(_ manager: BHExploreManager) {
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func exploreManagerDidUpdateItems(_ manager: BHExploreManager) {
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+}

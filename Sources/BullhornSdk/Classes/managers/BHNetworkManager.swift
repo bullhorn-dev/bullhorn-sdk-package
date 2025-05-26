@@ -2,7 +2,9 @@
 import Foundation
 
 protocol BHNetworkManagerListener: ObserverProtocol {
+    func networkManagerDidFetch(_ manager: BHNetworkManager)
     func networkManagerDidUpdatePosts(_ manager: BHNetworkManager)
+    func networkManagerDidUpdateUsers(_ manager: BHNetworkManager)
 }
 
 struct UIUsersModel {
@@ -168,6 +170,10 @@ class BHNetworkManager {
     func updateNetworkPost(_ post: BHPost) {
         if let row = posts.firstIndex(where: {$0.id == post.id}) {
             self.posts[row] = post
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.networkManagerDidUpdatePosts(self)
+            }
         }
     }
     
@@ -177,7 +183,7 @@ class BHNetworkManager {
         
         if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
             posts[row] = validPost
-            
+
             self.observersContainer.notifyObserversAsync {
                 $0.networkManagerDidUpdatePosts(self)
             }
@@ -202,6 +208,10 @@ class BHNetworkManager {
     func updateNetworkUser(_ user: BHUser) {
         if let row = users.firstIndex(where: {$0.id == user.id}) {
             self.users[row] = user
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.networkManagerDidUpdateUsers(self)
+            }
         }
     }
 
@@ -376,8 +386,13 @@ class BHNetworkManager {
             }
             fetchGroup.leave()
         }
-                                
+                    
         fetchGroup.notify(queue: .main) {
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.networkManagerDidFetch(self)
+            }
+
             if let error = responseError {
                 completion(.failure(error: error))
             } else {

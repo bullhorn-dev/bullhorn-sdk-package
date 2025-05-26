@@ -72,6 +72,10 @@ class BHDownloadsManager {
         if let row = downloadsQueue.firstIndex(where: {$0.post.id == post.id}) {
             self.downloadsQueue[row].post = post
             self.updateStorageItem(self.downloadsQueue[row])
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.downloadsManagerItemsUpdated(self)
+            }
         }
     }
     
@@ -165,10 +169,6 @@ class BHDownloadsManager {
                 DispatchQueue.main.async {
                     self.downloadsQueue[row] = item
                     self.updateStorageItem(item)
-                    
-                    self.observersContainer.notifyObserversAsync {
-                        $0.downloadsManagerItemsUpdated(self)
-                    }
                 }
             }
         }

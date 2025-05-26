@@ -10,8 +10,6 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
     fileprivate(set) var iconName: String = "carplay-home.png"
     fileprivate(set) var emptyListText: String = NSLocalizedString("There is nothing here", comment: "")
     
-    var items = [CPListItem]() /// live episodes
-
     var carplayInterfaceController: CPInterfaceController?
 
     var followedPodcasts = [BHUser]()
@@ -22,20 +20,45 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
 
     var followedPodcastsRowItem = CPListImageRowItem()
     var featuredPodcastsRowItem = CPListImageRowItem()
-    var liveItems = [CPListItem]()
+    var items = [CPListItem]() /// live episodes
     var featuredEpisodesListItem = CPListItem()
-    var recentEpisodesRowItem = CPListItem()
+    var recentEpisodesListItem = CPListItem()
 
     var listTemplate: CPListTemplate!
     
     var placeholderImage: UIImage!
 
+    let networkManager: BHNetworkManager!
+    let userManager: BHUserManager!
+
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
-        self.listTemplate = composeCPListTemplate()
-        self.carplayInterfaceController = interfaceController
-        self.placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
+        networkManager = BHNetworkManager.shared
+        userManager = BHUserManager.shared
+
+        networkManager.addListener(self)
+        userManager.addListener(self)
+
+        listTemplate = composeCPListTemplate()
+        carplayInterfaceController = interfaceController
+        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
+                
+        let networkId = BHAppConfiguration.shared.networkId
+
+        if BHReachabilityManager.shared.isConnected() {
+            networkManager.fetch(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.loadItems()
+                }
+            }
+        } else {
+            networkManager.fetchStorage(networkId) { _ in
+                DispatchQueue.main.async {
+                    self.loadItems()
+                }
+            }
+        }
     }
 
     // MARK: - Private
@@ -49,14 +72,20 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
     func composeCPListTemplate() -> CPListTemplate {
         return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module)
     }
+    
+    func disconnect() {
+        BHLog.p("CarPlay \(#function)")
+        networkManager.removeListener(self)
+        userManager.removeListener(self)
+    }
 
     func loadItems() {
         
         liveEpisodes = BHNetworkManager.shared.liveNowPosts
-        liveItems = convertEpisodes(liveEpisodes)
+        items = convertEpisodes(liveEpisodes)
 
         followedPodcasts = BHUserManager.shared.followedUsers
-        followedPodcastsRowItem = convertPodcastsToImageRowItem("Followed Podcasts", podcasts: followedPodcasts, placeholderImage: placeholderImage, imagesCount: 3)
+        followedPodcastsRowItem = convertPodcastsToImageRowItem("Followed Podcasts", podcasts: followedPodcasts, placeholderImage: placeholderImage)
         
         featuredPodcasts = BHNetworkManager.shared.featuredUsers
         featuredPodcastsRowItem = convertPodcastsToImageRowItem("Featured Podcasts", podcasts: featuredPodcasts, placeholderImage: placeholderImage)
@@ -64,8 +93,26 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
         featuredEpisodes = BHNetworkManager.shared.featuredPosts
         featuredEpisodesListItem = convertEpisodesToListItem("Featured Episodes", episodes: featuredEpisodes)
 
+        let recentTitle = "Latest Episodes"
         recentEpisodes = BHNetworkManager.shared.posts
-        recentEpisodesRowItem = convertEpisodesToListItem("Latest Episodes", episodes: recentEpisodes)
+        recentEpisodesListItem = convertEpisodesToListItem(recentTitle, episodes: recentEpisodes, handler: false)
+        recentEpisodesListItem.handler = { item, completion in
+            BHLog.p("CarPlay recent episodes list item selected")
+
+            if BHReachabilityManager.shared.isConnected() {
+                let networkId = BHAppConfiguration.shared.networkId
+                BHNetworkManager.shared.fetchPosts(networkId) { result in
+                    DispatchQueue.main.async {
+                        self.recentEpisodes = BHNetworkManager.shared.posts
+                        self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle)
+                        completion()
+                    }
+                }
+            } else {
+                self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle)
+                completion()
+            }
+        }
 
         updateSectionsForList()
     }
@@ -75,15 +122,27 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
         var sections: [CPListSection] = []
 
         if liveEpisodes.count > 0 {
-            sections.append(CPListSection(items: liveItems))
+            sections.append(CPListSection(items: items, header: "Live Episodes", sectionIndexTitle: nil))
         }
         
         if followedPodcasts.count > 0 {
-            sections.append(CPListSection(items: [followedPodcastsRowItem]))
+            if followedPodcasts.count > 2 {
+                sections.append(CPListSection(items: [followedPodcastsRowItem]))
+            } else {
+                let model = UIUsersModel(title: "Followed Podcasts", users: followedPodcasts)
+                let followed = self.convertCategories([model])
+                sections.append(CPListSection(items: followed))
+            }
         }
         
         if featuredPodcasts.count > 0 {
-            sections.append(CPListSection(items: [featuredPodcastsRowItem]))
+            if featuredPodcasts.count > 2 {
+                sections.append(CPListSection(items: [featuredPodcastsRowItem]))
+            } else {
+                let model = UIUsersModel(title: "Featured Podcasts", users: featuredPodcasts)
+                let featured = self.convertCategories([model])
+                sections.append(CPListSection(items: featured))
+            }
         }
         
         if featuredEpisodes.count > 0 {
@@ -91,10 +150,57 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
         }
         
         if recentEpisodes.count > 0 {
-            sections.append(CPListSection(items: [recentEpisodesRowItem]))
+            sections.append(CPListSection(items: [recentEpisodesListItem]))
         }
 
         listTemplate.updateSections(sections)
         listTemplate.tabTitle = title
     }
 }
+
+// MARK: - BHNetworkManagerListener
+
+extension BHHomePlayableContentProvider: BHNetworkManagerListener {
+
+    func networkManagerDidFetch(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+    
+    func networkManagerDidUpdateUsers(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+}
+
+// MARK: - BHUserManagerListener
+
+extension BHHomePlayableContentProvider: BHUserManagerListener {
+
+    func userManagerDidUpdateFollowedUsers(_ manager: BHUserManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+    
+    func userManagerDidFetchPosts(_ manager: BHUserManager) {}
+    
+    func userManagerDidUpdatePosts(_ manager: BHUserManager) {}
+}
+
