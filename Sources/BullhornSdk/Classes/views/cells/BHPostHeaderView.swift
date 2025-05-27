@@ -349,7 +349,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                 }
             }
             
-            let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.username, episodeId: validPost.id, episodeTitle: validPost.title)
+            let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
             BHTracker.shared.trackEvent(with: request)
 
         } else {

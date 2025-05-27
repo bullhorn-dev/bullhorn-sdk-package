@@ -81,7 +81,7 @@ final class BHUserOptionsBottomSheet: BHBottomSheetController {
         guard let url = self.user?.shareLink else { return }
 
         /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: url.absoluteString, podcastId: user?.id, podcastTitle: user?.username)
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: url.absoluteString, podcastId: user?.id, podcastTitle: user?.fullName)
         BHTracker.shared.trackEvent(with: request)
 
         self.presentShareDialog(with: [url], configureBlock: { controller in

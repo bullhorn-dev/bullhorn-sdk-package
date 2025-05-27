@@ -26,7 +26,6 @@ class BHServerApiExplore: BHServerApiBase {
                   case .success(let p):
                       completion(.success(posts: p.posts))
                   case .failure(let error):
-                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -53,7 +52,6 @@ class BHServerApiExplore: BHServerApiBase {
                   case .success(let p):
                       completion(.success(posts: p.posts))
                   case .failure(let error):
-                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -90,7 +88,6 @@ class BHServerApiExplore: BHServerApiBase {
                       }
                       completion(.success(posts: p.posts))
                   case .failure(let error):
-                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -127,7 +124,6 @@ class BHServerApiExplore: BHServerApiBase {
                       }
                       completion(.success(users: u.users))
                   case .failure(let error):
-                      self.trackError(url: fullPath, error: error)
                       completion(.failure(error: error))
                   }
               })
@@ -171,7 +167,6 @@ class BHServerApiExplore: BHServerApiBase {
                             completion(.failure(error: error))
                         }
                     case .failure(let error):
-                        self.trackError(url: fullPath, error: error)
                         completion(.failure(error: error))
                     }
                 })

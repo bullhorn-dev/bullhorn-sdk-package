@@ -422,6 +422,7 @@ class BHNetworkManager {
                                 
         fetchGroup.notify(queue: .main) {
             if let error = responseError {
+                self.apiNetwork.trackError(url: "home_fetch_failed", error: error)
                 completion(.failure(error: error))
             } else {
                 completion(.success)

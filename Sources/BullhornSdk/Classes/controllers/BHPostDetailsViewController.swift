@@ -59,7 +59,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         fetch(initial: true)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openEpisode, context: post?.shareLink.absoluteString, podcastId: post?.user.id, podcastTitle: post?.user.username, episodeId: post?.id, episodeTitle: post?.title)
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openEpisode, context: post?.shareLink.absoluteString, podcastId: post?.user.id, podcastTitle: post?.user.fullName, episodeId: post?.id, episodeTitle: post?.title)
         BHTracker.shared.trackEvent(with: request)
     }
     

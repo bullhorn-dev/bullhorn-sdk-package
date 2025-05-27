@@ -38,7 +38,7 @@ class BHSettingsManager {
                 case .success(user: let user):
                     /// track event
                     let banner: BHTrackBanner = enable ? .notificationsOn : .notificationsOff
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: banner, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.username)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: banner, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.fullName)
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):

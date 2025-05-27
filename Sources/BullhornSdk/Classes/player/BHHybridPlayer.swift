@@ -203,7 +203,7 @@ class BHHybridPlayer {
 
             /// track event
             let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context, podcastId: post.user.id, podcastTitle: post.user.username, episodeId: post.id, episodeTitle: post.title, episodeType: type)
+            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, episodeType: type)
             BHTracker.shared.trackEvent(with: request)
 
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)

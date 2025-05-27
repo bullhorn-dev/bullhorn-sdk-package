@@ -24,7 +24,6 @@ class BHServerApiSettings: BHServerApiBase {
                     case .success(let u):
                         completion(.success(users: u.users))
                     case .failure(let error):
-                        self.trackError(url: fullPath, error: error)
                         completion(.failure(error: error))
                     }
                 })
@@ -52,7 +51,6 @@ class BHServerApiSettings: BHServerApiBase {
                     case .success(let u):
                         completion(.success(user: u.user))
                     case .failure(let error):
-                        self.trackError(url: fullPath, error: error)
                         completion(.failure(error: error))
                     }
                 })

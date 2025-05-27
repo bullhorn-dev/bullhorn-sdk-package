@@ -115,9 +115,9 @@ class BHTracker {
         if let episodeType = request.episodeType {
             params["episode_type"] = episodeType
         }
-//        if let extraParams = request.extraParams {
-//            params["extra_params"] = request.extraParams
-//        }
+        if let extraParams = request.extraParams, extraParams.count > 0 {
+            params["extra_params"] = extraParams
+        }
 
         params["subscription_id"] = BHAccountManager.shared.user?.id ?? ""
         params["bullhorn_sdk_id"] = BullhornSdk.shared.clientId

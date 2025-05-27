@@ -75,7 +75,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openPodcast, context: user?.shareLink?.absoluteString, podcastId: user?.id, podcastTitle: user?.username)
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openPodcast, context: user?.shareLink?.absoluteString, podcastId: user?.id, podcastTitle: user?.fullName)
         BHTracker.shared.trackEvent(with: request)
     }
     

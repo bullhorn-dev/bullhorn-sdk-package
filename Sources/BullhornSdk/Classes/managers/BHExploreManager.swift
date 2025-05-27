@@ -241,6 +241,7 @@ class BHExploreManager {
             }
             
             if let error = responseError {
+                self.apiExplore.trackError(url: "explore_fetch_failed", error: error)
                 completion(.failure(error: error))
             } else {
                 completion(.success)

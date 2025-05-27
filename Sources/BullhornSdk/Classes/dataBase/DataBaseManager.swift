@@ -32,7 +32,6 @@ class DataBaseManager {
             completion(.success(users: featuredUsers))
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(users: []))
         }
     }
@@ -44,7 +43,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -60,7 +58,6 @@ class DataBaseManager {
             completion(.success(posts: featuredPosts))
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(posts: []))
         }
     }
@@ -72,7 +69,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -90,7 +86,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(channels: []))
         }
     }
@@ -102,7 +97,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -114,7 +108,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -132,7 +125,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(users: []))
         }
     }
@@ -144,7 +136,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -156,7 +147,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -174,7 +164,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(posts: [], page: 1, pages: 1))
         }
     }
@@ -186,7 +175,6 @@ class DataBaseManager {
             return updateDownloads()
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -198,7 +186,6 @@ class DataBaseManager {
             return updateDownloads()
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -229,7 +216,6 @@ class DataBaseManager {
             return item
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return nil
         }
     }
@@ -242,7 +228,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -267,7 +252,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -279,7 +263,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -294,7 +277,6 @@ class DataBaseManager {
             return user
         }
         catch {
-            trackError(error)
             return nil
         }
     }
@@ -306,7 +288,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -318,7 +299,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -334,7 +314,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(posts: [], page: 1, pages: 1))
         }
     }
@@ -346,7 +325,6 @@ class DataBaseManager {
             return updateDownloads()
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -364,7 +342,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(posts: [], page: 1, pages: 1))
         }
     }
@@ -376,7 +353,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -394,7 +370,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(users: [], page: 1, pages: 1))
         }
     }
@@ -406,7 +381,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -421,7 +395,6 @@ class DataBaseManager {
             return post
         }
         catch {
-            trackError(error)
             return nil
         }
     }
@@ -433,7 +406,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -445,7 +417,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -461,7 +432,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(users: []))
         }
     }
@@ -473,7 +443,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -489,7 +458,6 @@ class DataBaseManager {
             completion(.success(radios: radios))
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.failure(error: error))
         }
     }
@@ -501,7 +469,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -532,7 +499,6 @@ class DataBaseManager {
             return item
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return nil
         }
     }
@@ -545,7 +511,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -570,7 +535,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -582,7 +546,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -600,7 +563,6 @@ class DataBaseManager {
             }
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             completion(.success(users: []))
         }
     }
@@ -612,7 +574,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }
@@ -624,7 +585,6 @@ class DataBaseManager {
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
-            trackError(error)
             return false
         }
     }

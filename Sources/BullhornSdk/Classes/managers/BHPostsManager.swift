@@ -73,7 +73,7 @@ class BHPostsManager {
         }
         
         /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .episodeLikeOn, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.username, episodeId: item.id, episodeTitle: item.title)
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .episodeLikeOn, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.fullName, episodeId: item.id, episodeTitle: item.title)
         BHTracker.shared.trackEvent(with: request)
     }
     
@@ -96,7 +96,7 @@ class BHPostsManager {
         }
         
         /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .episodeLikeOff, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.username, episodeId: item.id, episodeTitle: item.title)
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .episodeLikeOff, context: item.shareLink.absoluteString, podcastId: item.user.id, podcastTitle: item.user.fullName, episodeId: item.id, episodeTitle: item.title)
         BHTracker.shared.trackEvent(with: request)
     }
     
