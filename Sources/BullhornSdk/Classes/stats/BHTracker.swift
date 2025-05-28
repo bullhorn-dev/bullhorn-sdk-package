@@ -116,7 +116,9 @@ class BHTracker {
             params["episode_type"] = episodeType
         }
         if let extraParams = request.extraParams, extraParams.count > 0 {
-            params["extra_params"] = extraParams
+            for (key, value) in extraParams {
+                params[key] = value
+            }
         }
 
         params["subscription_id"] = BHAccountManager.shared.user?.id ?? ""
