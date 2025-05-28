@@ -86,22 +86,26 @@ class BHLinkResolver {
             let username = pathComponentsWithoutDelimiters[0]
             
             if !username.isEmpty {
-                BHUserManager.shared.getUserByUsername(username) { result in
-                    switch result {
-                    case .success(user: let user):
-                        DispatchQueue.main.async {
-                            let bundle = Bundle.module
-                            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-                            let vc = storyboard.instantiateViewController(withIdentifier: BHUserDetailsViewController.storyboardIndentifer) as! BHUserDetailsViewController
-                            vc.user = user
+                if BHReachabilityManager.shared.isConnected() {
+                    BHUserManager.shared.getUserByUsername(username) { result in
+                        switch result {
+                        case .success(user: let user):
+                            DispatchQueue.main.async {
+                                let bundle = Bundle.module
+                                let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                                let vc = storyboard.instantiateViewController(withIdentifier: BHUserDetailsViewController.storyboardIndentifer) as! BHUserDetailsViewController
+                                vc.user = user
+                                
+                                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                            }
                             
-                            UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                        case .failure(error: let e):
+                            BHLog.w(e)
+                            break
                         }
-                        
-                    case .failure(error: let e):
-                        BHLog.w(e)
-                        break
                     }
+                } else {
+                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection appears to be offline.")
                 }
                 result = true
             }
@@ -121,22 +125,29 @@ class BHLinkResolver {
             let alias = pathComponentsWithoutDelimiters[2]
 
             if !username.isEmpty && !alias.isEmpty {
-                BHPostsManager.shared.getPostByAlias(username, postAlias: alias) { result in
-                    switch result {
-                    case .success(post: let post):
-                        DispatchQueue.main.async {
-                            let bundle = Bundle.module
-                            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-                            let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
-                            vc.post = post
+                if BHReachabilityManager.shared.isConnected() {
+                    BHPostsManager.shared.getPostByAlias(username, postAlias: alias) { result in
+                        switch result {
+                        case .success(post: let post):
+                            DispatchQueue.main.async {
+                                let bundle = Bundle.module
+                                let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                                let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
+                                vc.post = post
+                                
+                                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                            }
                             
-                            UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                        case .failure(error: let e):
+                            BHLog.w(e)
+                            DispatchQueue.main.async {
+                                UIApplication.topViewController()?.showError("Failed to load episode details. This episode is no longer available.")
+                            }
+                            break
                         }
-                        
-                    case .failure(error: let e):
-                        BHLog.w(e)
-                        break
                     }
+                } else {
+                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection appears to be offline.")
                 }
                 result = true
             }
