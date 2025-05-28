@@ -21,12 +21,16 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     var placeholderImage: UIImage!
 
     let radioManager: BHRadioStreamsManager!
+    let networkManager: BHNetworkManager!
 
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
         radioManager = BHRadioStreamsManager.shared
+        networkManager = BHNetworkManager.shared
+
         radioManager.addListener(self)
+        networkManager.addListener(self)
 
         carplayInterfaceController = interfaceController
         listTemplate = composeCPListTemplate()
@@ -48,6 +52,7 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
         radioManager.removeListener(self)
+        networkManager.removeListener(self)
     }
 
     func loadItems() {
@@ -87,4 +92,21 @@ extension BHRadioPlayableContentProvider: BHRadioStreamsListener {
             self.loadItems()
         }
     }
+}
+
+// MARK: - BHNetworkManagerListener
+
+extension BHRadioPlayableContentProvider: BHNetworkManagerListener {
+
+    func networkManagerDidFetch(_ manager: BHNetworkManager) {
+        BHLog.p("CarPlay \(#function)")
+
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func networkManagerDidUpdatePosts(_ manager: BHNetworkManager) {}
+    
+    func networkManagerDidUpdateUsers(_ manager: BHNetworkManager) {}
 }
