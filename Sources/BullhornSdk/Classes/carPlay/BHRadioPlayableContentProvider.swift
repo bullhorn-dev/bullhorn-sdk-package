@@ -13,12 +13,9 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     var carplayInterfaceController: CPInterfaceController?
 
     var items = [CPListItem]()
-
-    var streams = [BHStream]()
-    var streamsRowItem = CPListImageRowItem()
+    var playlist: [BHPost]?
 
     var listTemplate: CPListTemplate!
-    var placeholderImage: UIImage!
 
     let radioManager: BHRadioStreamsManager!
     let networkManager: BHNetworkManager!
@@ -34,13 +31,6 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
 
         carplayInterfaceController = interfaceController
         listTemplate = composeCPListTemplate()
-        placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: Bundle.module, with: nil)
-    }
-
-    // MARK: - Private
-
-    fileprivate func feedEventsFilterMethod() -> (BHPost) -> Bool {
-        return { $0.recording?.publishUrl != nil }
     }
 
     // MARK: - BHPlayableContentProvider
@@ -57,27 +47,15 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
 
     func loadItems() {
         
-        let post = BHRadioStreamsManager.shared.radios.first?.asPost()
-        streams = BHRadioStreamsManager.shared.radios.first?.streams ?? []
-        streamsRowItem = convertRadioStreamsToImageRowItem("Live Radio Streams", streams: streams, post: post, placeholderImage: placeholderImage)
+        let data = BHRadioStreamsManager.shared.radios.map({ $0.asPost()! })
+        self.items = self.convertEpisodes(data)
+        self.playlist = data
 
-        let radios = BHRadioStreamsManager.shared.otherRadios.map({ $0.asPost()! })
-        self.items = self.convertEpisodes(radios)
-        
         updateSectionsForList()
     }
     
     func updateSectionsForList() {
-        
-        var sections: [CPListSection] = []
-
-        if streams.count > 0 {
-            sections.append(CPListSection(items: [streamsRowItem]))
-        }
-
-        sections.append(CPListSection(items: items))
-
-        listTemplate.updateSections(sections)
+        listTemplate.updateSections([CPListSection(items: items)])
     }
 }
 

@@ -39,60 +39,6 @@ extension BHPlayableContentProvider {
 
         return listTemplate
     }
-    
-    // MARK: - Streams
-
-    func convertRadioStreamsToImageRowItem(_ title: String, streams: [BHStream], post: BHPost?, placeholderImage: UIImage, imagesCount: Int = CPMaximumNumberOfGridImages) -> CPListImageRowItem {
-        let allowedItems = streams.prefix(imagesCount)
-        let images = allowedItems.map({ _ in placeholderImage })
-        
-        var listImageRowItem: CPListImageRowItem
-        
-        if #available(iOS 17.4, *) {
-            let titles = allowedItems.enumerated().map({
-                if $0 == 0 {
-                    return "Live Now"
-                } else if $0 == 1 {
-                    return "Next \($1.localStartTime())"
-                } else {
-                    return "Later \($1.localStartTime())"
-                }
-            })
-            listImageRowItem = CPListImageRowItem(text: title, images: images, imageTitles: titles)
-        } else {
-            listImageRowItem = CPListImageRowItem(text: title, images: images)
-        }
-        
-        let urls = allowedItems.map({ $0.coverUrl! })
-        fetchImages(urls, placeholderImage: placeholderImage) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(images: let images):
-                    listImageRowItem.update(images)
-                case .failure(error: let error):
-                    BHLog.w("CarPlay failed to load images for ImageRowItem. \(error)")
-                }
-            }
-        }
-        
-        listImageRowItem.listImageRowHandler = { item, index, completion in
-            BHLog.p("CarPlay \(title) image radio item \(index) selected")
-            
-            if index == 0 && index < streams.count, let validPost = post {
-                self.play(validPost, playlist: nil)
-            }
-            completion()
-        }
-        listImageRowItem.handler = { item, completion in
-            BHLog.p("CarPlay \(title) list radio item selected")
-            if let validPost = post {
-                self.play(validPost, playlist: nil)
-            }
-            completion()
-        }
-        
-        return listImageRowItem
-    }
 
     // MARK: - Episodes
 
