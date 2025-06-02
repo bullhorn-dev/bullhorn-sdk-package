@@ -72,6 +72,10 @@ extension BHPlayableContentProvider {
 
     func convertEpisodesToCPListTemplate(_ episodes: [BHPost], title: String) {
         let items = self.convertEpisodes(episodes)
+
+        BHPlayableContentController.shared.episodes = episodes
+        BHPlayableContentController.shared.episodesListItems = items
+
         let configuration = CPAssistantCellConfiguration(position: .top, visibility: .off, assistantAction: .playMedia)
         let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
         listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
@@ -242,6 +246,7 @@ extension BHPlayableContentProvider {
 
         let item = items.first(where: { $0.text == title })
         updatePlayingItem(item, items: items)
+        updatePlayingItem(item, items: BHPlayableContentController.shared.episodesListItems)
     }
         
     internal func fetchImages(_ urls: [URL], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {

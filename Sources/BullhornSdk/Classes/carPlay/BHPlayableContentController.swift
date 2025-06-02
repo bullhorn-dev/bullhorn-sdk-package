@@ -5,6 +5,8 @@ import MediaPlayer
 
 class BHPlayableContentController: NSObject {
 
+    static let shared: BHPlayableContentController = BHPlayableContentController()
+
     /// A reference to the CPInterfaceController that passes in after connecting to CarPlay.
     private var carplayInterfaceController: CPInterfaceController?
     
@@ -18,6 +20,10 @@ class BHPlayableContentController: NSObject {
     
     /// The observer of the playback state changes.
     var playbackObserver: NSObjectProtocol?
+    
+    /// Top pushed episodes list
+    var episodes = [BHPost]()
+    var episodesListItems = [CPListItem]()
 
     /// Tab content providers
     fileprivate var providers = [BHPlayableContentProvider]()
@@ -68,6 +74,21 @@ class BHPlayableContentController: NSObject {
     func reload() {
         providers.forEach {
             $0.loadItems()
+        }
+        
+        episodesListItems.forEach { item in
+            let post = self.episodes.first(where: { $0.title == item.text })
+
+            if let validPost = post, let row = episodesListItems.firstIndex(where: {$0.text == post?.title}) {
+                var accessoryImage: UIImage?
+
+                if validPost.isDownloaded {
+                    accessoryImage = UIImage(systemName: "arrow.down.circle.fill")
+                } else if validPost.isRadioStream() || validPost.isLiveStream() {
+                    accessoryImage = UIImage(systemName: "dot.radiowaves.forward")
+                }
+                episodesListItems[row].setAccessoryImage(accessoryImage)
+            }
         }
         
         guard let title = BHHybridPlayer.shared.playerItem?.post.title else { return }

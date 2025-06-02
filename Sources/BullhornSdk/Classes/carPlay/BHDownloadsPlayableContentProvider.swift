@@ -18,18 +18,13 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     var listTemplate: CPListTemplate!
 
-    let downloadsManager: BHDownloadsManager!
-
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
-        downloadsManager = BHDownloadsManager.shared
-        downloadsManager.addListener(self)
-
         listTemplate = composeCPListTemplate()
         carplayInterfaceController = interfaceController
         
-        downloadsManager.updateItems()
+        BHDownloadsManager.shared.updateItems()
     }
 
     // MARK: - Private
@@ -46,7 +41,6 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
     
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
-        downloadsManager.removeListener(self)
     }
 
     func loadItems() {
@@ -78,27 +72,4 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
             }
         }
     }
-}
-
-// MARK: - BHDownloadsManagerListener
-
-extension BHDownloadsPlayableContentProvider: BHDownloadsManagerListener {
-
-    func downloadsManager(_ manager: BHDownloadsManager, itemStateUpdated item: BHDownloadItem) {
-        if item.status == .success || item.status == .start {
-            DispatchQueue.main.async {
-                self.loadItems()
-            }
-        }
-    }
-    
-    func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
-    
-    func downloadsManager(_ manager: BHDownloadsManager, allRemoved status: Bool) {
-        DispatchQueue.main.async {
-            self.loadItems()
-        }
-    }
-    
-    func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {}
 }

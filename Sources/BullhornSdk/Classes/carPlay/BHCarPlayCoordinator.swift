@@ -6,12 +6,17 @@ public class BHCarPlayCoordinator {
     
     var providers = [BHPlayableContentProvider]()
 
-    let carPlayController = BHPlayableContentController.init()
+    let downloadsManager: BHDownloadsManager
+
+    let carPlayController = BHPlayableContentController.shared
 
     // MARK: - Initialization
 
     public init() {
         BHLog.p("CarPlay coordinator init")
+        
+        downloadsManager = BHDownloadsManager.shared
+        downloadsManager.addListener(self)
     }
         
     // MARK: CPTemplateApplicationSceneDelegate
@@ -34,7 +39,8 @@ public class BHCarPlayCoordinator {
         BHLog.p("Disconnected from CarPlay window.")
         
         carPlayController.disconnect()
-        
+        downloadsManager.removeListener(self)
+
         /// track stats
         let request = BHTrackEventRequest.createRequest(category: .carplay, action: .ui, banner: .carplayDisconnect)
         BHTracker.shared.trackEvent(with: request)
@@ -51,4 +57,27 @@ public class BHCarPlayCoordinator {
 
         providers = [home, browse, radio, downloads]
     }
+}
+
+// MARK: - BHDownloadsManagerListener
+
+extension BHCarPlayCoordinator: BHDownloadsManagerListener {
+
+    func downloadsManager(_ manager: BHDownloadsManager, itemStateUpdated item: BHDownloadItem) {
+        if item.status == .success || item.status == .start {
+            DispatchQueue.main.async {
+                self.carPlayController.reload()
+            }
+        }
+    }
+    
+    func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
+    
+    func downloadsManager(_ manager: BHDownloadsManager, allRemoved status: Bool) {
+        DispatchQueue.main.async {
+            self.carPlayController.reload()
+        }
+    }
+    
+    func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {}
 }
