@@ -238,6 +238,16 @@ public class BullhornSdk: NSObject {
         BHNotificationsManager.shared.didRegisterForRemoteNotifications(with: token)
     }
     
+    public func searchMedia(_ text: String, completion: @escaping (CommonResult) -> Void) {
+        BHLog.p("\(#function) - \(text)")
+
+        if BHPlayableContentController.shared.isConnected {
+            BHPlayableContentController.shared.searchMedia(text, completion: completion)
+        } else {
+            /// Search in app
+        }
+    }
+    
     // MARK: - Notifications
     
     @objc func appDidEnteredBackgound() {

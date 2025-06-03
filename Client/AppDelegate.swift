@@ -2,6 +2,7 @@
 import UIKit
 import Foundation
 import BullhornSdk
+import Intents
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -56,6 +57,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return BullhornSdk.shared.shouldOpenUrl(url, options: options)
     }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return false }
+        guard let url = userActivity.webpageURL else { return false }
+
+        return BullhornSdk.shared.shouldContinueUserActivity(url)
+    }
+    
+    func application(_ application: UIApplication, handle intent: INIntent, completionHandler: @escaping (INIntentResponse) -> Void) {
+        if let playMediaIntent = intent as? INPlayMediaIntent {
+            handlePlayMediaIntent(playMediaIntent, completion: completionHandler)
+        } else {
+            debugPrint("Unknown Intent")
+            completionHandler(INPlayMediaIntentResponse(code: .failure, userActivity: nil))
+        }
+    }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         debugPrint("\(#function)")
@@ -104,6 +121,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let sdkUser = BHSdkUser(id: sdkUserId, fullName: nil, profilePictureUri: nil, level: .anonymous)
         BullhornSdk.shared.restore(sdkUser: sdkUser)
+    }
+    
+    private func handlePlayMediaIntent(_ intent: INPlayMediaIntent,
+                               completion: @escaping (INPlayMediaIntentResponse) -> Void) {
+        if let mediaSearch = intent.mediaSearch?.mediaName {
+            debugPrint("\(#function) - mediaSearch: \(mediaSearch)")
+
+            BullhornSdk.shared.searchMedia(mediaSearch) { response in
+                // Donate an interaction to the system.
+                let response = INPlayMediaIntentResponse(code: .success, userActivity: nil)
+                let interaction = INInteraction(intent: intent, response: response)
+                interaction.donate(completion: nil)
+                completion(response)
+            }
+        }
+
+        completion(INPlayMediaIntentResponse(code: .failure, userActivity: nil))
     }
 }
 

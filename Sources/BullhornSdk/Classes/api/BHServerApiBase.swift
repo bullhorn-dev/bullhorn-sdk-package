@@ -17,7 +17,7 @@ enum ServerApiError: Error {
 
 // MARK: - Common Result
 
-enum CommonResult {
+public enum CommonResult {
     case success
     case failure(error: Error)
 }

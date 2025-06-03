@@ -57,9 +57,9 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: false)
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: true)
     }
-    
+        
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
         networkManager.removeListener(self)

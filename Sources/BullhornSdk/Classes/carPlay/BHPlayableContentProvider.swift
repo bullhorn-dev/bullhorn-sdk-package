@@ -183,6 +183,10 @@ extension BHPlayableContentProvider {
         
         return listImageRowItem
     }
+    
+    func openSearch(_ searchText: String, podcasts: [BHUser]) {
+        convertPodcastsToCPListTemplate(title: "Search for: \(searchText)", podcasts: podcasts)
+    }
 
     // MARK: - Categories
     

@@ -24,6 +24,9 @@ class BHPlayableContentController: NSObject {
     /// Top pushed episodes list
     var episodes = [BHPost]()
     var episodesListItems = [CPListItem]()
+    
+    ///
+    var isConnected: Bool = false
 
     /// Tab content providers
     fileprivate var providers = [BHPlayableContentProvider]()
@@ -51,6 +54,8 @@ class BHPlayableContentController: NSObject {
 
         carplayInterfaceController?.delegate = self
         carplayInterfaceController?.setRootTemplate(tabBarTemplate!, animated: true, completion: nil)
+        
+        isConnected = true
 
         configureNowPlayingTemplate()
 
@@ -65,6 +70,8 @@ class BHPlayableContentController: NSObject {
         providers = []
         nowPlayingItemObserver = nil
         playbackObserver = nil
+        
+        isConnected = false
                 
         BHHybridPlayer.shared.pause()
         BHHybridPlayer.shared.removeListener(self)
@@ -94,6 +101,25 @@ class BHPlayableContentController: NSObject {
         guard let title = BHHybridPlayer.shared.playerItem?.post.title else { return }
         providers.forEach {
             $0.updatePlayingItemForEpisode(title)
+        }
+    }
+    
+    func searchMedia(_ searchText: String, completion: @escaping (CommonResult) -> Void) {
+        BHLog.p("CarPlay search: \(searchText)")
+
+        BHExploreManager.shared.getUsers(BHAppConfiguration.shared.networkId, text: searchText) { response in
+            switch response {
+            case .success(users: let users, page: _, pages: _):
+                DispatchQueue.main.async {
+                    if let provider = self.providers.first {
+                        provider.openSearch(searchText, podcasts: users)
+                    }
+                }
+                completion(.success)
+            case .failure(error: let error):
+                BHLog.w("Failed to fetch searched podcasts - \(error)")
+                completion(.failure(error: error))
+            }
         }
     }
 
