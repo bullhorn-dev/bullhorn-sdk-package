@@ -91,10 +91,9 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
                 let recent = self.convertCategories([model])
                 sections.append(CPListSection(items: recent))
             }
-            sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
-        } else {
-            sections.append(CPListSection(items: items))
         }
+        
+        sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
 
         listTemplate.updateSections(sections)
     }
