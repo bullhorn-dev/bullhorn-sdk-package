@@ -128,15 +128,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let mediaSearch = intent.mediaSearch?.mediaName {
             debugPrint("\(#function) - mediaSearch: \(mediaSearch)")
 
-            BullhornSdk.shared.searchMedia(mediaSearch) { response in
-                // Donate an interaction to the system.
-                let response = INPlayMediaIntentResponse(code: .success, userActivity: nil)
-                let interaction = INInteraction(intent: intent, response: response)
-                interaction.donate(completion: nil)
-                completion(response)
+            BullhornSdk.shared.searchPodcasts(mediaSearch) { response in
+                completion(INPlayMediaIntentResponse(code: .success, userActivity: nil))
             }
         }
-
         completion(INPlayMediaIntentResponse(code: .failure, userActivity: nil))
     }
 }
