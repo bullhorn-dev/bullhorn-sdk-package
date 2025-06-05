@@ -57,7 +57,7 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: true)
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: false)
     }
         
     func disconnect() {
@@ -91,9 +91,10 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
                 let recent = self.convertCategories([model])
                 sections.append(CPListSection(items: recent))
             }
+            sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
+        } else {
+            sections.append(CPListSection(items: items))
         }
-        
-        sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
 
         listTemplate.updateSections(sections)
     }
