@@ -122,7 +122,7 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
                 break
             case .failure(error: _):
                 if !BHReachabilityManager.shared.isConnected() {
-                    self.showError("The Internet connection appears to be offline")
+                    self.showConnectionError()
                 }
             }
             completeBlock()
@@ -176,7 +176,7 @@ extension BHRadioViewController: UITableViewDataSource, UITableViewDelegate {
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
         if BHRadioStreamsManager.shared.otherRadios.count < 1 && !activityIndicator.isAnimating {
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {
             tableView.restore()

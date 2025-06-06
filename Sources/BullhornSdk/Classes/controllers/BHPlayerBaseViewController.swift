@@ -442,8 +442,13 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {
         DispatchQueue.main.async {
             var message = "Failed to play episode. "
-            if let validError = error {
-                message += " \(validError.localizedDescription)"
+
+            if BHReachabilityManager.shared.isConnected() {
+                if let validError = error {
+                    message += " \(validError.localizedDescription)"
+                }
+            } else {
+                message += "The Internet connection is lost."
             }
             self.showError(message)
         }
@@ -503,9 +508,14 @@ extension BHPlayerBaseViewController: BHLivePlayerListener {
     
     func livePlayerDidFailedToPlay(_ player: BHLivePlayer, error: Error?) {
         DispatchQueue.main.async {
-            var message = "Failed to play live episode."
-            if let validError = error {
-                message += " \(validError.localizedDescription)"
+            var message = "Failed to play live episode. "
+
+            if BHReachabilityManager.shared.isConnected() {
+                if let validError = error {
+                    message += " \(validError.localizedDescription)"
+                }
+            } else {
+                message += "The Internet connection is lost."
             }
             self.showError(message)
         }

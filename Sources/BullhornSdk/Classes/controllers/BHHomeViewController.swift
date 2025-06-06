@@ -137,7 +137,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                 break
             case .failure(error: _):
                 if !BHReachabilityManager.shared.isConnected() {
-                    self.showError("The Internet connection appears to be offline")
+                    self.showConnectionError()
                 }
             }
             self.defaultHideActivityIndicatorView()
@@ -248,7 +248,7 @@ extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
             let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {
             tableView.restore()

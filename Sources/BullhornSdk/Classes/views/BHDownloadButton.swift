@@ -117,6 +117,10 @@ class BHDownloadButton: UIView {
     @objc private func onPress(_ sender: Any) {
         guard let validPost = post else { return }
         
+        if !BHReachabilityManager.shared.isConnected() {
+            UIApplication.topViewController()?.showError("Failed to download episode. The Internet connection is lost.")
+        }
+        
         switch status {
         case .start:
             BHDownloadsManager.shared.download(validPost)

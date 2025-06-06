@@ -33,7 +33,7 @@ final class BHConnectionLostBottomSheet: BHBottomSheetController {
         titleLabel.font = .fontWithName(.robotoRegular, size: 17)
         titleLabel.textColor = .primary()
         titleLabel.textAlignment = .center
-        titleLabel.text = "Connection is lost"
+        titleLabel.text = "The Internet connection is lost"
         
         // description
 

@@ -141,7 +141,11 @@ class BHSystemAudioPlayer: BHMediaPlayerBase {
                 newState = .ready
             case .failed:
                 readyToPlayFlag = false
-                newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "Audio failed to play"))
+                if BHReachabilityManager.shared.isConnected() {
+                    newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "Audio failed to play."))
+                } else {
+                    newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "The Internet connection is lost."))
+                }
             case .unknown:
                 newState = .waiting
             @unknown default:

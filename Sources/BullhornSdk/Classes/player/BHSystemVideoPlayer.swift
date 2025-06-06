@@ -116,7 +116,11 @@ class BHSystemVideoPlayer: BHMediaPlayerBase {
             case .playedToTheEnd:
                 newState = .ended
             case .error:
+            if BHReachabilityManager.shared.isConnected() {
                 newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "Video failed to play"))
+            } else {
+                newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "The Internet connection is lost."))
+            }
                 readyToPlayFlag = false
         }
         

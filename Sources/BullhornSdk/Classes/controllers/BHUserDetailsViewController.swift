@@ -159,13 +159,10 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
             case .success:
                 break
             case .failure(error: let error):
-                var message: String = ""
                 if BHReachabilityManager.shared.isConnected() {
-                    message = "Failed to fetch user details from backend. \(error.localizedDescription)"
-                    self.showError(message)
+                    self.showError("Failed to fetch user details from backend. \(error.localizedDescription)")
                 } else if !initial {
-                    message = "The Internet connection appears to be offline"
-                    self.showError(message)
+                    self.showConnectionError()
                 }
             }
             completeBlock()
@@ -241,8 +238,7 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
         if userManager.posts.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
-
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {
             tableView.restore()

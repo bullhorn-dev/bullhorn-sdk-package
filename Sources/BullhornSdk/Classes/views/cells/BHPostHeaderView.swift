@@ -353,7 +353,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             BHTracker.shared.trackEvent(with: request)
 
         } else {
-            self.delegate?.postHeaderView(self, didGetError: "Failed to share episode. The Internet connection appears to be offline.")
+            self.delegate?.postHeaderView(self, didGetError: "Failed to share episode. The Internet connection is lost.")
         }
     }
 
@@ -375,7 +375,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                         }
                     }
                 } else {
-                    self.delegate?.postHeaderView(self, didGetError: "Failed to unlike episode. The Internet connection appears to be offline.")
+                    self.delegate?.postHeaderView(self, didGetError: "Failed to unlike episode. The Internet connection is lost.")
                 }
             } else {
                 if BHReachabilityManager.shared.isConnected() {
@@ -391,7 +391,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                         }
                     }
                 } else {
-                    self.delegate?.postHeaderView(self, didGetError: "Failed to like episode. The Internet connection appears to be offline.")
+                    self.delegate?.postHeaderView(self, didGetError: "Failed to like episode. The Internet connection is lost.")
                 }
             }
         } else {

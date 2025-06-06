@@ -96,7 +96,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
                 BHTracker.shared.trackEvent(with: request)
 
             } else {
-                self.showError("Failed to share episode. The Internet connection appears to be offline.")
+                self.showError("Failed to share episode. The Internet connection is lost.")
             }
         })
     }

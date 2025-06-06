@@ -17,6 +17,10 @@ extension UIViewController {
         showTopMessageView(with: message, theme: .error, autoHide: autoHide)
     }
     
+    public func showConnectionError(_ autoHide: Double = 5.0) {
+        showTopMessageView(with: "The Internet connection is lost.", theme: .error, autoHide: autoHide)
+    }
+    
     func showTopMessageView(with message: String, theme: Theme, autoHide: Double = 0) {
 
         let toastView = MessageView.viewFromNib(layout: .cardView)

@@ -284,7 +284,7 @@ class BHPostCell: UITableViewCell {
                         }
                     }
                 } else {
-                    errorClosure?("Failed to unlike episode. The Internet connection appears to be offline.")
+                    errorClosure?("Failed to unlike episode. The Internet connection is lost.")
                 }
             } else {
                 if BHReachabilityManager.shared.isConnected() {
@@ -299,7 +299,7 @@ class BHPostCell: UITableViewCell {
                         }
                     }
                 } else {
-                    errorClosure?("Failed to like episode. The Internet connection appears to be offline.")
+                    errorClosure?("Failed to like episode. The Internet connection is lost.")
                 }
             }
         } else {
@@ -329,7 +329,7 @@ class BHPostCell: UITableViewCell {
             BHTracker.shared.trackEvent(with: request)
 
         } else {
-            errorClosure?("Failed to share episode. The Internet connection appears to be offline.")
+            errorClosure?("Failed to share episode. The Internet connection is lost.")
         }
     }
 

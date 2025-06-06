@@ -105,7 +105,7 @@ class BHLinkResolver {
                         }
                     }
                 } else {
-                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection appears to be offline.")
+                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection is lost.")
                 }
                 result = true
             }
@@ -147,7 +147,7 @@ class BHLinkResolver {
                         }
                     }
                 } else {
-                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection appears to be offline.")
+                    UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection is lost.")
                 }
                 result = true
             }

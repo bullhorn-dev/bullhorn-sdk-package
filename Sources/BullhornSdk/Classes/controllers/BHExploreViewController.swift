@@ -197,7 +197,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
                 break
             case .failure(error: _):
                 if !BHReachabilityManager.shared.isConnected() {
-                    self.showError("The Internet connection appears to be offline")
+                    self.showConnectionError()
                 }
             }
             completeBlock()
@@ -337,7 +337,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         switch selectedTab {
         case .podcasts:
             if exploreManager.users.count == 0 && !activityIndicator.isAnimating {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
                 tableView.setEmptyMessage(message, image: image)
             } else {
                 tableView.restore()
@@ -345,7 +345,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             return exploreManager.users.count
         case .episodes:
             if exploreManager.posts.count == 0 && !activityIndicator.isAnimating {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
                 tableView.setEmptyMessage(message, image: image)
             } else {
                 tableView.restore()

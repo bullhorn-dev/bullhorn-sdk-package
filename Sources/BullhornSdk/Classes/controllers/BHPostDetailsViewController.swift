@@ -132,13 +132,10 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
             case .success:
                 break
             case .failure(error: _):
-                var message: String = ""
                 if BHReachabilityManager.shared.isConnected() {
-                    message = "Failed to load episode details. This episode is no longer available."
-                    self.showError(message)
+                    self.showError("Failed to load episode details. This episode is no longer available.")
                 } else if !initial {
-                    message = "The Internet connection appears to be offline"
-                    self.showError(message)
+                    self.showConnectionError()
                 }
             }
             completeBlock()

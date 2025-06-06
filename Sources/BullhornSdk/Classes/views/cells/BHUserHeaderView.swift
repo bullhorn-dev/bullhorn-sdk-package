@@ -320,7 +320,13 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
                 }
             case .failure(error: let error):
                 DispatchQueue.main.async {
-                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to follow podcast. \(error.localizedDescription)")
+                    var message = "Failed to follow podcast. "
+                    if BHReachabilityManager.shared.isConnected() {
+                        message += error.localizedDescription
+                    } else {
+                        message += "The Internet connection is lost."
+                    }
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: message)
                 }
             }
         }
@@ -339,7 +345,13 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
                 }
             case .failure(error: let error):
                 DispatchQueue.main.async {
-                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to unfollow podcast. \(error.localizedDescription)")
+                    var message = "Failed to unfollow podcast. "
+                    if BHReachabilityManager.shared.isConnected() {
+                        message += error.localizedDescription
+                    } else {
+                        message += "The Internet connection is lost."
+                    }
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: message)
                 }
             }
         }
@@ -359,7 +371,13 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
                 self.reloadData()
             case .failure(error: let error):
                 DispatchQueue.main.async {
-                    self.delegate?.userHeaderViewOnErrorOccured(self, message: "Failed to enable podcast notifications. \(error.localizedDescription)")
+                    var message = "Failed to enable podcast notifications. "
+                    if BHReachabilityManager.shared.isConnected() {
+                        message += error.localizedDescription
+                    } else {
+                        message += "The Internet connection is lost."
+                    }
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: message)
                 }
             }
         }

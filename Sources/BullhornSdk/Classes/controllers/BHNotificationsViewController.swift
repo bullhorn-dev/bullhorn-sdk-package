@@ -98,13 +98,10 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
                 case .success(users: _):
                     break
                 case .failure(error: let error):
-                    var message: String = ""
                     if BHReachabilityManager.shared.isConnected() {
-                        message = "Failed to fetch user subscriptions from backend. \(error.localizedDescription)"
-                        self.showError(message)
+                        self.showError("Failed to fetch user subscriptions from backend. \(error.localizedDescription)")
                     } else if !initial {
-                        message = "The Internet connection appears to be offline"
-                        self.showError(message)
+                        self.showConnectionError()
                     }
                 }
                 completeBlock()
