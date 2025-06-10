@@ -31,20 +31,22 @@ class BHReachabilityManager: NSObject {
             
             var type: ConnectionChangedNotificationInfo.ConnectionType = .unavailable
             var isConnected = false
+            
+            BHLog.p("Reachability. Path status: \(path.status)")
 
             if path.status == .satisfied {
 
                 isConnected = true
 
                 if path.isExpensive {
-                    BHLog.p("Reachability. Network connected expensive")
+                    BHLog.p("Reachability. Connected expensive")
                     type = .connectedExpensive
                 } else {
-                    BHLog.p("Reachability. Network connected")
+                    BHLog.p("Reachability. Connected")
                     type = .connected
                 }
             } else {
-                BHLog.p("Reachability. No network connection.")
+                BHLog.p("Reachability. No connection. Reason: \(path.unsatisfiedReason)")
             }
                         
             if self.isPreviouslyConnected != isConnected {
