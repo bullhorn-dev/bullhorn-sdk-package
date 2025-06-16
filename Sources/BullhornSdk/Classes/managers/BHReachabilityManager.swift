@@ -1,6 +1,7 @@
 
 import Foundation
 import Network
+internal import Alamofire
 
 class BHReachabilityManager: NSObject {
     
@@ -19,65 +20,61 @@ class BHReachabilityManager: NSObject {
     }
 
     static let shared: BHReachabilityManager = BHReachabilityManager()
-
-    let pathMonitor = NWPathMonitor()
     
-    var isPreviouslyConnected = true
-    
+    private let afManager = Alamofire.NetworkReachabilityManager(host: "www.apple.com")
+        
     override init() {
         super.init()
-        
-        pathMonitor.pathUpdateHandler = { path in
+
+        afManager?.startListening(onUpdatePerforming: { listener in
             
             var type: ConnectionChangedNotificationInfo.ConnectionType = .unavailable
-            var isConnected = false
-            
-            BHLog.p("Reachability. Path status: \(path.status)")
 
-            if path.status == .satisfied {
+            switch listener {
+            case .unknown:
+                BHLog.p("Reachability. Alamofire unknown")
+                break
+            case .notReachable:
+                BHLog.p("Reachability. Alamofire notReachable")
+            case .reachable(_):
+                BHLog.p("Reachability. Alamofire reachable")
 
-                isConnected = true
-
-                if path.isExpensive {
+                if self.isConnectedExpensive() {
                     BHLog.p("Reachability. Connected expensive")
                     type = .connectedExpensive
                 } else {
                     BHLog.p("Reachability. Connected")
                     type = .connected
                 }
-            } else {
-                BHLog.p("Reachability. No connection. Reason: \(path.unsatisfiedReason)")
-            }
-                        
-            if self.isPreviouslyConnected != isConnected {
-                DispatchQueue.main.sync {
-                    let infoObject = ConnectionChangedNotificationInfo.init(type: type)
-                    let info = [BHReachabilityManager.NotificationInfoKey: infoObject]
-
-                    NotificationCenter.default.post(name: BHReachabilityManager.ConnectionChangedNotification, object: self, userInfo: info)
-                }
             }
             
-            self.isPreviouslyConnected = isConnected
-
-        }
-        
-        let queue = DispatchQueue(label: "Monitor")
-        pathMonitor.start(queue: queue)
+            self.notifyNetworkStatus(type)
+        })
     }
     
     deinit {
-        pathMonitor.cancel()
+        afManager?.stopListening()
+    }
+    
+    // MARK: - Private
+    
+    private func notifyNetworkStatus(_ type: ConnectionChangedNotificationInfo.ConnectionType) {
+        DispatchQueue.main.async {
+            let infoObject = ConnectionChangedNotificationInfo.init(type: type)
+            let info = [BHReachabilityManager.NotificationInfoKey: infoObject]
+
+            NotificationCenter.default.post(name: BHReachabilityManager.ConnectionChangedNotification, object: self, userInfo: info)
+        }
     }
     
     // MARK: - Public
     
     func isConnected() -> Bool {
-        return pathMonitor.currentPath.status == .satisfied
+        return afManager?.isReachable == true
     }
     
     func isConnectedExpensive() -> Bool {
-        return pathMonitor.currentPath.status == .satisfied && pathMonitor.currentPath.isExpensive
+        return isConnected() && afManager?.isReachableOnCellular == true
     }
 }
 

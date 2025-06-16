@@ -362,8 +362,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             self.positionLabel.text = position.stringFormatted()
             self.durationLabel.text = "-\((duration-position).stringFormatted())"
         }
-        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()
-        previousButton.isEnabled = position > 30 || BHHybridPlayer.shared.hasPrevious()
+//        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()
+//        previousButton.isEnabled = position > 30 || BHHybridPlayer.shared.hasPrevious()
     }
     
     func resetUI() {
