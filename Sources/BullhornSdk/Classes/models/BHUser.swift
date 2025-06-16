@@ -24,6 +24,7 @@ struct BHUser: Codable, Hashable {
         case ratingValue = "rating_value"
         case outgoingStatus = "outgoing_status"
         case receiveNotifications = "receive_notifications"
+        case newEpisodesCount = "new_episodes_count"
     }
     
     enum Level: Int, Codable {
@@ -56,6 +57,7 @@ struct BHUser: Codable, Hashable {
     var ratingValue: Double?
     var outgoingStatus: String?
     var receiveNotifications: Bool = false
+    var newEpisodesCount: Int?
 
     var categoryName: String {
         return categories?.first?.name ?? "News Updates"
@@ -88,6 +90,10 @@ struct BHUser: Codable, Hashable {
         } else {
             return profilePictureTiny
         }
+    }
+    
+    var unwatchedEpisodesCount: Int {
+        return newEpisodesCount ?? 0
     }
 
     var hashValue: Int {

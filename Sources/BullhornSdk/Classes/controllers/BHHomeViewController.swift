@@ -8,6 +8,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     fileprivate static let UserDetailsSegueIdentifier = "Home.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Home.PostDetailsSegueIdentifier"
     fileprivate static let FollowedPodcastsSegueIdentifier = "Home.FollowedPodcastsSegueIdentifier"
+    fileprivate static let ShowsSegueIdentifier = "Home.ShowsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -20,10 +21,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
-    
-    fileprivate lazy var userManager = BHUserManager()
-    fileprivate lazy var postManager = BHPostsManager()
-    
+        
     fileprivate var shouldShowHeader: Bool = false
 
     // MARK: - Lifecycle
@@ -70,7 +68,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         super.viewIsAppearing(animated)
 
         refreshControl?.resetUIState()
-        
+        configureNavigationItems()
+
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openHome)
         BHTracker.shared.trackEvent(with: request)
@@ -88,6 +87,12 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         navigationItem.title = NSLocalizedString("Home", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        if UserDefaults.standard.isDevModeEnabled {
+            let config = UIImage.SymbolConfiguration(weight: .light)
+            let imageName = BHUserManager.shared.newEpisodesUsers.count > 0 ? "bell.badge" : "bell"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(showsButtonAction(_:)))
+        }
     }
 
     fileprivate func configureRefreshControl() {
@@ -110,6 +115,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             self.refreshControl?.endRefreshing()
             self.reloadData()
             self.headerView?.reloadData()
+            self.configureNavigationItems()
         }
 
         if isInitial {
@@ -156,6 +162,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         fetch()
     }
     
+    @objc fileprivate func showsButtonAction(_ sender: Any) {
+        openShows()
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -182,6 +192,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
     private func openFollowedPodcasts() {
         performSegue(withIdentifier: BHHomeViewController.FollowedPodcastsSegueIdentifier, sender: self)
+    }
+
+    private func openShows() {
+        performSegue(withIdentifier: BHHomeViewController.ShowsSegueIdentifier, sender: self)
     }
 
     // MARK: - Notifications

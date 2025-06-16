@@ -2,9 +2,9 @@
 import UIKit
 import Foundation
 
-class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
-    fileprivate static let UserDetailsSegueIdentifier = "FollowedVC.UserDetailsSegueIdentifier"
+    fileprivate static let UserDetailsSegueIdentifier = "ShowsVC.UserDetailsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -26,9 +26,9 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
-        let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
+        let gridCellNib = UINib(nibName: "BHUsersGridCell", bundle: bundle)
 
-        tableView.register(userCellNib, forCellReuseIdentifier: BHUserCell.reusableIndentifer)
+        tableView.register(gridCellNib, forCellReuseIdentifier: BHUsersGridCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
@@ -51,6 +51,7 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
         super.viewIsAppearing(animated)
 
         refreshControl?.resetUIState()
+        configureNavigationItems()
         tableView.reloadData()
     }
 
@@ -63,8 +64,11 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        navigationItem.title = NSLocalizedString("Followed Podcasts", comment: "")
+        navigationItem.title = NSLocalizedString("Notifications", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear All", style: .plain, target: self, action: #selector(clearButtonAction(_:)))
+        navigationItem.rightBarButtonItem?.isEnabled = BHUserManager.shared.newEpisodesUsers.count > 0
     }
     
     fileprivate func configureRefreshControl() {
@@ -111,7 +115,7 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if segue.identifier == BHFollowedViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
+        if segue.identifier == BHShowsViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
             vc.user = selectedUser
         }
     }
@@ -120,7 +124,7 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
     
     override func openUserDetails(_ user: BHUser?) {
         selectedUser = user
-        performSegue(withIdentifier: BHFollowedViewController.UserDetailsSegueIdentifier, sender: self)
+        performSegue(withIdentifier: BHShowsViewController.UserDetailsSegueIdentifier, sender: self)
     }
 
     // MARK: - Action handlers
@@ -128,44 +132,68 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
     @objc fileprivate func onRefreshControlAction(_ sender: Any) {
         fetch(initial: false)
     }
+    
+    @objc fileprivate func clearButtonAction(_ sender: Any) {
+        userManager.clearCounters() { respose in
+            switch respose {
+            case .success:
+                DispatchQueue.main.async {
+                    self.configureNavigationItems()
+                    self.tableView.reloadData()
+                }
+            case .failure(error: let error):
+                DispatchQueue.main.async {
+                    self.showError("Failed to clear all notifications. \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension BHFollowedViewController: UITableViewDataSource, UITableViewDelegate {
+extension BHShowsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if userManager.followedUsers.count == 0 && !activityIndicator.isAnimating {
+        if userManager.newEpisodesUsers.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "No podcast followed yet" : "The Internet connection is lost"
+            let message = BHReachabilityManager.shared.isConnected() ? "No notifications yet" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {
             tableView.restore()
         }
 
-        return userManager.followedUsers.count
+        return userManager.newEpisodesUsers.count > 0 ? 1 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BHUserCell", for: indexPath) as! BHUserCell
-        let user = userManager.followedUsers[indexPath.row]
-        cell.user = user
+        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
+        
+        let uiModel = UIUsersModel(title: "Shows with new episodes", users: userManager.newEpisodesUsers)
+        cell.collectionViewController.uiModels = [uiModel]
+        cell.collectionViewController.showNewEpisodesBadge = true
+        cell.collectionViewController.delegate = self
         
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = userManager.followedUsers[indexPath.row]
-        openUserDetails(user)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }
 
+// MARK: - BHGridControllerDelegate
+
+extension BHShowsViewController: BHGridControllerDelegate {
+
+    func gridController(_ controller: BHGridCollectionController, didSelectUser user: BHUser) {
+        openUserDetails(user)
+    }
+}

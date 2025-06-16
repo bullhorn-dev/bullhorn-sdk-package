@@ -67,7 +67,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        navigationItem.title = NSLocalizedString("Notifications", comment: "")
+        navigationItem.title = NSLocalizedString("Notifications Settings", comment: "")
         navigationItem.largeTitleDisplayMode = .never
     }
     

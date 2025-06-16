@@ -16,6 +16,7 @@ class BHUserCarouselCell: UICollectionViewCell {
     }
     
     var showCategory: Bool = true
+    var showBadge: Bool = false
 
     fileprivate var placeholderImage: UIImage?
 
@@ -47,6 +48,19 @@ class BHUserCarouselCell: UICollectionViewCell {
         label.textColor = .secondary()
         return label
     }()
+    
+    private let badgeLabel: UILabel = {
+        let label = UILabel()
+        label.font = .fontWithName(.robotoRegular, size: 12)
+        label.textAlignment = .left
+        label.textColor = .onAccent()
+        label.backgroundColor = .accent()
+        label.layer.cornerRadius = 8
+        label.clipsToBounds = true
+        label.isHidden = true
+        return label
+    }()
+
         
     // MARK: - Initializers
     
@@ -58,6 +72,12 @@ class BHUserCarouselCell: UICollectionViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height / 2
     }
         
     // MARK: - Private Methods
@@ -74,17 +94,26 @@ class BHUserCarouselCell: UICollectionViewCell {
         stackView.spacing = 3
 
         contentView.addSubview(stackView)
+        contentView.addSubview(badgeLabel)
+
         imageView.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        badgeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalTo: widthAnchor),
-            imageView.heightAnchor.constraint(equalTo: widthAnchor),
-            stackView.leftAnchor.constraint(equalTo: leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: -2),
+            stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -2),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            badgeLabel.rightAnchor.constraint(equalTo: rightAnchor),
+            badgeLabel.topAnchor.constraint(equalTo: topAnchor),
+            badgeLabel.heightAnchor.constraint(equalToConstant: 20.0),
+            badgeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 20.0),
+            imageView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: stackView.widthAnchor),
         ])
+        
+        badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height / 2
     }
 
     private func update() {
@@ -92,6 +121,13 @@ class BHUserCarouselCell: UICollectionViewCell {
         imageView.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
         nameLabel.text = user?.fullName
         categoryLabel.text = user?.categoryName
+
+        if let newEpisodesCount = user?.unwatchedEpisodesCount, newEpisodesCount > 0, showBadge {
+            badgeLabel.text = "  \(newEpisodesCount)  "
+            badgeLabel.isHidden = false
+        } else {
+            badgeLabel.isHidden = true
+        }
 
         if !showCategory {
             nameLabel.numberOfLines = 0

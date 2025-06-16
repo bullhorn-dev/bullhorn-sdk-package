@@ -16,6 +16,8 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
         }
     }
 
+    var showNewEpisodesBadge: Bool = false
+
     var didLayoutAction: (() -> Void)?
 
     override func viewDidLoad() {
@@ -77,6 +79,7 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
         
         cell.showCategory = false
+        cell.showBadge = showNewEpisodesBadge
         cell.user = uiModels[indexPath.section].users[indexPath.item]
     
         return cell

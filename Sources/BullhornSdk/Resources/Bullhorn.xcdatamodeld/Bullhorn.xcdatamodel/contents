@@ -518,6 +518,11 @@
                 <entry key="hyper.remoteKey" value="level"/>
             </userInfo>
         </attribute>
+        <attribute name="newEpisodesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="new_episodes_count"/>
+            </userInfo>
+        </attribute>
         <attribute name="outgoingStatus" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="outgoing_status"/>

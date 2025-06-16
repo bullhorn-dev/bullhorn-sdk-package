@@ -20,6 +20,13 @@ class BHServerApiUsers: BHServerApiBase {
         case failure(error: Error)
     }
     
+    // MARK: - New epidodes count
+    
+    enum NewEpisodesCountResult {
+        case success(count: Int)
+        case failure(error: Error)
+    }
+    
     // MARK: - Public
     
     func getAuthTokenAnonymously(completion: @escaping (SelfUserResult) -> Void) {
@@ -443,6 +450,60 @@ class BHServerApiUsers: BHServerApiBase {
                         completion(.failure(error: error))
                     }
                 })
+        }
+    }
+    
+    func getNewEpisodesCount(_ authToken: String, completion: @escaping (NewEpisodesCountResult) -> Void) {
+        
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+            let path = "users/self/shows/new_episodes_count"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composeHeaders(authToken)
+            
+            AF.request(fullPath, method: .get, headers: headers)
+                .validate()
+                .responseData(completionHandler: { response in
+                    debugPrint(response)
+                    
+                    switch response.result {
+                    case .success(let newEpisodesCount):
+                        completion(.success(count: newEpisodesCount.count))
+                    case .failure(let error):
+                        completion(.failure(error: error))
+                    }
+                })
+        }
+    }
+    
+    func clearCounters(_ authToken: String?, completion: @escaping (CommonResult) -> Void) {
+        
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+                        
+            let path = "users/self/shows/clear_counters"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composeHeaders(authToken)
+            
+            AF.request(fullPath, method: .post, parameters: [:], encoding: JSONEncoding.default, headers: headers)
+              .validate()
+              .responseData(completionHandler: { response in
+                debugPrint(response)
+                  
+                switch response.result {
+                case .success(_):
+                    completion(.success)
+                case .failure(let error):
+                    self.trackError(url: fullPath, error: error)
+                    completion(.failure(error: error))
+                }
+            })
         }
     }
 }

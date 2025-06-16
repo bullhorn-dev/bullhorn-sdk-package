@@ -43,6 +43,10 @@ class BHUserManager {
     ///
     
     var followedUsers: [BHUser] = []
+    
+    var newEpisodesUsers: [BHUser] {
+        return followedUsers.filter({ $0.unwatchedEpisodesCount > 0 })
+    }
 
     init() {
         observersContainer = .init(notifyQueue: workingQueue)
@@ -264,7 +268,45 @@ class BHUserManager {
             }
         }
     }
+    
+    func getNewEpisodesCount(_ completion: @escaping (BHServerApiUsers.NewEpisodesCountResult) -> Void) {
 
+        apiUsers.getNewEpisodesCount(authToken) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(count: _):
+                    break
+                case .failure(error: let error):
+                    BHLog.w("New episodes count load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
+    func clearCounters(_ completion: @escaping (CommonResult) -> Void) {
+
+        apiUsers.clearCounters(authToken) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success:
+                    BHLog.p("Cleared new episodes counters")
+                    for index in self.followedUsers.indices {
+                        self.followedUsers[index].newEpisodesCount = 0
+                    }
+                case .failure(error: let error):
+                    BHLog.w("Clear counters failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+    
+    func clearUserCounters(_ user: BHUser) {
+        if let row = followedUsers.firstIndex(where: {$0.id == user.id}) {
+            self.followedUsers[row].newEpisodesCount = 0
+        }
+    }
 
     // MARK: - Initial fetch for screen
 

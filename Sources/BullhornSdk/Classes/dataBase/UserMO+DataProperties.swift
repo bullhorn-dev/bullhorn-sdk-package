@@ -26,4 +26,5 @@ extension UserMO {
     @NSManaged public var ratingValue: NSNumber?
     @NSManaged public var outgoingStatus: String?
     @NSManaged public var receiveNotifications: Bool
+    @NSManaged public var newEpisodesCount: NSNumber?
 }

@@ -126,6 +126,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     fileprivate func fetch(initial: Bool = false) {
         guard let u = user else { return }
+        
+        userManager.clearUserCounters(u)
 
         let completeBlock = {
             self.shouldShowHeader = self.userManager.posts.count > 0
