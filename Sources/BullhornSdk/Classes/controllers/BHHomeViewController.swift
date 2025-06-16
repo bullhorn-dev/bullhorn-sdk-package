@@ -92,6 +92,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             let config = UIImage.SymbolConfiguration(weight: .light)
             let imageName = BHUserManager.shared.newEpisodesUsers.count > 0 ? "bell.badge" : "bell"
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(showsButtonAction(_:)))
+        } else {
+            navigationItem.rightBarButtonItem = nil
         }
     }
 
