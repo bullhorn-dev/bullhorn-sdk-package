@@ -45,7 +45,7 @@ class BHPlaybacksManager {
             for playback in playbacksToSend {
                 /// track stats
                 let duration: Int = Int((playback.finishedAt - playback.startedAt) * 1000)
-                let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlayback, context: String(duration), podcastId: playback.podcastId, podcastTitle: playback.podcastTitle, episodeId: playback.episodeId, episodeTitle: playback.episodeTitle, episodeType: playback.episodeType, extraParams: ["playback_time" : String(duration)])
+                let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlayback, context: String(duration), podcastId: playback.podcastId, podcastTitle: playback.podcastTitle, episodeId: playback.episodeId, episodeTitle: playback.episodeTitle, episodeType: playback.episodeType, extraParams: ["playback_ms" : duration])
                 BHTracker.shared.trackEvent(with: request)
 
                 self.playbacksQueue = self.playbacksQueue.filter { $0.uuid != playback.uuid }

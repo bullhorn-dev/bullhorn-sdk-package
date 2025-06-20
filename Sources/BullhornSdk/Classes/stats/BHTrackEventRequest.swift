@@ -114,9 +114,9 @@ struct BHTrackEventRequest: Codable {
     let episodeId: String?
     let episodeTitle: String?
     let episodeType: String?
-    let extraParams: [String : String]?
+    let extraParams: [String : Int]?
     
-    static func createRequest(category: BHTrackCategory, action: BHTrackAction, banner: BHTrackBanner? = nil, context: String? = nil, variant: String? = nil, podcastId: String? = nil, podcastTitle: String? = nil, episodeId: String? = nil, episodeTitle: String? = nil, episodeType: String? = nil, extraParams: [String : String]? = [:]) -> BHTrackEventRequest {
+    static func createRequest(category: BHTrackCategory, action: BHTrackAction, banner: BHTrackBanner? = nil, context: String? = nil, variant: String? = nil, podcastId: String? = nil, podcastTitle: String? = nil, episodeId: String? = nil, episodeTitle: String? = nil, episodeType: String? = nil, extraParams: [String : Int]? = [:]) -> BHTrackEventRequest {
 
         return BHTrackEventRequest(category: category, action: action, banner: banner, context: context, variant: variant, podcastId: podcastId, podcastTitle: podcastTitle, episodeId: episodeId, episodeTitle: episodeTitle, episodeType: episodeType, extraParams: extraParams)
     }
