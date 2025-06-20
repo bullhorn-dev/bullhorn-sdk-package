@@ -38,7 +38,7 @@ extension FileManager {
                 try FileManager.default.removeItem(at: file)
             }
             catch {
-                BHLog.w("\(#function) - Failed to read data from file \(file): \(error)")
+//                BHLog.w("\(#function) - Failed to read data from file \(file): \(error)")
             }
             
             DispatchQueue.main.sync { completion(result) }

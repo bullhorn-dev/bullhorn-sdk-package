@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U2I-TR-bcv">
-    <device id="retina6_0" orientation="portrait" appearance="dark"/>
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -784,11 +784,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -816,11 +816,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="34"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="81" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1349,6 +1349,129 @@
             </objects>
             <point key="canvasLocation" x="-1683" y="3048"/>
         </scene>
+        <!--Report a Problem-->
+        <scene sceneID="Kgz-XU-tjf">
+            <objects>
+                <viewController restorationIdentifier="BHReportProblemViewController" storyboardIdentifier="BHReportProblemViewController" title="Report a Problem" hidesBottomBarWhenPushed="YES" id="14M-J2-kRm" customClass="BHReportProblemViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7OD-7D-nxC">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PT0-hw-oiW">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="k48-fR-Vab">
+                                        <rect key="frame" x="16" y="16" width="358" height="323"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is a problem?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9Y-kL-mhk">
+                                                <rect key="frame" x="0.0" y="0.0" width="358" height="19"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hvf-cO-K2U" customClass="BHDropDownTextField" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="29" width="358" height="44"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="VxV-xm-PU7"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is a problem?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJD-yN-8NK">
+                                                <rect key="frame" x="0.0" y="83" width="358" height="19"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="piQ-Ry-9CX" customClass="BHInputTextField" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="112" width="358" height="44"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="Ig3-XQ-YbT"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add problem details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoX-Qe-rPk">
+                                                <rect key="frame" x="0.0" y="166" width="358" height="19"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Describe the bug or problem you're experiencing" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ez1-UI-rfT">
+                                                <rect key="frame" x="0.0" y="195" width="358" height="128"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="128" id="UxO-Er-N0d"/>
+                                                </constraints>
+                                                <color key="textColor" systemColor="labelColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="fxColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstItem="k48-fR-Vab" firstAttribute="leading" secondItem="PT0-hw-oiW" secondAttribute="leading" constant="16" id="1w2-IF-yz0"/>
+                                    <constraint firstAttribute="trailing" secondItem="k48-fR-Vab" secondAttribute="trailing" constant="16" id="r2o-jl-2dx"/>
+                                    <constraint firstItem="k48-fR-Vab" firstAttribute="top" secondItem="PT0-hw-oiW" secondAttribute="top" constant="16" id="y2U-BU-QIo"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xQC-pR-ocy" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="dBV-Ly-QlP"/>
+                                    <constraint firstAttribute="width" constant="30" id="mJg-AN-ERZ"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" name="bhColorAccent"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qPn-4M-a8D">
+                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <color key="backgroundColor" name="fxColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="mGN-P8-EAS"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Njj-78-AU3"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <constraints>
+                            <constraint firstItem="qPn-4M-a8D" firstAttribute="leading" secondItem="Njj-78-AU3" secondAttribute="leading" id="0o5-Sq-yQr"/>
+                            <constraint firstItem="Njj-78-AU3" firstAttribute="trailing" secondItem="PT0-hw-oiW" secondAttribute="trailing" id="2ye-3v-rr3"/>
+                            <constraint firstItem="Njj-78-AU3" firstAttribute="bottom" secondItem="PT0-hw-oiW" secondAttribute="bottom" id="R7d-ue-hGm"/>
+                            <constraint firstItem="PT0-hw-oiW" firstAttribute="top" secondItem="Njj-78-AU3" secondAttribute="top" id="S3A-mE-kU3"/>
+                            <constraint firstItem="xQC-pR-ocy" firstAttribute="centerX" secondItem="7OD-7D-nxC" secondAttribute="centerX" id="Xaf-ws-cIV"/>
+                            <constraint firstItem="qPn-4M-a8D" firstAttribute="top" secondItem="PT0-hw-oiW" secondAttribute="bottom" id="YEq-rB-ZAD"/>
+                            <constraint firstItem="Njj-78-AU3" firstAttribute="trailing" secondItem="qPn-4M-a8D" secondAttribute="trailing" id="bEF-NT-Hjr"/>
+                            <constraint firstItem="xQC-pR-ocy" firstAttribute="centerY" secondItem="7OD-7D-nxC" secondAttribute="centerY" id="pBV-B7-hJ4"/>
+                            <constraint firstItem="PT0-hw-oiW" firstAttribute="leading" secondItem="Njj-78-AU3" secondAttribute="leading" id="vfC-O6-6al"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Wa8-f1-zEQ">
+                        <barButtonItem key="backBarButtonItem" id="Ds9-Yl-0OZ"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicator" destination="xQC-pR-ocy" id="t8W-jq-AKr"/>
+                        <outlet property="contentView" destination="PT0-hw-oiW" id="5jh-B7-Ain"/>
+                        <outlet property="detailsLabel" destination="GoX-Qe-rPk" id="lld-RE-Ww3"/>
+                        <outlet property="detailsTextField" destination="ez1-UI-rfT" id="TnI-8G-rLR"/>
+                        <outlet property="nameLabel" destination="rJD-yN-8NK" id="hML-md-Bxo"/>
+                        <outlet property="nameTextField" destination="piQ-Ry-9CX" id="bb2-jL-Z2P"/>
+                        <outlet property="reasonHeightConstraint" destination="VxV-xm-PU7" id="v9x-RA-wKK"/>
+                        <outlet property="reasonLabel" destination="W9Y-kL-mhk" id="u5M-0g-Sh7"/>
+                        <outlet property="reasonTextField" destination="Hvf-cO-K2U" id="yU1-ZE-D7Q"/>
+                        <outlet property="stackView" destination="k48-fR-Vab" id="aAq-Yn-ptI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oic-A7-V7F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2575.3846153846152" y="3047.6303317535544"/>
+        </scene>
         <!--Radio-->
         <scene sceneID="Bc1-rf-bte">
             <objects>
@@ -1706,6 +1829,7 @@
                         <segue destination="cko-RD-0fW" kind="show" identifier="Profile.DownloadsSegueIdentifier" id="NTL-B9-tFj"/>
                         <segue destination="Fzv-mz-Aod" kind="show" identifier="Profile.NotificationsSegueIdentifier" id="ohg-JO-SKf"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>
+                        <segue destination="14M-J2-kRm" kind="show" identifier="Profile.ReportProblemSegueIdentifier" id="Ybo-2u-4Gf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-Q0-eO2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2016,14 +2140,20 @@
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="fxColorPrimaryBg">
+            <color red="0.96470588235294119" green="0.97254901960784312" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

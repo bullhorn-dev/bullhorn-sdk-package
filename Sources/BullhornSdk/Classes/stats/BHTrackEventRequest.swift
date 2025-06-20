@@ -37,6 +37,7 @@ enum BHTrackBanner: String, Codable {
     case openFollowed      = "open_followed"
     case openDownloads     = "open_downloads"
     case openRecent        = "open_recent"
+    case openReportProblem = "open_report_problem"
     /// ui-explore
     case openPodcast       = "open_podcast"
     case openEpisode       = "open_episode"
@@ -49,6 +50,7 @@ enum BHTrackBanner: String, Codable {
     case downloadEpisode   = "download_episode"
     case episodeLikeOn     = "episode_like_on"
     case episodeLikeOff    = "episode_like_off"
+    case reportProblem     = "report_problem"
     /// ui-player
     case playerOpen        = "player_open"
     case playerPlay        = "player_play"

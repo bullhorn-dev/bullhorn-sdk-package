@@ -48,7 +48,20 @@ class BHSettingsManager {
             }
         }
     }
-    
+
+    func reportProblem(_ report: [String : Any], completion: @escaping (CommonResult) -> Void) {
+
+        apiSettings.reportProblem(authToken: authToken, report: report) { response in
+            switch response {
+            case .success:
+                break
+
+            case .failure(error: let error):
+                BHLog.w("Filed to send report: \(error.localizedDescription)")
+            }
+            completion(response)
+        }
+    }
 
     // MARK: - Initial fetch for screen
 
