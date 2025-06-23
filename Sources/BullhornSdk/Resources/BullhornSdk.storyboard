@@ -1361,7 +1361,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="k48-fR-Vab">
-                                        <rect key="frame" x="16" y="16" width="358" height="323"/>
+                                        <rect key="frame" x="16" y="16" width="358" height="355"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is a problem?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9Y-kL-mhk">
                                                 <rect key="frame" x="0.0" y="0.0" width="358" height="19"/>
@@ -1397,10 +1397,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Describe the bug or problem you're experiencing" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ez1-UI-rfT">
-                                                <rect key="frame" x="0.0" y="195" width="358" height="128"/>
+                                                <rect key="frame" x="0.0" y="195" width="358" height="160"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="128" id="UxO-Er-N0d"/>
+                                                    <constraint firstAttribute="height" constant="160" id="UxO-Er-N0d"/>
                                                 </constraints>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1457,6 +1457,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="xQC-pR-ocy" id="t8W-jq-AKr"/>
+                        <outlet property="bottomView" destination="qPn-4M-a8D" id="npR-wv-pJQ"/>
                         <outlet property="contentView" destination="PT0-hw-oiW" id="5jh-B7-Ain"/>
                         <outlet property="detailsLabel" destination="GoX-Qe-rPk" id="lld-RE-Ww3"/>
                         <outlet property="detailsTextField" destination="ez1-UI-rfT" id="TnI-8G-rLR"/>
