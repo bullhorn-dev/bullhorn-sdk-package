@@ -140,6 +140,7 @@ class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicator
                 DispatchQueue.main.async {
                     self.configureNavigationItems()
                     self.tableView.reloadData()
+                    BHNotificationsManager.shared.removeAllDeliveredNotifications()
                 }
             case .failure(error: let error):
                 DispatchQueue.main.async {

@@ -37,8 +37,13 @@ class BHLocalNotificationsManager: NSObject {
 
     // MARK: - Public
 
-    func cleanAllNotifications() {
+    func removeAllDeliveredNotifications() {
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        updateApplicationIconBadgeNumber()
+    }
+    
+    func removeDeliveredNotifications(with identifiers: [String]) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
         updateApplicationIconBadgeNumber()
     }
     

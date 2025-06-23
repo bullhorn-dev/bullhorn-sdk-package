@@ -134,6 +134,14 @@ class BHNotificationsManager: NSObject {
             }
         }
     }
+    
+    func removeAllDeliveredNotifications() {
+        localNotificationsManager.removeAllDeliveredNotifications()
+    }
+    
+    func removeDeliveredNotifications(with identifiers: [String]) {
+        localNotificationsManager.removeDeliveredNotifications(with: identifiers)
+    }
 
     // MARK: - Private
 
@@ -234,7 +242,7 @@ extension BHNotificationsManager {
             checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: true)
 
         case .logout:
-            localNotificationsManager.cleanAllNotifications()
+            localNotificationsManager.removeAllDeliveredNotifications()
             forgetPushToken() { _ in }
 
         default:
@@ -247,7 +255,6 @@ extension BHNotificationsManager {
         guard BHAccountManager.shared.account?.user != nil else { return }
 
         checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: true)
-        localNotificationsManager.cleanAllNotifications()
     }
 
     @objc fileprivate func onApplicationDidEnterBackground(_ notification: Notification) {
