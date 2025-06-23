@@ -103,6 +103,9 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate func configureNavigationItems() {
         navigationItem.title = NSLocalizedString("Podcast Details", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let config = UIImage.SymbolConfiguration(weight: .light)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis")?.withConfiguration(config), style: .plain, target: self, action: #selector(openOptionsAction(_:)))
     }
     
     fileprivate func configureRefreshControl() {
@@ -211,7 +214,15 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     @objc fileprivate func onRefreshControlAction(_ sender: Any) {
         fetch(initial: false)
     }
-    
+
+    @objc fileprivate func openOptionsAction(_ sender: Any) {
+        let optionsSheet = BHUserOptionsBottomSheet()
+        optionsSheet.user = user
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = true
+        present(optionsSheet, animated: true)
+    }
+
     // MARK: - Notifications
     
     @objc fileprivate func onConnectionChangedNotification(notification: Notification) {

@@ -14,6 +14,8 @@ enum ReportReason: String, CaseIterable {
 
 class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport {
     
+    class var storyboardIndentifer: String { return String(describing: self) }
+
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomView: UIView!
@@ -91,6 +93,21 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if let validReportReason = reportReason {
+            reasonTextField.textField.text = validReportReason
+        }
+        
+        if let validReportName = reportName {
+            nameTextField.text = validReportName
+        }
+        
+        if let validReportDetails = reportDetails {
+            detailsTextField.text = validReportDetails
+            detailsTextField.textColor = .primary()
+        }
+        
+        validateSendButton()
     }
     
     override func viewIsAppearing(_ animated: Bool) {

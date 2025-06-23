@@ -4,6 +4,7 @@ import Foundation
 final class BHPostOptionsBottomSheet: BHBottomSheetController {
 
     private var shareItem: BHOptionsItem!
+    private var reportItem: BHOptionsItem!
     private var downloadItem: BHOptionsItem!
 
     var post: BHPost?
@@ -19,14 +20,12 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
 
         guard let validPost = self.post else { return }
 
-        // share
-        
+        /// share
         shareItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Share", icon: "arrowshape.turn.up.right")
         let shareItemTap = UITapGestureRecognizer(target: self, action: #selector(onShareItem(_:)))
         shareItem.addGestureRecognizer(shareItemTap)
-
-        // download
         
+        /// download
         var downloadTitle = "Download"
         var downloadIcon = "arrow.down.to.line"
         var type: BHOptionsItem.ItemType = .normal
@@ -40,6 +39,11 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         downloadItem = BHOptionsItem(withType: type, valueType: .text, title: downloadTitle, icon: downloadIcon)
         let downloadItemTap = UITapGestureRecognizer(target: self, action: #selector(onDownloadItem(_:)))
         downloadItem.addGestureRecognizer(downloadItemTap)
+
+        /// report
+        reportItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Report", icon: "exclamationmark.octagon")
+        let reportItemTap = UITapGestureRecognizer(target: self, action: #selector(onReportItem(_:)))
+        reportItem.addGestureRecognizer(reportItemTap)
 
         let verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
@@ -56,11 +60,15 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
                 downloadItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
             ])
         }
+        verticalStackView.addArrangedSubview(reportItem)
 
         NSLayoutConstraint.activate([
             shareItem.heightAnchor.constraint(equalToConstant: 50),
             shareItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
             shareItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            reportItem.heightAnchor.constraint(equalToConstant: 50),
+            reportItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+            reportItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
 
             verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             verticalStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -119,6 +127,26 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
                 BHDownloadsManager.shared.download(validPost)
                 self.dismiss(animated: true)
             }
+        })
+    }
+    
+    @objc func onReportItem(_ sender: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            guard let validPost = self.post else { return }
+            
+            let bundle = Bundle.module
+            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+
+            if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
+                
+                viewController.reportReason = ReportReason.experiencingABug.rawValue
+                viewController.reportName = validPost.user.fullName
+                viewController.reportDetails = validPost.shareLink.absoluteString
+
+                UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
+            }
+            
+            self.dismiss(animated: true)
         })
     }
 }

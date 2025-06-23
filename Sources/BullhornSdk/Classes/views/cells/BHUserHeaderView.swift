@@ -268,7 +268,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         guard let validUser = userManager?.user else { return }
 
         if validUser.isFollowed {
-            let optionsSheet = BHUserOptionsBottomSheet()
+            let optionsSheet = BHFollowingOptionsBottomSheet()
             optionsSheet.user = validUser
             optionsSheet.preferredSheetSizing = .fit
             optionsSheet.panToDismissEnabled = true
