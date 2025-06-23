@@ -57,7 +57,7 @@ class BHServerApiSettings: BHServerApiBase {
         }
     }
     
-    func reportProblem(authToken: String?, report: [String : Any], _ completion: @escaping (CommonResult) -> Void) {
+    func reportProblem(authToken: String?, params: Parameters, _ completion: @escaping (CommonResult) -> Void) {
 
         updateConfig { (configError: ServerApiError?) in
             if let error = configError {
@@ -69,7 +69,7 @@ class BHServerApiSettings: BHServerApiBase {
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
-            AF.request(fullPath, method: .post, parameters: report, headers: headers)
+            AF.request(fullPath, method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers)
                 .validate()
                 .responseData(completionHandler: { response in
                   debugPrint(response)

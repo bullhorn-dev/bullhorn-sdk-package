@@ -221,7 +221,7 @@
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRg-3p-7XU" customClass="DropDownTextField" customModule="BHSdkApp" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRg-3p-7XU" customClass="BHDropDownTextField" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="29" width="361" height="44"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>

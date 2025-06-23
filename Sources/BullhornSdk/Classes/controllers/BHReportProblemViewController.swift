@@ -39,20 +39,23 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
         
+        contentView.backgroundColor = .fxPrimaryBackground()
+
         configureNavigationItems()
 
-        reasons = ReportReason.allCases.map({ BHDropDownItem(value: $0.rawValue, title: $0.rawValue) })
+        reasons = ReportReason.allCases.map({ BHDropDownItem(value: $0.rawValue, title: $0.rawValue, extra: false) })
 
         reasonTextField.delegate = self
         reasonTextField.textField.placeholder = "Select the reason of problem"
         reasonTextField.options = reasons
+        reasonTextField.textField.textColor = .primary()
 
         reasonLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
-        reasonLabel.textColor = .label
+        reasonLabel.textColor = .primary()
         reasonLabel.text = "What is the problem?"
 
         nameLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
-        nameLabel.textColor = .label
+        nameLabel.textColor = .primary()
         nameLabel.text = "Where is the problem?"
         
         nameTextField.placeholder = "Enter page or name of show"
@@ -67,7 +70,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         nameTextField.delegate = self
 
         detailsLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
-        detailsLabel.textColor = .label
+        detailsLabel.textColor = .primary()
         detailsLabel.text = "Add problem details"
         
         detailsTextField.backgroundColor = .cardBackground()
@@ -76,6 +79,10 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         detailsTextField.text = "Describe the bug or problem you're experiencing"
         detailsTextField.textColor = .lightGray
         detailsTextField.delegate = self
+        detailsTextField.layer.borderColor = UIColor.divider().cgColor
+        detailsTextField.layer.borderWidth = 1
+        detailsTextField.layer.cornerRadius = 4
+        detailsTextField.textContainerInset = .init(top: 12, left: 8, bottom: 12, right: 8)
 
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BHReportProblemViewController.dismissKeyboard)))
     }
@@ -133,7 +140,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         defaultShowActivityIndicatorView()
 
         let systemInfo: [String : String] = [
-            "who_reported": user.username ?? "",
+            "who_reported": user.id,
             "app_version": BHAppConfiguration.shared.appVersion(),
             "device_info": BHDeviceUtils.shared.getDeviceName(),
         ]
@@ -147,7 +154,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
             "report": report
         ]
         
-        BHSettingsManager.shared.reportProblem(report) { response in
+        BHSettingsManager.shared.reportProblem(reportObj) { response in
             DispatchQueue.main.async {
                 self.defaultHideActivityIndicatorView()
 

@@ -2,7 +2,7 @@
 import UIKit
 import Foundation
 
-class BHDropDownCell: UITableViewCell {
+public class BHDropDownCell: UITableViewCell {
     
     static let reuseIdentifier = "BHDropDownCellReuseIdentifier"
     
@@ -14,7 +14,7 @@ class BHDropDownCell: UITableViewCell {
         }
     }
         
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
     }
     
@@ -25,7 +25,11 @@ class BHDropDownCell: UITableViewCell {
         self.textLabel?.font = .fontWithName(.robotoRegular, size: 15)
         self.textLabel?.textColor = .primary()
         self.backgroundColor = .cardBackground()
-        self.textLabel?.text = "\(validItem.value)"
+        if validItem.extra {
+            self.textLabel?.text = "\(validItem.value) (\(validItem.title))"
+        } else {
+            self.textLabel?.text = "\(validItem.value)"
+        }
         
         selectionStyle = .none
         

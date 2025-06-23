@@ -161,6 +161,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 .staticCell(model: SettingsOption(title: "Appearance", icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
                 }, disclosure: true)),
+                .staticCell(model: SettingsOption(title: "Report a problem", icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.ReportProblemSegueIdentifier, sender: self)
+                }, disclosure: true)),
             ]))
         }
     }

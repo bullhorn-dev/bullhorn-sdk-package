@@ -4,7 +4,7 @@ import Foundation
 
 // MARK: - BHDropDownTextFieldDelegate
 
-protocol BHDropDownTextFieldDelegate {
+public protocol BHDropDownTextFieldDelegate {
     func menuDidAnimate(up: Bool)
     func optionSelected(option: String)
     func textChanged(text: String?)
@@ -12,22 +12,29 @@ protocol BHDropDownTextFieldDelegate {
 
 // MARK: - BHDropDownItem
 
-struct BHDropDownItem {
+public struct BHDropDownItem {
     let value: String
     let title: String
+    let extra: Bool
+    
+    public init(value: String, title: String, extra: Bool) {
+        self.value = value
+        self.title = title
+        self.extra = extra
+    }
 }
 
 // MARK: - BHDropDownTextField
 
-class BHDropDownTextField: UIView {
+public class BHDropDownTextField: UIView {
     
-    var delegate: BHDropDownTextFieldDelegate?
+    public var delegate: BHDropDownTextFieldDelegate?
 
-    var text: String? {
+    public var text: String? {
         return textField.text
     }
 
-    var options = [BHDropDownItem]() {
+    public var options = [BHDropDownItem]() {
         didSet {
             calculateHeight()
             setupViews()
@@ -58,7 +65,7 @@ class BHDropDownTextField: UIView {
     
     let animationView = UIView()
     
-    lazy var textField: BHInputTextField = {
+    public lazy var textField: BHInputTextField = {
         let textField = BHInputTextField(frame: .zero)
         textField.textColor = .primary()
         textField.tintColor = .accent()
@@ -72,7 +79,7 @@ class BHDropDownTextField: UIView {
     
     // MARK: - Lifecycle
 
-    init(frame: CGRect, title: String, options: [BHDropDownItem]) {
+    public init(frame: CGRect, title: String, options: [BHDropDownItem]) {
         self.options = options
         super.init(frame: frame)
         self.textField.placeholder = title
@@ -80,7 +87,7 @@ class BHDropDownTextField: UIView {
         setupViews()
     }
     
-    private override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -135,6 +142,10 @@ class BHDropDownTextField: UIView {
         textField.textInsets = .init(top: 12, left: 8, bottom: 12, right: 8)
         textField.addTarget(self, action: #selector(textFieldDidChange(_ :)), for: .editingChanged)
         textField.delegate = self
+        
+        self.layer.borderColor = UIColor.divider().cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 4
     }
     
     private func addTapView() {
@@ -224,12 +235,12 @@ class BHDropDownTextField: UIView {
 
 extension BHDropDownTextField: UITextFieldDelegate {
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
         delegate?.optionSelected(option: text)
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.textField.resignFirstResponder()
         return true
     }
@@ -237,11 +248,11 @@ extension BHDropDownTextField: UITextFieldDelegate {
 
 extension BHDropDownTextField: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return options.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BHDropDownCell.reuseIdentifier) as? BHDropDownCell ?? BHDropDownCell()
         cell.item = options[indexPath.row]
         cell.selectItemClosure = { [weak self] item in
@@ -253,7 +264,7 @@ extension BHDropDownTextField: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.frame.height / CGFloat(options.count)
     }
 }

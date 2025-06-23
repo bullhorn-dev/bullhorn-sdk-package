@@ -49,9 +49,9 @@ class BHSettingsManager {
         }
     }
 
-    func reportProblem(_ report: [String : Any], completion: @escaping (CommonResult) -> Void) {
+    func reportProblem(_ params: Parameters, completion: @escaping (CommonResult) -> Void) {
 
-        apiSettings.reportProblem(authToken: authToken, report: report) { response in
+        apiSettings.reportProblem(authToken: authToken, params: params) { response in
             switch response {
             case .success:
                 break

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D904E1842B9F1ECB00DEC42A /* DropDownTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */; };
-		D904E1872B9F209300DEC42A /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D904E1862B9F209300DEC42A /* DropDownCell.swift */; };
 		D93CFD042B95CD57006B922D /* UserDefaults+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */; };
 		D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */; };
 		D94E70732D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */; };
@@ -29,7 +27,6 @@
 		D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */; };
 		D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */; };
 		D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */; };
-		D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */; };
 		D9C936DA2A9667B900C32539 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C936D92A9667B900C32539 /* Utils.swift */; };
 		D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */ = {isa = PBXBuildFile; productRef = D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */; };
 		D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884029DD5CF7002A5631 /* AppDelegate.swift */; };
@@ -65,8 +62,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownTextField.swift; sourceTree = "<group>"; };
-		D904E1862B9F209300DEC42A /* DropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
 		D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Utils.swift"; sourceTree = "<group>"; };
 		D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperModeViewController.swift; sourceTree = "<group>"; };
 		D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "BullhornSDK-ConfigPROD.xcconfig"; sourceTree = "<group>"; };
@@ -90,7 +85,6 @@
 		D9C06CF32B29FC6E0088B159 /* AppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewController.swift; sourceTree = "<group>"; };
 		D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewCell.swift; sourceTree = "<group>"; };
 		D9C06CFD2B2A3DD60088B159 /* AuthConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConfig.swift; sourceTree = "<group>"; };
-		D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		D9C936D92A9667B900C32539 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BHSdkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9D7884029DD5CF7002A5631 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -173,11 +167,8 @@
 		D9C06CFA2B2A3B2F0088B159 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				D9C06D0C2B2A3F8F0088B159 /* InputTextField.swift */,
 				D9C06CF62B2A1EE60088B159 /* ThemeTableViewCell.swift */,
 				D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */,
-				D904E1832B9F1ECB00DEC42A /* DropDownTextField.swift */,
-				D904E1862B9F209300DEC42A /* DropDownCell.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -324,12 +315,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9C06D0D2B2A3F8F0088B159 /* InputTextField.swift in Sources */,
 				D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */,
-				D904E1872B9F209300DEC42A /* DropDownCell.swift in Sources */,
 				D9C06D002B2A3DD60088B159 /* AuthConfig.swift in Sources */,
 				D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */,
-				D904E1842B9F1ECB00DEC42A /* DropDownTextField.swift in Sources */,
 				D93CFD042B95CD57006B922D /* UserDefaults+Utils.swift in Sources */,
 				D9C06CF72B2A1EE60088B159 /* ThemeTableViewCell.swift in Sources */,
 				D9D7884129DD5CF7002A5631 /* AppDelegate.swift in Sources */,

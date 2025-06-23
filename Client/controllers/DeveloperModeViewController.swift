@@ -5,16 +5,16 @@ import BullhornSdk
 class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var networkLabel: UILabel!
-    @IBOutlet weak var dropDownTextField: DropDownTextField!
+    @IBOutlet weak var dropDownTextField: BHDropDownTextField!
     
     @IBOutlet weak var networkHeightConstraint: NSLayoutConstraint!
     
     private let networkIdDefaultValue = UserDefaults.standard.networkId
 
     private var networks = [
-        DropDownItem(value: AuthConfig.shared.networkId, title: "Fox"),
-        DropDownItem(value: AuthConfig.shared.testNetworkId, title: "Test"),
-        DropDownItem(value: AuthConfig.shared.nazarNetworkId, title: "Nazar")
+        BHDropDownItem(value: AuthConfig.shared.networkId, title: "Fox", extra: true),
+        BHDropDownItem(value: AuthConfig.shared.testNetworkId, title: "Test", extra: true),
+        BHDropDownItem(value: AuthConfig.shared.nazarNetworkId, title: "Nazar", extra: true)
     ]
         
     override func viewDidLoad() {
@@ -95,7 +95,7 @@ class DeveloperModeViewController: UIViewController, UIGestureRecognizerDelegate
 
 //MARK: Drop down textfield delegate
 
-extension DeveloperModeViewController: DropDownTextFieldDelegate {
+extension DeveloperModeViewController: BHDropDownTextFieldDelegate {
     
     func textChanged(text: String?) {
         validateSaveButton()
