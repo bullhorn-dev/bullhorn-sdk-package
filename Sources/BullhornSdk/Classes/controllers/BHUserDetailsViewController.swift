@@ -162,7 +162,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         userManager.fetch(u.id, context: context) { response in
             switch response {
             case .success:
-                BHNotificationsManager.shared.removeDeliveredNotifications(with: [u.id])
+                BHNotificationsManager.shared.removeDeliveredNotifications(with: u.id)
             case .failure(error: let error):
                 if BHReachabilityManager.shared.isConnected() {
                     self.showError("Failed to fetch user details from backend. \(error.localizedDescription)")

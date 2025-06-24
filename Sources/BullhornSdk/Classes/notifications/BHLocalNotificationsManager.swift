@@ -42,8 +42,9 @@ class BHLocalNotificationsManager: NSObject {
         updateApplicationIconBadgeNumber()
     }
     
-    func removeDeliveredNotifications(with identifiers: [String]) {
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
+    func removeDeliveredNotifications(with userId: String) {
+        cleanNotifications(userId)
+        cleanNotifications([.massNotification, .newEpisodesReminder])
         updateApplicationIconBadgeNumber()
     }
     
@@ -82,7 +83,25 @@ class BHLocalNotificationsManager: NSObject {
             let notificationsWithIdentifiers = deliveredNotifications.filter { categoryRawValues.contains($0.request.content.categoryIdentifier) }
             let identifiers = notificationsWithIdentifiers.compactMap { $0.request.identifier }
 
-            if identifiers.isEmpty {
+            if !identifiers.isEmpty {
+                UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
+            }
+        }
+    }
+    
+    fileprivate func cleanNotifications(_ userId: String) {
+
+        UNUserNotificationCenter.current().getDeliveredNotifications { deliveredNotifications in
+
+            var identifiers: [String] = []
+
+            for notification in deliveredNotifications {
+                if let uuid = notification.request.content.userInfo["user_uuid"] as? String, uuid == userId {
+                    identifiers.append(notification.request.identifier)
+                }
+            }
+
+            if !identifiers.isEmpty {
                 UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
             }
         }

@@ -136,11 +136,13 @@ class BHNotificationsManager: NSObject {
     }
     
     func removeAllDeliveredNotifications() {
+        BHLog.p("\(#function)")
         localNotificationsManager.removeAllDeliveredNotifications()
     }
     
-    func removeDeliveredNotifications(with identifiers: [String]) {
-        localNotificationsManager.removeDeliveredNotifications(with: identifiers)
+    func removeDeliveredNotifications(with userId: String) {
+        BHLog.p("\(#function) - userId: \(userId)")
+        localNotificationsManager.removeDeliveredNotifications(with: userId)
     }
 
     // MARK: - Private
