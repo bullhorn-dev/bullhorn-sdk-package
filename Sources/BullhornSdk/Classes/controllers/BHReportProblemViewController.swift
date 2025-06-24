@@ -179,6 +179,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 
                 switch response {
                 case .success:
+                    self.showInfo("Report has been sent successfully")
                     self.navigationController?.popViewController(animated: true)
                 case .failure(error: let error):
                     self.showError("Failed to send report. \(error.localizedDescription)")
