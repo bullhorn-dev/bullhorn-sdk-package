@@ -86,8 +86,10 @@ class BHHybridPlayer {
     internal var mediaPlayer: BHMediaPlayerBase?
     fileprivate var trackTimer: Timer?
     fileprivate var sleepTimer: Timer?
+
     var sleepTimerInterval: TimeInterval = 0
-    
+
+    fileprivate var context: BHPlayerContext = .app
     fileprivate var currentPlayback: BHPostPlayback?
     fileprivate var playbackRecreateCounter: Double = 0.0
 
@@ -187,7 +189,7 @@ class BHHybridPlayer {
         
     // MARK: - Public
 
-    func playRequest(with post: BHPost, playlist: [BHPost]?, context: String? = "app") {
+    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app) {
         
         BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
         
@@ -201,9 +203,11 @@ class BHHybridPlayer {
             }
         } else {
 
+            self.context = context
+
             /// track event
             let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, episodeType: type)
+            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context.rawValue, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, episodeType: type)
             BHTracker.shared.trackEvent(with: request)
 
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
@@ -888,7 +892,7 @@ class BHHybridPlayer {
         let uuid = UUID.init()
         let timeNow = Date().timeIntervalSince1970
         let type = validPost.isLiveStream() ? "live-stream" : validPost.isRadioStream() ? "radio" : "pre-recorded"
-        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", episodeType: type, podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow)
+        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", episodeType: type, podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow, context: context.rawValue)
 
         playbackRecreateCounter = 0
     }

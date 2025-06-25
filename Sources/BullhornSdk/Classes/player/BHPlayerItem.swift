@@ -141,3 +141,9 @@ public struct BHPlayerItem: Codable {
         }
     }
 }
+
+public enum BHPlayerContext: String {
+    case app = "app"
+    case carplay = "carplay"
+}
+

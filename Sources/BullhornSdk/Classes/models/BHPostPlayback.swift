@@ -12,6 +12,7 @@ class BHPostPlayback: Codable, Hashable {
         case podcastTitle = "podcast_title"
         case startedAt = "started_at"
         case finishedAt = "finished_at"
+        case context = "context"
     }
 
     let uuid: String
@@ -22,14 +23,15 @@ class BHPostPlayback: Codable, Hashable {
     let podcastTitle: String
     let startedAt: TimeInterval
     var finishedAt: TimeInterval
+    var context: String
     
     var description: String {
-        return "uuid=\(uuid), episodeId=\(episodeId), startedAt=\(startedAt), finishedAt=\(finishedAt)"
+        return "uuid=\(uuid), episodeId=\(episodeId), startedAt=\(startedAt), finishedAt=\(finishedAt), context=\(context)"
     }
     
     // MARK: - Initializers
     
-    init(identifier: String, episodeId: String, episodeTitle: String, episodeType: String, podcastId: String, podcastTitle: String, startTime: TimeInterval, endTime: TimeInterval) {
+    init(identifier: String, episodeId: String, episodeTitle: String, episodeType: String, podcastId: String, podcastTitle: String, startTime: TimeInterval, endTime: TimeInterval, context: String) {
         self.uuid = identifier
         self.episodeId = episodeId
         self.episodeTitle = episodeTitle
@@ -38,6 +40,7 @@ class BHPostPlayback: Codable, Hashable {
         self.podcastTitle = podcastTitle
         self.startedAt = startTime
         self.finishedAt = endTime
+        self.context = context
     }
     
     // MARK: Hashable
@@ -62,7 +65,9 @@ class BHPostPlayback: Codable, Hashable {
             CodingKeys.podcastId.rawValue: podcastId,
             CodingKeys.podcastTitle.rawValue: podcastTitle,
             CodingKeys.startedAt.rawValue: startedAt,
-            CodingKeys.finishedAt.rawValue: finishedAt]
+            CodingKeys.finishedAt.rawValue: finishedAt,
+            CodingKeys.context.rawValue: context
+        ]
         
         return params
     }
@@ -76,8 +81,9 @@ class BHPostPlayback: Codable, Hashable {
         guard let podcastTitle = params[CodingKeys.podcastTitle.rawValue] as? String else { return nil }
         guard let startedAt = params[CodingKeys.startedAt.rawValue] as? Double else { return nil }
         guard let finishedAt = params[CodingKeys.finishedAt.rawValue] as? Double else { return nil }
+        guard let context = params[CodingKeys.context.rawValue] as? String else { return nil }
 
-        return BHPostPlayback(identifier: uuid, episodeId: episodeId, episodeTitle: episodeTitle, episodeType: episodeType, podcastId: podcastId, podcastTitle: podcastTitle, startTime: startedAt, endTime: finishedAt)
+        return BHPostPlayback(identifier: uuid, episodeId: episodeId, episodeTitle: episodeTitle, episodeType: episodeType, podcastId: podcastId, podcastTitle: podcastTitle, startTime: startedAt, endTime: finishedAt, context: context)
     }
 
 }
