@@ -150,7 +150,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XDK-m3-Q1D">
                                                 <rect key="frame" x="0.0" y="567" width="390" height="36"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Podcast Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-XQ-ouN">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Podcast Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-XQ-ouN">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="36"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="36" id="PeZ-Zb-qsW"/>
@@ -171,7 +171,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JsL-64-ILe">
                                                 <rect key="frame" x="0.0" y="603" width="390" height="20"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY0-ym-zuX">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY0-ym-zuX">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="nsJ-21-jbU"/>
@@ -2094,7 +2094,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Tnh-iY-7ke"/>
+        <segue reference="Dux-9E-9ph"/>
         <segue reference="fUD-lq-Ug9"/>
         <segue reference="o17-EU-xWZ"/>
     </inferredMetricsTieBreakers>

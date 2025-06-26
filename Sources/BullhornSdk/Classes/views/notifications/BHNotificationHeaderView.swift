@@ -45,7 +45,7 @@ class BHNotificationHeaderView: UITableViewHeaderFooterView {
         enableNotificationsButton.setTitle(title, for: .normal)
         enableNotificationsButton.backgroundColor = .fxPrimaryBackground()
         enableNotificationsButton.setTitleColor(color, for: .normal)
-        enableNotificationsButton.titleLabel?.font = .fontWithName(.robotoBold, size: 17)
+        enableNotificationsButton.titleLabel?.font = .primaryButton()
     }
     
     func calculateHeight(_ hasRadioStreams: Bool = true) -> CGFloat {

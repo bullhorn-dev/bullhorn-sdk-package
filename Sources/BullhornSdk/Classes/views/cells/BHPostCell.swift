@@ -64,10 +64,25 @@ class BHPostCell: UITableViewCell {
         contentView.backgroundColor = .primaryBackground()
         
         dateLabel.textColor = .secondary()
+        dateLabel.font = .secondaryText()
+        dateLabel.adjustsFontForContentSizeCategory = true
+
         titleLabel.textColor = .primary()
+        titleLabel.font = .primaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
+
         descriptionLabel.textColor = .secondary()
+        descriptionLabel.font = .secondaryText()
+        descriptionLabel.adjustsFontForContentSizeCategory = true
+
         durationLabel.textColor = .secondary()
+        durationLabel.font = .secondaryText()
+        durationLabel.adjustsFontForContentSizeCategory = true
+
         playedLabel.textColor = .secondary()
+        playedLabel.font = .secondaryText()
+        playedLabel.adjustsFontForContentSizeCategory = true
+
         waitingRoomLabel.textColor = .primary()
 
         let shadowColor = UIColor.shadow().withAlphaComponent(0.5)

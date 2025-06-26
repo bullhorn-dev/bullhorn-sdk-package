@@ -28,6 +28,8 @@ class ThemeTableViewCell: UITableViewCell {
     
     public func configure(with model : ThemeOption) {
         titleLabel.text = model.title
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.font = .fontWithName(.robotoRegular, size: 17)
         checkmarkIcon.isHidden = !model.selected
     }
 }

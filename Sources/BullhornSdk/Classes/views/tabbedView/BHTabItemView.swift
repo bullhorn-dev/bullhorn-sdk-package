@@ -21,6 +21,7 @@ class BHTabItemView: UIView, BHTabItemProtocol {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .fontWithName(.robotoRegular, size: 15)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
         label.text = title
         label.translatesAutoresizingMaskIntoConstraints = false

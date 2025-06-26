@@ -130,7 +130,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         followButton.backgroundColor = .navigationBackground()
         followButton.tintColor = .navigationText()
         followButton.configuration?.baseForegroundColor = .navigationText()
-        followButton.titleLabel?.font = .fontWithName(.robotoBold, size: 16)
+        followButton.titleLabel?.font = .primaryButton()
+        followButton.titleLabel?.adjustsFontForContentSizeCategory = true
 
         let config = UIImage.SymbolConfiguration(scale: .small)
         unfollowButton.setTitle("Following ", for: .normal)
@@ -140,7 +141,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         unfollowButton.backgroundColor = .secondaryBackground()
         unfollowButton.tintColor = .primary()
         unfollowButton.configuration?.baseForegroundColor = .primary()
-        unfollowButton.titleLabel?.font = .fontWithName(.robotoBold, size: 16)
+        unfollowButton.titleLabel?.font = .primaryButton()
+        unfollowButton.titleLabel?.adjustsFontForContentSizeCategory = true
 
         updateFollowButton()
 
@@ -155,11 +157,25 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         ratingView.backgroundColor = .primaryBackground()
         
         titleLabel.textColor = .primary()
+        titleLabel.font = .primaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
+
         bioLabel.textColor = .primary()
+        bioLabel.font = .secondaryText()
+        bioLabel.adjustsFontForContentSizeCategory = true
+
         ratingLabel.textColor = .secondary()
+        ratingLabel.font = .secondaryText()
+        ratingLabel.adjustsFontForContentSizeCategory = true
+
         categoryLabel.textColor = .secondary()
+        categoryLabel.font = .secondaryText()
+        categoryLabel.adjustsFontForContentSizeCategory = true
+
         linkIcon.tintColor = .primary()
-        
+        linkButton.titleLabel?.font = .secondaryText()
+        linkButton.titleLabel?.adjustsFontForContentSizeCategory = true
+
         userView.isHidden = searchActive
         bioView.isHidden = searchActive
         linkView.isHidden = searchActive || !hasWebsite()

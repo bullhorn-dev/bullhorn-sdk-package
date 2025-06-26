@@ -47,7 +47,8 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoMedium, size: 15)
+        label.font = .primaryText()
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
         label.numberOfLines = 1
         return label
@@ -55,7 +56,8 @@ class BHLivePostCarouselCell: UICollectionViewCell {
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoRegular, size: 13)
+        label.font = .secondaryText()
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
         label.numberOfLines = 2
         return label

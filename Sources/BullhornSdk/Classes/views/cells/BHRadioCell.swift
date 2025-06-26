@@ -53,7 +53,12 @@ class BHRadioCell: UITableViewCell {
         streamIcon.clipsToBounds = true
             
         radioTitleLabel.textColor = .accent()
+        radioTitleLabel.font = .sectionTitle()
+        radioTitleLabel.adjustsFontForContentSizeCategory = true
+
         streamTitleLabel.textColor = .primary()
+        streamTitleLabel.font = .primaryText()
+        streamTitleLabel.adjustsFontForContentSizeCategory = true
         
         playButton.title = "Listen"
     }

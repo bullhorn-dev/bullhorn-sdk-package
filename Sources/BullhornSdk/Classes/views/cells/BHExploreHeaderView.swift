@@ -74,10 +74,15 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         featuredPostsView.delegate = self
 
         recentUsersTitleLabel.textColor = .primary()
-        featuredUsersTitleLabel.textColor = .primary()
-        featuredPostsTitleLabel.textColor = .primary()
+        recentUsersTitleLabel.font = .sectionTitle()
 
-        seeAllRecentsButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 15)
+        featuredUsersTitleLabel.textColor = .primary()
+        featuredUsersTitleLabel.font = .sectionTitle()
+
+        featuredPostsTitleLabel.textColor = .primary()
+        featuredPostsTitleLabel.font = .sectionTitle()
+
+        seeAllRecentsButton.titleLabel?.font = .secondaryButton()
         seeAllRecentsButton.backgroundColor = .clear
         seeAllRecentsButton.tintColor = .accent()
         

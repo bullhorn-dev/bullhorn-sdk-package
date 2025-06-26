@@ -35,9 +35,13 @@ class BHSettingDetailsCell: UITableViewCell {
 
         titleLabel.text = model.title
         titleLabel.textColor = .primary()
+        titleLabel.font = .settingsPrimaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
 
         detailsLabel.text = model.subtitle
         detailsLabel.textColor = .secondary()
+        detailsLabel.font = .settingsSecondaryText()
+        detailsLabel.adjustsFontForContentSizeCategory = true
     }
 }
 

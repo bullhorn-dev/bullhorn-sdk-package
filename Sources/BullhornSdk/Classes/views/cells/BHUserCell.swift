@@ -51,7 +51,12 @@ class BHUserCell: UITableViewCell {
         userIcon.clipsToBounds = true
             
         nameLabel.textColor = .primary()
+        nameLabel.font = .primaryText()
+        nameLabel.adjustsFontForContentSizeCategory = true
+
         bioLabel.textColor = .primary()
+        bioLabel.font = .secondaryText()
+        bioLabel.adjustsFontForContentSizeCategory = true
     }
     
     // MARK: - Private

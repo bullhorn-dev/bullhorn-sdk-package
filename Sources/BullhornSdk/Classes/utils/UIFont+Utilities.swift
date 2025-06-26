@@ -14,7 +14,7 @@ extension UIFont {
 
     class func fontWithName(_ name: Name, size: CGFloat) -> UIFont {
 
-        let font = UIFont.init(name: name.rawValue, size: size)
+        let font = UIFont(name: name.rawValue, size: size)
         var fontWeight: UIFont.Weight = .regular
 
         if font == nil {
@@ -29,6 +29,34 @@ extension UIFont {
             }
         }
 
-        return font ?? UIFont.systemFont(ofSize: size, weight: fontWeight)
+        return font != nil ? UIFontMetrics(forTextStyle: .headline).scaledFont(for: font!) : UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: size, weight: fontWeight))
+    }
+    
+    class func sectionTitle() -> UIFont {
+        return UIFont.fontWithName(.robotoBold, size: 18)
+    }
+    
+    class func primaryButton() -> UIFont {
+        return UIFont.fontWithName(.robotoMedium, size: 17)
+    }
+
+    class func secondaryButton() -> UIFont {
+        return UIFont.fontWithName(.robotoRegular, size: 15)
+    }
+
+    class func primaryText() -> UIFont {
+        return UIFont.fontWithName(.robotoMedium, size: 14)
+    }
+
+    class func secondaryText() -> UIFont {
+        return UIFont.fontWithName(.robotoRegular, size: 13)
+    }
+
+    class func settingsPrimaryText() -> UIFont {
+        return UIFont.fontWithName(.robotoRegular, size: 17)
+    }
+
+    class func settingsSecondaryText() -> UIFont {
+        return UIFont.fontWithName(.robotoRegular, size: 14)
     }
 }

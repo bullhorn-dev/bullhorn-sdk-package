@@ -31,6 +31,9 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         previousButton.tintColor = .primary()
         nextButton.tintColor = .primary()
         bottomView.backgroundColor = .primaryBackground()
+        
+        nameLabel.font = .primaryButton()
+        titleLabel.font = .secondaryButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {

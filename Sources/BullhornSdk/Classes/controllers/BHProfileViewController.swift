@@ -78,6 +78,8 @@ class BHProfileViewController: BHPlayerContainingViewController {
         let versionTap = UITapGestureRecognizer(target: self, action: #selector(self.onVersionTapped(_:)))
         versionTap.numberOfTapsRequired = 3
         versionLabel.isUserInteractionEnabled = true
+        versionLabel.font = .secondaryButton()
+        versionLabel.adjustsFontForContentSizeCategory = true
         versionLabel.addGestureRecognizer(versionTap)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
@@ -187,7 +189,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         UserDefaults.standard.isDevModeEnabled = !isDevModeEnabled
         
-        debugPrint("Set Dev Mode enabled = \(!isDevModeEnabled)")
+        BHLog.p("Set Dev Mode enabled = \(!isDevModeEnabled)")
         
         configure()
         updateVersion()
@@ -202,7 +204,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     // MARK: - Notifications
     
     @objc fileprivate func onAccountChangedNotification(_ notification: Notification) {
-        debugPrint("Account changed notification")
+        BHLog.p("Account changed notification")
 
         configure()
         tableView.reloadData()

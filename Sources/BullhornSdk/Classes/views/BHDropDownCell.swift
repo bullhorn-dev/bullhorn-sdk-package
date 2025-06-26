@@ -22,7 +22,8 @@ public class BHDropDownCell: UITableViewCell {
         guard let validItem = item else { return }
         
         self.selectionStyle = .gray
-        self.textLabel?.font = .fontWithName(.robotoRegular, size: 15)
+        self.textLabel?.font = .secondaryButton()
+        self.textLabel?.adjustsFontForContentSizeCategory = true
         self.textLabel?.textColor = .primary()
         self.backgroundColor = .cardBackground()
         if validItem.extra {

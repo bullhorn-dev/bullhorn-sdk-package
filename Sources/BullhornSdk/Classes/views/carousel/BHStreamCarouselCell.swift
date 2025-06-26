@@ -41,6 +41,7 @@ class BHStreamCarouselCell: UICollectionViewCell {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .fontWithName(.robotoMedium, size: BHStreamCarouselCell.textHeight)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondary()
         label.numberOfLines = 1
         return label

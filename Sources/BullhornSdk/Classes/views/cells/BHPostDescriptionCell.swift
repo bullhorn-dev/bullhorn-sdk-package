@@ -55,6 +55,8 @@ class BHPostDescriptionCell: UITableViewCell {
         label.didTapOnURL = tapHandler
         label.textAlignment = .left
         label.textColor = .primary()
+        label.font = .secondaryText()
+        label.adjustsFontForContentSizeCategory = true
     }
     
     // MARK: - Actions

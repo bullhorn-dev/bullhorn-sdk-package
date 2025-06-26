@@ -20,7 +20,8 @@ class BHPlayButton: UIView {
     private let button: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("", for: .normal)
-        button.titleLabel?.font = .fontWithName(.robotoMedium, size: 17)
+        button.titleLabel?.font = .primaryButton()
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.backgroundColor = .accent()
         button.tintColor = .onAccent()
         return button

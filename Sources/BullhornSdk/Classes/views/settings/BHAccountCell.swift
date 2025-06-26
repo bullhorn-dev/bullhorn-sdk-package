@@ -40,12 +40,18 @@ class BHAccountCell: UITableViewCell {
 
         titleLabel.text = model.title
         titleLabel.textColor = .primary()
+        titleLabel.font = .settingsSecondaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
 
         subtitleLabel.text = model.subtitle?.capitalized
         subtitleLabel.textColor = .primary()
+        subtitleLabel.font = .settingsPrimaryText()
+        subtitleLabel.adjustsFontForContentSizeCategory = true
 
         iconLabel.text = model.initials
         iconLabel.textColor = .primary()
+        iconLabel.font = .sectionTitle()
+        iconLabel.adjustsFontForContentSizeCategory = true
 
         iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5

@@ -92,6 +92,6 @@ extension UIFont {
             }
         }
 
-        return font ?? UIFont.systemFont(ofSize: size, weight: fontWeight)
+        return font != nil ? UIFontMetrics(forTextStyle: .headline).scaledFont(for: font!) : UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: size, weight: fontWeight))
     }
 }

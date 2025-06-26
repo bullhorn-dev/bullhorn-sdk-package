@@ -109,12 +109,30 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         likeButton.configuration?.baseForegroundColor = .primary()
 
         userLabel.textColor = .primary()
+        userLabel.font = .primaryText()
+        userLabel.adjustsFontForContentSizeCategory = true
+
         dateLabel.textColor = .secondary()
+        dateLabel.font = .secondaryText()
+        dateLabel.adjustsFontForContentSizeCategory = true
+
         titleLabel.textColor = .primary()
+        titleLabel.font = .primaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
+
         durationLabel.textColor = .primary()
+        durationLabel.font = .secondaryText()
+        durationLabel.adjustsFontForContentSizeCategory = true
+
         waitingRoomLabel.textColor = .primary()
+
         playedLabel.textColor = .primary()
+        playedLabel.font = .secondaryText()
+        playedLabel.adjustsFontForContentSizeCategory = true
+
         tabTitleLabel.textColor = .primary()
+        tabTitleLabel.font = .primaryText()
+        tabTitleLabel.adjustsFontForContentSizeCategory = true
 
         shareButton.setTitle("", for: .normal)
         shareButton.backgroundColor = .clear

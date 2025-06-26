@@ -23,6 +23,7 @@ class BHSectionHeaderView: UICollectionReusableView {
 
     fileprivate func setup() {
         titleLabel.textColor = .primary()
-        titleLabel.font = UIFont.fontWithName(.robotoBold , size: 18)
+        titleLabel.font = .sectionTitle()
+        titleLabel.adjustsFontForContentSizeCategory = true
     }
 }

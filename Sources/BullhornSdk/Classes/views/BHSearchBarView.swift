@@ -54,7 +54,8 @@ class BHSearchBarView: UIView {
         searchBar.setClearButtonColor(to: .tertiary())
         searchBar.placeholder = "Search podcasts or episodes"
         
-        searchBar.searchTextField.font = .fontWithName(.robotoRegular, size: 14)
+        searchBar.searchTextField.font = .settingsSecondaryText()
+        searchBar.searchTextField.adjustsFontForContentSizeCategory = true
         searchBar.searchTextField.textColor = .primary()
         searchBar.searchTextField.tintColor = .accent()
         searchBar.searchTextField.borderStyle = .roundedRect

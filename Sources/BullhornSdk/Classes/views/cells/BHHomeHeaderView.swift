@@ -69,12 +69,21 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     func setup() {
         
         contentView.backgroundColor = .primaryBackground()
-        
+            
         scheduledPostsTitleLabel.textColor = .primary()
+        scheduledPostsTitleLabel.font = .sectionTitle()
+
         livePostsTitleLabel.textColor = .primary()
+        livePostsTitleLabel.font = .sectionTitle()
+
         featuredUsersTitleLabel.textColor = .primary()
+        featuredUsersTitleLabel.font = .sectionTitle()
+
         featuredPostsTitleLabel.textColor = .primary()
+        featuredPostsTitleLabel.font = .sectionTitle()
+
         followedUsersTitleLabel.textColor = .primary()
+        followedUsersTitleLabel.font = .sectionTitle()
 
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self
@@ -83,7 +92,7 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         channelsView.delegate = self
         followedUsersView.delegate = self
 
-        seeAllFollowedButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 15)
+        seeAllFollowedButton.titleLabel?.font = .secondaryButton()
         seeAllFollowedButton.backgroundColor = .clear
         seeAllFollowedButton.tintColor = .accent()
 

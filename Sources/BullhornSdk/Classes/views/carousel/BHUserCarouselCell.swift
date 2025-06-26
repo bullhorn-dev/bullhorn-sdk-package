@@ -35,7 +35,8 @@ class BHUserCarouselCell: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoMedium, size: 13)
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .primaryText()
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left
         label.textColor = .primary()
@@ -44,14 +45,16 @@ class BHUserCarouselCell: UICollectionViewCell {
 
     private let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoRegular, size: 12)
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .secondaryText()
         label.textColor = .secondary()
         return label
     }()
     
     private let badgeLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoRegular, size: 12)
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .secondaryText()
         label.textAlignment = .left
         label.textColor = .onAccent()
         label.backgroundColor = .accent()
@@ -129,10 +132,30 @@ class BHUserCarouselCell: UICollectionViewCell {
             badgeLabel.isHidden = true
         }
 
-        if !showCategory {
+        if !showCategory || !shouldShowCategory() {
             nameLabel.numberOfLines = 0
             categoryLabel.isHidden = true
             nameLabel.sizeToFit()
+        } else {
+            nameLabel.numberOfLines = 1
+            categoryLabel.isHidden = false
+            nameLabel.sizeToFit()
+        }
+    }
+    
+    private func shouldShowCategory() -> Bool {
+        let sizeCategory: UIContentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        
+        switch sizeCategory {
+        case .accessibilityExtraExtraExtraLarge,
+             .accessibilityExtraExtraLarge,
+             .accessibilityExtraLarge,
+             .extraExtraExtraLarge,
+             .extraExtraLarge,
+             .extraLarge:
+            return false
+        default:
+            return true
         }
     }
 }

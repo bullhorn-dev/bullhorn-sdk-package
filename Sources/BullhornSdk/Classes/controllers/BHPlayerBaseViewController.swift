@@ -108,6 +108,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.liveTagLabel.layer.cornerRadius = 4
         self.liveTagLabel.layer.masksToBounds = true
         
+        self.positionLabel.adjustsFontForContentSizeCategory = true
+        self.positionLabel.font = .primaryText()
+        self.durationLabel.adjustsFontForContentSizeCategory = true
+        self.durationLabel.font = .primaryText()
+
         self.videoView.isHidden = true
         
         self.slider.isContinuous = true

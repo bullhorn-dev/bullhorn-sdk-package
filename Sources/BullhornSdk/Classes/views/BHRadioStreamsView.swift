@@ -41,7 +41,8 @@ class BHRadioStreamsView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "News Radio"
-        label.font = .fontWithName(.robotoMedium, size: 15)
+        label.font = .primaryText()
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
         label.numberOfLines = 1
         return label

@@ -23,6 +23,7 @@ import Foundation
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .fontWithName(.robotoLight, size: 18)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .tertiary()
         return label
     }()
@@ -30,6 +31,7 @@ import Foundation
     let valueLabel: UILabel = {
         let label = UILabel()
         label.font = .fontWithName(.robotoRegular, size: 17)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .tertiary()
         label.textAlignment = .right
         return label
@@ -59,7 +61,7 @@ import Foundation
         backgroundColor = .clear
 
         var arrangedSubviews: [UIView] = []
-        let config = UIImage.SymbolConfiguration(weight: .thin)
+        let config = UIImage.SymbolConfiguration(weight: .light)
         let color: UIColor = type == .destructive ? .accent() : .primary()
 
         leftImageView.image = UIImage(systemName: icon)?.withConfiguration(config)

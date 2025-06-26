@@ -49,7 +49,8 @@ class BHMiniPlayerView: UIView {
     private let userLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = .fontWithName(.robotoRegular, size: 15)
+        label.font = .secondaryButton()
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
         return label
     }()

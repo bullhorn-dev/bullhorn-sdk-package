@@ -14,7 +14,8 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoRegular, size: 17)
+        label.font = .settingsPrimaryText()
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.textColor = .navigationText()
         label.layer.borderColor = UIColor.navigationBackground().cgColor

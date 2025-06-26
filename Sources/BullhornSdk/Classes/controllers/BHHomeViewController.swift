@@ -209,7 +209,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         switch info.type {
         case .connected, .connectedExpensive:
             tableView.restore()
-            fetch(true)
+            fetch()
         default:
             break
         }

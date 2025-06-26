@@ -33,6 +33,8 @@ class BHSettingCell: UITableViewCell {
 
         titleLabel.text = model.title
         titleLabel.textColor = .primary()
+        titleLabel.font = .settingsPrimaryText()
+        titleLabel.adjustsFontForContentSizeCategory = true
     }
 }
 

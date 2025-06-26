@@ -44,6 +44,8 @@ class BHNotificationUserCell: UITableViewCell {
         userIcon.clipsToBounds = true
             
         nameLabel.textColor = .primary()
+        nameLabel.font = .primaryText()
+        nameLabel.adjustsFontForContentSizeCategory = true
     }
     
     // MARK: - Actions
