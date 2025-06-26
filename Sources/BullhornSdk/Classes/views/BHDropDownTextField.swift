@@ -138,11 +138,12 @@ public class BHDropDownTextField: UIView {
             textField.trailingAnchor.constraint(equalTo: arrowIndicator.leadingAnchor)
         ])
         textField.font = UIFont.fontWithName(.robotoRegular, size: 15)
-        textField.backgroundColor = .cardBackground()
+        textField.backgroundColor = .clear
         textField.textInsets = .init(top: 12, left: 8, bottom: 12, right: 8)
         textField.addTarget(self, action: #selector(textFieldDidChange(_ :)), for: .editingChanged)
         textField.delegate = self
         
+        self.backgroundColor = .cardBackground()
         self.layer.borderColor = UIColor.divider().cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 4
