@@ -179,6 +179,10 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 
                 switch response {
                 case .success:
+                    /// track event
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sendReport, context: self.reportReason, variant: self.reportName)
+                    BHTracker.shared.trackEvent(with: request)
+
                     self.showInfo("Report has been sent successfully")
                     self.navigationController?.popViewController(animated: true)
                 case .failure(error: let error):

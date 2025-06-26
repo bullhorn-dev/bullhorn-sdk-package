@@ -50,7 +50,7 @@ enum BHTrackBanner: String, Codable {
     case downloadEpisode   = "download_episode"
     case episodeLikeOn     = "episode_like_on"
     case episodeLikeOff    = "episode_like_off"
-    case reportProblem     = "report_problem"
+    case sendReport        = "send_report"
     /// ui-player
     case playerOpen        = "player_open"
     case playerPlay        = "player_play"
