@@ -45,7 +45,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
     fileprivate static let NotificationsSegueIdentifier = "Profile.NotificationsSegueIdentifier"
-    fileprivate static let ReportProblemSegueIdentifier = "Profile.ReportProblemSegueIdentifier"
+    fileprivate static let MoreInfoSegueIdentifier = "Profile.MoreInfoSegueIdentifier"
 
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
@@ -151,8 +151,8 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 .staticCell(model: SettingsOption(title: "Notifications", icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.NotificationsSegueIdentifier, sender: self)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Report a problem", icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ReportProblemSegueIdentifier, sender: self)
+                .staticCell(model: SettingsOption(title: "More Info", icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Developer mode options", icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenDevModeNotification, object: self, userInfo: nil)
@@ -163,8 +163,8 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 .staticCell(model: SettingsOption(title: "Appearance", icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Report a problem", icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ReportProblemSegueIdentifier, sender: self)
+                .staticCell(model: SettingsOption(title: "More Info", icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         }

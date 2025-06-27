@@ -71,6 +71,7 @@ public class BullhornSdk: NSObject {
 
     public var networkId: String = ""
     public var clientId: String = ""
+    public var infoLinks: [BHInfoLink] = []
 
     public var externalUser: BHSdkUser?
     
@@ -80,7 +81,7 @@ public class BullhornSdk: NSObject {
     fileprivate var backgroundTaskStartTime: TimeInterval?
     fileprivate var isBackgroundTaskRequested: Bool = false
 
-    public func configure(clientId: String, networkId: String, configType: BHAppConfigType = .prod) {
+    public func configure(clientId: String, networkId: String, infoLinks: [BHInfoLink], configType: BHAppConfigType = .prod) {
         BHLog.p("\(#function)")
 
         if BHReachabilityManager.shared.isConnected() {
@@ -91,6 +92,7 @@ public class BullhornSdk: NSObject {
         
         self.clientId = clientId
         self.networkId = networkId
+        self.infoLinks = infoLinks
         
         BHLog.p("\(#function) - AppConfig: \(BHAppConfiguration.shared.appVersion(useBuildNumber: true))")
 

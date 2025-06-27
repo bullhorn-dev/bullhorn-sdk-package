@@ -16,6 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var configType: BHAppConfigType
         var clientId: String
         let networkId: String = UserDefaults.standard.networkId
+        let infoLinks: [BHInfoLink] = [
+            BHInfoLink(type: .termsOfService, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
+            BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),
+            BHInfoLink(type: .yourPrivacyChoices, title: "Your Privacy Choices", url: "https://l.bullhorn.fm/privacy-policy"),
+            BHInfoLink(type: .contactUs, title: "Contact Us", url: "https://l.bullhorn.fm/#get-in-touch")
+        ]
 
         if let mainBundleInfo = Bundle.main.infoDictionary, let appConfigTypeString = mainBundleInfo["AppConfigType"] as? String, let clientIdString = mainBundleInfo["BullhornSdkId"] as? String {
             configType = BHAppConfigType.init(rawValue: appConfigTypeString) ?? .prod
@@ -27,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
                 
         BullhornSdk.shared.isLoggingEnabled = true
-        BullhornSdk.shared.configure(clientId: clientId, networkId: networkId, configType: configType)
+        BullhornSdk.shared.configure(clientId: clientId, networkId: networkId, infoLinks: infoLinks, configType: configType)
 
         ThemesManager.shared.updateTheme(theme: ThemesManager.shared.currentTheme())
 
