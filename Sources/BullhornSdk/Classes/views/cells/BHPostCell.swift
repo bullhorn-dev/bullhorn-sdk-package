@@ -132,7 +132,8 @@ class BHPostCell: UITableViewCell {
     fileprivate func updateControls() {
         guard let validPost = post else { return }
 
-        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .medium)
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        let mediumConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .medium)
         var image: UIImage? = nil
 
         if BullhornSdk.shared.externalUser?.level == .external {
@@ -149,10 +150,12 @@ class BHPostCell: UITableViewCell {
         likeButton.backgroundColor = .clear
         likeButton.configuration?.baseForegroundColor = .primary()
 
+        shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)
         shareButton.setTitle("", for: .normal)
         shareButton.backgroundColor = .clear
         shareButton.configuration?.baseForegroundColor = .primary()
 
+        optionsButton.setImage(UIImage(systemName: "ellipsis")?.withConfiguration(mediumConfig), for: .normal)
         optionsButton.setTitle("", for: .normal)
         optionsButton.backgroundColor = .clear
         optionsButton.configuration?.baseForegroundColor = .primary()

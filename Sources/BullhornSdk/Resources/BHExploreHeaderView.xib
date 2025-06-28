@@ -16,18 +16,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHExploreHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHExploreHeaderView" rowHeight="588" id="wk1-wC-qQd" customClass="BHExploreHeaderView" customModule="BullhornSdk">
-            <rect key="frame" x="0.0" y="0.0" width="474" height="588"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHExploreHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHExploreHeaderView" rowHeight="596" id="wk1-wC-qQd" customClass="BHExploreHeaderView" customModule="BullhornSdk">
+            <rect key="frame" x="0.0" y="0.0" width="477" height="596"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wk1-wC-qQd" id="mCl-FO-1hE">
-                <rect key="frame" x="0.0" y="0.0" width="474" height="588"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wk1-wC-qQd" id="mCl-FO-1hE">
+                <rect key="frame" x="0.0" y="0.0" width="477" height="596"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rnA-fj-jBc">
-                        <rect key="frame" x="0.0" y="0.0" width="474" height="588"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rnA-fj-jBc">
+                        <rect key="frame" x="0.0" y="0.0" width="477" height="592"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MqY-6e-geO">
-                                <rect key="frame" x="0.0" y="0.0" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="477" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent Searches" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKP-DJ-Rfg">
                                         <rect key="frame" x="16" y="11.333333333333334" width="136.33333333333334" height="21.333333333333329"/>
@@ -36,7 +36,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="clM-PB-7yw">
-                                        <rect key="frame" x="378" y="0.0" width="80" height="44"/>
+                                        <rect key="frame" x="381" y="0.0" width="80" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="cxY-gh-nkY"/>
                                         </constraints>
@@ -59,14 +59,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oYR-ET-mF0" customClass="BHUsersCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="44" width="474" height="134"/>
+                                <rect key="frame" x="0.0" y="44" width="477" height="136"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="134" id="wuP-1g-zmM"/>
+                                    <constraint firstAttribute="height" constant="136" id="wuP-1g-zmM"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tj6-ZT-g6Q">
-                                <rect key="frame" x="0.0" y="178" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="180" width="477" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Featured Podcasts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hC1-Lp-Gd1">
                                         <rect key="frame" x="16" y="11.333333333333341" width="151.66666666666666" height="21.333333333333329"/>
@@ -83,14 +83,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lkt-zb-uE3" customClass="BHUsersCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="222" width="474" height="134"/>
+                                <rect key="frame" x="0.0" y="224" width="477" height="136"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="134" id="YZj-SV-IiV"/>
+                                    <constraint firstAttribute="height" constant="136" id="YZj-SV-IiV"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9JJ-Re-G9v">
-                                <rect key="frame" x="0.0" y="356" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="360" width="477" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Featured Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0dA-pw-ZZb">
                                         <rect key="frame" x="16" y="0.0" width="149.66666666666666" height="44"/>
@@ -109,15 +109,15 @@
                                     <constraint firstAttribute="height" constant="44" id="UIe-Am-JTE"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gnb-9U-gD1" customClass="BHPagedCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="400" width="474" height="144"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gnb-9U-gD1" customClass="BHPagedCarouselView" customModule="BullhornSdk">
+                                <rect key="frame" x="0.0" y="404" width="477" height="144"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="Lt5-Yh-I0x"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="544" width="474" height="44"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
+                                <rect key="frame" x="0.0" y="548" width="477" height="44"/>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="HpC-Ve-5Rp"/>
@@ -148,7 +148,7 @@
                 <outlet property="seeAllRecentsButton" destination="clM-PB-7yw" id="3EU-Gv-gR2"/>
                 <outlet property="tabbedView" destination="eji-UJ-jlI" id="2wt-vs-rUf"/>
             </connections>
-            <point key="canvasLocation" x="427.69230769230768" y="-201.89573459715638"/>
+            <point key="canvasLocation" x="430" y="-196.91943127962085"/>
         </tableViewCell>
     </objects>
     <resources>

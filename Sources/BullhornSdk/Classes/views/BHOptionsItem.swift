@@ -61,7 +61,9 @@ import Foundation
         backgroundColor = .clear
 
         var arrangedSubviews: [UIView] = []
-        let config = UIImage.SymbolConfiguration(weight: .light)
+
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .light, scale: .medium)
         let color: UIColor = type == .destructive ? .accent() : .primary()
 
         leftImageView.image = UIImage(systemName: icon)?.withConfiguration(config)

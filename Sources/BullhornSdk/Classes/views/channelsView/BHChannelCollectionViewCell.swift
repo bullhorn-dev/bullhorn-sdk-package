@@ -12,8 +12,8 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
+    lazy var titleLabel: BHPaddingLabel = {
+        let label = BHPaddingLabel()
         label.font = .settingsPrimaryText()
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
@@ -23,6 +23,7 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         label.layer.masksToBounds = true
         label.backgroundColor = .navigationBackground()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textEdgeInsets = UIEdgeInsets(top: 0, left: 3, bottom: 0, right: 3)
         return label
     }()
     

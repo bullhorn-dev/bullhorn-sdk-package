@@ -78,8 +78,9 @@ class BHDownloadButton: UIView {
     }
     
     fileprivate func updateButtonState() {
-        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .medium)
-        let smallConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .small)
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        let mediumConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .medium)
+        let smallConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .small)
         var image: UIImage? = nil
         var bgColor: UIColor = .clear
         var hasProgress: Bool = false

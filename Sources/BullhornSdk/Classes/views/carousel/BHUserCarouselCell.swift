@@ -51,19 +51,21 @@ class BHUserCarouselCell: UICollectionViewCell {
         return label
     }()
     
-    private let badgeLabel: UILabel = {
-        let label = UILabel()
+    private let badgeLabel: BHPaddingLabel = {
+        let label = BHPaddingLabel()
         label.adjustsFontForContentSizeCategory = true
         label.font = .secondaryText()
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.textColor = .onAccent()
         label.backgroundColor = .accent()
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
         label.isHidden = true
+        label.textEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
         return label
     }()
-
+    
+    private let badgeSize: Double = 24.0
         
     // MARK: - Initializers
     
@@ -80,7 +82,7 @@ class BHUserCarouselCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height / 2
+        badgeLabel.layer.cornerRadius = badgeSize / 2
     }
         
     // MARK: - Private Methods
@@ -104,19 +106,19 @@ class BHUserCarouselCell: UICollectionViewCell {
         badgeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: -2),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -2),
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: -3),
+            stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -3),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 3),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             badgeLabel.rightAnchor.constraint(equalTo: rightAnchor),
             badgeLabel.topAnchor.constraint(equalTo: topAnchor),
-            badgeLabel.heightAnchor.constraint(equalToConstant: 20.0),
-            badgeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 20.0),
+            badgeLabel.heightAnchor.constraint(equalToConstant: badgeSize),
+            badgeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: badgeSize),
             imageView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: stackView.widthAnchor),
         ])
-        
-        badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height / 2
+                
+        layoutSubviews()
     }
 
     private func update() {
@@ -126,24 +128,29 @@ class BHUserCarouselCell: UICollectionViewCell {
         categoryLabel.text = user?.categoryName
 
         if let newEpisodesCount = user?.unwatchedEpisodesCount, newEpisodesCount > 0, showBadge {
-            badgeLabel.text = "  \(newEpisodesCount)  "
+            badgeLabel.text = "\(newEpisodesCount)"
             badgeLabel.isHidden = false
         } else {
             badgeLabel.isHidden = true
         }
 
-        if !showCategory || !shouldShowCategory() {
-            nameLabel.numberOfLines = 0
+        if !showCategory || isTextScaled() {
             categoryLabel.isHidden = true
             nameLabel.sizeToFit()
         } else {
-            nameLabel.numberOfLines = 1
             categoryLabel.isHidden = false
             nameLabel.sizeToFit()
         }
+        
+        if isTextScaled() {
+            nameLabel.numberOfLines = 1
+            nameLabel.lineBreakMode = .byTruncatingTail
+        } else {
+            nameLabel.numberOfLines = showCategory ? 1 : 0
+        }
     }
     
-    private func shouldShowCategory() -> Bool {
+    private func isTextScaled() -> Bool {
         let sizeCategory: UIContentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         
         switch sizeCategory {
@@ -153,9 +160,9 @@ class BHUserCarouselCell: UICollectionViewCell {
              .extraExtraExtraLarge,
              .extraExtraLarge,
              .extraLarge:
-            return false
-        default:
             return true
+        default:
+            return false
         }
     }
 }

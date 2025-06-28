@@ -199,7 +199,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     fileprivate func updateControls() {
         guard let validPost = postsManager?.post else { return }
 
-        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .thin, scale: .medium)
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        let mediumConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .medium)
         var image: UIImage? = nil
 
         if BullhornSdk.shared.externalUser?.level == .external {
@@ -212,6 +213,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
         }
         likeButton.setImage(image, for: .normal)
+        shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)
 
         if validPost.isLiveStream() {
             playerView.isHidden = false
