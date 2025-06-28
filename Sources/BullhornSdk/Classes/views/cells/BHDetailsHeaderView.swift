@@ -93,10 +93,19 @@ class BHDetailsHeaderView: UITableViewHeaderFooterView {
         userIcon.clipsToBounds = true
         
         userLabel.textColor = .primary()
+        userLabel.font = .primaryText()
+
         dateLabel.textColor = .secondary()
+        dateLabel.font = .secondaryText()
+
         titleLabel.textColor = .primary()
+        titleLabel.font = .fontWithName(.robotoMedium, size: 16)
+
         durationLabel.textColor = .secondary()
+        durationLabel.font = .secondaryText()
+
         waitingRoomLabel.textColor = .primary()
+        waitingRoomLabel.font = .secondaryButton()
         
         ringButton.setTitle("", for: .normal)
         ringButton.backgroundColor = .clear
