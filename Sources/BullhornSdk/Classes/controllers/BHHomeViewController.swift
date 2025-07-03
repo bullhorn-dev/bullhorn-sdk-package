@@ -131,6 +131,9 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                     if showHeader || !BHReachabilityManager.shared.isConnected() {
                         completeBlock()
                     }
+                    if BHNetworkManager.shared.users.count > 0 {
+                        self.defaultHideActivityIndicatorView()
+                    }
                 case .failure(error: let error):
                     let message = "Failed to fetch network from storage. \(error.localizedDescription)"
                     BHLog.w(message)
