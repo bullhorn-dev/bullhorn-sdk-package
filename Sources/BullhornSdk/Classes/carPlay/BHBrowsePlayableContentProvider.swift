@@ -57,7 +57,7 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
-        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: true)
+        return composeCPListTemplateForTab(sections: [CPListSection(items: items)], in: Bundle.module, hasSearch: false)
     }
         
     func disconnect() {
