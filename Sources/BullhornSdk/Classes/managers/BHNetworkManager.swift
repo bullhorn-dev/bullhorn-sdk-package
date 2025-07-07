@@ -64,7 +64,7 @@ class BHNetworkManager {
         if let selectedChannel = channels.first(where: { $0.id == channelId }) {
             if selectedChannel.isMain() {
                 selectedChannel.categories?.forEach({ category in
-                    let cusers = users.filter({ $0.categoryName == category.name })
+                    let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
                     if let validName = category.name, cusers.count > 0 {
                         let uimodel = UIUsersModel(title: validName, users: cusers)
                         splittedUsers.append(uimodel)
