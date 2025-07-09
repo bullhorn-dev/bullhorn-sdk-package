@@ -24,6 +24,7 @@ struct BHUser: Codable, Hashable {
         case ratingValue = "rating_value"
         case outgoingStatus = "outgoing_status"
         case receiveNotifications = "receive_notifications"
+        case autoDownload = "auto_download"
         case newEpisodesCount = "new_episodes_count"
     }
     
@@ -57,6 +58,7 @@ struct BHUser: Codable, Hashable {
     var ratingValue: Double?
     var outgoingStatus: String?
     var receiveNotifications: Bool = false
+    var autoDownload: Bool = false
     var newEpisodesCount: Int?
 
     var categoryName: String {

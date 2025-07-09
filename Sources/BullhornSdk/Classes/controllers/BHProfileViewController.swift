@@ -12,6 +12,7 @@ enum SettingsOptionType {
     case staticCell(model: SettingsOption)
     case detailsCell(model: SettingsDetailsOption)
     case accountCell(model: SettingsAccountOption)
+    case toggleCell(model: SettingsToggleOption)
 }
 
 struct SettingsOption {
@@ -20,6 +21,12 @@ struct SettingsOption {
     let iconBackgroundColor: UIColor
     let handler: (() -> Void)
     let disclosure: Bool
+}
+
+struct SettingsToggleOption {
+    let title: String
+    let isActive: Bool
+    let handler: (() -> Void)
 }
 
 struct SettingsDetailsOption {
@@ -44,7 +51,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
-    fileprivate static let NotificationsSegueIdentifier = "Profile.NotificationsSegueIdentifier"
+    fileprivate static let SettingsSegueIdentifier = "Profile.SettingsSegueIdentifier"
     fileprivate static let MoreInfoSegueIdentifier = "Profile.MoreInfoSegueIdentifier"
 
     @IBOutlet weak var stackView: UIStackView!
@@ -145,11 +152,8 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         if UserDefaults.standard.isDevModeEnabled {
             models.append(Section(title: "App Preferences", options: [
-                .staticCell(model: SettingsOption(title: "Appearance", icon: nil, iconBackgroundColor: .accent(), handler: {
-                    NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Notifications", icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.NotificationsSegueIdentifier, sender: self)
+                .staticCell(model: SettingsOption(title: "Settings", icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.SettingsSegueIdentifier, sender: self)
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "More Info", icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
@@ -263,6 +267,12 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.configure(with: model)
             return cell
+        case .toggleCell(let model):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingToggleCell.reusableIndentifer, for: indexPath) as? BHSettingToggleCell else {
+                return UITableViewCell()
+            }
+            cell.configure(with: model)
+            return cell
         }
     }
     
@@ -276,6 +286,8 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case .detailsCell(let model):
             model.handler()
         case .accountCell(let model):
+            model.handler()
+        case .toggleCell(let model):
             model.handler()
         }
     }

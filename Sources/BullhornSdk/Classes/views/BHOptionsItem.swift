@@ -11,6 +11,7 @@ import Foundation
     enum ItemValueType {
         case text
         case image
+        case toggle
     }
 
     let leftImageView: UIImageView = {
@@ -43,6 +44,14 @@ import Foundation
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+    
+    let valueSwitch: UISwitch = {
+        let toggleView = UISwitch()
+        toggleView.tintColor = .navigationText()
+        toggleView.onTintColor = .accent()
+        toggleView.isUserInteractionEnabled = false
+        return toggleView
+    }()
 
     private let contentView = UIView()
     
@@ -52,7 +61,7 @@ import Foundation
     
     // MARK: - Lifecycle
     
-    init(withType type: ItemType, valueType: ItemValueType, title: String, icon: String) {
+    init(withType type: ItemType, valueType: ItemValueType, title: String, icon: String?) {
         super.init(frame: .zero)
                 
         self.type = type
@@ -63,12 +72,21 @@ import Foundation
         var arrangedSubviews: [UIView] = []
 
         let font = UIFont.fontWithName(.robotoRegular, size: 18)
-        let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .light, scale: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .medium)
         let color: UIColor = type == .destructive ? .accent() : .primary()
 
-        leftImageView.image = UIImage(systemName: icon)?.withConfiguration(config)
-        leftImageView.tintColor = color
-        arrangedSubviews.append(leftImageView)
+        if let validIcon = icon {
+            leftImageView.image = UIImage(systemName: validIcon)?.withConfiguration(config)
+            leftImageView.tintColor = color
+
+            arrangedSubviews.append(leftImageView)
+            leftImageView.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                leftImageView.heightAnchor.constraint(equalToConstant: 28),
+                leftImageView.widthAnchor.constraint(equalToConstant: 28)
+            ])
+        }
 
         titleLabel.text = title
         titleLabel.textColor = color
@@ -77,8 +95,20 @@ import Foundation
         switch valueType {
         case .image:
             arrangedSubviews.append(valueImageView)
+            valueImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                valueImageView.heightAnchor.constraint(equalToConstant: 28),
+                valueImageView.widthAnchor.constraint(equalToConstant: 28)
+            ])
         case .text:
             arrangedSubviews.append(valueLabel)
+            valueLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                valueLabel.heightAnchor.constraint(equalToConstant: 28),
+                valueLabel.widthAnchor.constraint(equalToConstant: 100),
+            ])
+        case .toggle:
+            arrangedSubviews.append(valueSwitch)
         }
 
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
@@ -94,33 +124,13 @@ import Foundation
         addSubview(contentView)
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        leftImageView.translatesAutoresizingMaskIntoConstraints = false
-        valueLabel.translatesAutoresizingMaskIntoConstraints = false
-        valueImageView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 20),
+            stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 28),
             stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
-            leftImageView.heightAnchor.constraint(equalToConstant: 20),
-            leftImageView.widthAnchor.constraint(equalToConstant: 20)
         ])
-        
-        switch valueType {
-        case .image:
-            NSLayoutConstraint.activate([
-                valueImageView.heightAnchor.constraint(equalToConstant: 20),
-                valueImageView.widthAnchor.constraint(equalToConstant: 20)
-            ])
-        case .text:
-            NSLayoutConstraint.activate([
-                valueLabel.heightAnchor.constraint(equalToConstant: 20),
-                valueLabel.widthAnchor.constraint(equalToConstant: 100),
-                valueLabel.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
-                valueLabel.rightAnchor.constraint(equalTo: stackView.rightAnchor)
-            ])
-        }
     }
         
     required init?(coder: NSCoder) {
@@ -140,5 +150,9 @@ import Foundation
         } else {
             valueImageView.image = nil
         }
+    }
+    
+    func setToggleValue(_ value: Bool) {
+        valueSwitch.setOn(value, animated: true)
     }
 }

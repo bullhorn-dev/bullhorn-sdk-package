@@ -5,21 +5,32 @@ import UIKit
 class BHNotificationUserCell: UITableViewCell {
     
     class var reusableIndentifer: String { return String(describing: self) }
-
+    
+    enum ItemType {
+        case notifications
+        case downloads
+    }
+    
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var switchControl: UISwitch!
     
     var switchChangeClosure: ((Bool)->())?
-
+    
     var user: BHUser? {
         didSet {
             update()
         }
     }
-
+    
+    var type: ItemType = .notifications {
+        didSet {
+            updateValue()
+        }
+    }
+    
     fileprivate var placeholderImage: UIImage?
-
+    
     // MARK: - Lifecycle
     
     required init?(coder: NSCoder) {
@@ -31,7 +42,7 @@ class BHNotificationUserCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialize()
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -42,7 +53,7 @@ class BHNotificationUserCell: UITableViewCell {
         userIcon.layer.borderWidth = 1
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
-            
+        
         nameLabel.textColor = .primary()
         nameLabel.font = .primaryText()
         nameLabel.adjustsFontForContentSizeCategory = true
@@ -53,7 +64,7 @@ class BHNotificationUserCell: UITableViewCell {
     @IBAction func switchAction(_ sender: Any) {
         switchChangeClosure?(switchControl.isOn)
     }
-
+    
     // MARK: - Private
     
     fileprivate func initialize() {
@@ -63,10 +74,21 @@ class BHNotificationUserCell: UITableViewCell {
     
     fileprivate func update() {
         guard let validUser = user else { return }
-
+        
         nameLabel.text = validUser.fullName
         userIcon.sd_setImage(with: validUser.coverUrl, placeholderImage: placeholderImage)
-        switchControl.setOn(validUser.receiveNotifications, animated: false)
+    }
+
+    fileprivate func updateValue() {
+        guard let validUser = user else { return }
+
+        switch type {
+        case .notifications:
+            switchControl.setOn(validUser.receiveNotifications, animated: false)
+        case .downloads:
+            switchControl.setOn(validUser.autoDownload, animated: false)
+        }
+
         switchControl.isEnabled = UserDefaults.standard.isPushNotificationsEnabled
     }
 }

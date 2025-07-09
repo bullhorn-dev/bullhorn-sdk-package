@@ -42,7 +42,41 @@ class BHSettingsManager {
                     BHTracker.shared.trackEvent(with: request)
 
                 case .failure(error: let error):
-                    BHLog.w("User follow failed \(error.localizedDescription)")
+                    BHLog.w("User enable: \(enable) notifications failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
+    func getDownloadsUsers(_ completion: @escaping (BHServerApiBase.UsersResult) -> Void) {
+
+        apiSettings.getDownloadsUsers(authToken: authToken) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(users: let users):
+                    self.notificationsUsers = users
+                case .failure(error: let error):
+                    BHLog.w("Downloads users load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
+    func enableUserDownloads(_ userId: String, enable: Bool, completion: @escaping (BHServerApiUsers.UserResult) -> Void) {
+
+        apiSettings.enableUserDownloads(authToken: authToken, userId: userId, enable: enable) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(user: let user):
+                    /// track event
+                    let banner: BHTrackBanner = enable ? .downloadsOn : .downloadsOff
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: banner, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.fullName)
+                    BHTracker.shared.trackEvent(with: request)
+
+                case .failure(error: let error):
+                    BHLog.w("User enable: \(enable) auto downloads failed \(error.localizedDescription)")
                 }
                 completion(response)
             }

@@ -1285,10 +1285,10 @@
             </objects>
             <point key="canvasLocation" x="-569" y="3048"/>
         </scene>
-        <!--Notifications-->
+        <!--Notifications Settings-->
         <scene sceneID="t2A-3b-TGo">
             <objects>
-                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications" hidesBottomBarWhenPushed="YES" id="Fzv-mz-Aod" customClass="BHNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications Settings" hidesBottomBarWhenPushed="YES" id="Fzv-mz-Aod" customClass="BHSettingsNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dyV-Tw-0bt">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1347,7 +1347,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WcF-ET-yP9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1683" y="3048"/>
+            <point key="canvasLocation" x="-1294" y="3847"/>
         </scene>
         <!--Report a Problem-->
         <scene sceneID="Kgz-XU-tjf">
@@ -1471,7 +1471,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oic-A7-V7F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2986" y="3847"/>
+            <point key="canvasLocation" x="-3583" y="3847"/>
         </scene>
         <!--Web-->
         <scene sceneID="igE-u0-KlH">
@@ -1506,7 +1506,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n2C-4b-77F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2177" y="3847"/>
+            <point key="canvasLocation" x="-2774" y="3847"/>
         </scene>
         <!--Radio-->
         <scene sceneID="Bc1-rf-bte">
@@ -1863,9 +1863,9 @@
                         <outlet property="versionLabel" destination="riA-or-ieg" id="V6R-dH-j3u"/>
                         <segue destination="ISO-h0-mfF" kind="show" identifier="Profile.FavoritesSegueIdentifier" id="mQH-fg-wpb"/>
                         <segue destination="cko-RD-0fW" kind="show" identifier="Profile.DownloadsSegueIdentifier" id="NTL-B9-tFj"/>
-                        <segue destination="Fzv-mz-Aod" kind="show" identifier="Profile.NotificationsSegueIdentifier" id="ohg-JO-SKf"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>
                         <segue destination="0tn-Pd-tIz" kind="show" identifier="Profile.MoreInfoSegueIdentifier" id="ppD-0V-INu"/>
+                        <segue destination="REK-qd-AQy" kind="show" identifier="Profile.SettingsSegueIdentifier" id="iPA-XL-ErK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-Q0-eO2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2218,7 +2218,210 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kpF-5h-i03" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2606" y="3048"/>
+            <point key="canvasLocation" x="-3174" y="3048"/>
+        </scene>
+        <!--Downloads Settings-->
+        <scene sceneID="0pr-Te-gSs">
+            <objects>
+                <viewController restorationIdentifier="BHSettingDownloadsViewController" storyboardIdentifier="BHSettingDownloadsViewController" title="Downloads Settings" hidesBottomBarWhenPushed="YES" id="u9p-a2-xYQ" customClass="BHSettingsDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OoD-DW-edP">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dX0-Py-RM6">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="u9p-a2-xYQ" id="ux6-o8-uIS"/>
+                                    <outlet property="delegate" destination="u9p-a2-xYQ" id="rMj-Nt-mFY"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CIw-Er-e1p" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1gy-hc-4QT"/>
+                                    <constraint firstAttribute="width" constant="30" id="XmN-Wp-nsM"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" name="bhColorAccent"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MuN-5x-Y6m">
+                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="8uG-Qm-09f"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3WB-Fo-E5H"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <constraints>
+                            <constraint firstItem="dX0-Py-RM6" firstAttribute="leading" secondItem="3WB-Fo-E5H" secondAttribute="leading" id="1bl-SC-mW7"/>
+                            <constraint firstItem="dX0-Py-RM6" firstAttribute="top" secondItem="3WB-Fo-E5H" secondAttribute="top" id="BOc-oR-QMu"/>
+                            <constraint firstItem="CIw-Er-e1p" firstAttribute="centerX" secondItem="OoD-DW-edP" secondAttribute="centerX" id="DZx-Ia-DIh"/>
+                            <constraint firstItem="dX0-Py-RM6" firstAttribute="trailing" secondItem="3WB-Fo-E5H" secondAttribute="trailing" id="IiI-9f-dsI"/>
+                            <constraint firstItem="MuN-5x-Y6m" firstAttribute="leading" secondItem="3WB-Fo-E5H" secondAttribute="leading" id="X06-xp-H5l"/>
+                            <constraint firstItem="MuN-5x-Y6m" firstAttribute="top" secondItem="dX0-Py-RM6" secondAttribute="bottom" id="ZM5-f0-AF2"/>
+                            <constraint firstItem="3WB-Fo-E5H" firstAttribute="bottom" secondItem="dX0-Py-RM6" secondAttribute="bottom" id="ghv-Uw-O3T"/>
+                            <constraint firstItem="CIw-Er-e1p" firstAttribute="centerY" secondItem="OoD-DW-edP" secondAttribute="centerY" id="mDb-sF-Luf"/>
+                            <constraint firstItem="MuN-5x-Y6m" firstAttribute="trailing" secondItem="3WB-Fo-E5H" secondAttribute="trailing" id="vRo-xA-9pR"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Eqk-TL-AFN">
+                        <barButtonItem key="backBarButtonItem" id="oNC-2k-H2b"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicator" destination="CIw-Er-e1p" id="MsE-iT-xfM"/>
+                        <outlet property="bottomView" destination="MuN-5x-Y6m" id="n2J-y6-Z5m"/>
+                        <outlet property="tableView" destination="dX0-Py-RM6" id="7lq-eA-dVf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u9X-lK-cpa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2074" y="3847"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="M8U-jp-dvM">
+            <objects>
+                <viewController restorationIdentifier="BHSettingsViewController" storyboardIdentifier="BHSettingsViewController" title="Settings" id="REK-qd-AQy" customClass="BHSettingsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GxB-Ur-Bwj">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QKL-Fe-K47">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="7a3-qo-4eD">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                        <color key="tintColor" name="bhColorPrimary"/>
+                                        <color key="separatorColor" name="bhColorSecondaryBg"/>
+                                        <color key="sectionIndexColor" name="bhColorPrimary"/>
+                                        <color key="sectionIndexBackgroundColor" name="bhColorSecondaryBg"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingCell" rowHeight="55" id="C6E-kG-dMt" customClass="BHSettingCell" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="50" width="390" height="55"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="C6E-kG-dMt" id="gQu-S5-2M6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="55"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ar-c5-t2l">
+                                                            <rect key="frame" x="20" y="16" width="319.66666666666669" height="23"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJ5-hy-Agb">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="319.66666666666669" height="23"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                                    <color key="textColor" name="bhColorPrimary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </stackView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="8Ar-c5-t2l" firstAttribute="leading" secondItem="gQu-S5-2M6" secondAttribute="leading" constant="20" id="WPi-JR-cun"/>
+                                                        <constraint firstAttribute="bottom" secondItem="8Ar-c5-t2l" secondAttribute="bottom" constant="16" id="c5N-sp-Bu4"/>
+                                                        <constraint firstAttribute="trailing" secondItem="8Ar-c5-t2l" secondAttribute="trailing" constant="20" id="cEV-38-xLg"/>
+                                                        <constraint firstItem="8Ar-c5-t2l" firstAttribute="top" secondItem="gQu-S5-2M6" secondAttribute="top" constant="16" id="k3S-mI-jRv"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <outlet property="titleLabel" destination="LJ5-hy-Agb" id="Uua-oK-K2E"/>
+                                                </connections>
+                                            </tableViewCell>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingToggleCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingToggleCell" rowHeight="55" id="Bvn-8r-bfc" customClass="BHSettingToggleCell" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="105" width="390" height="55"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Bvn-8r-bfc" id="jj8-b8-6cs">
+                                                    <rect key="frame" x="0.0" y="0.0" width="390" height="55"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbV-cd-i4C">
+                                                            <rect key="frame" x="20" y="16" width="350" height="23"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qko-uW-m6O">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="301" height="23"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                                    <color key="textColor" name="bhColorPrimary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPA-d8-aC0">
+                                                                    <rect key="frame" x="301" y="0.0" width="51" height="23"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="49" id="HiO-Cg-0e8"/>
+                                                                        <constraint firstAttribute="height" constant="32" id="b88-a1-VOZ"/>
+                                                                    </constraints>
+                                                                    <color key="tintColor" name="bhColorAppBarTitle"/>
+                                                                    <color key="onTintColor" name="bhColorAccent"/>
+                                                                </switch>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="32" id="NUZ-Zf-zsY"/>
+                                                            </constraints>
+                                                        </stackView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="cbV-cd-i4C" secondAttribute="trailing" constant="20" id="Yce-KB-9eX"/>
+                                                        <constraint firstItem="cbV-cd-i4C" firstAttribute="top" secondItem="jj8-b8-6cs" secondAttribute="top" constant="16" id="s1O-Da-PRc"/>
+                                                        <constraint firstAttribute="bottom" secondItem="cbV-cd-i4C" secondAttribute="bottom" constant="16" id="tOL-ta-vI1"/>
+                                                        <constraint firstItem="cbV-cd-i4C" firstAttribute="leading" secondItem="jj8-b8-6cs" secondAttribute="leading" constant="20" id="x8X-j3-Sjb"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <outlet property="switchControl" destination="FPA-d8-aC0" id="8oS-jr-NFi"/>
+                                                    <outlet property="titleLabel" destination="qko-uW-m6O" id="5xo-KZ-7O0"/>
+                                                </connections>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ1-0n-eQb" customClass="BHMiniPlayerView" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <color key="backgroundColor" systemColor="systemTealColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="HI1-KT-z6e"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ZQ1-0n-eQb" secondAttribute="trailing" id="4wX-eG-ifs"/>
+                                    <constraint firstItem="ZQ1-0n-eQb" firstAttribute="leading" secondItem="QKL-Fe-K47" secondAttribute="leading" id="yCC-PY-lMr"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="NUM-XE-NVn"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <constraints>
+                            <constraint firstItem="QKL-Fe-K47" firstAttribute="top" secondItem="NUM-XE-NVn" secondAttribute="top" id="6dv-J8-76h"/>
+                            <constraint firstItem="NUM-XE-NVn" firstAttribute="trailing" secondItem="QKL-Fe-K47" secondAttribute="trailing" id="U1b-vG-aOW"/>
+                            <constraint firstItem="QKL-Fe-K47" firstAttribute="leading" secondItem="NUM-XE-NVn" secondAttribute="leading" id="n9X-0n-23E"/>
+                            <constraint firstItem="NUM-XE-NVn" firstAttribute="bottom" secondItem="QKL-Fe-K47" secondAttribute="bottom" id="nMx-Vd-IJn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="jKb-f6-JAa">
+                        <barButtonItem key="backBarButtonItem" title=" " id="aLk-Ru-Vgk"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="miniPlayerView" destination="ZQ1-0n-eQb" id="x5z-db-Pn5"/>
+                        <outlet property="stackView" destination="QKL-Fe-K47" id="vby-Bx-qKI"/>
+                        <outlet property="tableView" destination="7a3-qo-4eD" id="DXz-SU-Lff"/>
+                        <segue destination="u9p-a2-xYQ" kind="show" identifier="Settings.DownloadsSegueIdentifier" id="z4p-Uo-Klg"/>
+                        <segue destination="Fzv-mz-Aod" kind="show" identifier="Settings.NotificationsSegueIdentifier" id="HoI-3W-ntL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="huE-WU-NB0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1683" y="3048"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

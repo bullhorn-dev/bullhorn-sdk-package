@@ -39,7 +39,7 @@ class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicator
         fetch(initial: true)
 
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openFollowed)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openNotifications)
         BHTracker.shared.trackEvent(with: request)
     }
     

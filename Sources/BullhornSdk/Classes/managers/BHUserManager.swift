@@ -251,6 +251,7 @@ class BHUserManager {
 
         if let validUser = self.user, validUser.id == user.id {
             self.user?.receiveNotifications = user.receiveNotifications
+            self.user?.autoDownload = user.autoDownload
         }
         
         if let row = followedUsers.firstIndex(where: {$0.id == user.id}) {

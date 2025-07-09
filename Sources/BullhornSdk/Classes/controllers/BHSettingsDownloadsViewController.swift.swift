@@ -3,15 +3,13 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport {
+class BHSettingsDownloadsViewController: UIViewController, ActivityIndicatorSupport {
     
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-    fileprivate var headerView: BHNotificationHeaderView?
-
     fileprivate var settingsManager = BHSettingsManager.shared
 
     // MARK: - Lifecycle
@@ -26,17 +24,11 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
 
         let bundle = Bundle.module
         let notificationUserCellNib = UINib(nibName: "BHNotificationUserCell", bundle: bundle)
-        let headerNib = UINib(nibName: "BHNotificationHeaderView", bundle: bundle)
 
         tableView.register(notificationUserCellNib, forCellReuseIdentifier: BHNotificationUserCell.reusableIndentifer)
-        tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHNotificationHeaderView.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
-
-        headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHNotificationHeaderView.reusableIndentifer) as? BHNotificationHeaderView
-        headerView?.updateControls()
-        headerView?.delegate = self
 
         configureNavigationItems()
         configureRefreshControl()
@@ -44,7 +36,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         fetch(initial: true)
 
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openNotifications)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openDownloadsSettings)
         BHTracker.shared.trackEvent(with: request)
     }
     
@@ -67,7 +59,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        navigationItem.title = NSLocalizedString("Notifications Settings", comment: "")
+        navigationItem.title = NSLocalizedString("Downloads Settings", comment: "")
         navigationItem.largeTitleDisplayMode = .never
     }
     
@@ -99,7 +91,7 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
                     break
                 case .failure(error: let error):
                     if BHReachabilityManager.shared.isConnected() {
-                        self.showError("Failed to fetch user subscriptions from backend. \(error.localizedDescription)")
+                        self.showError("Failed to fetch user downloads settings from backend. \(error.localizedDescription)")
                     } else if !initial {
                         self.showConnectionError()
                     }
@@ -111,12 +103,12 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
         }
     }
 
-    fileprivate func enableUserNotifications(_ userId: String, enable: Bool) {
+    fileprivate func enableUserAutoDownloads(_ userId: String, enable: Bool) {
         BHLog.p("\(#function) - userID: \(userId), enable: \(enable)")
         
         defaultShowActivityIndicatorView()
 
-        settingsManager.enableUserNotifications(userId, enable: enable) { response in
+        settingsManager.enableUserDownloads(userId, enable: enable) { response in
             switch response {
             case .success(user: let user):
                 BHUserManager.shared.updateUserNotifications(user)
@@ -137,69 +129,44 @@ class BHNotificationsViewController: UIViewController, ActivityIndicatorSupport 
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension BHNotificationsViewController: UITableViewDataSource, UITableViewDelegate {
+extension BHSettingsDownloadsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 0
-        } else if section == 1 {
-            return BHUserManager.shared.followedUsers.count
-        }
-        return 0
+        return BHUserManager.shared.followedUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHNotificationUserCell", for: indexPath) as! BHNotificationUserCell
         let user = BHUserManager.shared.followedUsers[indexPath.row]
         cell.user = user
+        cell.type = .downloads
         cell.switchChangeClosure = { [weak self] isOn in
-            self?.enableUserNotifications(user.id, enable: isOn)
+            self?.enableUserAutoDownloads(user.id, enable: isOn)
         }
         
         return cell
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return ""
-        } else {
-            return NSLocalizedString("New Episodes", comment: "").uppercased()
-        }
+        return NSLocalizedString("Auto Download Episodes", comment: "").uppercased()
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return headerView
-        } else {
-            let header = UITableViewHeaderFooterView()
-            header.contentView.backgroundColor = .fxPrimaryBackground()
-            header.textLabel?.textColor = .secondary()
-            header.textLabel?.font = UIFont.fontWithName(.robotoThin , size: 15)
-            return header
-        }
+        let header = UITableViewHeaderFooterView()
+        header.contentView.backgroundColor = .fxPrimaryBackground()
+        header.textLabel?.textColor = .secondary()
+        header.textLabel?.font = UIFont.fontWithName(.robotoThin , size: 15)
+        return header
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return headerView?.calculateHeight() ?? 50.0
-        } else {
-            return BHUserManager.shared.followedUsers.count > 0 ? 44.0 : 0
-        }
+        return BHUserManager.shared.followedUsers.count > 0 ? 44.0 : 0
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-}
-
-// MARK: - BHNotificationHeaderViewDelegate
-
-extension BHNotificationsViewController: BHNotificationHeaderViewDelegate {
-
-    func headerView(_ view: BHNotificationHeaderView, didChange enable: Bool) {
-        tableView.reloadData()
-    }
 }
 

@@ -472,6 +472,11 @@
         <relationship name="streams" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Radio" inverseName="streams" inverseEntity="Radio"/>
     </entity>
     <entity name="User" representedClassName="UserMO" syncable="YES">
+        <attribute name="autoDownload" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="auto_download"/>
+            </userInfo>
+        </attribute>
         <attribute name="bio" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="bio"/>

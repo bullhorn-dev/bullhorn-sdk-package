@@ -291,6 +291,9 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             optionsSheet.notificationsPressedClosure = { [weak self] _ in
                 self?.enableUserNotifications(validUser.id, enable: !validUser.receiveNotifications)
             }
+            optionsSheet.downloadsPressedClosure = { [weak self] _ in
+                self?.enableUserDownloads(validUser.id, enable: !validUser.autoDownload)
+            }
             optionsSheet.unfollowPressedClosure = { [weak self] _ in
                 self?.unfollow(validUser.id)
             }
@@ -388,6 +391,32 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             case .failure(error: let error):
                 DispatchQueue.main.async {
                     var message = "Failed to enable podcast notifications. "
+                    if BHReachabilityManager.shared.isConnected() {
+                        message += error.localizedDescription
+                    } else {
+                        message += "The Internet connection is lost."
+                    }
+                    self.delegate?.userHeaderViewOnErrorOccured(self, message: message)
+                }
+            }
+        }
+    }
+    
+    fileprivate func enableUserDownloads(_ userId: String, enable: Bool) {
+        BHLog.p("\(#function) - userID: \(userId), enable: \(enable)")
+        
+        if enable && !UserDefaults.standard.isPushNotificationsEnabled {
+            BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
+        }
+
+        BHSettingsManager.shared.enableUserDownloads(userId, enable: enable) { response in
+            switch response {
+            case .success(user: let user):
+                BHUserManager.shared.updateUserNotifications(user)
+                self.reloadData()
+            case .failure(error: let error):
+                DispatchQueue.main.async {
+                    var message = "Failed to enable podcast auto downloads. "
                     if BHReachabilityManager.shared.isConnected() {
                         message += error.localizedDescription
                     } else {

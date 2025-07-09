@@ -30,6 +30,7 @@ public class UserMO: NSManagedObject {
         user.ratingValue = ratingValue?.doubleValue
         user.outgoingStatus = outgoingStatus
         user.receiveNotifications = receiveNotifications
+        user.autoDownload = autoDownload
         user.newEpisodesCount = newEpisodesCount?.intValue
 
         var cnls: [BHChannel] = []
