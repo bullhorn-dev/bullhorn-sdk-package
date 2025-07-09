@@ -27,7 +27,12 @@ class BHWebViewController: UIViewController {
             setupWebview(url: validUrl)
         }
     }
-            
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hideProgressView()
+    }
+
     // MARK: - Private
     
     private func setupProgressView() {
@@ -46,6 +51,10 @@ class BHWebViewController: UIViewController {
             progressView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 4.0)
         ])
+    }
+    
+    private func hideProgressView() {
+        progressView.removeFromSuperview()
     }
 
     private func setupEstimatedProgressObserver() {

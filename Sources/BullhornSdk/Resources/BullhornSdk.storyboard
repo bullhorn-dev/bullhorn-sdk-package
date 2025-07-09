@@ -1476,7 +1476,7 @@
         <!--Web-->
         <scene sceneID="igE-u0-KlH">
             <objects>
-                <viewController restorationIdentifier="BHWebViewController" storyboardIdentifier="BHWebViewController" title="Web" id="SmV-xe-rJb" customClass="BHWebViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHWebViewController" storyboardIdentifier="BHWebViewController" title="Web" hidesBottomBarWhenPushed="YES" id="SmV-xe-rJb" customClass="BHWebViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TWp-FT-oGr">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2344,16 +2344,16 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbV-cd-i4C">
-                                                            <rect key="frame" x="20" y="16" width="350" height="23"/>
+                                                            <rect key="frame" x="20" y="11.666666666666664" width="350" height="32"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qko-uW-m6O">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="301" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="301" height="32"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPA-d8-aC0">
-                                                                    <rect key="frame" x="301" y="0.0" width="51" height="23"/>
+                                                                    <rect key="frame" x="301" y="0.0" width="51" height="32"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="49" id="HiO-Cg-0e8"/>
                                                                         <constraint firstAttribute="height" constant="32" id="b88-a1-VOZ"/>
@@ -2370,9 +2370,8 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstItem="cbV-cd-i4C" firstAttribute="centerY" secondItem="jj8-b8-6cs" secondAttribute="centerY" id="3bI-zC-0ge"/>
                                                         <constraint firstAttribute="trailing" secondItem="cbV-cd-i4C" secondAttribute="trailing" constant="20" id="Yce-KB-9eX"/>
-                                                        <constraint firstItem="cbV-cd-i4C" firstAttribute="top" secondItem="jj8-b8-6cs" secondAttribute="top" constant="16" id="s1O-Da-PRc"/>
-                                                        <constraint firstAttribute="bottom" secondItem="cbV-cd-i4C" secondAttribute="bottom" constant="16" id="tOL-ta-vI1"/>
                                                         <constraint firstItem="cbV-cd-i4C" firstAttribute="leading" secondItem="jj8-b8-6cs" secondAttribute="leading" constant="20" id="x8X-j3-Sjb"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
