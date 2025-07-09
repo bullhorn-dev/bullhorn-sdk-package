@@ -7,7 +7,6 @@ class BHSettingsDownloadsViewController: UIViewController, ActivityIndicatorSupp
     
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
     fileprivate var settingsManager = BHSettingsManager.shared
@@ -19,8 +18,6 @@ class BHSettingsDownloadsViewController: UIViewController, ActivityIndicatorSupp
         
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
-
-        bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
         let cellNib = UINib(nibName: "BHSettingUserCell", bundle: bundle)

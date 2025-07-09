@@ -18,7 +18,6 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var reasonLabel: UILabel!
     @IBOutlet weak var reasonTextField: BHDropDownTextField!
@@ -43,7 +42,6 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         activityIndicator.color = .accent()
         
         contentView.backgroundColor = .fxPrimaryBackground()
-        bottomView.backgroundColor = .fxPrimaryBackground()
 
         configureNavigationItems()
 

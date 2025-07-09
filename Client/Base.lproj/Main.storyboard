@@ -104,7 +104,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hXE-6L-oPk">
-                                <rect key="frame" x="0.0" y="103" width="413" height="715"/>
+                                <rect key="frame" x="0.0" y="103" width="413" height="749"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <color key="separatorColor" name="bhColorDivider"/>
                                 <prototypes>
@@ -165,23 +165,13 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="86d-Z4-115">
-                                <rect key="frame" x="0.0" y="818" width="401" height="48"/>
-                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="V41-oV-oyT"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <color key="tintColor" name="bhColorAppBarTitle"/>
                         <constraints>
-                            <constraint firstItem="86d-Z4-115" firstAttribute="top" secondItem="hXE-6L-oPk" secondAttribute="bottom" id="FET-P8-lNY"/>
-                            <constraint firstItem="PvW-9w-nkW" firstAttribute="top" secondItem="hXE-6L-oPk" secondAttribute="bottom" id="VIL-vY-LSx"/>
+                            <constraint firstAttribute="bottom" secondItem="hXE-6L-oPk" secondAttribute="bottom" id="VIL-vY-LSx"/>
                             <constraint firstAttribute="right" secondItem="hXE-6L-oPk" secondAttribute="rightMargin" id="Xuy-8r-8JG"/>
-                            <constraint firstAttribute="right" secondItem="86d-Z4-115" secondAttribute="rightMargin" id="crP-bt-a5u"/>
                             <constraint firstItem="hXE-6L-oPk" firstAttribute="top" secondItem="45o-5c-3JO" secondAttribute="bottom" id="dKB-oX-R0B"/>
-                            <constraint firstItem="86d-Z4-115" firstAttribute="left" secondItem="8ow-QC-0yz" secondAttribute="left" id="ePi-2Y-j9T"/>
                             <constraint firstItem="hXE-6L-oPk" firstAttribute="left" secondItem="8ow-QC-0yz" secondAttribute="left" id="rh4-0x-SVh"/>
                         </constraints>
                     </view>
