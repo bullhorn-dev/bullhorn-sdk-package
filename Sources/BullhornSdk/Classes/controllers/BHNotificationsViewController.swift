@@ -2,9 +2,9 @@
 import UIKit
 import Foundation
 
-class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHNotificationsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
-    fileprivate static let UserDetailsSegueIdentifier = "ShowsVC.UserDetailsSegueIdentifier"
+    fileprivate static let UserDetailsSegueIdentifier = "Notifications.UserDetailsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -115,7 +115,7 @@ class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicator
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if segue.identifier == BHShowsViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
+        if segue.identifier == BHNotificationsViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
             vc.user = selectedUser
         }
     }
@@ -124,7 +124,7 @@ class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicator
     
     override func openUserDetails(_ user: BHUser?) {
         selectedUser = user
-        performSegue(withIdentifier: BHShowsViewController.UserDetailsSegueIdentifier, sender: self)
+        performSegue(withIdentifier: BHNotificationsViewController.UserDetailsSegueIdentifier, sender: self)
     }
 
     // MARK: - Action handlers
@@ -153,7 +153,7 @@ class BHShowsViewController: BHPlayerContainingViewController, ActivityIndicator
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension BHShowsViewController: UITableViewDataSource, UITableViewDelegate {
+extension BHNotificationsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -175,7 +175,7 @@ extension BHShowsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
         
-        let uiModel = UIUsersModel(title: "Shows with new episodes", users: userManager.newEpisodesUsers)
+        let uiModel = UIUsersModel(title: "Podcasts with new episodes", users: userManager.newEpisodesUsers)
         cell.collectionViewController.uiModels = [uiModel]
         cell.collectionViewController.showNewEpisodesBadge = true
         cell.collectionViewController.delegate = self
@@ -192,7 +192,7 @@ extension BHShowsViewController: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - BHGridControllerDelegate
 
-extension BHShowsViewController: BHGridControllerDelegate {
+extension BHNotificationsViewController: BHGridControllerDelegate {
 
     func gridController(_ controller: BHGridCollectionController, didSelectUser user: BHUser) {
         openUserDetails(user)

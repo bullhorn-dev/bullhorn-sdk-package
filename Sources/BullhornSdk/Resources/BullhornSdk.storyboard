@@ -479,7 +479,7 @@
                         <segue destination="TEG-MA-Hda" kind="show" identifier="Home.PostDetailsSegueIdentifier" id="TAw-Tl-Zg2"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="Home.UserDetailsSegueIdentifier" id="vP2-ST-MEt"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Home.FollowedPodcastsSegueIdentifier" id="Tnh-iY-7ke"/>
-                        <segue destination="bvR-f5-TVh" kind="show" identifier="Home.ShowsSegueIdentifier" id="yk0-AM-Nb6"/>
+                        <segue destination="bvR-f5-TVh" kind="show" identifier="Home.NotificationsSegueIdentifier" id="yk0-AM-Nb6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oG8-2N-PZW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1288,7 +1288,7 @@
         <!--Notifications Settings-->
         <scene sceneID="t2A-3b-TGo">
             <objects>
-                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications Settings" hidesBottomBarWhenPushed="YES" id="Fzv-mz-Aod" customClass="BHSettingsNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHSettingsNotificationsViewController" storyboardIdentifier="BHSettingsNotificationsViewController" title="Notifications Settings" hidesBottomBarWhenPushed="YES" id="Fzv-mz-Aod" customClass="BHSettingsNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dyV-Tw-0bt">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2042,10 +2042,10 @@
             </objects>
             <point key="canvasLocation" x="-569" y="1485"/>
         </scene>
-        <!--Your Shows-->
+        <!--Notifications-->
         <scene sceneID="29M-FS-gvI">
             <objects>
-                <viewController restorationIdentifier="BHShowsViewController" storyboardIdentifier="BHShowsViewController" title="Your Shows" hidesBottomBarWhenPushed="YES" id="bvR-f5-TVh" customClass="BHShowsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications" hidesBottomBarWhenPushed="YES" id="bvR-f5-TVh" customClass="BHNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="u7h-wZ-RQZ">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2120,7 +2120,7 @@
                         <outlet property="bottomView" destination="Qz3-gD-SLT" id="mCU-V9-mOy"/>
                         <outlet property="miniPlayerView" destination="ZeQ-oS-xqD" id="7R1-1W-tSo"/>
                         <outlet property="tableView" destination="e7T-K9-GDV" id="wYI-lA-yLn"/>
-                        <segue destination="bIr-LV-sBK" kind="show" identifier="ShowsVC.UserDetailsSegueIdentifier" id="o17-EU-xWZ"/>
+                        <segue destination="bIr-LV-sBK" kind="show" identifier="Notifications.UserDetailsSegueIdentifier" id="o17-EU-xWZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jOU-cy-NiT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

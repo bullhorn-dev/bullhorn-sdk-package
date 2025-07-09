@@ -23,9 +23,9 @@ class BHSettingsNotificationsViewController: UIViewController, ActivityIndicator
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
-        let notificationUserCellNib = UINib(nibName: "BHNotificationUserCell", bundle: bundle)
+        let cellNib = UINib(nibName: "BHSettingUserCell", bundle: bundle)
 
-        tableView.register(notificationUserCellNib, forCellReuseIdentifier: BHNotificationUserCell.reusableIndentifer)
+        tableView.register(cellNib, forCellReuseIdentifier: BHSettingUserCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
@@ -140,7 +140,7 @@ extension BHSettingsNotificationsViewController: UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BHNotificationUserCell", for: indexPath) as! BHNotificationUserCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BHSettingUserCell", for: indexPath) as! BHSettingUserCell
         let user = BHUserManager.shared.followedUsers[indexPath.row]
         cell.user = user
         cell.type = .notifications

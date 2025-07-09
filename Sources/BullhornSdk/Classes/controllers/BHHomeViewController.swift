@@ -8,7 +8,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     fileprivate static let UserDetailsSegueIdentifier = "Home.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Home.PostDetailsSegueIdentifier"
     fileprivate static let FollowedPodcastsSegueIdentifier = "Home.FollowedPodcastsSegueIdentifier"
-    fileprivate static let ShowsSegueIdentifier = "Home.ShowsSegueIdentifier"
+    fileprivate static let NotificationsSegueIdentifier = "Home.NotificationsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -91,7 +91,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         if UserDefaults.standard.isDevModeEnabled {
             let config = UIImage.SymbolConfiguration(weight: .light)
             let imageName = BHUserManager.shared.newEpisodesUsers.count > 0 ? "bell.badge" : "bell"
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(showsButtonAction(_:)))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(notificationsButtonAction(_:)))
         } else {
             navigationItem.rightBarButtonItem = nil
         }
@@ -167,8 +167,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         fetch()
     }
     
-    @objc fileprivate func showsButtonAction(_ sender: Any) {
-        openShows()
+    @objc fileprivate func notificationsButtonAction(_ sender: Any) {
+        openNotifications()
     }
     
     // MARK: - Navigation
@@ -199,8 +199,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         performSegue(withIdentifier: BHHomeViewController.FollowedPodcastsSegueIdentifier, sender: self)
     }
 
-    private func openShows() {
-        performSegue(withIdentifier: BHHomeViewController.ShowsSegueIdentifier, sender: self)
+    private func openNotifications() {
+        performSegue(withIdentifier: BHHomeViewController.NotificationsSegueIdentifier, sender: self)
     }
 
     // MARK: - Notifications

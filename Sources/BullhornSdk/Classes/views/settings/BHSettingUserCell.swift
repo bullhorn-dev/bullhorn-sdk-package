@@ -2,7 +2,7 @@
 import Foundation
 import UIKit
 
-class BHNotificationUserCell: UITableViewCell {
+class BHSettingUserCell: UITableViewCell {
     
     class var reusableIndentifer: String { return String(describing: self) }
     
