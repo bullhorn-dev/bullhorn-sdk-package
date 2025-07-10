@@ -187,6 +187,7 @@ class BHUserManager {
                 case .success(user: let user):
                     BHNetworkManager.shared.updateNetworkUser(user)
                     self.followedUsers.removeAll(where: { $0.id == userId })
+                    BHDownloadsManager.shared.removeAutoDownloads(for: user)
                                         
                     /// track event
                     let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .unfollowPodcast, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.fullName)

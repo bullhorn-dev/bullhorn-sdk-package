@@ -74,6 +74,12 @@ class BHSettingsManager {
                     let banner: BHTrackBanner = enable ? .downloadsOn : .downloadsOff
                     let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: banner, context: user.shareLink?.absoluteString, podcastId: user.id, podcastTitle: user.fullName)
                     BHTracker.shared.trackEvent(with: request)
+                    
+                    if enable {
+                        BHDownloadsManager.shared.autoDownloadNewEpisodesIfNeeded()
+                    } else {
+                        BHDownloadsManager.shared.removeAutoDownloads(for: user)
+                    }
 
                 case .failure(error: let error):
                     BHLog.w("User enable: \(enable) auto downloads failed \(error.localizedDescription)")

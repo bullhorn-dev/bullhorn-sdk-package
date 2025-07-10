@@ -6,11 +6,13 @@ class BHDownloadButton: UIView {
     var post: BHPost? {
         didSet {
             status = post?.downloadStatus ?? .start
+            reason = post?.downloadReason ?? .manually
             updateButtonState()
         }
     }
 
     private var status: DownloadStatus = .start
+    private var reason: DownloadReason = .manually
     
     private let button: UIButton = {
         let button = UIButton(type: .system)
@@ -82,7 +84,7 @@ class BHDownloadButton: UIView {
         let mediumConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .medium)
         let smallConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .thin, scale: .small)
         var image: UIImage? = nil
-        var bgColor: UIColor = .clear
+        var bgColor: UIColor = reason == .auto ? .fxPrimaryBackground() : .clear
         var hasProgress: Bool = false
             
         switch status {
@@ -124,13 +126,13 @@ class BHDownloadButton: UIView {
         
         switch status {
         case .start:
-            BHDownloadsManager.shared.download(validPost)
+            BHDownloadsManager.shared.download(validPost, reason: .manually)
         case .pending,
              .progress,
              .success:
             break
         case .failure:
-            BHDownloadsManager.shared.download(validPost)
+            BHDownloadsManager.shared.download(validPost, reason: .manually)
             break
         }
 

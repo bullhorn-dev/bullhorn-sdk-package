@@ -193,6 +193,10 @@ class BHNotificationsManager: NSObject {
                         let vc = storyboard.instantiateViewController(withIdentifier: BHPostDetailsViewController.storyboardIndentifer) as! BHPostDetailsViewController
                         vc.post = post
                         UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                        
+                        if infoEvent.autoDownload {
+                            BHDownloadsManager.shared.autoDownloadNewEpisodesIfNeeded()
+                        }
                     case .failure(error: _):
                         break
                     }

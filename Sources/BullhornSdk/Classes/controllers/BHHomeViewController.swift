@@ -145,7 +145,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         BHNetworkManager.shared.fetch(networkId) { response in
             switch response {
             case .success:
-                break
+                BHDownloadsManager.shared.autoDownloadNewEpisodesIfNeeded()
             case .failure(error: _):
                 if !BHReachabilityManager.shared.isConnected() {
                     self.showConnectionError()

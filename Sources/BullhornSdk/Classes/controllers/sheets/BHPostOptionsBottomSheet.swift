@@ -124,7 +124,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
 
                 UIApplication.topViewController()?.present(alert, animated: true)
             } else {
-                BHDownloadsManager.shared.download(validPost)
+                BHDownloadsManager.shared.download(validPost, reason: .manually)
                 self.dismiss(animated: true)
             }
         })

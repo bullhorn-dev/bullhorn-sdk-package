@@ -129,6 +129,10 @@ struct BHPost: Codable {
         return BHDownloadsManager.shared.item(for: id)?.status ?? .start
     }
     
+    var downloadReason: DownloadReason {
+        return BHDownloadsManager.shared.item(for: id)?.reason ?? .manually
+    }
+    
     var originalTimeDate: Date? {
         return originalTime != nil ? dateStringFormatter.date(from: originalTime!) : nil
     }

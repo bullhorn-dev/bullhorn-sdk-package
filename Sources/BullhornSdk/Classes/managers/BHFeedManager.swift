@@ -14,11 +14,16 @@ class BHFeedManager {
     fileprivate lazy var server = BHServerApiFeed.init(withApiType: .regular)
     
     fileprivate var feed: [BHPost]?
+    fileprivate var feedActual: [BHPost]?
     fileprivate var continueListening: [BHPost]?
     fileprivate var likedPosts: [BHPost]?
 
     var feedPosts: [BHPost] {
         return feed ?? []
+    }
+
+    var feedActualPosts: [BHPost] {
+        return feedActual ?? []
     }
 
     var continueListeningPosts: [BHPost] {
@@ -56,6 +61,21 @@ class BHFeedManager {
                     self.feed = feed
                 case .failure(error: let error):
                     BHLog.w("Feed posts load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
+    func getFeedActualPosts(completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
+
+        server.getFeedActualPosts(authToken: authToken) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(posts: let posts):
+                    self.feedActual = posts
+                case .failure(error: let error):
+                    BHLog.w("Feed actual posts load failed \(error.localizedDescription)")
                 }
                 completion(response)
             }

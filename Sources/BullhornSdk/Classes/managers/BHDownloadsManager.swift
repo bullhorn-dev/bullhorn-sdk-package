@@ -13,6 +13,8 @@ class BHDownloadsManager {
  
     static let shared = BHDownloadsManager()
 
+    private let autoDownloadsMaxCount: Int = 3
+
     private let observersContainer: ObserversContainerNotifyingOnQueue<BHDownloadsManagerListener>
     private let workingQueue = DispatchQueue.init(label: "BHDownloadsManager.Working", target: .global())
 
@@ -79,17 +81,50 @@ class BHDownloadsManager {
         }
     }
     
-    func download(_ post: BHPost) {
+    func autoDownloadNewEpisodesIfNeeded() {
+        BHLog.p("\(#function)")
+        
+        if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
+            BHLog.p("\(#function) - connection expensive. Stop autodownloads.")
+            return
+        }
+
+        BHFeedManager.shared.getFeedActualPosts() { response in
+            switch response {
+            case .success(posts: let posts):
+                for post in posts {
+                    if post.user.autoDownload && !post.isDownloaded {
+                        self.clearAutoudownloadsIfNeeded()
+                        self.download(post, reason: .auto)
+                    }
+                }
+            case .failure(error: let error):
+                BHLog.w("\(#function) - \(error)")
+            }
+        }
+    }
+    
+    func clearAutoudownloadsIfNeeded() {
+        BHLog.p("\(#function)")
+
+        let autoDownloadedQueue = self.downloadsQueue.filter({ $0.reason == .auto })
+
+        if autoDownloadedQueue.count >= autoDownloadsMaxCount, let lastItem = autoDownloadedQueue.last {
+            removeFromDownloads(lastItem.post)
+        }
+    }
+    
+    func download(_ post: BHPost, reason: DownloadReason = .manually) {
         
         guard let recordingUrl = post.recording?.publishUrl else {
             BHLog.w("Download failed: recording url is empty")
             return
         }
 
-        BHLog.p("Download post: \(post.id), url: \(recordingUrl)")
+        BHLog.p("Download post: \(post.id), reason: \(reason), url: \(recordingUrl)")
         
         let time = Date().timeIntervalSince1970
-        let downloadItem = BHDownloadItem(id: post.id, post: post, status: .start, prevStatus: .start, reason: .manually, progress: 0, url: recordingUrl, file: nil, time: time)
+        let downloadItem = BHDownloadItem(id: post.id, post: post, status: .start, prevStatus: .start, reason: reason, progress: 0, url: recordingUrl, file: nil, time: time)
         
         performDownload(downloadItem)
         fetchStorageItems()
@@ -116,6 +151,28 @@ class BHDownloadsManager {
         }
 
         fetchStorageItems()
+    }
+    
+    func removeAutoDownloads(for user: BHUser) {
+
+        BHLog.p("Remove auto downloads for user id: \(user.id)")
+
+        let items = downloadsQueue.filter({ $0.post.user.id == user.id && $0.reason == .auto })
+
+        if items.count > 0 {
+            for item in items {
+                performRemoveDownload(item)
+                    
+                item.status = .start
+                item.file = nil
+                    
+                observersContainer.notifyObserversAsync {
+                    $0.downloadsManager(self, itemStateUpdated: item)
+                }
+            }
+
+            fetchStorageItems()
+        }
     }
     
     func removeAll() {

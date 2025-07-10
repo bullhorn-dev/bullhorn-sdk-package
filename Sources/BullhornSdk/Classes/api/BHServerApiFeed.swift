@@ -22,6 +22,32 @@ class BHServerApiFeed: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
+                  debugPrint(response)
+                  switch response.result {
+                  case .success(let posts):
+                      completion(.success(posts: posts.posts))
+                  case .failure(let error):
+                      completion(.failure(error: error))
+                  }
+              })
+        }
+    }
+    
+    func getFeedActualPosts(authToken: String?, _ completion: @escaping (PostsResult) -> Void) {
+
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+
+            let path = "feed/actual"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composeHeaders(authToken)
+            
+            AF.request(fullPath, method: .get, headers: headers)
+              .validate()
+              .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
                   switch response.result {
                   case .success(let posts):
                       completion(.success(posts: posts.posts))
