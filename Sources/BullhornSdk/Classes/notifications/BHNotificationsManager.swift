@@ -195,7 +195,7 @@ class BHNotificationsManager: NSObject {
                         UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
                         
                         if infoEvent.autoDownload {
-                            BHDownloadsManager.shared.autoDownloadNewEpisodesIfNeeded()
+                            BHDownloadsManager.shared.autoDownloadNewEpisodeIfNeeded(post)
                         }
                     case .failure(error: _):
                         break
