@@ -18,6 +18,7 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
     fileprivate var feedManager = BHFeedManager.shared
 
     fileprivate var selectedPost: BHPost?
+    fileprivate var selectedTab: BHPostTabs = .details
 
     // MARK: - Lifecycle
     
@@ -137,13 +138,15 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
 
         if segue.identifier == BHFavoritesViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
+            vc.selectedTab = selectedTab
         }
     }
     
     // MARK: - Private
     
-    override func openPostDetails(_ post: BHPost?) {
+    override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
+        selectedTab = tab
         performSegue(withIdentifier: BHFavoritesViewController.PostDetailsSegueIdentifier, sender: self)
     }
 
@@ -193,7 +196,8 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        cell.post = feedManager.favorites[indexPath.row]
+        let post = feedManager.favorites[indexPath.row]
+        cell.post = post
         cell.playlist = feedManager.favorites
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
@@ -202,6 +206,9 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
         }
         cell.likeBtnTapClosure = { [weak self] liked in
             self?.fetchPosts(initial: true)
+        }
+        cell.transcriptBtnTapClosure = { [weak self] postId in
+            self?.openPostDetails(post, tab: .transcript)
         }
         cell.errorClosure = { [weak self] message in
             self?.showError(message)

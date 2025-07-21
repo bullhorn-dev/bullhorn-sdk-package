@@ -181,7 +181,7 @@ class BHPlayerContainingViewController: UIViewController {
     
     func openUserDetails(_ user: BHUser?) {}
 
-    func openPostDetails(_ post: BHPost?) {}
+    func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {}
 }
 
 

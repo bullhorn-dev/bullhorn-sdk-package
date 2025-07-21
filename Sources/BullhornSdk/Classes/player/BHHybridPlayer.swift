@@ -94,6 +94,8 @@ class BHHybridPlayer {
     fileprivate var playbackRecreateCounter: Double = 0.0
 
     fileprivate var nowPlayingInfoUpdateCounter: Double = 0.0
+    
+    internal var manualPosition: Double = 0
 
     var lastSentPosition: TimeInterval = 0
     var lastSentDuration: TimeInterval = 0
@@ -189,10 +191,10 @@ class BHHybridPlayer {
         
     // MARK: - Public
 
-    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app) {
+    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app, position: Double = 0) {
         
         BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
-        
+
         BHLivePlayer.shared.close()
         
         if isPostActive(post.id) {
@@ -204,6 +206,7 @@ class BHHybridPlayer {
         } else {
 
             self.context = context
+            self.manualPosition = position
 
             /// track event
             let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
@@ -274,6 +277,7 @@ class BHHybridPlayer {
         post = nil
         bulletinManager.reset()
         settings = .initial
+        manualPosition = 0
         
         observersContainer.notifyObserversAsync {
             $0.hybridPlayerDidClose(self)

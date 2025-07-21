@@ -120,10 +120,6 @@ class BHDownloadsManager {
     func clearAutoudownloadsIfNeeded() {
         BHLog.p("\(#function)")
         
-        let size = totalFileSizes()
-        
-        debugPrint("Total downloads size is \(size) bytes")
-
         let autoDownloadedQueue = self.downloadsQueue.filter({ $0.reason == .auto })
  
         if autoDownloadedQueue.count >= autoDownloadsMaxCount, let lastItem = autoDownloadedQueue.last {
@@ -328,15 +324,7 @@ class BHDownloadsManager {
     fileprivate func cancelAll() {
         // TODO: - cancel all download requests
     }
-    
-    fileprivate func totalFileSizes() -> UInt64 {
-        var size: UInt64 = 0
-
-        downloadsQueue.forEach({ size += $0.fileSize() })
-        
-        return size
-    }
-        
+            
     // MARK: - Notifications
     
     @objc fileprivate func onConnectionChangedNotification(notification: Notification) {

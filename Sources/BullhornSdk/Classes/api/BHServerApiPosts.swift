@@ -53,6 +53,22 @@ class BHServerApiPosts: BHServerApiBase {
         case failure(error: Error)
     }
     
+    // MARK: - Transcript Result
+
+    struct Transcript: Codable {
+        
+        enum CodingKeys: String, CodingKey {
+            case data
+        }
+        
+        let data: BHTranscript
+    }
+
+    enum TranscriptResult {
+        case success(transcript: BHTranscript)
+        case failure(error: Error)
+    }
+    
     // MARK: - Public
 
     func getPost(authToken: String?, postId: String, context: String?, _ completion: @escaping (PostResult) -> Void) {
@@ -260,6 +276,34 @@ class BHServerApiPosts: BHServerApiBase {
                     switch response.result {
                     case .success(let phoneNumber):
                         completion(.success(phoneNumber: phoneNumber.data))
+                    case .failure(let error):
+                        completion(.failure(error: error))
+                    }
+                })
+        }
+    }
+    
+    func getTranscript(authToken: String?, postId: String, _ completion: @escaping (TranscriptResult) -> Void) {
+        
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+            
+            let path = "posts/\(postId)/transcript"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composePostHeaders(authToken)
+
+            debugPrint(fullPath)
+
+            AF.request(fullPath, method: .get, headers: headers)
+                .validate()
+                .responseDecodable(of: Transcript.self, completionHandler: { response in
+                    debugPrint(response)
+                    switch response.result {
+                    case .success(let transcript):
+                        completion(.success(transcript: transcript.data))
                     case .failure(let error):
                         completion(.failure(error: error))
                     }

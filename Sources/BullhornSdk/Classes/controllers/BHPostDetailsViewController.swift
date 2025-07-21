@@ -3,6 +3,11 @@ import UIKit
 import Foundation
 import SDWebImage
 
+enum BHPostTabs: Int {
+    case details = 0
+    case transcript
+}
+
 class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
     class var storyboardIndentifer: String { return String(describing: self) }
@@ -16,7 +21,6 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var refreshControl: UIRefreshControl?
 
     fileprivate var headerView: BHPostHeaderView?
-    fileprivate var selectedTab: BHPostHeaderView.Tabs = .details
 
     fileprivate var postsManager = BHPostsManager()
 
@@ -25,6 +29,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var shouldShowHeader: Bool = false
 
     var post: BHPost?
+    var selectedTab: BHPostTabs = .details
     var context: String?
 
     // MARK: - Lifecycle
@@ -38,12 +43,12 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
-        let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
-        let postCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
+        let descriptionCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
+        let transcriptCellNib = UINib(nibName: "BHPostTranscriptCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHPostHeaderView", bundle: bundle)
 
-        tableView.register(userCellNib, forCellReuseIdentifier: BHUserCell.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostDescriptionCell.reusableIndentifer)
+        tableView.register(descriptionCellNib, forCellReuseIdentifier: BHPostDescriptionCell.reusableIndentifer)
+        tableView.register(transcriptCellNib, forCellReuseIdentifier: BHPostTranscriptCell.reusableIndentifer)
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHPostHeaderView.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
@@ -77,6 +82,9 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         super.viewWillDisappear(animated)
 
         refreshControl?.endRefreshing()
+        
+        postsManager.post = nil
+        postsManager.transcript = nil
     }
     
     // MARK: - Private
@@ -99,7 +107,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
     
     fileprivate func fetch(initial: Bool = false) {
-        guard let p = post else { return }
+        guard let validPost = post else { return }
 
         let completeBlock = {
             self.shouldShowHeader = true
@@ -113,7 +121,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
             self.shouldShowHeader = false
             self.defaultShowActivityIndicatorView()
 
-            postsManager.fetchStorage(userId: p.user.id, postId: p.id) { response in
+            postsManager.fetchStorage(postId: validPost.id) { response in
                 switch response {
                 case .success:
                     if self.postsManager.post != nil {
@@ -127,7 +135,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
             }
         }
 
-        postsManager.fetch(userId: p.user.id, postId: p.id, context: context) { response in
+        postsManager.fetch(postId: validPost.id, context: context, loadTranscript: validPost.hasTranscript) { response in
             switch response {
             case .success:
                 break
@@ -156,6 +164,16 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         selectedUser = user
         performSegue(withIdentifier: BHPostDetailsViewController.UserDetailsSegueIdentifier, sender: self)
     }
+    
+    private func openPlayer(position: Double) {
+        guard let validPost = post else { return }
+        
+        if BHHybridPlayer.shared.isPostActive(validPost.id) {
+            BHHybridPlayer.shared.seek(to: position, resume: true)
+        } else {
+            BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], position: position)
+        }
+    }
 
     // MARK: - Action handlers
     
@@ -181,23 +199,25 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !shouldShowHeader { return 0 }
+        
         switch selectedTab {
         case .details:
             headerView?.tabTitleLabel.alpha = 1
             tableView.restore()
             return 1
-        case .related:
-            if postsManager.recommendedUsers.count == 0 {
+        case .transcript:
+            if postsManager.transcriptSegments.count == 0 && !activityIndicator.isAnimating {
                 let bundle = Bundle.module
                 let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 
-                tableView.setEmptyMessage("There are no similar podcasts", image: image, topOffset: (headerView?.calculateHeight() ?? 120) / 2)
+                tableView.setEmptyMessage("Transcript is not available", image: image, topOffset: (headerView?.calculateHeight() ?? 120) / 2)
             } else {
                 tableView.restore()
             }
-            headerView?.tabTitleLabel.alpha = postsManager.recommendedUsers.count > 0 ? 1 : 0
+            headerView?.tabTitleLabel.alpha = postsManager.transcriptSegments.count > 0 ? 1 : 0
 
-            return postsManager.recommendedUsers.count
+            return postsManager.transcriptSegments.count
         }
     }
     
@@ -207,16 +227,17 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostDescriptionCell.reusableIndentifer, for: indexPath) as! BHPostDescriptionCell
             cell.text = postsManager.post?.description
             return cell
-        case .related:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BHUserCell.reusableIndentifer, for: indexPath) as! BHUserCell
-            cell.user = postsManager.recommendedUsers[indexPath.row]
+        case .transcript:
+            let cell = tableView.dequeueReusableCell(withIdentifier: BHPostTranscriptCell.reusableIndentifer, for: indexPath) as! BHPostTranscriptCell
+            cell.postId = post?.id
+            cell.segment = postsManager.transcriptSegments[indexPath.row]
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if shouldShowHeader {
-            headerView?.setup()
+            headerView?.setup(selectedTab)
             return headerView
         } else {
             return nil
@@ -233,8 +254,10 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch selectedTab {
-        case .details: break
-        case .related: openUserDetails(postsManager.recommendedUsers[indexPath.row])
+        case .details:
+            break
+        case .transcript:
+            openPlayer(position: postsManager.transcriptSegments[indexPath.row].start)
         }
     }
 }
@@ -253,7 +276,7 @@ extension BHPostDetailsViewController: BHPostHeaderViewDelegate {
         openUserDetails(user)
     }
 
-    func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostHeaderView.Tabs) {
+    func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostTabs) {
         selectedTab = item
         tableView.reloadData()
     }

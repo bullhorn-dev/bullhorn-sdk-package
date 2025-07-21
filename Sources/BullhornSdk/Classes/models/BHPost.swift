@@ -59,6 +59,7 @@ struct BHPost: Codable {
         case recording
         case bulletin
         case status
+        case hasTranscript = "has_transcript"
     }
     
     enum PostType: String, Codable {
@@ -120,6 +121,7 @@ struct BHPost: Codable {
     let recording: BHRecording?
     let bulletin: BHPostBulletin?
     let status: PostStatus
+    let hasTranscript: Bool
     
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)

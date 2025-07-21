@@ -190,7 +190,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         performSegue(withIdentifier: BHHomeViewController.UserDetailsSegueIdentifier, sender: self)
     }
 
-    override func openPostDetails(_ post: BHPost?) {
+    override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
         performSegue(withIdentifier: BHHomeViewController.PostDetailsSegueIdentifier, sender: self)
     }

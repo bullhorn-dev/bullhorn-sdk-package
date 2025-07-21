@@ -123,33 +123,36 @@ extension BHHybridPlayer {
         let offset: Double = localOffset?.offset ?? 0
         let timestamp: Double = localOffset?.timestamp ?? 0
 
-        if BHReachabilityManager.shared.isConnected() {
+        if BHReachabilityManager.shared.isConnected(), manualPosition == 0 {
                                                 
             postsManager.getPlaybackOffset(validPost.id, offset: offset, timestamp: timestamp.toMs()) { response in
-                switch response {
-                case .success(offset: let playbackOffset):
-                    self.post?.updatePlaybackOffset(playbackOffset.offset, completed: playbackOffset.playbackCompleted)
-                    
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    switch response {
+                    case .success(offset: let playbackOffset):
+                        BHLog.p("BHPlaybackOffset loaded, offset: \(playbackOffset.offset)")
+                        self.post?.updatePlaybackOffset(playbackOffset.offset, completed: playbackOffset.playbackCompleted)
+
                         let o = BHOffset(id: validPost.id, offset: playbackOffset.offset, timestamp: Date().timeIntervalSince1970, completed: playbackOffset.playbackCompleted)
                         BHOffsetsManager.shared.insertOrUpdateOffset(o)
-                    }
+                        
+                        let position = playbackOffset.offset
 
-                    let position = playbackOffset.offset
-                        
-                    BHLog.p("BHPlaybackOffset loaded, offset: \(playbackOffset.offset)")
-                        
-                    if position != -1 && position != validItem.position {
-                        self.seek(to: position)
-                    }
-                case .failure(error: let e):
-                    BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
-                    if offset > 0 {
-                        self.seek(to: offset)
-                    } else if validPost.playbackOffset > 0 {
-                        self.seek(to: validPost.playbackOffset)
+                        if position != -1 && position != validItem.position {
+                            self.seek(to: position)
+                        }
+                    case .failure(error: let e):
+                        BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
+                        if offset > 0 {
+                            self.seek(to: offset)
+                        } else if validPost.playbackOffset > 0 {
+                            self.seek(to: validPost.playbackOffset)
+                        }
                     }
                 }
+            }
+        } else if manualPosition > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.seek(to: self.manualPosition)
             }
         } else {
             if offset > 0 {

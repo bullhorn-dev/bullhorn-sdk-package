@@ -53,16 +53,16 @@ class BHTabbedView: UIView {
 
     weak var delegate: BHTabbedViewDelegate?
     
-    public let configuration: SizeConfiguration
+    let configuration: SizeConfiguration
 
-    public var tabs: [BHTabItemProtocol] {
+    var tabs: [BHTabItemProtocol] {
         didSet {
             self.collectionView.reloadData()
             self.tabs[currentlySelectedIndex].onSelected()
         }
     }
 
-    private var currentlySelectedIndex: Int = 0
+    var currentlySelectedIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

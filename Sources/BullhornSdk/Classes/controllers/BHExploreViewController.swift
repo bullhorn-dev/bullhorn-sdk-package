@@ -23,7 +23,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
-    
+    fileprivate var selectedPostTab: BHPostTabs = .details
+
     fileprivate let exploreManager = BHExploreManager.shared
     
     fileprivate var shouldShowHeader: Bool = false
@@ -270,6 +271,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         }
         else if segue.identifier == BHExploreViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
+            vc.selectedTab = selectedPostTab
             vc.context = context
         }
     }
@@ -281,8 +283,9 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         performSegue(withIdentifier: BHExploreViewController.UserDetailsSegueIdentifier, sender: self)
     }
 
-    override func openPostDetails(_ post: BHPost?) {
+    override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
+        selectedPostTab = tab
         performSegue(withIdentifier: BHExploreViewController.PostDetailsSegueIdentifier, sender: self)
     }
     
@@ -367,12 +370,16 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case .episodes:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostCell.reusableIndentifer, for: indexPath) as! BHPostCell
-            cell.post = exploreManager.posts[indexPath.row]
+            let post = exploreManager.posts[indexPath.row]
+            cell.post = post
             cell.playlist = exploreManager.posts
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
                     controller.popoverPresentationController?.sourceView = cell.shareButton
                 })
+            }
+            cell.transcriptBtnTapClosure = { [weak self] postId in
+                self?.openPostDetails(post, tab: .transcript)
             }
             cell.errorClosure = { [weak self] message in
                 self?.showError(message)

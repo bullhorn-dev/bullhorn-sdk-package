@@ -13,16 +13,14 @@ class BHPostsManager {
     }
 
     fileprivate lazy var apiPosts = BHServerApiPosts.init(withApiType: .regular)
-    fileprivate lazy var apiUsers = BHServerApiUsers.init(withApiType: .regular)
-
-    fileprivate var recommendations: [BHUser]?
 
     var post: BHPost?
-    
-    var recommendedUsers: [BHUser] {
-        return recommendations ?? []
+    var transcript: BHTranscript?
+
+    var transcriptSegments: [BHSegment] {
+        return transcript?.segments ?? []
     }
-        
+            
     // MARK: - Public
     
     func getPost(_ postId: String, context: String?, completion: @escaping (BHServerApiPosts.PostResult) -> Void) {
@@ -134,10 +132,25 @@ class BHPostsManager {
             }
         }
     }
-    
+        
+    func getTranscript(_ postId: String, completion: @escaping (BHServerApiPosts.TranscriptResult) -> Void) {
+        
+        apiPosts.getTranscript(authToken: authToken, postId: postId) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(transcript: let transcript):
+                    self.transcript = transcript
+                case .failure(error: _):
+                    break
+                }
+                completion(response)
+            }
+        }
+    }
+
     // MARK: - Initial fetch for screen
 
-    func fetch(userId: String, postId: String, context: String?, completion: @escaping (CommonResult) -> Void) {
+    func fetch(postId: String, context: String?, loadTranscript: Bool = false, completion: @escaping (CommonResult) -> Void) {
 
         let fetchGroup = DispatchGroup()
         var responseError: Error?
@@ -153,16 +166,17 @@ class BHPostsManager {
             fetchGroup.leave()
         }
 
-        fetchGroup.enter()
-
-        apiUsers.getUserRecommendations(authToken: authToken, userId: userId) { response in
-            switch response {
-            case .success(users: _):
-                self.fetchStorageRelatedUsers(userId) { _ in }
-            case .failure(error: let error):
-                responseError = error
+        if loadTranscript {
+            fetchGroup.enter()
+            
+            getTranscript(postId) { response in
+                switch response {
+                case .success(transcript: _): break
+                case .failure(error: let error):
+                    responseError = error
+                }
+                fetchGroup.leave()
             }
-            fetchGroup.leave()
         }
 
         fetchGroup.notify(queue: .main) {
@@ -179,20 +193,8 @@ class BHPostsManager {
     fileprivate func fetchStoragePost(_ postId: String) {
         post = DataBaseManager.shared.fetchPost(with: postId)
     }
-
-    fileprivate func fetchStorageRelatedUsers(_ userId: String, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchRelatedUsers(with: userId) { response in
-            switch response {
-            case .success(users: let users):
-                self.recommendations = users
-                completion(.success)
-            case .failure(error: let error):
-                completion(.failure(error: error))
-            }
-        }
-    }
     
-    func fetchStorage(userId: String, postId: String, completion: @escaping (CommonResult) -> Void) {
+    func fetchStorage(postId: String, completion: @escaping (CommonResult) -> Void) {
         
         let fetchGroup = DispatchGroup()
         var responseError: Error?
@@ -201,13 +203,8 @@ class BHPostsManager {
 
         fetchStoragePost(postId)
 
-        fetchStorageRelatedUsers(postId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
+        if post?.hasTranscript == true {
+            // TODO: - fetch post transcript
         }
         
         fetchGroup.notify(queue: .main) {

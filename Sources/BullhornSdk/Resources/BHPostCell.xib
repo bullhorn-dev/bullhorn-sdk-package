@@ -93,7 +93,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cVH-hZ-ZeZ">
-                                        <rect key="frame" x="0.0" y="248.66666666666669" width="136" height="28"/>
+                                        <rect key="frame" x="0.0" y="248.66666666666669" width="172" height="28"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vvi-N8-31O">
                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
@@ -137,8 +137,25 @@
                                                     <constraint firstAttribute="height" constant="28" id="xrX-Pv-TL4"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEj-2d-LHH">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWJ-zT-42A">
                                                 <rect key="frame" x="108" y="0.0" width="28" height="28"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="EQh-lE-wDs"/>
+                                                    <constraint firstAttribute="width" constant="28" id="eN1-hb-qv8"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain">
+                                                    <imageReference key="image" image="doc.plaintext" catalog="system" symbolScale="medium"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="thin"/>
+                                                    <color key="baseForegroundColor" name="bhColorPrimary"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="onTranscriptButton:" destination="lHJ-6X-D7B" eventType="touchUpInside" id="WKX-iC-b5O"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEj-2d-LHH">
+                                                <rect key="frame" x="144" y="0.0" width="28" height="28"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="Csn-Ca-2vN"/>
@@ -247,6 +264,7 @@
                 <outlet property="shareButton" destination="a2Z-8N-oOX" id="hFe-gR-Kes"/>
                 <outlet property="tagLabel" destination="Yg5-jn-KFC" id="vwU-4B-Ted"/>
                 <outlet property="titleLabel" destination="xap-ZB-GbZ" id="5Xe-9d-Uwf"/>
+                <outlet property="transcriptButton" destination="gWJ-zT-42A" id="89T-2X-vXc"/>
                 <outlet property="userIcon" destination="GYo-3i-0Et" id="EdU-54-CCh"/>
                 <outlet property="waitingRoomButton" destination="P04-Pc-Ybq" id="QM4-B8-Geg"/>
                 <outlet property="waitingRoomLabel" destination="gXt-5z-eR0" id="12T-Zj-Fo5"/>
@@ -256,6 +274,7 @@
     </objects>
     <resources>
         <image name="arrowshape.turn.up.right" catalog="system" width="128" height="104"/>
+        <image name="doc.plaintext" catalog="system" width="115" height="128"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>

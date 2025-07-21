@@ -13,7 +13,8 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var selectedPost: BHPost?
-    
+    fileprivate var selectedTab: BHPostTabs = .details
+
     // MARK: - Lifecycle
     
     deinit {
@@ -63,6 +64,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         
         if segue.identifier == BHDownloadsViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
+            vc.selectedTab = selectedTab
         }
     }
     
@@ -78,8 +80,9 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         navigationItem.rightBarButtonItem?.isEnabled = BHDownloadsManager.shared.items.count > 0
     }
     
-    override func openPostDetails(_ post: BHPost?) {
+    override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
+        selectedTab = tab
         performSegue(withIdentifier: BHDownloadsViewController.PostDetailsSegueIdentifier, sender: self)
     }
 
@@ -119,12 +122,16 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        cell.post = BHDownloadsManager.shared.items[indexPath.row].post
+        let post = BHDownloadsManager.shared.items[indexPath.row].post
+        cell.post = post
         cell.playlist = BHDownloadsManager.shared.items.map({ $0.post })
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton
             })
+        }
+        cell.transcriptBtnTapClosure = { [weak self] postId in
+            self?.openPostDetails(post, tab: .transcript)
         }
         cell.errorClosure = { [weak self] message in
             self?.showError(message)

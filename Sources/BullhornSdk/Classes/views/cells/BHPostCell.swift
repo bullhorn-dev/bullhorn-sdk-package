@@ -20,6 +20,7 @@ class BHPostCell: UITableViewCell {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var downloadButton: BHDownloadButton!
+    @IBOutlet weak var transcriptButton: UIButton!
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var bottomView: UIStackView!
 
@@ -41,6 +42,7 @@ class BHPostCell: UITableViewCell {
     
     var shareBtnTapClosure: ((URL)->())?
     var likeBtnTapClosure: ((Bool)->())?
+    var transcriptBtnTapClosure: ((String)->())?
     var errorClosure: ((String)->())?
 
     fileprivate lazy var dateFormatter: DateFormatter = DateFormatter()
@@ -155,6 +157,11 @@ class BHPostCell: UITableViewCell {
         shareButton.backgroundColor = .clear
         shareButton.configuration?.baseForegroundColor = .primary()
 
+        transcriptButton.setImage(UIImage(systemName: "doc.plaintext")?.withConfiguration(mediumConfig), for: .normal)
+        transcriptButton.setTitle("", for: .normal)
+        transcriptButton.backgroundColor = .clear
+        transcriptButton.configuration?.baseForegroundColor = .primary()
+
         optionsButton.setImage(UIImage(systemName: "ellipsis")?.withConfiguration(mediumConfig), for: .normal)
         optionsButton.setTitle("", for: .normal)
         optionsButton.backgroundColor = .clear
@@ -164,6 +171,7 @@ class BHPostCell: UITableViewCell {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
             downloadButton.isHidden = true
             optionsButton.isHidden = false
+            transcriptButton.isHidden = true
             playButton.isHidden = false
             durationLabel.text = duration.stringFormatted()
             durationLabel.isHidden = false
@@ -173,6 +181,7 @@ class BHPostCell: UITableViewCell {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
             downloadButton.isHidden = false
             optionsButton.isHidden = false
+            transcriptButton.isHidden = !validPost.hasTranscript
             playButton.isHidden = false
             durationLabel.text = duration.stringFormatted()
             durationLabel.isHidden = false
@@ -181,6 +190,7 @@ class BHPostCell: UITableViewCell {
         } else {
             downloadButton.isHidden = true
             optionsButton.isHidden = true
+            transcriptButton.isHidden = true
             playButton.isHidden = true
             durationLabel.isHidden = true
             playedLabel.isHidden = true
@@ -349,6 +359,12 @@ class BHPostCell: UITableViewCell {
         } else {
             errorClosure?("Failed to share episode. The Internet connection is lost.")
         }
+    }
+    
+    @IBAction func onTranscriptButton(_ sender: UIButton) {
+        guard let validPost = post else { return }
+        
+        self.transcriptBtnTapClosure?(validPost.id)
     }
 
     @IBAction func onOptionsButton(_ sender: UIButton) {

@@ -25,7 +25,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var userManager = BHUserManager.shared
 
     fileprivate var selectedPost: BHPost?
-    
+    fileprivate var selectedTab: BHPostTabs = .details
+
     fileprivate var shouldShowHeader: Bool = false
 
     var user: BHUser? {
@@ -199,13 +200,15 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
         if segue.identifier == BHUserDetailsViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
+            vc.selectedTab = selectedTab
         }
     }
     
     // MARK: - Private
     
-    override func openPostDetails(_ post: BHPost?) {
+    override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
+        selectedTab = tab
         performSegue(withIdentifier: BHUserDetailsViewController.PostDetailsSegueIdentifier, sender: self)
     }
 
@@ -262,12 +265,16 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        cell.post = userManager.posts[indexPath.row]
+        let post = userManager.posts[indexPath.row]
+        cell.post = post
         cell.playlist = userManager.posts
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton
             })
+        }
+        cell.transcriptBtnTapClosure = { [weak self] postId in
+            self?.openPostDetails(post, tab: .transcript)
         }
         cell.errorClosure = { [weak self] message in
             self?.showError(message)

@@ -3,19 +3,14 @@ import Foundation
 import UIKit
 
 protocol BHPostHeaderViewDelegate: AnyObject {
-    func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostHeaderView.Tabs)
+    func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostTabs)
     func postHeaderView(_ view: BHPostHeaderView, didSelectUser user: BHUser)
     func postHeaderView(_ view: BHPostHeaderView, didSelectShare shareLink: URL)
     func postHeaderView(_ view: BHPostHeaderView, didGetError message: String)
 }
 
 class BHPostHeaderView: UITableViewHeaderFooterView {
-    
-    enum Tabs: Int {
-        case details = 0
-        case related
-    }
-    
+        
     class var reusableIndentifer: String { return String(describing: self) }
 
     @IBOutlet weak var userIcon: UIImageView!
@@ -48,7 +43,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
     var postsManager: BHPostsManager?
     
-    fileprivate var selectedTab: Tabs = .details
+    fileprivate var selectedTab: BHPostTabs = .details
 
     fileprivate var placeholderImage: UIImage?
 
@@ -85,13 +80,13 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         userLabel.text = postsManager?.post?.user.fullName
         titleLabel.text = postsManager?.post?.title
         durationLabel.text = duration.stringFormatted()
-        tabTitleLabel.text = selectedTab == .details ? "Episode Description" : "Similar Podcasts"
+        tabTitleLabel.text = selectedTab == .details ? "Episode Description" : "Episode Transcription"
         
         updateTagLabel()
         updateControls()
     }
 
-    func setup() {
+    func setup(_ tab: BHPostTabs = .details) {
         
         contentView.backgroundColor = .primaryBackground()
 
@@ -143,9 +138,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         separatorView1.backgroundColor = .clear
         separatorView2.backgroundColor = .clear
 
+        tabbedView.currentlySelectedIndex = tab.rawValue
         tabbedView.tabs = [
             BHTabItemView(title: "Details"),
-            BHTabItemView(title: "Related")
+            BHTabItemView(title: "Transcript")
         ]
         tabbedView.delegate = self
         
@@ -425,7 +421,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 extension BHPostHeaderView: BHTabbedViewDelegate {
     
     func tabbedView(_ tabbedView: BHTabbedView, didMoveToTab index: Int) {
-        selectedTab = Tabs(rawValue: index) ?? .details
+        selectedTab = BHPostTabs(rawValue: index) ?? .details
         delegate?.postHeaderView(self, didSelectTabBarItem: selectedTab)
     }
 }
