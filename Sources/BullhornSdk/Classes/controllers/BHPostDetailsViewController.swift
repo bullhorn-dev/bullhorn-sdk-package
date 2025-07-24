@@ -27,6 +27,8 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var selectedUser: BHUser?
     
     fileprivate var shouldShowHeader: Bool = false
+    
+    fileprivate var selectedIndexPaths = Set<IndexPath>()
 
     var post: BHPost?
     var selectedTab: BHPostTabs = .details
@@ -150,6 +152,29 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         }
     }
     
+    fileprivate func refreshTranscriptForPosition(_ position: Double = 0) {
+        guard let validPost = post else { return }
+        guard let playerPost = BHHybridPlayer.shared.post else { return }
+
+        if validPost.id != playerPost.id { return }
+        if selectedTab != .transcript { return }
+
+        if let index = BHHybridPlayer.shared.transcript?.segmentIndex(for: position), index >= 0 {
+            let indexPath = IndexPath(row: index, section: 0)
+
+            var indexPathsToReload = selectedIndexPaths
+            indexPathsToReload.insert(indexPath)
+
+            selectedIndexPaths.removeAll()
+            selectedIndexPaths.insert(indexPath)
+
+            tableView.reloadRows(at: Array(indexPathsToReload), with: .none)
+        } else {
+            selectedIndexPaths.removeAll()
+            tableView.reloadData()
+        }
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -160,6 +185,16 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     // MARK: - Private
     
+    override func onPlayerPositionChanged(_ position: Double, duration: Double) {
+        super.onPlayerPositionChanged(position, duration: duration)
+        refreshTranscriptForPosition(position)
+    }
+    
+    override func onPlayerPlaybackCompleted() {
+        super.onPlayerPlaybackCompleted()
+        refreshTranscriptForPosition(-1)
+    }
+
     override func openUserDetails(_ user: BHUser?) {
         selectedUser = user
         performSegue(withIdentifier: BHPostDetailsViewController.UserDetailsSegueIdentifier, sender: self)
@@ -229,10 +264,15 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             return cell
         case .transcript:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostTranscriptCell.reusableIndentifer, for: indexPath) as! BHPostTranscriptCell
+            cell.isSelected = selectedIndexPaths.contains(indexPath)
             cell.postId = post?.id
             cell.segment = postsManager.transcriptSegments[indexPath.row]
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

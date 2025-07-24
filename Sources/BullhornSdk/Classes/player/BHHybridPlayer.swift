@@ -11,6 +11,7 @@ protocol BHHybridPlayerListener: ObserverProtocol {
     func hybridPlayerDidFinishPlaying(_ player: BHHybridPlayer)
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?)
     func hybridPlayerDidClose(_ player: BHHybridPlayer)
+    func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript)
 
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings)
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double)
@@ -25,6 +26,7 @@ extension BHHybridPlayerListener {
     func hybridPlayerDidFinishPlaying(_ player: BHHybridPlayer) {}
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {}
     func hybridPlayerDidClose(_ player: BHHybridPlayer) {}
+    func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript) {}
 
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {}
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double) {}
@@ -56,9 +58,16 @@ class BHHybridPlayer {
         didSet {
             BHBulletinManager.shared.reset()
             fetchInteractive() { _ in }
+            getTranscript()
         }
     }
-    
+
+    internal var transcript: BHTranscript?
+    internal var transcriptSegments: [BHSegment] {
+        return transcript?.segments ?? []
+    }
+    var isTranscriptActive: Bool = false // UI flag for player
+
     var playlist: [BHPost]?
     
     var playerItem: BHPlayerItem?
@@ -205,6 +214,7 @@ class BHHybridPlayer {
             }
         } else {
 
+            self.isTranscriptActive = false
             self.context = context
             self.manualPosition = position
 
@@ -275,9 +285,11 @@ class BHHybridPlayer {
         playerItem = nil
         playlist = nil
         post = nil
+        transcript = nil
         bulletinManager.reset()
         settings = .initial
         manualPosition = 0
+        isTranscriptActive = false
         
         observersContainer.notifyObserversAsync {
             $0.hybridPlayerDidClose(self)

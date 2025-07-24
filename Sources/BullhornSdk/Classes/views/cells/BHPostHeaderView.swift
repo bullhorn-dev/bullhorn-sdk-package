@@ -145,6 +145,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         ]
         tabbedView.delegate = self
         
+        selectedTab = tab
+        
         progressBgView.layer.cornerRadius = progressBgView.frame.height / 2
         progressBgView.layer.borderColor = UIColor.primaryBackground().cgColor
         progressBgView.layer.borderWidth = 1

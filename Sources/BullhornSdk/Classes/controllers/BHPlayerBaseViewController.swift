@@ -82,6 +82,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     internal var isPortrait: Bool = true
 
+    internal var selectedIndexPaths = Set<IndexPath>()
+
     
     // MARK: - Lifecycle
     
@@ -188,6 +190,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func updateAfterExpand() {}
     
+    func refreshTranscriptForPosition(_ position: Double = 0) {}
+    
     // MARK: - Notifications
     
     @objc fileprivate func onUserInterfaceStyleChangedNotification(notification: Notification) {
@@ -287,6 +291,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     func onStateChanged(_ state: PlayerState, stateFlags: PlayerStateFlags) {
         
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
+        guard let post = BHHybridPlayer.shared.post else { return }
 
         var controlsEnabled = false
         var showIndicator = false
@@ -343,7 +348,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             routePickerView.isHidden = !controlsEnabled
         }
                 
-        if playerItem.isStream || post?.isLiveStream() == true || type == .waitingRoom {
+        if playerItem.isStream || post.isLiveStream() || type == .waitingRoom {
             backwardButton.isHidden = true
             forwardButton.isHidden = true
             optionsButton.isHidden = true
@@ -367,9 +372,12 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             self.positionLabel.text = position.stringFormatted()
             self.durationLabel.text = "-\((duration-position).stringFormatted())"
         }
+        refreshTranscriptForPosition(position)
 //        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()
 //        previousButton.isEnabled = position > 30 || BHHybridPlayer.shared.hasPrevious()
     }
+    
+    func onTranscriptChanged() {}
     
     func resetUI() {
         playButton.isEnabled = true
@@ -456,6 +464,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
                 message += "The Internet connection is lost."
             }
             self.showError(message)
+            self.refreshTranscriptForPosition(-1)
         }
     }
     
@@ -480,7 +489,14 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             self.hasTile = false
             self.hasVideo = false
             self.videoView.reset()
+            self.refreshTranscriptForPosition(-1)
             self.resetUI()
+        }
+    }
+    
+    func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript) {
+        DispatchQueue.main.async {
+            self.onTranscriptChanged()
         }
     }
 }

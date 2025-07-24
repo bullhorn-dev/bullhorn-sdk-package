@@ -177,11 +177,19 @@ class BHPlayerContainingViewController: UIViewController {
         BHLivePlayer.shared.close()
     }
     
-    // MARK: - Private
+    // MARK: - Internal (to override)
     
     func openUserDetails(_ user: BHUser?) {}
-
+    
     func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {}
+    
+    func onPlayerStateChanged(_ state: PlayerState, stateFlags: PlayerStateFlags) {
+        updateMiniPlayer()
+    }
+    
+    func onPlayerPositionChanged(_ position: Double, duration: Double) {}
+
+    func onPlayerPlaybackCompleted() {}
 }
 
 
@@ -228,11 +236,32 @@ extension BHPlayerContainingViewController: BHHybridPlayerListener {
                 message += "The Internet connection is lost."
             }
             self.showError(message)
+            self.onPlayerPlaybackCompleted()
         }
     }
 
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {
-        DispatchQueue.main.async { self.updateMiniPlayer() }
+        DispatchQueue.main.async {
+            self.onPlayerStateChanged(state, stateFlags: stateFlags)
+        }
+    }
+    
+    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
+        DispatchQueue.main.async {
+            self.onPlayerPositionChanged(position, duration: duration)
+        }
+    }
+    
+    func hybridPlayerDidFinishPlaying(_ player: BHHybridPlayer) {
+        DispatchQueue.main.async {
+            self.onPlayerPlaybackCompleted()
+        }
+    }
+    
+    func hybridPlayerDidClose(_ player: BHHybridPlayer) {
+        DispatchQueue.main.async {
+            self.onPlayerPlaybackCompleted()
+        }
     }
 }
 

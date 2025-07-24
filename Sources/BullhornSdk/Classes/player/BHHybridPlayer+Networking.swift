@@ -216,6 +216,26 @@ extension BHHybridPlayer {
             BHLog.w("\(#function) - \(error)")
         }
     }
+    
+    func getTranscript() {
+        guard let validPost = post else { return }
+        
+        BHLog.p("\(#function) for postId: \(validPost.id)")
+
+        if validPost.hasTranscript {
+            postsManager.getTranscript(validPost.id) { response in
+                switch response {
+                case .success(transcript: let transcript):
+                    self.transcript = transcript
+                    self.observersContainer.notifyObserversAsync {
+                        $0.hybridPlayerDidChangeTranscript(self, transcript: transcript)
+                    }
+                case .failure(error: let error):
+                    BHLog.w("\(#function) - failed to load transcript. Error: \(error)")
+                }
+            }
+        }
+    }
 }
 
 

@@ -14,6 +14,13 @@ struct BHSegment: Codable {
     let start: Double
     let end: Double
     let text: String
+    
+    func contain(_ position: Double) -> Bool {
+        if start <= position && end > position {
+            return true
+        }
+        return false
+    }
 }
 
 // MARK: - Post Transcript
@@ -43,6 +50,10 @@ class BHTranscript: Codable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.segments = segments
+    }
+    
+    func segmentIndex(for position: Double) -> Int {
+        return segments.firstIndex(where: { $0.contain(position) }) ?? -1
     }
 }
 

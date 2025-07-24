@@ -7,9 +7,8 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     class var storyboardIndentifer: String { return String(describing: self) }
 
     enum Tabs: Int {
-        case chat = 0
-        case questions
-        case details
+        case details = 0
+        case transcript
     }
     
     @IBOutlet weak var videoStackView: UIStackView!
@@ -59,14 +58,15 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         interactiveView.delegate = self
         interactiveView.reloadData()
 
+        selectedTab = BHHybridPlayer.shared.isTranscriptActive ? .transcript : .details
+
         tabbedView.tabs = [
-            BHTabItemView(title: "Chat"),
-            BHTabItemView(title: "Questions"),
-            BHTabItemView(title: "Details")
+            BHTabItemView(title: "Details"),
+            BHTabItemView(title: "Transcript")
         ]
         tabbedView.delegate = self
         tabbedView.moveToTab(at: selectedTab.rawValue)
-        tabbedView.isHidden = true
+        tabbedView.isHidden = false
         
         isExpanded = false
         
@@ -75,9 +75,11 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
 
         let bundle = Bundle.module
         let headerNib = UINib(nibName: "BHDetailsHeaderView", bundle: bundle)
-        let postCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
+        let descriptionCellNib = UINib(nibName: "BHPostDescriptionCell", bundle: bundle)
+        let transcriptCellNib = UINib(nibName: "BHPostTranscriptCell", bundle: bundle)
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHDetailsHeaderView.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostDescriptionCell.reusableIndentifer)
+        tableView.register(descriptionCellNib, forCellReuseIdentifier: BHPostDescriptionCell.reusableIndentifer)
+        tableView.register(transcriptCellNib, forCellReuseIdentifier: BHPostTranscriptCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
@@ -102,7 +104,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         super.viewWillAppear(animated)
 
         BHOrientationManager.shared.landscapeSupported = true
-        
         onRotated()
     }
     
@@ -141,6 +142,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         super.updateAfterExpand()
 
         detailsView.isHidden = isExpanded
+        tabbedView.isHidden = isExpanded
         updateCollapseButton()
         updateLayers()
     }
@@ -188,7 +190,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
             videoStackView.axis = .vertical
             interactiveStackView.axis = .vertical
             isPortrait = true
-            tabbedView.isHidden = true
+            tabbedView.isHidden = isExpanded
             topVideoView.isHidden = false
             topInteractiveView.isHidden = false
             collapseButton.isHidden = false
@@ -251,6 +253,35 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         }
     }
     
+    override func onTranscriptChanged() {
+        super.onTranscriptChanged()
+
+        if selectedTab == .transcript {
+            tableView.reloadData()
+        }
+    }
+    
+    override func refreshTranscriptForPosition(_ position: Double = 0) {
+        super.refreshTranscriptForPosition(position)
+
+        if !BHHybridPlayer.shared.isTranscriptActive { return }
+
+        if let index = BHHybridPlayer.shared.transcript?.segmentIndex(for: position), index >= 0 {
+            let indexPath = IndexPath(row: index, section: 0)
+                
+            var indexPathsToReload = selectedIndexPaths
+            indexPathsToReload.insert(indexPath)
+
+            selectedIndexPaths.removeAll()
+            selectedIndexPaths.insert(indexPath)
+
+            tableView.reloadRows(at: Array(indexPathsToReload), with: .none)
+        } else {
+            selectedIndexPaths.removeAll()
+            tableView.reloadData()
+        }
+    }
+    
     // MARK: - Overlay timer
     
     fileprivate func startOverlayTimer() {
@@ -287,6 +318,7 @@ extension BHInteractivePlayerViewController: BHTabbedViewDelegate {
         let isChanged = index != selectedTab.rawValue
         selectedTab = Tabs(rawValue: index) ?? .details
         isExpanded = false
+        BHHybridPlayer.shared.isTranscriptActive = selectedTab == .transcript
         if isChanged { tableView.reloadData() }
     }
 }
@@ -300,52 +332,57 @@ extension BHInteractivePlayerViewController: UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let bundle = Bundle.module
-        let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-
         switch selectedTab {
-        case .chat:
-            let message = "No chats"
-            tableView.setEmptyMessage(message, image: image)
-            return 0
-        case .questions:
-            let message = "No questions"
-            tableView.setEmptyMessage(message, image: image)
-            return 0
         case .details:
             tableView.restore()
             return 1
+        case .transcript:
+            if BHHybridPlayer.shared.transcriptSegments.count == 0 && !activityIndicator.isAnimating {
+                let bundle = Bundle.module
+                let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
+
+                tableView.setEmptyMessage("Transcript is not available", image: image)
+            } else {
+                tableView.restore()
+            }
+            return BHHybridPlayer.shared.transcriptSegments.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch selectedTab {
-        case .chat, .questions:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            return cell
-
         case .details:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostDescriptionCell.reusableIndentifer, for: indexPath) as! BHPostDescriptionCell
             cell.text = post?.description
             return cell
+        case .transcript:
+            let cell = tableView.dequeueReusableCell(withIdentifier: BHPostTranscriptCell.reusableIndentifer, for: indexPath) as! BHPostTranscriptCell
+            cell.isSelected = selectedIndexPaths.contains(indexPath)
+            cell.postId = post?.id
+            cell.segment = BHHybridPlayer.shared.transcriptSegments[indexPath.row]
+            return cell
         }
     }
-    
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch selectedTab {
-        case .chat, .questions:
-            return nil
         case .details:
             detailsHeaderView?.post = post
             detailsHeaderView?.setup()
             return detailsHeaderView
+        case .transcript:
+            return nil
         }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch selectedTab {
-        case .chat, .questions:
-            return 0
+        case .transcript:
+            return 1
         case .details:
             return detailsHeaderView?.calculateHeight() ?? 100
         }
@@ -359,7 +396,19 @@ extension BHInteractivePlayerViewController: UITableViewDataSource, UITableViewD
         return 0
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch selectedTab {
+        case .transcript:
+            guard let validPost = post else { return }
+            let position = BHHybridPlayer.shared.transcriptSegments[indexPath.row].start
+            
+            if BHHybridPlayer.shared.isPostActive(validPost.id) {
+                BHHybridPlayer.shared.seek(to: position, resume: true)
+            }
+        default:
+            return
+        }
+    }
 }
 
 // MARK: - BHInteractiveViewDelegate
