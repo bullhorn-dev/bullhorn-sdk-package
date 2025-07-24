@@ -153,6 +153,12 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
     
     fileprivate func refreshTranscriptForPosition(_ position: Double = 0) {
+        
+        if position < 0 && selectedTab == .transcript {
+            selectedIndexPaths.removeAll()
+            tableView.reloadData()
+        }
+        
         guard let validPost = post else { return }
         guard let playerPost = BHHybridPlayer.shared.post else { return }
 
