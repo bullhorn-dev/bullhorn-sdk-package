@@ -214,6 +214,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         } else {
             BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], position: position)
         }
+        BHHybridPlayer.shared.isTranscriptActive = true
     }
 
     // MARK: - Action handlers
