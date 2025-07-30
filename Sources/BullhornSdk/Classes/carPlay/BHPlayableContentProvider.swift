@@ -117,6 +117,15 @@ extension BHPlayableContentProvider {
                                 convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
                             case .failure(error: let error):
                                 BHLog.w("User posts load failed \(error.localizedDescription)")
+                                
+                                var message = "Failed to load podcast episodes. "
+                                if BHReachabilityManager.shared.isConnected() {
+                                    message += " \(error.localizedDescription)"
+                                } else {
+                                    message += "The Internet connection is lost."
+                                }
+                                
+                                presentAlert(message)
                             }
                         }
                     }
@@ -169,6 +178,15 @@ extension BHPlayableContentProvider {
                             convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
                         case .failure(error: let error):
                             BHLog.w("User posts load failed \(error.localizedDescription)")
+                            
+                            var message = "Failed to load podcast episodes. "
+                            if BHReachabilityManager.shared.isConnected() {
+                                message += " \(error.localizedDescription)"
+                            } else {
+                                message += "The Internet connection is lost."
+                            }
+                            
+                            presentAlert(message)
                         }
                     }
                 }
@@ -221,7 +239,13 @@ extension BHPlayableContentProvider {
                 self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
             }
         } else {
-            BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay)
+            let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(episode.id)
+            
+            if fileUrl == nil && !BHReachabilityManager.shared.isConnected() {
+                presentAlert("Failed to play episode. The Internet connection is lost.")
+            } else {
+                BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay)
+            }
         }
     }
 
@@ -255,6 +279,18 @@ extension BHPlayableContentProvider {
         let item = items.first(where: { $0.text == title })
         updatePlayingItem(item, items: items)
         updatePlayingItem(item, items: BHPlayableContentController.shared.episodesListItems)
+    }
+    
+    func presentAlert(_ message: String) {
+        
+        BHLog.p("CarPlay present alert, message: \(message)")
+
+        let okAction = CPAlertAction(title: "OK", style: .default) { action in
+            self.carplayInterfaceController?.dismissTemplate(animated: true, completion: nil)
+        }
+        let alert = CPAlertTemplate(titleVariants: [message], actions: [okAction])
+
+        carplayInterfaceController?.presentTemplate(alert, animated: true, completion: nil)
     }
         
     internal func fetchImages(_ urls: [URL], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {

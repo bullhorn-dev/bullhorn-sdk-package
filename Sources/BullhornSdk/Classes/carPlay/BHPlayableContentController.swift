@@ -141,6 +141,21 @@ class BHPlayableContentController: NSObject {
             }
         }
     }
+    
+    func presentAlert(title: String, message: String? = nil) {
+        guard let interfaceController = carplayInterfaceController else { return }
+        
+        BHLog.p("CarPlay present alert, title: \(title), message: \(message ?? "nil")")
+
+        let titleVariants = message == nil ? [title] : [title, message!]
+        let okAction = CPAlertAction(title: "OK", style: .default) { action in
+            self.carplayInterfaceController?.dismissTemplate(animated: true, completion: nil)
+        }
+        let actions = [okAction]
+        let alert = CPAlertTemplate(titleVariants: titleVariants, actions: actions)
+
+        interfaceController.presentTemplate(alert, animated: true, completion: nil)
+    }
 
     // MARK: - Private
     
@@ -198,6 +213,22 @@ extension BHPlayableContentController: BHHybridPlayerListener {
 
         if topTemplate.isMember(of: CPNowPlayingTemplate.self) {
             carplayInterfaceController?.popToRootTemplate(animated: true)
+        }
+    }
+    
+    func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {
+        DispatchQueue.main.async {
+            var message = "Failed to play episode."
+
+            if BHReachabilityManager.shared.isConnected() {
+                if let validError = error {
+                    message += " \(validError.localizedDescription)"
+                }
+            } else {
+                message += "The Internet connection is lost."
+            }
+
+            self.presentAlert(title: message)
         }
     }
 }
