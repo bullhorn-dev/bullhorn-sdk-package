@@ -218,6 +218,9 @@ class BHHybridPlayer {
             self.context = context
             self.manualPosition = position
 
+            let localOffset = BHOffsetsManager.shared.offset(for: post.id)
+            let startPosition = position > 0 ? position : localOffset?.offset ?? 0
+
             /// track event
             let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
             let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context.rawValue, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, episodeType: type)
@@ -227,7 +230,7 @@ class BHHybridPlayer {
             
             if fileUrl != nil {
                 let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
                              
                 start(with: playerItem, post: post, playlist: playlist)
                              
@@ -244,7 +247,7 @@ class BHHybridPlayer {
                     }
 
                     let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
 
                     self.start(with: playerItem, post: post, playlist: playlist)
 
@@ -267,7 +270,7 @@ class BHHybridPlayer {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
             
-            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
             self.playerItem = playerItem
             self.post = post
@@ -678,7 +681,7 @@ class BHHybridPlayer {
         let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
         let settings: BHPlayerItem.PlaybackSettings = settings
             
-        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
         start(with: playerItem, post: post, playlist: playlist)
             
@@ -1061,14 +1064,14 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
     
-    func mediaPlayerDidFinishPlaying(_ player: BHMediaPlayerBase) {
+    func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase) {
         guard let validPlayerItem = playerItem else {
             stop()
             return
         }
         
         if validPlayerItem.isStream {
-            mediaPlayerDidStallPlaying(player)
+            mediaPlayerPlaybackStalled(player)
         } else {
             handlePlayerState(.ended)
             if hasNext() && UserDefaults.standard.playNextEnabled {
@@ -1077,14 +1080,19 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
     
-    func mediaPlayerDidStallPlaying(_ player: BHMediaPlayerBase) {
-        let error = NSError.error(with: NSError.LocalCodes.common, description: "Playing stalled because of bad network connection.")
+    func mediaPlayerPlaybackStalled(_ player: BHMediaPlayerBase) {
+        let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
         handlePlayerState(.failed(e: error))
     }
     
+    func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase) {
+        let error = NSError.error(with: NSError.LocalCodes.common, description: "Failed to play because of bad network connection.")
+        handlePlayerState(.failed(e: error))
+    }
+
     func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase) {
         if playerItem?.isStream == true {
-            mediaPlayerDidStallPlaying(player)
+            mediaPlayerPlaybackStalled(player)
         } else {
             pause()
         }

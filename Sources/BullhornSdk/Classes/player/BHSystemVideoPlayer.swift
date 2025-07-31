@@ -171,7 +171,7 @@ extension BHSystemVideoPlayer {
     
     @objc fileprivate func onAVPlayerItemDidPlayToEndTime(_ notification: Notification) {
         _ = stop()
-        delegate?.mediaPlayerDidFinishPlaying(self)
+        delegate?.mediaPlayerDidPlayToEndTime(self)
     }
 }
 
@@ -184,7 +184,7 @@ extension BHSystemVideoPlayer: BHVideoPlayerDelegate {
         updateState()
         
         if state == .playedToTheEnd {
-            delegate?.mediaPlayerDidFinishPlaying(self)
+            delegate?.mediaPlayerDidPlayToEndTime(self)
         }
     }
     

@@ -5,8 +5,9 @@ import MediaPlayer
 
 protocol BHMediaPlayerDelegate: AnyObject {
     func mediaPlayer(_ player: BHMediaPlayerBase, stateUpdated state: BHMediaPlayerBase.State)
-    func mediaPlayerDidFinishPlaying(_ player: BHMediaPlayerBase)
-    func mediaPlayerDidStallPlaying(_ player: BHMediaPlayerBase)
+    func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase)
+    func mediaPlayerPlaybackStalled(_ player: BHMediaPlayerBase)
+    func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase)
     func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase)
     func mediaPlayerServicesWereReset(_ player: BHMediaPlayerBase)
     func mediaPlayerDidRequestNowPlayingItemInfo(_ player: BHMediaPlayerBase) -> BHNowPlayingItemInfo

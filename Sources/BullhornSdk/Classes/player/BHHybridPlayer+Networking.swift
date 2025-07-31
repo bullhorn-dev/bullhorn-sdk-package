@@ -137,31 +137,12 @@ extension BHHybridPlayer {
                         
                         let position = playbackOffset.offset
 
-                        if position != -1 && position != validItem.position {
+                        if position > 0 && abs(position - validItem.position) > 12 {
                             self.seek(to: position)
                         }
                     case .failure(error: let e):
                         BHLog.w("BHPlaybackOffset load failed \(e.localizedDescription)")
-                        if offset > 0 {
-                            self.seek(to: offset)
-                        } else if validPost.playbackOffset > 0 {
-                            self.seek(to: validPost.playbackOffset)
-                        }
                     }
-                }
-            }
-        } else if manualPosition > 0 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.seek(to: self.manualPosition)
-            }
-        } else {
-            if offset > 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.seek(to: offset)
-                }
-            } else if validPost.playbackOffset > 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.seek(to: validPost.playbackOffset)
                 }
             }
         }
@@ -219,20 +200,19 @@ extension BHHybridPlayer {
     
     func getTranscript() {
         guard let validPost = post else { return }
+        if !validPost.hasTranscript { return }
         
         BHLog.p("\(#function) for postId: \(validPost.id)")
 
-        if validPost.hasTranscript {
-            postsManager.getTranscript(validPost.id) { response in
-                switch response {
-                case .success(transcript: let transcript):
-                    self.transcript = transcript
-                    self.observersContainer.notifyObserversAsync {
-                        $0.hybridPlayerDidChangeTranscript(self, transcript: transcript)
-                    }
-                case .failure(error: let error):
-                    BHLog.w("\(#function) - failed to load transcript. Error: \(error)")
+        postsManager.getTranscript(validPost.id) { response in
+            switch response {
+            case .success(transcript: let transcript):
+                self.transcript = transcript
+                self.observersContainer.notifyObserversAsync {
+                    $0.hybridPlayerDidChangeTranscript(self, transcript: transcript)
                 }
+            case .failure(error: let error):
+                BHLog.w("\(#function) - failed to load transcript. Error: \(error)")
             }
         }
     }

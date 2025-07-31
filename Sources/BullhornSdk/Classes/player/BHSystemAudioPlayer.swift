@@ -58,8 +58,8 @@ class BHSystemAudioPlayer: BHMediaPlayerBase {
 
         playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onAVPlayerItemDidPlayToEndTime(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemPlaybackStalled(_:)), name: .AVPlayerItemPlaybackStalled, object: playerItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemPlaybackStalled(_:)), name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onAVPlayerItemPlaybackStalled(_:)), name: .AVPlayerItemPlaybackStalled, object: playerItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onAVPlayerItemFailedToPlayToEndTime(_:)), name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
     }
     
     override func removePlayerItemNotifications() {
@@ -188,18 +188,18 @@ extension BHSystemAudioPlayer {
     @objc fileprivate func onAVPlayerItemDidPlayToEndTime(_ notification: Notification) {
         BHLog.p("\(#function)")
         _ = stop()
-        delegate?.mediaPlayerDidFinishPlaying(self)
+        delegate?.mediaPlayerDidPlayToEndTime(self)
     }
     
-    @objc func playerItemPlaybackStalled(_ notification: Notification) {
+    @objc fileprivate func onAVPlayerItemPlaybackStalled(_ notification: Notification) {
         BHLog.p("\(#function)")
         _ = stop()
-        delegate?.mediaPlayerDidStallPlaying(self)
+        delegate?.mediaPlayerPlaybackStalled(self)
     }
     
     @objc fileprivate func onAVPlayerItemFailedToPlayToEndTime(_ notification: Notification) {
         BHLog.p("\(#function)")
         _ = stop()
-        delegate?.mediaPlayerDidStallPlaying(self)
+        delegate?.mediaPlayerFailedToPlayToEndTime(self)
     }
 }
