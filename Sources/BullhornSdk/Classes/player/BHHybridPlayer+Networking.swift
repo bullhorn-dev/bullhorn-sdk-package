@@ -123,7 +123,7 @@ extension BHHybridPlayer {
         let offset: Double = localOffset?.offset ?? 0
         let timestamp: Double = localOffset?.timestamp ?? 0
 
-        if BHReachabilityManager.shared.isConnected(), manualPosition == 0 {
+        if BHReachabilityManager.shared.isConnected(), manualPosition == 0, validItem.post.file == nil {
                                                 
             postsManager.getPlaybackOffset(validPost.id, offset: offset, timestamp: timestamp.toMs()) { response in
                 DispatchQueue.main.async {
