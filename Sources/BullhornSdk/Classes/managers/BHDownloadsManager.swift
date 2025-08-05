@@ -13,7 +13,7 @@ class BHDownloadsManager {
  
     static let shared = BHDownloadsManager()
 
-    private let autoDownloadsMaxCount: Int = 3
+    private let autoDownloadsMaxCount: Int = 10
 
     private let observersContainer: ObserversContainerNotifyingOnQueue<BHDownloadsManagerListener>
     private let workingQueue = DispatchQueue.init(label: "BHDownloadsManager.Working", target: .global())
@@ -84,6 +84,8 @@ class BHDownloadsManager {
     func autoDownloadNewEpisodeIfNeeded(_ post: BHPost) {
         BHLog.p("\(#function), postId: \(post.id)")
         
+        if !UserDefaults.standard.isDevModeEnabled { return }
+        
         if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
             BHLog.p("\(#function) - connection expensive. Don't download the episode.")
             return
@@ -96,7 +98,9 @@ class BHDownloadsManager {
 
     func autoDownloadNewEpisodesIfNeeded() {
         BHLog.p("\(#function)")
-        
+
+        if !UserDefaults.standard.isDevModeEnabled { return }
+
         if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
             BHLog.p("\(#function) - connection expensive. Stop autodownloads.")
             return
@@ -117,13 +121,13 @@ class BHDownloadsManager {
         }
     }
     
-    func clearAutoudownloadsIfNeeded() {
+    private func clearAutoudownloadsIfNeeded() {
         BHLog.p("\(#function)")
         
         let autoDownloadedQueue = self.downloadsQueue.filter({ $0.reason == .auto })
  
-        if autoDownloadedQueue.count >= autoDownloadsMaxCount, let lastItem = autoDownloadedQueue.last {
-            removeFromDownloads(lastItem.post)
+        if autoDownloadedQueue.count >= autoDownloadsMaxCount, let firstItem = autoDownloadedQueue.first {
+            removeFromDownloads(firstItem.post)
         }
     }
     
