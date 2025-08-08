@@ -524,6 +524,10 @@ class BHHybridPlayer {
         self.post = post
         self.playlist = playlist
         
+        if !hasNext() {
+            getPlaylist()
+        }
+        
         observersContainer.notifyObserversAsync {
             $0.hybridPlayer(self, initializedWith: validItem)
         }

@@ -147,6 +147,22 @@ class BHPostsManager {
             }
         }
     }
+    
+    func getPlaybackQueuePosts(_ postId: String, count: Int = 20, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
+
+        apiPosts.getPlaybackQueue(authToken: authToken, postId: postId, count: count) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(posts: _):
+                    break
+                case .failure(error: let error):
+                    BHLog.w("Playback queue posts load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+
 
     // MARK: - Initial fetch for screen
 

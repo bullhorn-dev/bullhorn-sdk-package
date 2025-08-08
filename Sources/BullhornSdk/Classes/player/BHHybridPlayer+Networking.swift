@@ -216,6 +216,27 @@ extension BHHybridPlayer {
             }
         }
     }
+    
+    func getPlaylist() {
+        guard let validPost = post else { return }
+
+        BHLog.p("\(#function)")
+
+        if BHReachabilityManager.shared.isConnected() {
+            postsManager.getPlaybackQueuePosts(validPost.id) { response in
+                switch response {
+                case .success(posts: let posts):
+                    if self.playlist == nil {
+                        self.playlist = posts
+                    } else {
+                        self.playlist?.append(contentsOf: posts)
+                    }
+                case .failure(error: _):
+                    break
+                }
+            }
+        }
+    }
 }
 
 

@@ -311,6 +311,32 @@ class BHServerApiPosts: BHServerApiBase {
         }
     }
     
+    func getPlaybackQueue(authToken: String?, postId: String, count: Int, _ completion: @escaping (PostsResult) -> Void) {
+
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+
+            let path = "posts/\(postId)/autoplay?page[size]=\(count)"
+            let fullPath = self.composeFullApiURL(with: path)
+            let headers = self.composeHeaders(authToken)
+            
+            AF.request(fullPath, method: .get, headers: headers)
+              .validate()
+              .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
+                  debugPrint(response)
+                  switch response.result {
+                  case .success(let posts):
+                      completion(.success(posts: posts.posts))
+                  case .failure(let error):
+                      completion(.failure(error: error))
+                  }
+              })
+        }
+    }
+    
     // MARK: - Private
     
     private func getMobileInfo() -> (mcc: String, mnc: String, callingCode: Int) {
