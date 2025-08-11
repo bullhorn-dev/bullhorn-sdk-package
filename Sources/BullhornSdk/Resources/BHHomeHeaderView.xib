@@ -27,11 +27,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="474" height="1000"/>
                         <subviews>
                             <view contentMode="scaleToFill" restorationIdentifier="BHRadioView" translatesAutoresizingMaskIntoConstraints="NO" id="aI9-ia-iE0" customClass="BHRadioStreamsView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="0.0" width="474" height="30"/>
+                                <rect key="frame" x="0.0" y="0.0" width="474" height="14"/>
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qA9-BX-8vU">
-                                <rect key="frame" x="0.0" y="30" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="14" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Cu-dC-9Wz">
                                         <rect key="frame" x="15.999999999999993" y="11.333333333333334" width="111.33333333333331" height="21.333333333333329"/>
@@ -48,14 +48,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="99C-91-bXk" customClass="BHLiveCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="74" width="474" height="144"/>
+                                <rect key="frame" x="0.0" y="58" width="474" height="144"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="Neo-9g-3JF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jcp-Se-jL4">
-                                <rect key="frame" x="0.0" y="218" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="202" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upcoming Episodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pAH-V7-E8J">
                                         <rect key="frame" x="16" y="11.333333333333341" width="160.33333333333334" height="21.333333333333329"/>
@@ -72,14 +72,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wr1-qx-pH2" customClass="BHPostsCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="262" width="474" height="134"/>
+                                <rect key="frame" x="0.0" y="246" width="474" height="134"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="134" id="wbd-a1-yE2"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EqG-6J-eaL">
-                                <rect key="frame" x="0.0" y="396" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="380" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Followed Podcasts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRV-dQ-ftk">
                                         <rect key="frame" x="16" y="11.333333333333313" width="152.66666666666666" height="21.333333333333329"/>
@@ -111,14 +111,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mTX-or-nFC" customClass="BHUsersCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="440" width="474" height="136"/>
+                                <rect key="frame" x="0.0" y="424" width="474" height="144"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="136" id="WBF-Df-Ipo"/>
+                                    <constraint firstAttribute="height" constant="144" id="WBF-Df-Ipo"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tj6-ZT-g6Q">
-                                <rect key="frame" x="0.0" y="576" width="474" height="44"/>
+                                <rect key="frame" x="0.0" y="568" width="474" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Featured Podcasts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hC1-Lp-Gd1">
                                         <rect key="frame" x="16" y="11.333333333333369" width="151.66666666666666" height="21.333333333333329"/>
@@ -136,10 +136,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lkt-zb-uE3" customClass="BHUsersCarouselView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="620" width="474" height="136"/>
+                                <rect key="frame" x="0.0" y="612" width="474" height="144"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="136" id="YZj-SV-IiV"/>
+                                    <constraint firstAttribute="height" constant="144" id="YZj-SV-IiV"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9JJ-Re-G9v">

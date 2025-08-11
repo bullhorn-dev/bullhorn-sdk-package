@@ -28,7 +28,7 @@
         <scene sceneID="CaP-M5-Zzh">
             <objects>
                 <navigationController title="Profile NC" id="gFM-CJ-o6Q" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Account" id="ipv-mE-bxo">
+                    <tabBarItem key="tabBarItem" title="Profile" id="ipv-mE-bxo">
                         <imageReference key="image" image="ic_account" symbolScale="large"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="RiR-iy-X7Z">
@@ -80,7 +80,7 @@
                             <constraint firstItem="vrL-65-vZy" firstAttribute="top" secondItem="TIz-um-L77" secondAttribute="bottom" id="vFV-md-bEe"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Account" id="QXr-gw-hOF"/>
+                    <tabBarItem key="tabBarItem" title="Profile" id="QXr-gw-hOF"/>
                     <navigationItem key="navigationItem" title="Profile" id="yDU-2O-FXC"/>
                     <connections>
                         <segue destination="Ihu-3p-eUw" kind="show" identifier="Settings.AppearanceSegueIdentifier" id="y8z-h1-Bvr"/>
@@ -406,7 +406,7 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorSecondary">
-            <color red="0.53333333333333333" green="0.59999999999999998" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="fxColorPrimaryBg">
             <color red="0.96470588235294119" green="0.97254901960784312" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -19,7 +19,7 @@ class BHStreamCarouselCell: UICollectionViewCell {
     
     fileprivate var placeholderImage: UIImage?
         
-    fileprivate static let textHeight: CGFloat = 13.0
+    fileprivate static let textHeight: CGFloat = 18.0
     fileprivate static let spacing: CGFloat = Constants.paddingVertical / 4
 
     static let cellWidth: CGFloat = (UIScreen.main.bounds.width - 6 * Constants.paddingHorizontal) / 3
@@ -40,7 +40,7 @@ class BHStreamCarouselCell: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .fontWithName(.robotoMedium, size: BHStreamCarouselCell.textHeight)
+        label.font = .fontWithName(.robotoMedium, size: 13.0)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondary()
         label.numberOfLines = 1

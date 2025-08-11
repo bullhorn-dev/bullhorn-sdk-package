@@ -65,27 +65,27 @@
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="interactive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg5-jn-KFC" customClass="BHPaddingLabel" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="76.333333333333329" width="37.666666666666664" height="9.6666666666666714"/>
+                                        <rect key="frame" x="0.0" y="75.333333333333329" width="37.666666666666664" height="9.6666666666666714"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="8"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ">
-                                        <rect key="frame" x="0.0" y="102" width="293.33333333333331" height="49.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="100" width="293.33333333333331" height="49.333333333333343"/>
                                         <string key="text">Description description description description description description description description description description description</string>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going live " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXt-5z-eR0">
-                                        <rect key="frame" x="0.0" y="167.66666666666666" width="64.333333333333329" height="16.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="164.66666666666666" width="64.333333333333329" height="16.666666666666657"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P04-Pc-Ybq" customClass="BHWaitingRoomButton" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="200.66666666666666" width="140" height="32"/>
+                                        <rect key="frame" x="0.0" y="196.66666666666666" width="140" height="32"/>
                                         <color key="backgroundColor" name="bhColorSecondary"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="jvz-Wd-kZE"/>
@@ -93,7 +93,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cVH-hZ-ZeZ">
-                                        <rect key="frame" x="0.0" y="248.66666666666669" width="172" height="28"/>
+                                        <rect key="frame" x="0.0" y="243.66666666666669" width="172" height="28"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vvi-N8-31O">
                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
@@ -173,19 +173,19 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-AS-zZr">
-                                        <rect key="frame" x="0.0" y="293" width="328" height="14"/>
+                                        <rect key="frame" x="0.0" y="287" width="328" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Yesterday" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqg-cq-Xl0">
-                                                <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="14"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="20"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                 <color key="textColor" name="bhColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NH8-3N-Shi">
-                                                <rect key="frame" x="102.33333333333334" y="0.0" width="120" height="14"/>
+                                                <rect key="frame" x="102.33333333333334" y="0.0" width="120" height="20"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TPB-XO-f4H">
-                                                        <rect key="frame" x="0.0" y="3" width="0.0" height="8"/>
+                                                        <rect key="frame" x="0.0" y="3" width="0.0" height="14"/>
                                                         <color key="backgroundColor" name="bhColorPrimary"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" id="baZ-kD-BH7"/>
@@ -201,13 +201,13 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Played" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAG-sz-9tV">
-                                                <rect key="frame" x="234.33333333333331" y="0.0" width="38.666666666666686" height="14"/>
+                                                <rect key="frame" x="234.33333333333331" y="0.0" width="38.666666666666686" height="20"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                 <color key="textColor" name="bhColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="0:00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDr-W3-Wq8">
-                                                <rect key="frame" x="285" y="0.0" width="43" height="14"/>
+                                                <rect key="frame" x="285" y="0.0" width="43" height="20"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                 <color key="textColor" name="bhColorSecondary"/>
                                                 <nil key="highlightedColor"/>
@@ -216,7 +216,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="nDr-W3-Wq8" secondAttribute="trailing" id="a9g-z9-7Bo"/>
-                                            <constraint firstAttribute="height" constant="14" id="dCl-jf-K2i"/>
+                                            <constraint firstAttribute="height" constant="20" id="dCl-jf-K2i"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -291,7 +291,7 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorSecondary">
-            <color red="0.53333333333333333" green="0.59999999999999998" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.49019607843137253" green="0.54117647058823526" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
