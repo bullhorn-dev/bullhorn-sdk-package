@@ -63,4 +63,8 @@ class BHDownloadItem: Codable {
         self.file = file
         self.time = time
     }
+    
+    var date: Date {
+        return Date(timeIntervalSince1970: time)
+    }
 }

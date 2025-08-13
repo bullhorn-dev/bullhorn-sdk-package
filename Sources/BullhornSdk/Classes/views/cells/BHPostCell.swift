@@ -197,7 +197,7 @@ class BHPostCell: UITableViewCell {
             bottomView.isHidden = true
         }
         
-        if let validDate = validPost.publishedAtDate {
+        if let validDate = validPost.startTimeDate {
             dateLabel.text = dateFormatter.prettyDayFormatString(from: validDate)
             dateLabel.isHidden = false
         } else {

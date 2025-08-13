@@ -14,6 +14,8 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
 
     fileprivate var selectedPost: BHPost?
     fileprivate var selectedTab: BHPostTabs = .details
+    
+    let dateFormatter: DateFormatter = DateFormatter()
 
     // MARK: - Lifecycle
     
@@ -103,12 +105,28 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
 
 extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let date = BHDownloadsManager.shared.groupedItems[section].date
+        return dateFormatter.prettyDayFormatString(from: date)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.contentView.backgroundColor = .primaryBackground()
+        header.textLabel?.textColor = .secondary()
+        header.textLabel?.font = UIFont.fontWithName(.robotoMedium , size: 16)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+        
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return BHDownloadsManager.shared.groupedItems.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHDownloadsManager.shared.items.count == 0 && !activityIndicator.isAnimating {
+        if BHDownloadsManager.shared.groupedItems.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 
@@ -117,12 +135,12 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
             tableView.restore()
         }
 
-        return BHDownloadsManager.shared.items.count
+        return BHDownloadsManager.shared.groupedItems[section].posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        let post = BHDownloadsManager.shared.items[indexPath.row].post
+        let post = BHDownloadsManager.shared.groupedItems[indexPath.section].posts[indexPath.row]
         cell.post = post
         cell.playlist = BHDownloadsManager.shared.items.map({ $0.post })
         cell.shareBtnTapClosure = { [weak self] url in
@@ -141,7 +159,7 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openPostDetails(BHDownloadsManager.shared.items[indexPath.row].post)
+        openPostDetails(BHDownloadsManager.shared.groupedItems[indexPath.section].posts[indexPath.row])
     }
 }
 

@@ -151,6 +151,10 @@ struct BHPost: Codable {
         return endTime != nil ? dateStringFormatter.date(from: endTime!) : nil
     }
 
+    var validPublishedDate: Date {
+        return startTimeDate ?? Date()
+    }
+
     func hasRecording() -> Bool { recording != nil }
 
     func isPreRecorded() -> Bool { postType == .preRecorded }

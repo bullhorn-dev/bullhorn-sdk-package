@@ -2,6 +2,11 @@
 import Foundation
 internal import Alamofire
 
+struct UIDownloadsModel {
+    let date: Date
+    let posts: [BHPost]
+}
+
 protocol BHDownloadsManagerListener: ObserverProtocol {
     func downloadsManager(_ manager: BHDownloadsManager, itemStateUpdated item: BHDownloadItem)
     func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem)
@@ -30,6 +35,30 @@ class BHDownloadsManager {
         return downloadsQueue
             .filter({ $0.status.isSuccess() })
             .sorted(by: { $0.time > $1.time })
+    }
+
+    // MARK: - group items for UI
+
+    let calendar = Calendar.current
+    var groupedItems: [UIDownloadsModel] = []
+
+    func groupItems() {
+        groupedItems.removeAll()
+        
+        let items = downloadsQueue.sorted(by: { $0.time > $1.time })
+        var models: [UIDownloadsModel] = []
+
+        let grouped = Dictionary(grouping: items) { item -> Date in
+            calendar.startOfDay(for: item.date)
+        }
+        
+        for (date, values) in grouped {
+            let uiModel = UIDownloadsModel(date: date,
+                                           posts: values.sorted(by: { $0.post.validPublishedDate > $1.post.validPublishedDate }).map { $0.post })
+            models.append(uiModel)
+        }
+        
+        groupedItems = models.sorted(by: { $0.date > $1.date })
     }
     
     // MARK: - Initialization
@@ -348,6 +377,7 @@ class BHDownloadsManager {
     fileprivate func fetchStorageItems() {
         DataBaseManager.shared.fetchDownloads() { items in
             self.downloadsQueue = items
+            self.groupItems()
         }
     }
 
