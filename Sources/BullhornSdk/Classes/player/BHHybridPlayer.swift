@@ -794,8 +794,9 @@ class BHHybridPlayer {
 
     fileprivate func composeNowPlayingItemInfo(with image: UIImage? = nil) -> BHNowPlayingItemInfo {
 
+        let playbackRate = isPlaying() ? mediaPlayer?.rate : 0
         let currentItemImage = image ?? mediaPlayer?.nowPlayingItemInfo.itemImage
-        let nowPlayingItemInfo = BHNowPlayingItemInfo(title: playerItem?.post.title, audioTitle: playerItem?.post.userName, authorName: playerItem?.post.userName, duration: totalDuration(), elapsedTime: nil, itemImage: currentItemImage, isLiveStream: playerItem?.isStream, rate: nil)
+        let nowPlayingItemInfo = BHNowPlayingItemInfo(title: playerItem?.post.title, audioTitle: playerItem?.post.userName, authorName: playerItem?.post.userName, duration: totalDuration(), elapsedTime: playerItem?.position, itemImage: currentItemImage, isLiveStream: playerItem?.isStream, rate: playbackRate)
 
         return nowPlayingItemInfo
     }
@@ -898,11 +899,7 @@ class BHHybridPlayer {
     }
 
     @objc fileprivate func sleepTimerHandler(_ timer: Timer) {
-
-        guard let player = mediaPlayer else { return }
-
-        _ = player.pause()
-
+        pause()
         sleepTimerInterval = 0
     }
     

@@ -52,11 +52,7 @@ extension BHMediaPlayerBase {
     }
     
     internal func setNowPlayingInfo(_ info: [String: Any]?) {
-        
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        nowPlayingInfoCenter.nowPlayingInfo = info
-        
-//            nowPlayingInfoCenter.playbackState = nowPlayingItemPlaybackState
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
     
     internal func composeNowPlayingItemInfoDictionary() -> [String : Any] {
@@ -86,7 +82,7 @@ extension BHMediaPlayerBase {
         let validDuration = max(nowPlayingItemInfo.duration ?? 0, duration())
         info[MPMediaItemPropertyPlaybackDuration] = validDuration
         
-        let validRate = Float(nowPlayingItemInfo.rate ?? rate)
+        let validRate = Float(nowPlayingItemInfo.rate ?? 0)
         info[MPNowPlayingInfoPropertyPlaybackRate] = validRate
         info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = Constants.defaultPlaybackRate
         
