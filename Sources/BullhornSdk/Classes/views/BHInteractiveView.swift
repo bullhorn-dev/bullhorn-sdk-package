@@ -249,7 +249,7 @@ extension BHInteractiveView: BHHybridPlayerListener {
 
         DispatchQueue.main.async {
             self.tiles = bulletin.bulletinEvents?.compactMap({ $0.bulletinTile }) ?? []
-            if !(player.isEnded() || player.isDestroyed()) {
+            if !(player.isEnded() || player.isFailed()) {
                 self.reloadData()
             }
         }

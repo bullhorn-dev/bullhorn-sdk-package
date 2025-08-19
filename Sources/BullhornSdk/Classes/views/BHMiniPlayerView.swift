@@ -265,7 +265,7 @@ class BHMiniPlayerView: UIView {
         case .ended:
             controlsEnabled = true
             playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-        case .destroyed:
+        case .failed:
             showRefresh = true
             playButton.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
         }

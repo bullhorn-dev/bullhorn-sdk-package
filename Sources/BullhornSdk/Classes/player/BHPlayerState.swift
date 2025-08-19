@@ -43,13 +43,13 @@ enum PlayerState: Int {
     case playing
     case paused
     case ended
-    case destroyed
+    case failed
     
     func isInitializing() -> Bool { self == .initializing }
     func isPlaying() -> Bool { self == .playing }
     func isPaused() -> Bool { self == .paused }
     func isEnded() -> Bool { self == .ended }
-    func isDestroyed() -> Bool { self == .destroyed }
+    func isFailed() -> Bool { self == .failed }
     func isActive() -> Bool { self == .playing || self == .paused }
 }
 

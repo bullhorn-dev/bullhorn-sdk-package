@@ -322,10 +322,21 @@ class BHHybridPlayer {
         BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
     }
         
-    func resume() {
+    @discardableResult func resume() -> Bool {
+        
+        if self.state == .failed {
+            if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
+                destroyMediaPlayer()
+            } else {
+                let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
+                handlePlayerState(.failed(e: error))
+                mediaPlayer?.updateNowPlayingItemState()
+                return false
+            }
+        }
         
         if !isActive() {
-            play(at: 0)
+            play(at: playerItem?.position ?? 0)
         } else {
             performResume()
             mediaPlayer?.rate = settings.playbackSpeed
@@ -336,6 +347,8 @@ class BHHybridPlayer {
         /// track stats
         let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlay, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
         BHTracker.shared.trackEvent(with: request)
+        
+        return true
     }
 
     func pause() {
@@ -499,7 +512,7 @@ class BHHybridPlayer {
 
     @discardableResult func isEnded() -> Bool { state.isEnded() }
 
-    @discardableResult func isDestroyed() -> Bool { state.isDestroyed() }
+    @discardableResult func isFailed() -> Bool { state.isFailed() }
 
     @discardableResult func isInitializing() -> Bool { state.isInitializing() }
     
@@ -744,7 +757,7 @@ class BHHybridPlayer {
 
         guard playerItem != nil else { return }
 
-        let position = state == .destroyed ? lastSentDuration : lastSentPosition
+        let position = state == .failed ? lastSentDuration : lastSentPosition
 
         let playerState = BHPlayerState.init(state: state, stateFlags: stateFlags, position: position, duration: lastSentDuration, isVideoAvailable: isVideoAvailable)
         
@@ -983,7 +996,7 @@ class BHHybridPlayer {
         case .failed(let error):
             BHLog.w("\(#function) - Audio player error: \(String(describing: error))")
 
-            playerState = .destroyed
+            playerState = .failed
             playerStateFlags = .error
             
             /// track stats
@@ -1010,10 +1023,6 @@ class BHHybridPlayer {
         if isSilent { return }
         
         onStateUpdated()
-        
-        if self.state == .destroyed {
-            destroyMediaPlayer()
-        }
     }
     
     // MARK: - Notifications
@@ -1136,7 +1145,7 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
             return true
         }
         
-        return performResume()
+        return resume()
     }
 
     func onRemoteCommandPause() -> Bool {
@@ -1144,7 +1153,11 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
     }
 
     func onRemoteCommandTogglePlayPause() -> Bool {
-        return isPlaying() ? performPause() : performResume()
+        if isPlaying() {
+            return performPause()
+        } else {
+            return resume()
+        }
     }
 
     func onRemoteCommandSkipBackward() -> Bool {
@@ -1171,5 +1184,4 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
         updatePlaybackSpeed(playbackRate)
         return true
     }
-
 }

@@ -317,7 +317,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             controlsEnabled = true
             playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
 
-        case .destroyed:
+        case .failed:
             showRefresh = true
             playButton.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
         }
@@ -385,20 +385,23 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         forwardButton.isEnabled = false
         routePickerView.isHidden = true
         slider.isEnabled = false
-        positionLabel.text = "00:00"
-        durationLabel.text = "00:00"
-        slider.setValue(0, animated: true)
         hasVideo = false
         videoView.reset()
     }
     
+    func resetProgressUI() {
+        positionLabel.text = "00:00"
+        durationLabel.text = "00:00"
+        slider.setValue(0, animated: true)
+    }
+
     func updateVideoLayer(_ isVideoAvailable: Bool) {
         self.videoView.configureVideoLayer()
         self.hasVideo = isVideoAvailable
     }
     
     func updateLayers() {
-        if BHHybridPlayer.shared.isEnded() || BHHybridPlayer.shared.isDestroyed() {
+        if BHHybridPlayer.shared.isEnded() || BHHybridPlayer.shared.isFailed() {
             imageLayerView.isHidden = false
         } else {
             imageLayerView.isHidden = hasVideo || hasTile
@@ -448,6 +451,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, initializedWith playerItem: BHPlayerItem) {
         DispatchQueue.main.async {
             self.resetUI()
+            self.resetProgressUI()
             self.reloadData()
         }
     }
@@ -508,6 +512,7 @@ extension BHPlayerBaseViewController: BHLivePlayerListener {
     func livePlayer(_ player: BHLivePlayer, initializedWith playerItem: BHPlayerItem) {
         DispatchQueue.main.async {
             self.resetUI()
+            self.resetProgressUI()
             self.reloadData()
         }
     }

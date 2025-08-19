@@ -7,16 +7,10 @@ extension BHMediaPlayerBase {
     
     func updateNowPlayingItemInfo(with itemInfo: BHNowPlayingItemInfo? = nil) {
         
-        switch state {
-        case .ended, .failed:
-            clearNowPlayingInfo()
-            
-        default:
-            if let validItemInfo = itemInfo ?? delegate?.mediaPlayerDidRequestNowPlayingItemInfo(self) {
-                nowPlayingItemInfo = validItemInfo
-            }
-            updateNowPlayingInfo()
+        if let validItemInfo = itemInfo ?? delegate?.mediaPlayerDidRequestNowPlayingItemInfo(self) {
+            nowPlayingItemInfo = validItemInfo
         }
+        updateNowPlayingInfo()
     }
 
     func updateNowPlayingItemState(isInterrupted: Bool? = nil) {

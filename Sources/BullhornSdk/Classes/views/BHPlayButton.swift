@@ -177,7 +177,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                         self.button.setTitle("", for: .normal)
                     }
                 case .ended,
-                     .destroyed:
+                     .failed:
                     self.resetState()
                 }
             }
