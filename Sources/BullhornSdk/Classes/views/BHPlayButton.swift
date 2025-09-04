@@ -91,9 +91,15 @@ class BHPlayButton: UIView {
     
     fileprivate func updateButtonState() {
         let config = UIImage.SymbolConfiguration(scale: .medium)
+        
+        /// accessability
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
+
         if BHHybridPlayer.shared.isPostPlaying(post?.id ?? "") {
             button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
             button.setTitle("", for: .normal)
+            button.accessibilityLabel = "Pause Playback"
         } else {
             if let title = title {
                 button.setTitle(title, for: .normal)
@@ -102,6 +108,7 @@ class BHPlayButton: UIView {
                 button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                 button.setTitle("", for: .normal)
             }
+            button.accessibilityLabel = "Start Playback"
         }
     }
     

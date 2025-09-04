@@ -51,15 +51,18 @@ class BHRadioCell: UITableViewCell {
         streamIcon.backgroundColor = .tertiary()
         streamIcon.contentMode = .scaleToFill
         streamIcon.clipsToBounds = true
-            
+        streamIcon.isAccessibilityElement = false
+
         radioTitleLabel.textColor = .accent()
         radioTitleLabel.font = .sectionTitle()
         radioTitleLabel.adjustsFontForContentSizeCategory = true
+        radioTitleLabel.isAccessibilityElement = false
 
         streamTitleLabel.textColor = .primary()
         streamTitleLabel.font = .primaryText()
         streamTitleLabel.adjustsFontForContentSizeCategory = true
-        
+        streamTitleLabel.isAccessibilityElement = false
+
         playButton.title = "Listen"
     }
     
@@ -80,6 +83,11 @@ class BHRadioCell: UITableViewCell {
                 
         playButton.post = validRadio.asPost()
         playButton.isEnabled = true
+        
+        /// accessability
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = validRadio.title
     }
 }
 

@@ -43,13 +43,15 @@ class BHUserCell: UITableViewCell {
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowRadius = 4
         shadowView.backgroundColor = .cardBackground()
+        shadowView.isAccessibilityElement = false
         
         userIcon.layer.cornerRadius = 8
         userIcon.layer.borderColor = UIColor.tertiary().cgColor
         userIcon.layer.borderWidth = 1
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
-            
+        userIcon.isAccessibilityElement = false
+
         nameLabel.textColor = .primary()
         nameLabel.font = .primaryText()
         nameLabel.adjustsFontForContentSizeCategory = true
@@ -70,5 +72,10 @@ class BHUserCell: UITableViewCell {
         nameLabel.text = user?.fullName
         bioLabel.text = user?.bio
         userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
+        
+        /// accessability
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Podcast Item \(user?.fullName ?? "")"
     }
 }

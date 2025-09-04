@@ -101,6 +101,13 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
         setNeedsStatusBarAppearanceUpdate()
 
+        ///accessibility
+        self.playButton.isAccessibilityElement = true
+        self.playButton.accessibilityLabel = "Start episode playback"
+
+        self.forwardButton.isAccessibilityElement = false
+        self.forwardButton.accessibilityLabel = "Start episode playback"
+
         self.isPortrait = UIDevice.current.orientation.isPortrait
         
         self.imageLayerView.clipsToBounds = false

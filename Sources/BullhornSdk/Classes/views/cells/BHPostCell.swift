@@ -101,6 +101,7 @@ class BHPostCell: UITableViewCell {
         userIcon.layer.borderWidth = 1
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
+        userIcon.isAccessibilityElement = false
 
         progressBgView.layer.cornerRadius = progressBgView.frame.height / 2
         progressBgView.layer.borderColor = UIColor.cardBackground().cgColor
@@ -129,6 +130,19 @@ class BHPostCell: UITableViewCell {
         
         updateTagLabel()
         updateControls()
+        
+        /// accessability
+        guard let validPost = post else { return }
+
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Episode Item \(validPost.title)"
+                
+        likeButton.accessibilityLabel = "Like Episode: \(validPost.title)"
+        shareButton.accessibilityLabel = "Share Episode: \(validPost.title)"
+        transcriptButton.accessibilityLabel = "Episode Transcript: \(validPost.title)"
+        optionsButton.accessibilityLabel = "Episode Options: \(validPost.title)"
+        downloadButton.accessibilityLabel = "Download Episode: \(validPost.title)"
     }
     
     fileprivate func updateControls() {

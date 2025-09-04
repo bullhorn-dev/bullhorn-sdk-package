@@ -65,27 +65,27 @@
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="interactive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg5-jn-KFC" customClass="BHPaddingLabel" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="75.333333333333329" width="37.666666666666664" height="9.6666666666666714"/>
+                                        <rect key="frame" x="0.0" y="74" width="37.666666666666664" height="9.6666666666666714"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="8"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ">
-                                        <rect key="frame" x="0.0" y="100" width="293.33333333333331" height="49.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="97.333333333333329" width="293.33333333333331" height="49.333333333333329"/>
                                         <string key="text">Description description description description description description description description description description description</string>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going live " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXt-5z-eR0">
-                                        <rect key="frame" x="0.0" y="164.66666666666666" width="64.333333333333329" height="16.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="160.66666666666666" width="64.333333333333329" height="16.666666666666657"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P04-Pc-Ybq" customClass="BHWaitingRoomButton" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="196.66666666666666" width="140" height="32"/>
+                                        <rect key="frame" x="0.0" y="191.33333333333334" width="140" height="32"/>
                                         <color key="backgroundColor" name="bhColorSecondary"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="jvz-Wd-kZE"/>
@@ -93,14 +93,14 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cVH-hZ-ZeZ">
-                                        <rect key="frame" x="0.0" y="243.66666666666669" width="172" height="28"/>
+                                        <rect key="frame" x="0.0" y="237" width="212" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vvi-N8-31O">
-                                                <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="GmW-CU-wyx"/>
-                                                    <constraint firstAttribute="height" constant="28" id="MDT-OW-Cyr"/>
+                                                    <constraint firstAttribute="width" constant="36" id="GmW-CU-wyx"/>
+                                                    <constraint firstAttribute="height" constant="36" id="MDT-OW-Cyr"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain">
@@ -113,11 +113,11 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a2Z-8N-oOX">
-                                                <rect key="frame" x="36" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="44" y="0.0" width="36" height="36"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="bh4-k4-u4n"/>
-                                                    <constraint firstAttribute="height" constant="28" id="p7O-Hb-VYd"/>
+                                                    <constraint firstAttribute="width" constant="36" id="bh4-k4-u4n"/>
+                                                    <constraint firstAttribute="height" constant="36" id="p7O-Hb-VYd"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain">
@@ -130,19 +130,19 @@
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-LK-Zb3" customClass="BHDownloadButton" customModule="BullhornSdk">
-                                                <rect key="frame" x="72" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="88" y="0.0" width="36" height="36"/>
                                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="UGD-CE-yU0"/>
-                                                    <constraint firstAttribute="height" constant="28" id="xrX-Pv-TL4"/>
+                                                    <constraint firstAttribute="width" constant="36" id="UGD-CE-yU0"/>
+                                                    <constraint firstAttribute="height" constant="36" id="xrX-Pv-TL4"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWJ-zT-42A">
-                                                <rect key="frame" x="108" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="132" y="0.0" width="36" height="36"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="28" id="EQh-lE-wDs"/>
-                                                    <constraint firstAttribute="width" constant="28" id="eN1-hb-qv8"/>
+                                                    <constraint firstAttribute="height" constant="36" id="EQh-lE-wDs"/>
+                                                    <constraint firstAttribute="width" constant="36" id="eN1-hb-qv8"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain">
@@ -155,11 +155,11 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEj-2d-LHH">
-                                                <rect key="frame" x="144" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="176" y="0.0" width="36" height="36"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="28" id="Csn-Ca-2vN"/>
-                                                    <constraint firstAttribute="width" constant="28" id="ZgP-Uc-GhK"/>
+                                                    <constraint firstAttribute="height" constant="36" id="Csn-Ca-2vN"/>
+                                                    <constraint firstAttribute="width" constant="36" id="ZgP-Uc-GhK"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system">
@@ -291,7 +291,7 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorSecondary">
-            <color red="0.49019607843137253" green="0.54117647058823526" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -78,6 +78,12 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
             self.titleLabel.backgroundColor = .cardBackground()
             self.titleLabel.layer.borderColor = UIColor.primary().cgColor
         }
+
+        /// accessability
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Channel button: \(validChannel.title)"
+        titleLabel.isAccessibilityElement = false
         
         self.layoutSubviews()
     }
