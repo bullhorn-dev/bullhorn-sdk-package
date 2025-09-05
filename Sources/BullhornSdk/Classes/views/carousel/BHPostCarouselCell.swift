@@ -67,7 +67,7 @@ class BHPostCarouselCell: UICollectionViewCell {
     }()
     
     let playButton: BHPlayButton = {
-        let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 48, height: 48))
         return button
     }()
         
@@ -139,8 +139,8 @@ class BHPostCarouselCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalToConstant: iconSize),
             imageView.heightAnchor.constraint(equalToConstant: iconSize),
 
-            playButton.widthAnchor.constraint(equalToConstant: iconSize / 2),
-            playButton.heightAnchor.constraint(equalToConstant: iconSize / 2),
+            playButton.widthAnchor.constraint(equalToConstant: max(48, iconSize / 2)),
+            playButton.heightAnchor.constraint(equalToConstant: max(48, iconSize / 2)),
             playButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             playButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
         ])

@@ -90,7 +90,7 @@ class BHPlayButton: UIView {
     }
     
     fileprivate func updateButtonState() {
-        let config = UIImage.SymbolConfiguration(scale: .medium)
+        let config = UIImage.SymbolConfiguration(scale: .large)
         
         /// accessability
         isAccessibilityElement = true

@@ -597,9 +597,7 @@
                             <constraint firstItem="Mem-fg-Z6d" firstAttribute="bottom" secondItem="RN2-Sf-69i" secondAttribute="bottom" id="yxd-w6-mBO"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Is7-if-wOx">
-                        <barButtonItem key="backBarButtonItem" id="vlH-9m-8Cr"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="Is7-if-wOx"/>
                     <connections>
                         <outlet property="activityIndicator" destination="Z62-Mf-z45" id="qih-ab-sl9"/>
                         <outlet property="bottomView" destination="VSj-V3-dTO" id="JEl-TK-N5s"/>
@@ -2425,9 +2423,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Dux-9E-9ph"/>
+        <segue reference="Tnh-iY-7ke"/>
         <segue reference="fUD-lq-Ug9"/>
-        <segue reference="2Ut-JK-cZ6"/>
+        <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>

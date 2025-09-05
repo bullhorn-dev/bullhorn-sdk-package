@@ -45,17 +45,17 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title title title title title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xap-ZB-GbZ">
-                                                <rect key="frame" x="64" y="20.666666666666664" width="216" height="19"/>
+                                                <rect key="frame" x="64" y="20.666666666666664" width="212" height="19"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                                 <color key="textColor" name="bhColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="57e-ml-0Hv" customClass="BHPlayButton" customModule="BullhornSdk">
-                                                <rect key="frame" x="292" y="12" width="36" height="36"/>
+                                                <rect key="frame" x="288" y="10" width="40" height="40"/>
                                                 <color key="backgroundColor" name="bhColorAccent"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="36" id="clB-3h-UiH"/>
-                                                    <constraint firstAttribute="width" constant="36" id="vXg-qg-L1A"/>
+                                                    <constraint firstAttribute="height" constant="40" id="clB-3h-UiH"/>
+                                                    <constraint firstAttribute="width" constant="40" id="vXg-qg-L1A"/>
                                                 </constraints>
                                             </view>
                                         </subviews>

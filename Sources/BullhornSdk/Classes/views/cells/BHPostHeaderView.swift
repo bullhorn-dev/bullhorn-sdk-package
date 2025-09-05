@@ -157,6 +157,16 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         progressActiveView.backgroundColor = .secondary()
         progressActiveView.clipsToBounds = true
         
+        guard let validPost = postsManager?.post else { return }
+        playButton.isAccessibilityElement = true
+        playButton.accessibilityLabel = "Play \(validPost.title)"
+        likeButton.isAccessibilityElement = true
+        likeButton.accessibilityLabel = "Like \(validPost.title)"
+        shareButton.isAccessibilityElement = true
+        shareButton.accessibilityLabel = "Share \(validPost.title)"
+        downloadButton.isAccessibilityElement = true
+        downloadButton.accessibilityLabel = "Download \(validPost.title)"
+        
         reloadData()
     }
     

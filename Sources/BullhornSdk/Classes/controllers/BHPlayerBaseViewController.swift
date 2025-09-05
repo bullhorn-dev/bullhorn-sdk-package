@@ -103,10 +103,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
         ///accessibility
         self.playButton.isAccessibilityElement = true
-        self.playButton.accessibilityLabel = "Start episode playback"
-
-        self.forwardButton.isAccessibilityElement = false
-        self.forwardButton.accessibilityLabel = "Start episode playback"
+        self.playButton.accessibilityLabel = "Play"
+        self.forwardButton.isAccessibilityElement = true
+        self.forwardButton.accessibilityLabel = "Forward 15 seconds"
+        self.backwardButton.isAccessibilityElement = true
+        self.backwardButton.accessibilityLabel = "Backward 15 seconds"
 
         self.isPortrait = UIDevice.current.orientation.isPortrait
         

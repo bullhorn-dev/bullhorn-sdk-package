@@ -68,7 +68,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.accessibilityLabel = nil
+
         self.shareButton.accessibilityLabel = nil
         self.followButton.accessibilityLabel = nil
         self.unfollowButton.accessibilityLabel = nil
@@ -99,14 +99,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         } else {
             collapseButton.isHidden = true
         }
-        
-        self.accessibilityLabel = nil
-        self.shareButton.accessibilityLabel = "Share podcast"
-        self.followButton.accessibilityLabel = "Follow podcast"
-        self.unfollowButton.accessibilityLabel = "Following options"
-        self.collapseButton.accessibilityLabel = "Collapse podcast description"
-        self.linkButton.accessibilityLabel = "Open podcast website"
-        self.ratingView.isAccessibilityElement = false
     }
     
     func calculateHeight(_ searchActive: Bool = false) -> CGFloat {
@@ -201,6 +193,18 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         
         searchBarView.searchBar.placeholder = "Search..."
         searchBarView.mode = searchActive ? .dark : .light
+        
+        ///accessibility
+        let uuidString = UUID().uuidString
+        shareButton.accessibilityLabel = "Share podcast"
+        shareButton.accessibilityValue = "Share \(uuidString)"
+        followButton.accessibilityLabel = "Follow podcast"
+        followButton.accessibilityValue = "Follow \(uuidString)"
+        unfollowButton.accessibilityLabel = "Following options"
+        unfollowButton.accessibilityValue = "Following \(uuidString)"
+        linkButton.accessibilityLabel = "Open podcast website"
+        linkButton.accessibilityValue = "\(uuidString)"
+        ratingView.isAccessibilityElement = false
 
         reloadData()
     }

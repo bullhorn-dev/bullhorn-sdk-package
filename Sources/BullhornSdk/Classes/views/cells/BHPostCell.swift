@@ -149,12 +149,25 @@ class BHPostCell: UITableViewCell {
         self.accessibilityTraits = .button
         self.accessibilityLabel = "Open Episode \(validPost.title)"
         
-        playButton.accessibilityLabel = "Play Episode: \(validPost.title)"
-        likeButton.accessibilityLabel = "Like Episode: \(validPost.title)"
-        shareButton.accessibilityLabel = "Share Episode: \(validPost.title)"
-        transcriptButton.accessibilityLabel = "Episode Transcript: \(validPost.title)"
-        optionsButton.accessibilityLabel = "Episode Options: \(validPost.title)"
-        downloadButton.accessibilityLabel = "Download Episode: \(validPost.title)"
+        let uuidString = UUID().uuidString
+        playButton.isAccessibilityElement = true
+        playButton.accessibilityLabel = "Play \(validPost.title)"
+        playButton.accessibilityValue = "Play \(uuidString)"
+        likeButton.isAccessibilityElement = true
+        likeButton.accessibilityLabel = "Like \(validPost.title)"
+        likeButton.accessibilityValue = "Like \(uuidString)"
+        shareButton.isAccessibilityElement = true
+        shareButton.accessibilityLabel = "Share \(validPost.title)"
+        shareButton.accessibilityValue = "Share \(uuidString)"
+        downloadButton.isAccessibilityElement = true
+        downloadButton.accessibilityLabel = "Download \(validPost.title)"
+        downloadButton.accessibilityValue = "Download \(uuidString)"
+        transcriptButton.isAccessibilityElement = true
+        transcriptButton.accessibilityLabel = "Transcript \(validPost.title)"
+        transcriptButton.accessibilityValue = "Transcript \(uuidString)"
+        optionsButton.isAccessibilityElement = true
+        optionsButton.accessibilityLabel = "Options: \(validPost.title)"
+        optionsButton.accessibilityValue = "Options \(uuidString)"
     }
     
     fileprivate func updateControls() {

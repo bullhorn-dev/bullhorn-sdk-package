@@ -186,6 +186,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
         attributedString.addAttribute(.font, value: font, range: NSRange(location: baseText.count, length: versionText.count))
         
         versionLabel.attributedText = attributedString
+        versionLabel.accessibilityLabel = "App version \(versionText)"
     }
     
     @objc fileprivate func onVersionTapped(_ sender: UITapGestureRecognizer) {
