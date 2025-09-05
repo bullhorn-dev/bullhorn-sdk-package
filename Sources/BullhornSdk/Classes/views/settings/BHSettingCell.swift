@@ -23,6 +23,7 @@ class BHSettingCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
+        self.accessibilityLabel = nil
     }
     
     func configure(with model : SettingsOption) {
@@ -35,6 +36,13 @@ class BHSettingCell: UITableViewCell {
         titleLabel.textColor = .primary()
         titleLabel.font = .settingsPrimaryText()
         titleLabel.adjustsFontForContentSizeCategory = true
+        
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = model.title
+
+        titleLabel.isAccessibilityElement = false
     }
 }
 

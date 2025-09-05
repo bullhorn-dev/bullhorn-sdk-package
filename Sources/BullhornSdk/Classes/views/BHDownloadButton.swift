@@ -113,6 +113,14 @@ class BHDownloadButton: UIView {
             progressView.setProgress(0, animated: false)
             progressView.isHidden = true
         }
+        
+        /// accessability
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        
+        button.isAccessibilityElement = false
+        progressView.isAccessibilityElement = false
+
     }
     
     // MARK: - Actions

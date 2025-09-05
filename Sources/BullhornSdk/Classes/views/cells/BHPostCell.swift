@@ -115,7 +115,18 @@ class BHPostCell: UITableViewCell {
         
         tagLabel.sizeToFit()
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        playButton.accessibilityLabel = nil
+        likeButton.accessibilityLabel = nil
+        shareButton.accessibilityLabel = nil
+        transcriptButton.accessibilityLabel = nil
+        optionsButton.accessibilityLabel = nil
+        downloadButton.accessibilityLabel = nil
+    }
+
     // MARK: - Private
     
     fileprivate func update() {
@@ -136,8 +147,9 @@ class BHPostCell: UITableViewCell {
 
         self.isAccessibilityElement = true
         self.accessibilityTraits = .button
-        self.accessibilityLabel = "Episode Item \(validPost.title)"
-                
+        self.accessibilityLabel = "Open Episode \(validPost.title)"
+        
+        playButton.accessibilityLabel = "Play Episode: \(validPost.title)"
         likeButton.accessibilityLabel = "Like Episode: \(validPost.title)"
         shareButton.accessibilityLabel = "Share Episode: \(validPost.title)"
         transcriptButton.accessibilityLabel = "Episode Transcript: \(validPost.title)"

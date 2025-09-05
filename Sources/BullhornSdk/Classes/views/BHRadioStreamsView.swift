@@ -54,7 +54,7 @@ class BHRadioStreamsView: UIView {
         return view        
     }()
     
-    private let playButton: BHPlayButton = {
+    public let playButton: BHPlayButton = {
         let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 120, height: 48))
         button.title = "Live Now!"
         return button

@@ -32,6 +32,8 @@ class BHAccountCell: UITableViewCell {
         titleLabel.text = nil
         subtitleLabel.text = nil
         iconContainer.backgroundColor = nil
+        
+        self.accessibilityLabel = nil
     }
     
     func configure(with model : SettingsAccountOption) {
@@ -56,6 +58,16 @@ class BHAccountCell: UITableViewCell {
         iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5
         iconContainer.layer.borderColor = UIColor.divider().cgColor
+        
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = model.title
+
+        titleLabel.isAccessibilityElement = false
+        subtitleLabel.isAccessibilityElement = false
+        iconLabel.isAccessibilityElement = false
+        iconContainer.isAccessibilityElement = false
     }
 
 }

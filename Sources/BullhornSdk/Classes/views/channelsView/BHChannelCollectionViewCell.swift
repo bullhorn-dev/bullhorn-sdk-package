@@ -45,6 +45,11 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         titleLabel.layer.cornerRadius = labelHeight / 2
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+    
     // MARK: - UI Setup
 
     private func setupUI() {
@@ -82,7 +87,7 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         /// accessability
         self.isAccessibilityElement = true
         self.accessibilityTraits = .button
-        self.accessibilityLabel = "Channel button: \(validChannel.title)"
+        self.accessibilityLabel = "Select \(validChannel.title) channel"
         titleLabel.isAccessibilityElement = false
         
         self.layoutSubviews()

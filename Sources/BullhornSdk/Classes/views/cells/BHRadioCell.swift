@@ -65,7 +65,12 @@ class BHRadioCell: UITableViewCell {
 
         playButton.title = "Listen"
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+
     // MARK: - Private
     
     fileprivate func initialize() {

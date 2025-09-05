@@ -66,6 +66,17 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         collapseButton.layer.cornerRadius = collapseButton.frame.size.height / 2
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        self.shareButton.accessibilityLabel = nil
+        self.followButton.accessibilityLabel = nil
+        self.unfollowButton.accessibilityLabel = nil
+        self.collapseButton.accessibilityLabel = nil
+        self.linkButton.accessibilityLabel = nil
+        self.ratingView.isAccessibilityElement = false
+    }
+    
     // MARK: - Public
     
     func reloadData() {
@@ -88,6 +99,14 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         } else {
             collapseButton.isHidden = true
         }
+        
+        self.accessibilityLabel = nil
+        self.shareButton.accessibilityLabel = "Share podcast"
+        self.followButton.accessibilityLabel = "Follow podcast"
+        self.unfollowButton.accessibilityLabel = "Following options"
+        self.collapseButton.accessibilityLabel = "Collapse podcast description"
+        self.linkButton.accessibilityLabel = "Open podcast website"
+        self.ratingView.isAccessibilityElement = false
     }
     
     func calculateHeight(_ searchActive: Bool = false) -> CGFloat {

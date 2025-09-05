@@ -13,7 +13,12 @@ class BHPostDescriptionCell: UITableViewCell {
             setup(with: didTap)
         }
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+
     // MARK: - Private
 
     fileprivate func setup(with tapHandler: @escaping (URL) -> Void) {
@@ -57,6 +62,11 @@ class BHPostDescriptionCell: UITableViewCell {
         label.textColor = .primary()
         label.font = .secondaryText()
         label.adjustsFontForContentSizeCategory = true
+        
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Episode description item"
     }
     
     // MARK: - Actions

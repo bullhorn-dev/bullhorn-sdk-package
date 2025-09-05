@@ -61,6 +61,11 @@ class BHUserCell: UITableViewCell {
         bioLabel.adjustsFontForContentSizeCategory = true
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+    
     // MARK: - Private
     
     fileprivate func initialize() {
@@ -76,6 +81,6 @@ class BHUserCell: UITableViewCell {
         /// accessability
         self.isAccessibilityElement = true
         self.accessibilityTraits = .button
-        self.accessibilityLabel = "Podcast Item \(user?.fullName ?? "")"
+        self.accessibilityLabel = "Open podcast \(user?.fullName ?? "")"
     }
 }

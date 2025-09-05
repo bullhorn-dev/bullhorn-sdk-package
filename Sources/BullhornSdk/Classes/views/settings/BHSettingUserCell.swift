@@ -59,6 +59,12 @@ class BHSettingUserCell: UITableViewCell {
         nameLabel.adjustsFontForContentSizeCategory = true
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        switchControl.accessibilityLabel = nil
+    }
+    
     // MARK: - Actions
     
     @IBAction func switchAction(_ sender: Any) {
@@ -90,6 +96,16 @@ class BHSettingUserCell: UITableViewCell {
         }
 
         switchControl.isEnabled = UserDefaults.standard.isPushNotificationsEnabled
+        
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Change settings for podcast \(validUser.fullName ?? "")"
+
+        nameLabel.isAccessibilityElement = false
+
+        switchControl.isAccessibilityElement = true
+        switchControl.accessibilityLabel = "Toggle Settings for podcast \(validUser.fullName ?? "")"
     }
 }
 

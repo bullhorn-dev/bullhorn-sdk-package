@@ -24,6 +24,9 @@ class BHSettingToggleCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
+        
+        self.accessibilityLabel = nil
+        switchControl.accessibilityLabel = nil
     }
     
     func configure(with model : SettingsToggleOption) {
@@ -39,6 +42,16 @@ class BHSettingToggleCell: UITableViewCell {
         
         switchControl.isUserInteractionEnabled = false
         switchControl.setOn(model.isActive, animated: true)
+
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = model.title
+
+        titleLabel.isAccessibilityElement = false
+
+        switchControl.isAccessibilityElement = true
+        switchControl.accessibilityLabel = "Toggle Settings \(model.title)"
     }
 }
 

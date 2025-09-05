@@ -22,6 +22,12 @@ class BHRadioHeaderView: UITableViewHeaderFooterView {
         super.layoutSubviews()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        self.radioStreamsView.playButton.accessibilityLabel = nil
+    }
+    
     // MARK: - Public
     
     func initialize() {
@@ -30,6 +36,7 @@ class BHRadioHeaderView: UITableViewHeaderFooterView {
 
     func reloadData() {
         radioStreamsView.radio = BHRadioStreamsManager.shared.currentRadio
+        radioStreamsView.playButton.accessibilityLabel = "Live Now"
     }
 
     func setup(_ hasRadioStreams: Bool = true) {

@@ -258,6 +258,7 @@
                         <color key="tintColor" name="bhColorPrimary"/>
                         <color key="barTintColor" name="bhColorPrimaryBg"/>
                         <color key="selectedImageTintColor" name="bhColorPrimary"/>
+                        <tabBarAppearance key="scrollEdgeAppearance"/>
                     </tabBar>
                     <connections>
                         <segue destination="MRZ-0x-0At" kind="relationship" relationship="viewControllers" id="Jdk-dg-6iq"/>

@@ -35,7 +35,12 @@ class BHPostTranscriptCell: UITableViewCell {
         timeLbl.layer.masksToBounds = true
         timeLbl.layer.cornerRadius = 6
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+
     // MARK: - Private
     
     fileprivate func update() {
@@ -58,6 +63,15 @@ class BHPostTranscriptCell: UITableViewCell {
             self.textLbl.font = .fontWithName(.robotoRegular, size: 14)
             self.timeLbl.font = .fontWithName(.robotoRegular, size: 14)
         }
+
+        /// accessibility
+        guard let validSegment = segment else { return }
+
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Transcript segment \(validSegment.text)"
+        textLbl.isAccessibilityElement = false
+        timeLbl.isAccessibilityElement = false
     }
 }
 

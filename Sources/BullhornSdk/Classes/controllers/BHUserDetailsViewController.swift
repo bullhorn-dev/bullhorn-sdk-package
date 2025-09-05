@@ -107,6 +107,9 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         
         let config = UIImage.SymbolConfiguration(weight: .light)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis")?.withConfiguration(config), style: .plain, target: self, action: #selector(openOptionsAction(_:)))
+        
+        navigationItem.rightBarButtonItem?.accessibilityLabel = "More Options"
+        navigationItem.backBarButtonItem?.accessibilityLabel = "Go back to previous screen"
     }
     
     fileprivate func configureRefreshControl() {

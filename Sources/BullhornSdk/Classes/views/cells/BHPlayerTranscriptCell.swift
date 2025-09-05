@@ -34,6 +34,11 @@ class BHPlayerTranscriptCell: UITableViewCell {
         contentView.backgroundColor = .clear
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+    }
+    
     // MARK: - Private
     
     func update() {
@@ -41,6 +46,13 @@ class BHPlayerTranscriptCell: UITableViewCell {
         textLbl.text = segment?.text
         textLbl.font = .fontWithName(.robotoMedium, size: 23)
         textLbl.textColor = isSelected ? .playerOnDisplayBackground() : .secondary()
+        
+        /// accessibility
+        guard let validSegment = segment else { return }
+
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "Transcript segment \(validSegment.text)"
     }
         
     fileprivate func initialize() {}

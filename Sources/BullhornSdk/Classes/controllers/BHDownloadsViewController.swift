@@ -80,6 +80,9 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         let config = UIImage.SymbolConfiguration(weight: .light)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash")?.withConfiguration(config), style: .plain, target: self, action: #selector(removeAllButtonAction(_:)))
         navigationItem.rightBarButtonItem?.isEnabled = BHDownloadsManager.shared.items.count > 0
+
+        navigationItem.rightBarButtonItem?.accessibilityLabel = "Remove downloaded episodes"
+        navigationItem.backBarButtonItem?.accessibilityLabel = "Go back to previous screen"
     }
     
     override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
