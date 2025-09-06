@@ -73,6 +73,11 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
         
         navigationItem.title = NSLocalizedString("Recent Searches", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
 
     fileprivate func configureRefreshControl() {

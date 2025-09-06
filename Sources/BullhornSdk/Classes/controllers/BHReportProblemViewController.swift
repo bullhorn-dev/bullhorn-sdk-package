@@ -52,32 +52,36 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         reasonTextField.options = reasons
         reasonTextField.textField.textColor = .primary()
 
-        reasonLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
+        reasonLabel.font = .primaryButton()
         reasonLabel.textColor = .primary()
         reasonLabel.text = "What is the problem?"
-
-        nameLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
+        reasonLabel.adjustsFontForContentSizeCategory = true
+        
+        nameLabel.font = .primaryButton()
         nameLabel.textColor = .primary()
         nameLabel.text = "Where is the problem?"
-        
+        nameLabel.adjustsFontForContentSizeCategory = true
+
         nameTextField.placeholder = "Enter page or name of show"
         nameTextField.textColor = .primary()
         nameTextField.tintColor = .accent()
         nameTextField.autocapitalizationType = .sentences
         nameTextField.returnKeyType = .done
         nameTextField.keyboardType = .alphabet
-        nameTextField.font = UIFont.fontWithName(.robotoRegular, size: 15)
+        nameTextField.font = .secondaryButton()
         nameTextField.backgroundColor = .cardBackground()
         nameTextField.textInsets = .init(top: 12, left: 8, bottom: 12, right: 8)
         nameTextField.delegate = self
+        nameTextField.adjustsFontForContentSizeCategory = true
 
-        detailsLabel.font = UIFont.fontWithName(.robotoMedium, size: 17)
+        detailsLabel.font = .primaryButton()
         detailsLabel.textColor = .primary()
         detailsLabel.text = "Add problem details"
+        detailsLabel.adjustsFontForContentSizeCategory = true
         
         detailsTextField.backgroundColor = .cardBackground()
         detailsTextField.tintColor = .accent()
-        detailsTextField.font = UIFont.fontWithName(.robotoRegular, size: 15)
+        detailsTextField.font = .secondaryButton()
         detailsTextField.text = "Describe the bug or problem you're experiencing"
         detailsTextField.textColor = .lightGray
         detailsTextField.delegate = self
@@ -85,6 +89,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         detailsTextField.layer.borderWidth = 1
         detailsTextField.layer.cornerRadius = 4
         detailsTextField.textContainerInset = .init(top: 12, left: 8, bottom: 12, right: 8)
+        detailsTextField.adjustsFontForContentSizeCategory = true
 
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BHReportProblemViewController.dismissKeyboard)))
     }
@@ -124,6 +129,13 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         navigationItem.largeTitleDisplayMode = .never
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send", style: .plain, target: self, action: #selector(sendButtonAction(_:)))
+        navigationItem.rightBarButtonItem?.accessibilityLabel = "Send Report"
+
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
+
         validateSendButton()
     }
 

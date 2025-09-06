@@ -56,6 +56,12 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         super.layoutSubviews()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        seeAllRecentsButton.accessibilityLabel = nil
+    }
+    
     // MARK: - Public
     
     func reloadData() {

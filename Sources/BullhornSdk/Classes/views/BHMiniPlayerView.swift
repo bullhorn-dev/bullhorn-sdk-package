@@ -137,8 +137,16 @@ class BHMiniPlayerView: UIView {
         backgroundColor = .cardBackground()
         
         backwardButton.setBackgroundImage(UIImage(systemName: "gobackward.15"), for: .normal)
+        backwardButton.accessibilityLabel = "Backward 15 seconds"
+
         forwardButton.setBackgroundImage(UIImage(systemName: "goforward.15"), for: .normal)
+        forwardButton.accessibilityLabel = "Forward 15 seconds"
+
         closeButton.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
+        closeButton.accessibilityLabel = "Close player"
+        
+        playButton.accessibilityLabel = "Play episode"
+        expandButton.accessibilityLabel = "Open player"
 
         expandButton.addTarget(self, action: #selector(onExpandButton(_:)), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(onPlayButton(_:)), for: .touchUpInside)

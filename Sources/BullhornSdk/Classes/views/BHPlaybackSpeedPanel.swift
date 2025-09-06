@@ -40,22 +40,28 @@ class BHPlaybackSpeedPanel: UIView {
         
         zeroTwoFive.addTarget(self, action: #selector(onZeroTwoFive), for: .touchUpInside)
         zeroTwoFive.setTitle(BHPlayerPlaybackSpeed.zeroTwoFive.getTitle(), for: .normal)
+        zeroTwoFive.accessibilityLabel = "Set playback speed to 0.25x"
 
         zeroFiveZero.addTarget(self, action: #selector(onZeroFiveZero), for: .touchUpInside)
         zeroFiveZero.setTitle(BHPlayerPlaybackSpeed.zeroFiveZero.getTitle(), for: .normal)
-        
+        zeroFiveZero.accessibilityLabel = "Set playback speed to 0.5x"
+
         normal.addTarget(self, action: #selector(onNormal), for: .touchUpInside)
         normal.setTitle(BHPlayerPlaybackSpeed.normal.getTitle(), for: .normal)
-        
+        normal.accessibilityLabel = "Set playback speed to 1x"
+
         oneTwoFive.addTarget(self, action: #selector(onOneTwoFive), for: .touchUpInside)
         oneTwoFive.setTitle(BHPlayerPlaybackSpeed.oneTwoFive.getTitle(), for: .normal)
-        
+        oneTwoFive.accessibilityLabel = "Set playback speed to 1.25x"
+
         oneFiveZero.addTarget(self, action: #selector(onOneFiveZero), for: .touchUpInside)
         oneFiveZero.setTitle(BHPlayerPlaybackSpeed.oneFiveZero.getTitle(), for: .normal)
-        
+        oneFiveZero.accessibilityLabel = "Set playback speed to 0.5x"
+
         twoZero.addTarget(self, action: #selector(onTwoZero), for: .touchUpInside)
         twoZero.setTitle(BHPlayerPlaybackSpeed.twoZero.getTitle(), for: .normal)
-        
+        twoZero.accessibilityLabel = "Set playback speed to 2x"
+
         stackView = UIStackView(arrangedSubviews: [zeroTwoFive, zeroFiveZero, normal, oneTwoFive, oneFiveZero, twoZero])
         stackView.axis = .horizontal
         stackView.alignment = .fill

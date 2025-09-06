@@ -36,7 +36,7 @@ open class BHBottomSheetController: UIViewController {
         closeButton.setTitle("", for: .normal)
         closeButton.backgroundColor = .tertiary()
         closeButton.layer.cornerRadius = 2
-        closeButton.accessibilityLabel = "Close menu"
+        closeButton.accessibilityLabel = "Drag to close"
 
         closeButton.addTarget(self, action: #selector(onCloseAction(_:)), for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false

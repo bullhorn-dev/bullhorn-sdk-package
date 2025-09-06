@@ -58,6 +58,11 @@ class BHSettingsNotificationsViewController: UIViewController, ActivityIndicator
     fileprivate func configureNavigationItems() {
         navigationItem.title = NSLocalizedString("Notifications Settings", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
     
     fileprivate func configureRefreshControl() {

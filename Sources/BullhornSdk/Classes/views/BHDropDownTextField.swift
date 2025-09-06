@@ -137,12 +137,13 @@ public class BHDropDownTextField: UIView {
             textField.centerYAnchor.constraint(equalTo: topAnchor, constant: initialHeight / 2),
             textField.trailingAnchor.constraint(equalTo: arrowIndicator.leadingAnchor)
         ])
-        textField.font = UIFont.fontWithName(.robotoRegular, size: 15)
+        textField.font = .secondaryButton()
         textField.backgroundColor = .clear
         textField.textInsets = .init(top: 12, left: 8, bottom: 12, right: 8)
         textField.addTarget(self, action: #selector(textFieldDidChange(_ :)), for: .editingChanged)
         textField.delegate = self
-        
+        textField.adjustsFontForContentSizeCategory = true
+
         self.backgroundColor = .cardBackground()
         self.layer.borderColor = UIColor.divider().cgColor
         self.layer.borderWidth = 1

@@ -33,14 +33,14 @@ import Foundation
         let label = UILabel()
         label.font = .fontWithName(.robotoRegular, size: 17)
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .tertiary()
+        label.textColor = .secondary()
         label.textAlignment = .right
         return label
     }()
 
     let valueImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
-        imageView.tintColor = .tertiary()
+        imageView.tintColor = .secondary()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()

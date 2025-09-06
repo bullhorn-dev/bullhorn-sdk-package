@@ -49,6 +49,12 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         super.layoutSubviews()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        seeAllFollowedButton.accessibilityLabel = nil
+    }
+    
     // MARK: - Public
     
     func initialize() {

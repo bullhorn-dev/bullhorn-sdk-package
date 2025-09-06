@@ -78,6 +78,11 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
         
         navigationItem.title = NSLocalizedString("Liked Episodes", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
 
     fileprivate func configureRefreshControl() {

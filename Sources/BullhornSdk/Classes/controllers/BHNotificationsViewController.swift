@@ -69,6 +69,12 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear All", style: .plain, target: self, action: #selector(clearButtonAction(_:)))
         navigationItem.rightBarButtonItem?.isEnabled = BHUserManager.shared.newEpisodesUsers.count > 0
+        navigationItem.rightBarButtonItem?.accessibilityLabel = "Clear notifications"
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
     
     fileprivate func configureRefreshControl() {

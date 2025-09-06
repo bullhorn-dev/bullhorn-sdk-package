@@ -18,12 +18,13 @@ class BHPlayerSettingsButton: UIButton {
         super.init(frame: frame)
 
         titleLabel?.font = .fontWithName(.robotoRegular, size: 12)
+        titleLabel?.adjustsFontForContentSizeCategory = true
 
         if active {
             select()
         } else {
             deselect()
-        }
+        }        
     }
 
     required init?(coder: NSCoder) {

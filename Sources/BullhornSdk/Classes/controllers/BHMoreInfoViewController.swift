@@ -43,8 +43,7 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "More Info"
-        navigationItem.largeTitleDisplayMode = .never
+        configureNavigationItems()
 
         let bundle = Bundle.module
         let settingsCellNib = UINib(nibName: "BHSettingCell", bundle: bundle)
@@ -74,6 +73,16 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
     }
         
     // MARK: - Private
+    
+    fileprivate func configureNavigationItems() {
+        navigationItem.title = "More Info"
+        navigationItem.largeTitleDisplayMode = .never
+
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
+    }
 
     func configure() {
         

@@ -65,6 +65,11 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
     fileprivate func configureNavigationItems() {
         navigationItem.title = NSLocalizedString("Followed Podcasts", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
     
     fileprivate func configureRefreshControl() {

@@ -58,6 +58,11 @@ class BHSettingsDownloadsViewController: UIViewController, ActivityIndicatorSupp
     fileprivate func configureNavigationItems() {
         navigationItem.title = NSLocalizedString("Downloads Settings", comment: "")
         navigationItem.largeTitleDisplayMode = .never
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        backButton.accessibilityLabel = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
     
     fileprivate func configureRefreshControl() {
