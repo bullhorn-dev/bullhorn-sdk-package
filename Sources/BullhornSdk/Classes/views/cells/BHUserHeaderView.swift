@@ -195,15 +195,10 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         searchBarView.mode = searchActive ? .dark : .light
         
         ///accessibility
-        let uuidString = UUID().uuidString
         shareButton.accessibilityLabel = "Share podcast"
-        shareButton.accessibilityValue = "Share \(uuidString)"
         followButton.accessibilityLabel = "Follow podcast"
-        followButton.accessibilityValue = "Follow \(uuidString)"
         unfollowButton.accessibilityLabel = "Following options"
-        unfollowButton.accessibilityValue = "Following \(uuidString)"
         linkButton.accessibilityLabel = "Open podcast website"
-        linkButton.accessibilityValue = "\(uuidString)"
         ratingView.isAccessibilityElement = false
 
         reloadData()

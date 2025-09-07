@@ -88,7 +88,6 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         self.isAccessibilityElement = true
         self.accessibilityTraits = .button
         self.accessibilityLabel = "\(validChannel.title) channel"
-        self.accessibilityValue = UUID().uuidString
         titleLabel.isAccessibilityElement = false
         
         self.layoutSubviews()
