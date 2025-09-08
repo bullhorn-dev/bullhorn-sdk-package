@@ -190,7 +190,17 @@ class BHRadioStreamsView: UIView {
         self.laterStreamsView.streams = radio.laterStreams
         
         self.imageView.sd_setImage(with: liveStream.coverUrl, placeholderImage: self.placeholderImage)
-        self.titleLabel.text = liveStream.title
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+            
+        let attributedString = NSAttributedString(string: liveStream.title, attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryText()
+        ])
+            
+        self.titleLabel.attributedText = attributedString
     }
 }
 

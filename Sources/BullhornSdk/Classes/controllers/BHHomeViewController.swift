@@ -92,6 +92,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             let config = UIImage.SymbolConfiguration(weight: .light)
             let imageName = BHUserManager.shared.newEpisodesUsers.count > 0 ? "bell.badge" : "bell"
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(notificationsButtonAction(_:)))
+            navigationItem.rightBarButtonItem?.accessibilityLabel = "Notifications"
         } else {
             navigationItem.rightBarButtonItem = nil
         }

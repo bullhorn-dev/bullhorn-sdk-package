@@ -56,7 +56,7 @@ class BHPlaybackSpeedPanel: UIView {
 
         oneFiveZero.addTarget(self, action: #selector(onOneFiveZero), for: .touchUpInside)
         oneFiveZero.setTitle(BHPlayerPlaybackSpeed.oneFiveZero.getTitle(), for: .normal)
-        oneFiveZero.accessibilityLabel = "Set playback speed to 0.5x"
+        oneFiveZero.accessibilityLabel = "Set playback speed to 1.5x"
 
         twoZero.addTarget(self, action: #selector(onTwoZero), for: .touchUpInside)
         twoZero.setTitle(BHPlayerPlaybackSpeed.twoZero.getTitle(), for: .normal)

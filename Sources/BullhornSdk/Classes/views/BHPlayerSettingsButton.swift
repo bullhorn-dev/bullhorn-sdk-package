@@ -34,6 +34,9 @@ class BHPlayerSettingsButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        titleLabel?.font = .fontWithName(.robotoRegular, size: 12)
+        titleLabel?.adjustsFontForContentSizeCategory = true
+
         layer.cornerRadius = frame.size.height / 2
         layer.borderWidth = 2
     }
