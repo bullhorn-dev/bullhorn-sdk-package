@@ -58,8 +58,13 @@ class BHAccountCell: UITableViewCell {
         subtitleLabel.font = .settingsPrimaryText()
         subtitleLabel.adjustsFontForContentSizeCategory = true
 
+        let initialsParagraphStyle = NSMutableParagraphStyle()
+        initialsParagraphStyle.hyphenationFactor = 1.0
+        initialsParagraphStyle.alignment = .center
+        initialsParagraphStyle.lineBreakMode = .byWordWrapping
+
         let initialsString = NSAttributedString(string: model.initials ?? "A", attributes: [
-            .paragraphStyle: paragraphStyle,
+            .paragraphStyle: initialsParagraphStyle,
             .font: UIFont.sectionTitle()
         ])
         iconLabel.attributedText = initialsString
