@@ -149,7 +149,25 @@ class BHPostCarouselCell: UICollectionViewCell {
     private func update() {
         playButton.post = post
         imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
-        titleLabel.text = post?.title
-        descriptionLabel.text = post?.description
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        
+        if let title = post?.title {
+            let attributedString = NSAttributedString(string: title, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.primaryText()
+            ])
+            titleLabel.attributedText = attributedString
+        }
+
+        if let description = post?.description {
+            let attributedString = NSAttributedString(string: description, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.secondaryText()
+            ])
+            descriptionLabel.attributedText = attributedString
+        }
     }
 }

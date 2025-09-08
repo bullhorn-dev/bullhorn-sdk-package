@@ -124,11 +124,33 @@ class BHUserCarouselCell: UICollectionViewCell {
     private func update() {
 
         imageView.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
-        nameLabel.text = user?.fullName
-        categoryLabel.text = user?.categoryName
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        if let name = user?.fullName {
+            let attributedString = NSAttributedString(string: name, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.primaryText()
+            ])
+            nameLabel.attributedText = attributedString
+        }
+        
+        if let category = user?.categoryName {
+            let attributedString = NSAttributedString(string: category, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.secondaryText()
+            ])
+            categoryLabel.attributedText = attributedString
+        }
 
         if let newEpisodesCount = user?.unwatchedEpisodesCount, newEpisodesCount > 0, showBadge {
-            badgeLabel.text = "\(newEpisodesCount)"
+            let attributedString = NSAttributedString(string: "\(newEpisodesCount)", attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.secondaryText()
+            ])
+            badgeLabel.attributedText = attributedString
             badgeLabel.isHidden = false
         } else {
             badgeLabel.isHidden = true

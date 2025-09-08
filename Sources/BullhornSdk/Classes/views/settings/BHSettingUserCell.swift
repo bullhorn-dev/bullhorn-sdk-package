@@ -81,7 +81,15 @@ class BHSettingUserCell: UITableViewCell {
     fileprivate func update() {
         guard let validUser = user else { return }
         
-        nameLabel.text = validUser.fullName
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        let nameString = NSAttributedString(string: validUser.fullName ?? "A", attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryText()
+        ])
+        nameLabel.attributedText = nameString
         userIcon.sd_setImage(with: validUser.coverUrl, placeholderImage: placeholderImage)
     }
 

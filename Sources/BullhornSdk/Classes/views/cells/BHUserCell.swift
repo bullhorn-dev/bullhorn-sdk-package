@@ -74,8 +74,27 @@ class BHUserCell: UITableViewCell {
     }
     
     fileprivate func update() {
-        nameLabel.text = user?.fullName
-        bioLabel.text = user?.bio
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        if let name = user?.fullName {
+            let attributedString = NSAttributedString(string: name, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.primaryText()
+            ])
+            nameLabel.attributedText = attributedString
+        }
+
+        if let bio = user?.bio {
+            let attributedString = NSAttributedString(string: bio, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.secondaryText()
+            ])
+            bioLabel.attributedText = attributedString
+        }
+
         userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
         
         /// accessability

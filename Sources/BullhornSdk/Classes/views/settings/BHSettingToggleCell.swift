@@ -35,7 +35,15 @@ class BHSettingToggleCell: UITableViewCell {
         
         accessoryType = .none
 
-        titleLabel.text = model.title
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        let titleString = NSAttributedString(string: model.title, attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.settingsPrimaryText()
+        ])
+        titleLabel.attributedText = titleString
         titleLabel.textColor = .primary()
         titleLabel.font = .settingsPrimaryText()
         titleLabel.adjustsFontForContentSizeCategory = true

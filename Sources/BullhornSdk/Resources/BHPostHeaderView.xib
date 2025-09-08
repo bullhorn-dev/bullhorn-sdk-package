@@ -20,15 +20,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHPostHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHPostHeaderView" rowHeight="432" id="wk1-wC-qQd" customClass="BHPostHeaderView" customModule="BullhornSdk">
-            <rect key="frame" x="0.0" y="0.0" width="505" height="432"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHPostHeaderView" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BHPostHeaderView" rowHeight="450" id="wk1-wC-qQd" customClass="BHPostHeaderView" customModule="BullhornSdk">
+            <rect key="frame" x="0.0" y="0.0" width="505" height="450"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wk1-wC-qQd" id="mCl-FO-1hE">
-                <rect key="frame" x="0.0" y="0.0" width="505" height="432"/>
+                <rect key="frame" x="0.0" y="0.0" width="505" height="450"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="rnA-fj-jBc">
-                        <rect key="frame" x="0.0" y="16" width="505" height="416"/>
+                        <rect key="frame" x="0.0" y="16" width="505" height="434"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxo-NB-GW1">
                                 <rect key="frame" x="0.0" y="0.0" width="505" height="52"/>
@@ -44,7 +44,7 @@
                                                     <constraint firstAttribute="height" constant="52" id="E6V-Fg-Mw3"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label label label label label label label label label label label label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fK0-2T-7GY">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label label label label label label label label label label label label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fK0-2T-7GY">
                                                 <rect key="frame" x="64" y="0.0" width="344.33333333333331" height="52"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                                 <color key="textColor" name="bhColorPrimary"/>
@@ -97,10 +97,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Br8-3v-VxG">
-                                <rect key="frame" x="0.0" y="101" width="505" height="12"/>
+                                <rect key="frame" x="0.0" y="101" width="505" height="22"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label label label label label label Label label label label label label Label label label label label label " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQj-LH-ZLa">
-                                        <rect key="frame" x="16" y="-12.666666666666671" width="473" height="37.666666666666664"/>
+                                        <rect key="frame" x="16" y="-7.6666666666666714" width="473" height="37.666666666666664"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                         <color key="textColor" name="bhColorPrimary"/>
@@ -115,7 +115,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nm9-vv-jyC">
-                                <rect key="frame" x="0.0" y="125" width="505" height="56"/>
+                                <rect key="frame" x="0.0" y="135" width="505" height="56"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going live" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xGA-od-Up8">
                                         <rect key="frame" x="16" y="0.0" width="473" height="17.666666666666668"/>
@@ -143,10 +143,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1vp-In-pPt">
-                                <rect key="frame" x="0.0" y="193" width="505" height="50"/>
+                                <rect key="frame" x="0.0" y="203" width="505" height="58"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="V4M-q2-6Gl">
-                                        <rect key="frame" x="16" y="1" width="473" height="48"/>
+                                        <rect key="frame" x="16" y="5" width="473" height="48"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z4b-CL-xvy" customClass="BHPlayButton" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
@@ -208,14 +208,14 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="6BW-bc-hTl"/>
+                                    <constraint firstAttribute="height" constant="58" id="6BW-bc-hTl"/>
                                     <constraint firstItem="V4M-q2-6Gl" firstAttribute="centerY" secondItem="1vp-In-pPt" secondAttribute="centerY" id="FdK-AU-JiV"/>
                                     <constraint firstItem="V4M-q2-6Gl" firstAttribute="leading" secondItem="1vp-In-pPt" secondAttribute="leading" constant="16" id="h7g-G8-mkC"/>
                                     <constraint firstAttribute="trailing" secondItem="V4M-q2-6Gl" secondAttribute="trailing" constant="16" id="v6C-O2-Cgm"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="97R-Ul-XGg">
-                                <rect key="frame" x="0.0" y="255" width="505" height="36"/>
+                                <rect key="frame" x="0.0" y="273" width="505" height="36"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="xSH-N1-Hx6">
                                         <rect key="frame" x="16" y="0.0" width="132" height="36"/>
@@ -273,21 +273,21 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nbi-8o-LqY">
-                                <rect key="frame" x="0.0" y="303" width="505" height="1"/>
+                                <rect key="frame" x="0.0" y="321" width="505" height="1"/>
                                 <color key="backgroundColor" name="bhColorDivider"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="1nk-2y-D2z"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="316" width="505" height="44"/>
+                                <rect key="frame" x="0.0" y="334" width="505" height="44"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="HpC-Ve-5Rp"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6to-Bb-qOv">
-                                <rect key="frame" x="0.0" y="372" width="505" height="44"/>
+                                <rect key="frame" x="0.0" y="390" width="505" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OjT-9A-PgZ">
                                         <rect key="frame" x="16" y="0.0" width="473" height="44"/>

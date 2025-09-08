@@ -132,7 +132,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     func updateSettings() {
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
         
-        playbackSpeedItem.valueLabel.text = playerItem.playbackSettings.playbackSpeedString()
+        playbackSpeedItem.setValue(playerItem.playbackSettings.playbackSpeedString())
         playbackSpeedPanel.selectedValue = playerItem.playbackSettings.playbackSpeed
         
         updateSleepTimer()
@@ -143,7 +143,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     fileprivate func updateSleepTimer() {
         let sleepTimerTime = BHHybridPlayer.shared.getSleepTimerInterval()
         let sleepTimerString = sleepTimerTime > 0 ? "+\(sleepTimerTime.stringFormatted())" : BHPlayerSleepTime.off.getTitle()
-        self.sleepTimerItem.valueLabel.text = sleepTimerString
+        self.sleepTimerItem.setValue(sleepTimerString)
         sleepTimerPanel.selectedValue = BHHybridPlayer.shared.sleepTimerInterval
     }
     
@@ -203,7 +203,7 @@ extension BHPlayerOptionsBottomSheet: BHHybridPlayerListener {
 
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {
         DispatchQueue.main.async {
-            self.playbackSpeedItem.valueLabel.text = settings.playbackSpeedString()
+            self.playbackSpeedItem.setValue(settings.playbackSpeedString())
         }
     }
 

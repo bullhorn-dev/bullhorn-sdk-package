@@ -81,9 +81,23 @@ class BHRadioCell: UITableViewCell {
     fileprivate func update() {
         guard let validRadio = radio else { return }
         guard let validStream = radio?.streams.first else { return }
-                
-        radioTitleLabel.text = validRadio.title
-        streamTitleLabel.text = validStream.title
+    
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+            
+        let radioAttributedString = NSAttributedString(string: validRadio.title, attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.sectionTitle()
+        ])
+        radioTitleLabel.attributedText = radioAttributedString
+
+        let streamAttributedString = NSAttributedString(string: validStream.title, attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryText()
+        ])
+        streamTitleLabel.attributedText = streamAttributedString
+
         streamIcon.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)
                 
         playButton.post = validRadio.asPost()

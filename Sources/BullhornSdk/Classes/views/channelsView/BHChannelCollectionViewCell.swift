@@ -70,18 +70,29 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
     private func update() {
         guard let validChannel = channel else { return }
 
-        titleLabel.text = validChannel.title
-        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.alignment = .center
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
         if UserDefaults.standard.selectedChannelId == validChannel.id {
-            self.titleLabel.font = .fontWithName(.robotoMedium, size: 17)
-            self.titleLabel.textColor = .navigationText()
-            self.titleLabel.backgroundColor = .navigationBackground()
-            self.titleLabel.layer.borderColor = UIColor.navigationBackground().cgColor
+            let attributedString = NSAttributedString(string: validChannel.title, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.fontWithName(.robotoMedium, size: 17)
+            ])
+            titleLabel.attributedText = attributedString
+            titleLabel.textColor = .navigationText()
+            titleLabel.backgroundColor = .navigationBackground()
+            titleLabel.layer.borderColor = UIColor.navigationBackground().cgColor
         } else {
-            self.titleLabel.font = .fontWithName(.robotoRegular, size: 17)
-            self.titleLabel.textColor = .primary()
-            self.titleLabel.backgroundColor = .cardBackground()
-            self.titleLabel.layer.borderColor = UIColor.primary().cgColor
+            let attributedString = NSAttributedString(string: validChannel.title, attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: UIFont.fontWithName(.robotoRegular, size: 17)
+            ])
+            titleLabel.attributedText = attributedString
+            titleLabel.textColor = .primary()
+            titleLabel.backgroundColor = .cardBackground()
+            titleLabel.layer.borderColor = UIColor.primary().cgColor
         }
 
         /// accessability

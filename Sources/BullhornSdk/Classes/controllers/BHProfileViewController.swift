@@ -180,10 +180,15 @@ class BHProfileViewController: BHPlayerContainingViewController {
         let versionText = BullhornSdk.shared.appConfig.appVersion(useBuildNumber: true)
         let devModeText = UserDefaults.standard.isDevModeEnabled ? " DEV" : ""
         
-        let font = UIFont.fontWithName(.robotoMedium , size: 15)
-        let attributedString = NSMutableAttributedString(string: baseText + versionText + devModeText)
-        
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: baseText.count, length: versionText.count))
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.alignment = .center
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        let attributedString = NSMutableAttributedString(string: baseText + versionText + devModeText, attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.fontWithName(.robotoRegular , size: 15)
+        ])
         
         versionLabel.attributedText = attributedString
         versionLabel.accessibilityLabel = "App version \(versionText)"

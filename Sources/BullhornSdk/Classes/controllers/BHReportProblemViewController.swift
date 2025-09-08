@@ -47,19 +47,29 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 
         reasons = ReportReason.allCases.map({ BHDropDownItem(value: $0.rawValue, title: $0.rawValue, extra: false) })
 
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = 1.0
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        
         reasonTextField.delegate = self
         reasonTextField.textField.placeholder = "Select the reason of problem"
         reasonTextField.options = reasons
         reasonTextField.textField.textColor = .primary()
 
-        reasonLabel.font = .primaryButton()
+        let reasonString = NSAttributedString(string: "What is the problem?", attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryButton()
+        ])
+        reasonLabel.attributedText = reasonString
         reasonLabel.textColor = .primary()
-        reasonLabel.text = "What is the problem?"
         reasonLabel.adjustsFontForContentSizeCategory = true
         
-        nameLabel.font = .primaryButton()
+        let nameString = NSAttributedString(string: "Where is the problem?", attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryButton()
+        ])
+        nameLabel.attributedText = nameString
         nameLabel.textColor = .primary()
-        nameLabel.text = "Where is the problem?"
         nameLabel.adjustsFontForContentSizeCategory = true
 
         nameTextField.placeholder = "Enter page or name of show"
@@ -74,9 +84,12 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         nameTextField.delegate = self
         nameTextField.adjustsFontForContentSizeCategory = true
 
-        detailsLabel.font = .primaryButton()
+        let detailsString = NSAttributedString(string: "Add problem details", attributes: [
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.primaryButton()
+        ])
+        detailsLabel.attributedText = detailsString
         detailsLabel.textColor = .primary()
-        detailsLabel.text = "Add problem details"
         detailsLabel.adjustsFontForContentSizeCategory = true
         
         detailsTextField.backgroundColor = .cardBackground()
