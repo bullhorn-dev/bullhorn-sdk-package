@@ -53,7 +53,6 @@ public class BullhornSdk: NSObject {
     public static let OpenSignUpNotification = Notification.Name(rawValue: "BullhornSdk.OpenSignUpNotification")
     public static let OpenAccountNotification = Notification.Name(rawValue: "BullhornSdk.OpenAccountNotification")
     public static let OpenAppearanceNotification = Notification.Name(rawValue: "BullhornSdk.OpenAppearanceNotification")
-    public static let OpenDevModeNotification = Notification.Name(rawValue: "BullhornSdk.OpenDevModeNotification")
 
     public static let UserInterfaceStyleChangedNotification = Notification.Name(rawValue: "BullhornSdk.UserInterfaceStyleChangedNotification")
     public static let NetworkIdChangedNotification = Notification.Name(rawValue: "BullhornSdk.NetworkIdChangedNotification")
@@ -69,10 +68,15 @@ public class BullhornSdk: NSObject {
         return BHAppConfiguration.shared
     }
 
-    public var networkId: String = ""
     public var clientId: String = ""
     public var infoLinks: [BHInfoLink] = []
 
+    internal var defaultNetworkId: String = ""
+
+    public var networkId: String {
+        return UserDefaults.standard.networkId ?? defaultNetworkId
+    }
+    
     public var externalUser: BHSdkUser?
     
     fileprivate static let backgroundTaskLength: Double = 60 * 30 // 30 minutes
@@ -91,7 +95,7 @@ public class BullhornSdk: NSObject {
         BHAppConfiguration.type = configType
         
         self.clientId = clientId
-        self.networkId = networkId
+        self.defaultNetworkId = networkId
         self.infoLinks = infoLinks
         
         BHLog.p("\(#function) - AppConfig: \(BHAppConfiguration.shared.appVersion(useBuildNumber: true))")
@@ -121,7 +125,7 @@ public class BullhornSdk: NSObject {
             externalUser = sdkUser
             BHTracker.shared.start(with: clientId)
 
-            if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+            if UserDefaults.standard.isPushNotificationsFeatureEnabled && UserDefaults.standard.isPushNotificationsEnabled {
                 BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
             }
         }
@@ -141,7 +145,7 @@ public class BullhornSdk: NSObject {
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
                     
-                    if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                    if UserDefaults.standard.isPushNotificationsFeatureEnabled && UserDefaults.standard.isPushNotificationsEnabled {
                         BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
                     }
                 }
@@ -164,7 +168,7 @@ public class BullhornSdk: NSObject {
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: BullhornSdk.OnExternalAccountChangedNotification, object: self, userInfo: nil)
 
-                if UserDefaults.standard.isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
+                if UserDefaults.standard.isPushNotificationsFeatureEnabled && UserDefaults.standard.isPushNotificationsEnabled {
                     BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
                 }
             }
@@ -202,7 +206,7 @@ public class BullhornSdk: NSObject {
     }
     
     public func resetNetwork(with networkId: String) {
-        self.networkId = networkId
+        UserDefaults.standard.networkId = networkId
         
         NotificationCenter.default.post(name: BullhornSdk.NetworkIdChangedNotification, object: self, userInfo: nil)
     }

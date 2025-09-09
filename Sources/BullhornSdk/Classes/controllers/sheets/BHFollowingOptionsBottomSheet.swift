@@ -44,14 +44,20 @@ final class BHFollowingOptionsBottomSheet: BHBottomSheetController {
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(verticalStackView)
         
-        if UserDefaults.standard.isDevModeEnabled {
+        if UserDefaults.standard.isPushNotificationsFeatureEnabled {
             verticalStackView.addArrangedSubview(notificationsItem)
-            verticalStackView.addArrangedSubview(downloadsItem)
             
             NSLayoutConstraint.activate([
                 notificationsItem.heightAnchor.constraint(equalToConstant: 50),
                 notificationsItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
                 notificationsItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            ])
+        }
+
+        if UserDefaults.standard.isAutoDownloadsFeatureEnabled {
+            verticalStackView.addArrangedSubview(downloadsItem)
+            
+            NSLayoutConstraint.activate([
                 downloadsItem.heightAnchor.constraint(equalToConstant: 50),
                 downloadsItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
                 downloadsItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),

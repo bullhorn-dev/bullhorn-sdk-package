@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D93CFD042B95CD57006B922D /* UserDefaults+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD032B95CD57006B922D /* UserDefaults+Utils.swift */; };
-		D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CFD062B95CFCF006B922D /* DeveloperModeViewController.swift */; };
 		D94E70732D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D94E70722D3E5BD90004D4BA /* BullhornSDK-ConfigPROD.xcconfig */; };
 		D95D1A0B2D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A092D79AEC500DCB282 /* TemplateApplicationSceneDelegate.swift */; };
 		D95D1A0D2D79AFA600DCB282 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D1A0C2D79AFA600DCB282 /* Globals.swift */; };
@@ -326,7 +325,6 @@
 				D989323A2A4470C8002D3CC1 /* TabBarController.swift in Sources */,
 				D9C936DA2A9667B900C32539 /* Utils.swift in Sources */,
 				D9C06CF42B29FC6E0088B159 /* AppearanceViewController.swift in Sources */,
-				D93CFD072B95CFCF006B922D /* DeveloperModeViewController.swift in Sources */,
 				D98932382A442E5E002D3CC1 /* ThemesObserver.swift in Sources */,
 				D98932342A44244B002D3CC1 /* SettingsViewController.swift in Sources */,
 				D98932362A442D9B002D3CC1 /* ThemesManager.swift in Sources */,

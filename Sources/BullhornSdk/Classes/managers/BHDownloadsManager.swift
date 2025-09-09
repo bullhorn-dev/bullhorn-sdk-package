@@ -113,7 +113,7 @@ class BHDownloadsManager {
     func autoDownloadNewEpisodeIfNeeded(_ post: BHPost) {
         BHLog.p("\(#function), postId: \(post.id)")
         
-        if !UserDefaults.standard.isDevModeEnabled { return }
+        if !UserDefaults.standard.isAutoDownloadsFeatureEnabled { return }
         
         if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
             BHLog.p("\(#function) - connection expensive. Don't download the episode.")
@@ -128,7 +128,7 @@ class BHDownloadsManager {
     func autoDownloadNewEpisodesIfNeeded() {
         BHLog.p("\(#function)")
 
-        if !UserDefaults.standard.isDevModeEnabled { return }
+        if !UserDefaults.standard.isAutoDownloadsFeatureEnabled { return }
 
         if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
             BHLog.p("\(#function) - connection expensive. Stop autodownloads.")

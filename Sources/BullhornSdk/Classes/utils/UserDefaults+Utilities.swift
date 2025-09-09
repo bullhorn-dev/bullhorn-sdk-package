@@ -6,7 +6,6 @@ extension UserDefaults {
     
     fileprivate static let numberOfTimesLaunchedKey = "numberOfTimesLaunchedKey"
     fileprivate static let lastVersionPromtedForReviewKey = "lastVersionPromtedForReviewKey"
-    fileprivate static let isDevModeEnabledUserDefaultsKey = "isDevModeEnabledUserDefaultsKey"
     fileprivate static let isPushNotificationsEnabledUserDefaultsKey = "isPushNotificationsEnabledUserDefaultsKey"
     fileprivate static let startSessionTimeUserDefaultsKey = "startSessionTimeUserDefaultsKey"
     fileprivate static let endSessionTimeUserDefaultsKey = "endSessionTimeUserDefaultsKey"
@@ -25,7 +24,18 @@ extension UserDefaults {
     fileprivate static let userSessionIdDefaultsKey = "userSessionIdDefaultsKey"
     fileprivate static let userSessionTimeDefaultsKey = "userSessionTimeDefaultsKey"
     fileprivate static let selectedChannelIdDefaultsKey = "selectedChannelIdDefaultsKey"
+    fileprivate static let networkIdDefaultsKey = "networkIdDefaultsKey"
 
+    fileprivate static let isDevModeEnabledUserDefaultsKey = "isDevModeEnabledUserDefaultsKey"
+
+    ///dev mode features
+    fileprivate static let pushNotificationsFeatureEnabledDefaultsKey = "pushNotificationsFeatureEnabledDefaultsKey"
+    fileprivate static let autoDownloadsFeatureEnabledDefaultsKey = "autoDownloadsFeatureEnabledDefaultsKey"
+    fileprivate static let transcriptsFeatureEnabledDefaultsKey = "transcriptsFeatureEnabledDefaultsKey"
+    fileprivate static let interactiveTranscriptsFeatureEnabledDefaultsKey = "interactiveTranscriptsFeatureEnabledDefaultsKey"
+    fileprivate static let episodeAnimatedLogoFeatureEnabledDefaultsKey = "episodeAnimatedLogoFeatureEnabledDefaultsKey"
+
+    
     static let playNextEnabledDefaultsKey = "playNextEnabledDefaultsKey"
 
     var numberOfTimesLaunched: Int {
@@ -43,15 +53,6 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.lastVersionPromtedForReviewKey)
-        }
-    }
-    
-    var isDevModeEnabled: Bool {
-        get {
-            return UserDefaults.standard.bool(forKey: UserDefaults.isDevModeEnabledUserDefaultsKey)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: UserDefaults.isDevModeEnabledUserDefaultsKey)
         }
     }
     
@@ -225,6 +226,71 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.selectedChannelIdDefaultsKey)
+        }
+    }
+    
+    var isDevModeEnabled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.isDevModeEnabledUserDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.isDevModeEnabledUserDefaultsKey)
+        }
+    }
+    
+    var networkId: String? {
+        get {
+            return UserDefaults.standard.string(forKey: UserDefaults.networkIdDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.networkIdDefaultsKey)
+        }
+    }
+    
+    ///features
+    
+    var isPushNotificationsFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.pushNotificationsFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.pushNotificationsFeatureEnabledDefaultsKey)
+        }
+    }
+    
+    var isAutoDownloadsFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.autoDownloadsFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.autoDownloadsFeatureEnabledDefaultsKey)
+        }
+    }
+
+    var isTranscriptsFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.transcriptsFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.transcriptsFeatureEnabledDefaultsKey)
+        }
+    }
+
+    var isInteractiveTranscriptsFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.interactiveTranscriptsFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.interactiveTranscriptsFeatureEnabledDefaultsKey)
+        }
+    }
+
+    var isEpisodeProgressViewFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.episodeAnimatedLogoFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.episodeAnimatedLogoFeatureEnabledDefaultsKey)
         }
     }
 }

@@ -49,7 +49,7 @@ class BHSettingToggleCell: UITableViewCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         
         switchControl.isUserInteractionEnabled = false
-        switchControl.setOn(model.isActive, animated: true)
+        switchControl.setOn(model.isActive, animated: false)
 
         /// accessibility
         self.isAccessibilityElement = true

@@ -24,10 +24,6 @@ class BHPostCell: UITableViewCell {
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var bottomView: UIStackView!
 
-    @IBOutlet weak var progressBgView: UIView!
-    @IBOutlet weak var progressView: UIView!
-    @IBOutlet weak var progressViewWidthConstraint: NSLayoutConstraint!
-
     var post: BHPost? {
         didSet {
             update()
@@ -102,16 +98,6 @@ class BHPostCell: UITableViewCell {
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
         userIcon.isAccessibilityElement = false
-
-        progressBgView.layer.cornerRadius = progressBgView.frame.height / 2
-        progressBgView.layer.borderColor = UIColor.cardBackground().cgColor
-        progressBgView.layer.borderWidth = 3
-        progressBgView.backgroundColor = .divider()
-        progressBgView.clipsToBounds = true
-            
-        progressView.layer.cornerRadius = progressView.frame.height / 2
-        progressView.backgroundColor = .secondary()
-        progressView.clipsToBounds = true
         
         tagLabel.sizeToFit()
     }
@@ -272,34 +258,8 @@ class BHPostCell: UITableViewCell {
             waitingRoomButton.isHidden = true
             waitingRoomLabel.isHidden = true
         }
-        
-        updateProgress()
     }
     
-    fileprivate func updateProgress() {
-        if UserDefaults.standard.isDevModeEnabled {
-            if let validPost = post, let duration = validPost.recording?.duration, validPost.playbackOffset > 0, duration > 0, abs(duration - Int(validPost.playbackOffset)) > 5 {
-                let fullWidth = progressBgView.frame.size.width
-                let progressWidth = validPost.playbackOffset * fullWidth / Double(duration)
-                
-                if progressWidth > 0 {
-                    progressViewWidthConstraint.constant =  progressWidth < fullWidth ? progressWidth : 0
-                    progressBgView.isHidden  = false
-                    progressView.isHidden = false
-                } else {
-                    progressBgView.isHidden  = true
-                    progressView.isHidden = true
-                }
-            } else {
-                progressBgView.isHidden  = true
-                progressView.isHidden = true
-            }
-        } else {
-            progressBgView.isHidden  = true
-            progressView.isHidden = true
-        }
-    }
-
     fileprivate func updateTagLabel() {
         guard let validPost = post else { return }
         
@@ -438,19 +398,7 @@ class BHPostCell: UITableViewCell {
 extension BHPostCell: BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
     
-    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
-        if UserDefaults.standard.isDevModeEnabled {
-            guard let playerPost = player.post else { return }
-            guard let validPost = post else { return }
-            
-            if playerPost.id == validPost.id {
-                DispatchQueue.main.async {
-                    self.post?.updatePlaybackOffset(position, completed: false)
-                    self.updateProgress()
-                }
-            }
-        }
-    }
+    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {}
 
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool) {
         if let validPost = self.post, validPost.id == item.post.postId {

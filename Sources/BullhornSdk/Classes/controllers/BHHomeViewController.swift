@@ -88,7 +88,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         navigationItem.title = NSLocalizedString("Home", comment: "")
         navigationItem.largeTitleDisplayMode = .never
         
-        if UserDefaults.standard.isDevModeEnabled {
+        if UserDefaults.standard.isPushNotificationsFeatureEnabled {
             let config = UIImage.SymbolConfiguration(weight: .light)
             let imageName = BHUserManager.shared.newEpisodesUsers.count > 0 ? "bell.badge" : "bell"
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: imageName)?.withConfiguration(config), style: .plain, target: self, action: #selector(notificationsButtonAction(_:)))

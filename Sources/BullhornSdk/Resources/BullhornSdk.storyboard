@@ -1882,6 +1882,7 @@
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>
                         <segue destination="0tn-Pd-tIz" kind="show" identifier="Profile.MoreInfoSegueIdentifier" id="ppD-0V-INu"/>
                         <segue destination="REK-qd-AQy" kind="show" identifier="Profile.SettingsSegueIdentifier" id="iPA-XL-ErK"/>
+                        <segue destination="0Gn-EZ-aJ4" kind="show" identifier="Profile.DevModeSegueIdentifier" id="T4E-CU-pHH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-Q0-eO2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2421,14 +2422,154 @@
             </objects>
             <point key="canvasLocation" x="-1683" y="3048"/>
         </scene>
+        <!--Developer mode-->
+        <scene sceneID="ZqM-OW-UvS">
+            <objects>
+                <viewController restorationIdentifier="BHDevModeViewController" storyboardIdentifier="BHDevModeViewController" title="Developer mode" hidesBottomBarWhenPushed="YES" id="0Gn-EZ-aJ4" customClass="BHDevModeViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pUP-ef-NsE"/>
+                        <viewControllerLayoutGuide type="bottom" id="8gj-aW-yg9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hp0-fo-Qq3">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="iB2-Kx-HEp">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <color key="tintColor" name="bhColorPrimary"/>
+                                <color key="separatorColor" name="bhColorSecondaryBg"/>
+                                <color key="sectionIndexColor" name="bhColorPrimary"/>
+                                <color key="sectionIndexBackgroundColor" name="bhColorSecondaryBg"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingRadioCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingRadioCell" rowHeight="56" id="bSl-71-URn" customClass="BHSettingRadioCell" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="50" width="390" height="56"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bSl-71-URn" id="oeC-tn-40j">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jg1-4B-jbw">
+                                                    <rect key="frame" x="20" y="8" width="350" height="40"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRO-QB-Fhg">
+                                                            <rect key="frame" x="0.0" y="0.0" width="326" height="40"/>
+                                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                            <color key="textColor" name="bhColorPrimary"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdv-HI-4Ig">
+                                                            <rect key="frame" x="326" y="0.0" width="24" height="40"/>
+                                                            <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7ty-hh-ttU">
+                                                                    <rect key="frame" x="0.0" y="12" width="24" height="17"/>
+                                                                    <color key="tintColor" name="bhColorSecondary"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="24" id="FnA-gM-aE4"/>
+                                                                        <constraint firstAttribute="height" constant="24" id="e8R-Ud-TTi"/>
+                                                                    </constraints>
+                                                                    <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small"/>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="6Ho-eW-Gxe"/>
+                                                                <constraint firstItem="7ty-hh-ttU" firstAttribute="centerX" secondItem="fdv-HI-4Ig" secondAttribute="centerX" id="HDK-2B-4NJ"/>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="geo-UR-vuH"/>
+                                                                <constraint firstItem="7ty-hh-ttU" firstAttribute="centerY" secondItem="fdv-HI-4Ig" secondAttribute="centerY" id="jIp-fR-AtS"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="fdv-HI-4Ig" secondAttribute="trailing" id="He3-ML-Fun"/>
+                                                    </constraints>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="jg1-4B-jbw" firstAttribute="top" secondItem="oeC-tn-40j" secondAttribute="top" constant="8" id="6G9-LM-POT"/>
+                                                <constraint firstAttribute="bottom" secondItem="jg1-4B-jbw" secondAttribute="bottom" constant="8" id="8y4-oX-JJB"/>
+                                                <constraint firstItem="jg1-4B-jbw" firstAttribute="leading" secondItem="oeC-tn-40j" secondAttribute="leading" constant="20" id="Cy0-ep-wFa"/>
+                                                <constraint firstAttribute="trailing" secondItem="jg1-4B-jbw" secondAttribute="trailing" constant="20" id="FYG-ln-fIX"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="checkmarkIcon" destination="fdv-HI-4Ig" id="rCw-ok-KIy"/>
+                                            <outlet property="titleLabel" destination="oRO-QB-Fhg" id="PGM-aU-iDC"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingToggleCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingToggleCell" rowHeight="56" id="lv8-DY-XM0" customClass="BHSettingToggleCell" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="106" width="390" height="56"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lv8-DY-XM0" id="iqM-ai-TmW">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="33o-3l-raC">
+                                                    <rect key="frame" x="20" y="19" width="350" height="18"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crP-gA-wYd">
+                                                            <rect key="frame" x="0.0" y="0.0" width="301" height="18"/>
+                                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                            <color key="textColor" name="bhColorPrimary"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3jI-Qk-zHC">
+                                                            <rect key="frame" x="301" y="0.0" width="51" height="18"/>
+                                                            <color key="tintColor" name="bhColorAppBarTitle"/>
+                                                            <color key="onTintColor" name="bhColorAccent"/>
+                                                        </switch>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="33o-3l-raC" firstAttribute="top" secondItem="iqM-ai-TmW" secondAttribute="topMargin" constant="8" id="4oY-Zx-tbo"/>
+                                                <constraint firstAttribute="trailing" secondItem="33o-3l-raC" secondAttribute="trailing" constant="20" id="HbO-0a-RHx"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="33o-3l-raC" secondAttribute="bottom" constant="8" id="MGN-E7-dgR"/>
+                                                <constraint firstItem="33o-3l-raC" firstAttribute="leading" secondItem="iqM-ai-TmW" secondAttribute="leading" constant="20" id="mXV-kt-fmO"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="switchControl" destination="3jI-Qk-zHC" id="LfX-fb-t4r"/>
+                                            <outlet property="titleLabel" destination="crP-gA-wYd" id="Yib-jp-deZ"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="omo-ho-M0s"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <color key="tintColor" name="bhColorAppBarTitle"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="iB2-Kx-HEp" secondAttribute="bottom" id="8dq-cg-wfo"/>
+                            <constraint firstItem="iB2-Kx-HEp" firstAttribute="top" secondItem="omo-ho-M0s" secondAttribute="top" id="hwE-rW-EwH"/>
+                            <constraint firstItem="iB2-Kx-HEp" firstAttribute="leading" secondItem="omo-ho-M0s" secondAttribute="leading" id="j7Q-28-hET"/>
+                            <constraint firstItem="iB2-Kx-HEp" firstAttribute="trailing" secondItem="omo-ho-M0s" secondAttribute="trailing" id="jb3-el-tcz"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Developer mode" id="WUu-f6-bai"/>
+                    <connections>
+                        <outlet property="tableView" destination="iB2-Kx-HEp" id="P7i-hp-zdz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yd2-IE-x2b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4152" y="3048"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Tnh-iY-7ke"/>
+        <segue reference="Dux-9E-9ph"/>
         <segue reference="fUD-lq-Ug9"/>
         <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="chevron.compact.down" catalog="system" width="128" height="42"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="doc.plaintext" catalog="system" width="115" height="128"/>

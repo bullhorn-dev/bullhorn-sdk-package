@@ -270,7 +270,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             waitingRoomView.isHidden = true
         }
         
-        if UserDefaults.standard.isDevModeEnabled {
+        if UserDefaults.standard.isEpisodeProgressViewFeatureEnabled {
             if let duration = validPost.recording?.duration, validPost.playbackOffset > 0, duration > 0, abs(duration - Int(validPost.playbackOffset)) > 5 {
                 let fullWidth = progressBgView.frame.size.width
                 let progressWidth = validPost.playbackOffset * fullWidth / Double(duration)
@@ -445,7 +445,7 @@ extension BHPostHeaderView: BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
     
     func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
-        if UserDefaults.standard.isDevModeEnabled {
+        if UserDefaults.standard.isEpisodeProgressViewFeatureEnabled {
             guard let playerPost = player.post else { return }
             guard let validPost = postsManager?.post else { return }
             

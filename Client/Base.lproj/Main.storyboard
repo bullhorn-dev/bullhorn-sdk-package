@@ -84,7 +84,6 @@
                     <navigationItem key="navigationItem" title="Profile" id="yDU-2O-FXC"/>
                     <connections>
                         <segue destination="Ihu-3p-eUw" kind="show" identifier="Settings.AppearanceSegueIdentifier" id="y8z-h1-Bvr"/>
-                        <segue destination="5l0-3f-tcU" kind="show" identifier="Settings.DeveloperModeSegueIdentifier" id="PVe-MZ-48a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qtz-Ro-5gs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -183,69 +182,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tPv-GN-gmE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1308" y="1604"/>
-        </scene>
-        <!--Developer mode-->
-        <scene sceneID="ouF-EC-MIB">
-            <objects>
-                <viewController title="Developer mode" hidesBottomBarWhenPushed="YES" id="5l0-3f-tcU" customClass="DeveloperModeViewController" customModule="BHSdkApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9ht-hZ-Oe2"/>
-                        <viewControllerLayoutGuide type="bottom" id="Jdn-LK-mVS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="umJ-2F-EtT">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSm-3q-OoQ">
-                                <rect key="frame" x="0.0" y="103" width="393" height="749"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Y1-kb-l0l">
-                                        <rect key="frame" x="16" y="16" width="361" height="73"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Network" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DXI-Tk-pYo">
-                                                <rect key="frame" x="0.0" y="0.0" width="361" height="19"/>
-                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
-                                                <color key="textColor" name="bhColorPrimary"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRg-3p-7XU" customClass="BHDropDownTextField" customModule="BullhornSdk">
-                                                <rect key="frame" x="0.0" y="29" width="361" height="44"/>
-                                                <color key="backgroundColor" name="bhColorCardBg"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="44" id="f46-wj-0nD"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" name="fxColorPrimaryBg"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="6Y1-kb-l0l" secondAttribute="trailing" constant="16" id="Mbk-tU-gza"/>
-                                    <constraint firstItem="6Y1-kb-l0l" firstAttribute="leading" secondItem="lSm-3q-OoQ" secondAttribute="leading" constant="16" id="YiN-nt-6Xz"/>
-                                    <constraint firstItem="6Y1-kb-l0l" firstAttribute="top" secondItem="lSm-3q-OoQ" secondAttribute="top" constant="16" id="fBE-nr-coI"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" name="bhColorAppBarBg"/>
-                        <color key="tintColor" name="bhColorAppBarTitle"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="lSm-3q-OoQ" secondAttribute="trailing" id="ZDM-ND-AXq"/>
-                            <constraint firstItem="lSm-3q-OoQ" firstAttribute="leading" secondItem="umJ-2F-EtT" secondAttribute="leading" id="Zi2-R6-1BV"/>
-                            <constraint firstItem="lSm-3q-OoQ" firstAttribute="top" secondItem="9ht-hZ-Oe2" secondAttribute="bottom" id="qvy-b8-cb7"/>
-                            <constraint firstAttribute="bottom" secondItem="lSm-3q-OoQ" secondAttribute="bottom" id="sdD-th-Jbl"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Developer mode" id="8g1-Ag-zkZ"/>
-                    <connections>
-                        <outlet property="dropDownTextField" destination="hRg-3p-7XU" id="9B1-ye-Zgi"/>
-                        <outlet property="networkHeightConstraint" destination="f46-wj-0nD" id="huY-QJ-umd"/>
-                        <outlet property="networkLabel" destination="DXI-Tk-pYo" id="Qgz-zE-cxv"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="uC4-fK-JZf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="566" y="2620"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="DWA-lb-Oav">
@@ -394,9 +330,6 @@
         <namedColor name="bhColorAppBarTitle">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="bhColorCardBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="bhColorDivider">
             <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -408,9 +341,6 @@
         </namedColor>
         <namedColor name="bhColorSecondary">
             <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="fxColorPrimaryBg">
-            <color red="0.96470588235294119" green="0.97254901960784312" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         var configType: BHAppConfigType
         var clientId: String
-        let networkId: String = UserDefaults.standard.networkId
+        let networkId: String = AuthConfig.shared.networkId
         let infoLinks: [BHInfoLink] = [
             BHInfoLink(type: .termsOfService, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
             BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),

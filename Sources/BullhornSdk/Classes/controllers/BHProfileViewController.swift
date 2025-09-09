@@ -13,6 +13,7 @@ enum SettingsOptionType {
     case detailsCell(model: SettingsDetailsOption)
     case accountCell(model: SettingsAccountOption)
     case toggleCell(model: SettingsToggleOption)
+    case radioCell(model: SettingsRadioOption)
 }
 
 struct SettingsOption {
@@ -46,6 +47,12 @@ struct SettingsAccountOption {
     let handler : (() -> Void)
 }
 
+struct SettingsRadioOption {
+    let title : String
+    let selected : Bool
+    let handler : (() -> Void)
+}
+
 class BHProfileViewController: BHPlayerContainingViewController {
     
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
@@ -53,6 +60,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
     fileprivate static let SettingsSegueIdentifier = "Profile.SettingsSegueIdentifier"
     fileprivate static let MoreInfoSegueIdentifier = "Profile.MoreInfoSegueIdentifier"
+    fileprivate static let DevModeSegueIdentifier = "Profile.DevModeSegueIdentifier"
 
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
@@ -159,7 +167,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
                     self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Developer mode options", icon: nil, iconBackgroundColor: .accent(), handler: {
-                    NotificationCenter.default.post(name: BullhornSdk.OpenDevModeNotification, object: self, userInfo: nil)
+                    self.performSegue(withIdentifier: BHProfileViewController.DevModeSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         } else {
@@ -279,6 +287,12 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.configure(with: model)
             return cell
+        case .radioCell(let model):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingRadioCell.reusableIndentifer, for: indexPath) as? BHSettingRadioCell else {
+                return UITableViewCell()
+            }
+            cell.configure(with: model)
+            return cell
         }
     }
     
@@ -294,6 +308,8 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case .accountCell(let model):
             model.handler()
         case .toggleCell(let model):
+            model.handler()
+        case .radioCell(let model):
             model.handler()
         }
     }
