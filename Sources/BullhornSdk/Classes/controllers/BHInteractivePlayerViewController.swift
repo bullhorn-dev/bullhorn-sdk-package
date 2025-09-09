@@ -263,6 +263,8 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     
     override func refreshTranscriptForPosition(_ position: Double = 0) {
         super.refreshTranscriptForPosition(position)
+        
+        if !UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled { return }
 
         if !BHHybridPlayer.shared.isTranscriptActive { return }
 
@@ -399,11 +401,13 @@ extension BHInteractivePlayerViewController: UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch selectedTab {
         case .transcript:
-            guard let validPost = post else { return }
-            let position = BHHybridPlayer.shared.transcriptSegments[indexPath.row].start
-            
-            if BHHybridPlayer.shared.isPostActive(validPost.id) {
-                BHHybridPlayer.shared.seek(to: position, resume: true)
+            if UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled {
+                guard let validPost = post else { return }
+                let position = BHHybridPlayer.shared.transcriptSegments[indexPath.row].start
+                
+                if BHHybridPlayer.shared.isPostActive(validPost.id) {
+                    BHHybridPlayer.shared.seek(to: position, resume: true)
+                }
             }
         default:
             return

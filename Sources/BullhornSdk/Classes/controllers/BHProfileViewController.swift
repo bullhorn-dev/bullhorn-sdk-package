@@ -50,6 +50,7 @@ struct SettingsAccountOption {
 struct SettingsRadioOption {
     let title : String
     let selected : Bool
+    let hasText: Bool
     let handler : (() -> Void)
 }
 

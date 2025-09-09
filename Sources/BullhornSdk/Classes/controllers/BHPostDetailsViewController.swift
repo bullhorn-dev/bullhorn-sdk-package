@@ -160,6 +160,8 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     fileprivate func refreshTranscriptForPosition(_ position: Double = 0) {
         
+        if !UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled { return }
+
         if position < 0 && selectedTab == .transcript {
             selectedIndexPaths.removeAll()
             tableView.reloadData()
@@ -310,7 +312,9 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
         case .details:
             break
         case .transcript:
-            openPlayer(position: postsManager.transcriptSegments[indexPath.row].start)
+            if UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled {
+                openPlayer(position: postsManager.transcriptSegments[indexPath.row].start)
+            }
         }
     }
 }

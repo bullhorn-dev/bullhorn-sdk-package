@@ -56,10 +56,12 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
         models.removeAll()
 
         models.append(Section(title: "Network", options: [
-            .radioCell(model: SettingsRadioOption(title: "Default", selected: UserDefaults.standard.networkId == nil, handler: {
+            .radioCell(model: SettingsRadioOption(title: "Default", selected: UserDefaults.standard.networkId == nil, hasText: false, handler: {
                 UserDefaults.standard.networkId = nil
+                self.configure()
+                self.tableView.reloadData()
             })),
-            .radioCell(model: SettingsRadioOption(title: "Custom", selected: UserDefaults.standard.networkId != nil, handler: {
+            .radioCell(model: SettingsRadioOption(title: "Custom", selected: UserDefaults.standard.networkId != nil, hasText: true, handler: {
                 // TODO
             }))
         ]))
@@ -74,12 +76,6 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
             .toggleCell(model: SettingsToggleOption(title: "Auto downloads", isActive: UserDefaults.standard.isAutoDownloadsFeatureEnabled, handler: {
                 let value = UserDefaults.standard.isAutoDownloadsFeatureEnabled
                 UserDefaults.standard.isAutoDownloadsFeatureEnabled = !value
-                self.configure()
-                self.tableView.reloadData()
-            })),
-            .toggleCell(model: SettingsToggleOption(title: "Show transcripts", isActive: UserDefaults.standard.isTranscriptsFeatureEnabled, handler: {
-                let value = UserDefaults.standard.isTranscriptsFeatureEnabled
-                UserDefaults.standard.isTranscriptsFeatureEnabled = !value
                 self.configure()
                 self.tableView.reloadData()
             })),

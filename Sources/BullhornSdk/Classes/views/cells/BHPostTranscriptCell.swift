@@ -47,14 +47,14 @@ class BHPostTranscriptCell: UITableViewCell {
         
         timeLbl.adjustsFontForContentSizeCategory = true
         timeLbl.text = segment?.start.stringFormatted()
-        timeLbl.textColor = .accent()
-        timeLbl.backgroundColor = .fxPrimaryBackground()
+        timeLbl.textColor = UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled ? .accent() : .secondary()
+        timeLbl.backgroundColor = UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled ? .fxPrimaryBackground() : .primaryBackground()
 
         textLbl.adjustsFontForContentSizeCategory = true
-        textLbl.text = segment?.text
+        textLbl.text = segment?.text.trimmingCharacters(in: .whitespacesAndNewlines)
         textLbl.textColor = .primary()
         
-        if isSelected {
+        if UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled && isSelected {
             self.contentView.backgroundColor = .fxPrimaryBackground()
             self.textLbl.font = .fontWithName(.robotoMedium, size: 14)
             self.timeLbl.font = .fontWithName(.robotoMedium, size: 14)

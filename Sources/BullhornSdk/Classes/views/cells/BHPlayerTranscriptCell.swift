@@ -43,9 +43,10 @@ class BHPlayerTranscriptCell: UITableViewCell {
     
     func update() {
         textLbl.adjustsFontForContentSizeCategory = true
-        textLbl.text = segment?.text
+        textLbl.text = segment?.text.trimmingCharacters(in: .whitespacesAndNewlines)
         textLbl.font = .fontWithName(.robotoMedium, size: 23)
         textLbl.textColor = isSelected ? .playerOnDisplayBackground() : .secondary()
+        textLbl.textAlignment = .left
         
         /// accessibility
         guard let validSegment = segment else { return }
