@@ -37,11 +37,12 @@ class BHSettingRadioCell: UITableViewCell {
         textField.font = .fontWithName(.robotoRegular, size: 17)
         textField.adjustsFontForContentSizeCategory = true
         textField.isHidden = !model.hasText
-//        textField.backgroundColor = .secondaryBackground()
+        textField.backgroundColor = .fxPrimaryBackground()
 
         titleLabel.text = model.title
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.font = .fontWithName(.robotoRegular, size: 17)
+        titleLabel.textColor = .primary()
         checkmarkIcon.isHidden = !model.selected
     }
 }
