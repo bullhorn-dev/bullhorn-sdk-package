@@ -27,7 +27,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="505" height="450"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="rnA-fj-jBc">
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rnA-fj-jBc">
                         <rect key="frame" x="0.0" y="16" width="505" height="434"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxo-NB-GW1">
@@ -73,14 +73,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P5X-12-DS4">
-                                <rect key="frame" x="0.0" y="64" width="505" height="1"/>
+                                <rect key="frame" x="0.0" y="60" width="505" height="1"/>
                                 <color key="backgroundColor" name="bhColorDivider"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="LZv-ZE-FVo"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ro-lQ-U8Z">
-                                <rect key="frame" x="0.0" y="77" width="505" height="12"/>
+                                <rect key="frame" x="0.0" y="69" width="505" height="12"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="interactive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpM-1q-Jz9" customClass="BHPaddingLabel" customModule="BullhornSdk">
                                         <rect key="frame" x="15.999999999999996" y="1.3333333333333286" width="37.666666666666657" height="9.6666666666666661"/>
@@ -97,10 +97,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Br8-3v-VxG">
-                                <rect key="frame" x="0.0" y="101" width="505" height="22"/>
+                                <rect key="frame" x="0.0" y="89" width="505" height="58"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label label label label label label Label label label label label label Label label label label label label " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQj-LH-ZLa">
-                                        <rect key="frame" x="16" y="-7.6666666666666714" width="473" height="37.666666666666664"/>
+                                        <rect key="frame" x="16" y="10.333333333333329" width="473" height="37.666666666666671"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                         <color key="textColor" name="bhColorPrimary"/>
@@ -115,7 +115,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nm9-vv-jyC">
-                                <rect key="frame" x="0.0" y="135" width="505" height="56"/>
+                                <rect key="frame" x="0.0" y="155" width="505" height="56"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going live" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xGA-od-Up8">
                                         <rect key="frame" x="16" y="0.0" width="473" height="17.666666666666668"/>
@@ -143,7 +143,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1vp-In-pPt">
-                                <rect key="frame" x="0.0" y="203" width="505" height="58"/>
+                                <rect key="frame" x="0.0" y="219" width="505" height="58"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="V4M-q2-6Gl">
                                         <rect key="frame" x="16" y="5" width="473" height="48"/>
@@ -215,7 +215,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="97R-Ul-XGg">
-                                <rect key="frame" x="0.0" y="273" width="505" height="36"/>
+                                <rect key="frame" x="0.0" y="285" width="505" height="36"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="xSH-N1-Hx6">
                                         <rect key="frame" x="16" y="0.0" width="132" height="36"/>
@@ -273,15 +273,15 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nbi-8o-LqY">
-                                <rect key="frame" x="0.0" y="321" width="505" height="1"/>
+                                <rect key="frame" x="0.0" y="329" width="505" height="1"/>
                                 <color key="backgroundColor" name="bhColorDivider"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="1nk-2y-D2z"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="334" width="505" height="44"/>
-                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <rect key="frame" x="0.0" y="338" width="505" height="44"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="HpC-Ve-5Rp"/>
                                 </constraints>
@@ -376,6 +376,9 @@
         </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

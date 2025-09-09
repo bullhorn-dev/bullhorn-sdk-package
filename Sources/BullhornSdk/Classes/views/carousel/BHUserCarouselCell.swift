@@ -146,11 +146,7 @@ class BHUserCarouselCell: UICollectionViewCell {
         }
 
         if let newEpisodesCount = user?.unwatchedEpisodesCount, newEpisodesCount > 0, showBadge {
-            let attributedString = NSAttributedString(string: "\(newEpisodesCount)", attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.secondaryText()
-            ])
-            badgeLabel.attributedText = attributedString
+            badgeLabel.text = "\(newEpisodesCount)"
             badgeLabel.isHidden = false
         } else {
             badgeLabel.isHidden = true

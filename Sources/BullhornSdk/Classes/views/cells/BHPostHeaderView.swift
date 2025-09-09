@@ -171,7 +171,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     }
     
     func calculateHeight() -> CGFloat {
-        let spacing: CGFloat = 6
+        let spacing: CGFloat = 8
         var totalHeight: CGFloat = 3 * Constants.paddingVertical
         
         totalHeight += userIcon.frame.size.height + spacing
