@@ -36,6 +36,8 @@ class BHPostCell: UITableViewCell {
         }
     }
     
+    var context: String = "Episode"
+    
     var shareBtnTapClosure: ((URL)->())?
     var likeBtnTapClosure: ((Bool)->())?
     var transcriptBtnTapClosure: ((String)->())?
@@ -105,6 +107,7 @@ class BHPostCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
         playButton.accessibilityLabel = nil
         likeButton.accessibilityLabel = nil
         shareButton.accessibilityLabel = nil
@@ -144,26 +147,31 @@ class BHPostCell: UITableViewCell {
         
         updateTagLabel()
         updateControls()
-        
-        /// accessability
-        guard let validPost = post else { return }
+        setupAccessibility()
+    }
+    
+    private func setupAccessibility() {
+        guard let title = post?.title else { return }
 
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
-        self.accessibilityLabel = "Open Episode \(validPost.title)"
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(context) \(title)"
         
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play \(validPost.title)"
+        playButton.accessibilityLabel = "Play \(context) \(title)"
         likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = "Like \(validPost.title)"
+        likeButton.accessibilityLabel = "Like \(context) \(title)"
         shareButton.isAccessibilityElement = true
-        shareButton.accessibilityLabel = "Share \(validPost.title)"
+        shareButton.accessibilityLabel = "Share \(context) \(title)"
         downloadButton.isAccessibilityElement = true
-        downloadButton.accessibilityLabel = "Download \(validPost.title)"
+        downloadButton.accessibilityLabel = "Download \(context) \(title)"
         transcriptButton.isAccessibilityElement = true
-        transcriptButton.accessibilityLabel = "Transcript \(validPost.title)"
+        transcriptButton.accessibilityLabel = "Transcript \(context) \(title)"
         optionsButton.isAccessibilityElement = true
-        optionsButton.accessibilityLabel = "Options: \(validPost.title)"
+        optionsButton.accessibilityLabel = "Options: \(context) \(title)"
+        
+        self.accessibilityElements = [contentView, playButton!, likeButton!, shareButton!, downloadButton, transcriptButton!, optionsButton!]
+        self.isAccessibilityElement = false
     }
     
     fileprivate func updateControls() {

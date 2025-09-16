@@ -107,7 +107,7 @@ class BHSettingUserCell: UITableViewCell {
         
         /// accessibility
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
+        self.accessibilityTraits = .selected
         self.accessibilityLabel = "Change settings for podcast \(validUser.fullName ?? "")"
 
         nameLabel.isAccessibilityElement = false

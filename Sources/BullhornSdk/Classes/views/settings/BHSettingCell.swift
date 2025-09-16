@@ -47,7 +47,7 @@ class BHSettingCell: UITableViewCell {
         
         /// accessibility
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
+        self.accessibilityTraits = .selected
         self.accessibilityLabel = model.title
 
         titleLabel.isAccessibilityElement = false

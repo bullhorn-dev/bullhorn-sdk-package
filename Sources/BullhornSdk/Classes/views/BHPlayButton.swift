@@ -176,6 +176,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                     self.button.isHidden = stateFlags == .buffering
                     self.button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
                     self.button.setTitle("", for: .normal)
+                    self.accessibilityLabel = "Pause Playback"
                 case .paused:
                     self.loadIndicator.stopAnimating()
                     self.loadIndicator.isHidden = true
@@ -183,9 +184,11 @@ extension BHPlayButton: BHHybridPlayerListener {
                     if let title = self.title {
                         self.button.setTitle(title, for: .normal)
                         self.button.setImage(nil, for: .normal)
+                        self.accessibilityLabel = title
                     } else {
                         self.button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                         self.button.setTitle("", for: .normal)
+                        self.accessibilityLabel = "Start Playback"
                     }
                 case .ended,
                      .failed:

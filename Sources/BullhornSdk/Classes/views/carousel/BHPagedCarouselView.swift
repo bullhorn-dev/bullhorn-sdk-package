@@ -25,7 +25,7 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
         let view = BHPagerView(frame: .zero)
         view.register(BHPostCarouselCell.self, forCellWithReuseIdentifier: BHPostCarouselCell.reusableIndentifer)
         view.itemSize = BHPagerView.automaticSize
-        view.automaticSlidingInterval = 15.0
+        view.automaticSlidingInterval = UIAccessibility.isVoiceOverRunning ? 0 : 15.0
 //        view.isInfinite = true
         view.scrollDirection = .horizontal
         view.removesInfiniteLoopForSingleItem = true

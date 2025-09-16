@@ -111,7 +111,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.optionsButton.isAccessibilityElement = true
         self.optionsButton.accessibilityLabel = "More options"
         self.closeButton.isAccessibilityElement = true
-        self.closeButton.accessibilityLabel = "Close"
+        self.closeButton.accessibilityLabel = "Collapse Player"
+        self.positionLabel.isAccessibilityElement = false
+        self.durationLabel.isAccessibilityElement = false
 
         self.isPortrait = UIDevice.current.orientation.isPortrait
         
@@ -320,10 +322,12 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             controlsEnabled = true
             showIndicator = stateFlags == .buffering
             playButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playButton.accessibilityLabel = "Pause"
 
         case .paused:
             controlsEnabled = true
             playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+            playButton.accessibilityLabel = "Play"
 
         case .ended:
             controlsEnabled = true
@@ -332,6 +336,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         case .failed:
             showRefresh = true
             playButton.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
+            playButton.accessibilityLabel = "Retry"
         }
 
         if showIndicator {

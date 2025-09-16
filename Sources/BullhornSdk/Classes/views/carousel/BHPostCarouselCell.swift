@@ -20,6 +20,8 @@ class BHPostCarouselCell: UICollectionViewCell {
             self.playButton.playlist = playlist
         }
     }
+    
+    var context: String = "Episode"
 
     fileprivate var placeholderImage: UIImage?
 
@@ -97,7 +99,7 @@ class BHPostCarouselCell: UICollectionViewCell {
 
         return view
     }
-        
+            
     // MARK: - Private Methods
     
     private func setupUI() {
@@ -108,8 +110,6 @@ class BHPostCarouselCell: UICollectionViewCell {
         
         let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
-
-        imageView.addSubview(playButton)
         
         let vStackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         vStackView.axis = .vertical
@@ -125,7 +125,8 @@ class BHPostCarouselCell: UICollectionViewCell {
 
         shadowView.addSubview(hStackView)
         contentView.addSubview(shadowView)
-        
+        contentView.addSubview(playButton)
+
         imageView.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
         hStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -169,5 +170,25 @@ class BHPostCarouselCell: UICollectionViewCell {
             ])
             descriptionLabel.attributedText = attributedString
         }
+        
+        setupAccessibility()
+    }
+    
+    private func setupAccessibility() {
+        guard let title = post?.title else {
+            return
+        }
+        
+        playButton.isAccessibilityElement = true
+        playButton.accessibilityLabel = "Play \(context) \(title)"
+
+        titleLabel.isAccessibilityElement = true
+        titleLabel.accessibilityLabel = "\(context) \(title)"
+
+        descriptionLabel.isAccessibilityElement = true
+        descriptionLabel.accessibilityLabel = "\(context) details \(post?.description ?? "")"
+
+//        self.isAccessibilityElement = false
+        self.accessibilityTraits = .selected
     }
 }

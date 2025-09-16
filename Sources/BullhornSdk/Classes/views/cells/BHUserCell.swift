@@ -16,6 +16,8 @@ class BHUserCell: UITableViewCell {
             update()
         }
     }
+    
+    var context: String = "Podcast"
 
     fileprivate var placeholderImage: UIImage?
 
@@ -98,8 +100,12 @@ class BHUserCell: UITableViewCell {
         userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
         
         /// accessability
+        guard let fullName = user?.fullName else {
+            self.isAccessibilityElement = false
+            return
+        }
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
-        self.accessibilityLabel = "Open podcast \(user?.fullName ?? "")"
+        self.accessibilityTraits = .selected
+        self.accessibilityLabel = "\(context) \(fullName)"
     }
 }

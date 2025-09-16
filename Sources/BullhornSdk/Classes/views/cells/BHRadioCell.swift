@@ -17,6 +17,8 @@ class BHRadioCell: UITableViewCell {
             update()
         }
     }
+    
+    var context: String = "Radio"
 
     fileprivate var placeholderImage: UIImage?
 
@@ -69,6 +71,8 @@ class BHRadioCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
+        playButton.accessibilityLabel = nil
     }
 
     // MARK: - Private
@@ -103,10 +107,21 @@ class BHRadioCell: UITableViewCell {
         playButton.post = validRadio.asPost()
         playButton.isEnabled = true
         
-        /// accessability
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
-        self.accessibilityLabel = validRadio.title
+        setupAccessibility()
+    }
+    
+    private func setupAccessibility() {
+        guard let title = radio?.title else { return }
+
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(context) \(title)"
+        
+        playButton.isAccessibilityElement = true
+        playButton.accessibilityLabel = "Play \(context) \(title)"
+        
+        self.accessibilityElements = [contentView, playButton!]
+        self.isAccessibilityElement = false
     }
 }
 

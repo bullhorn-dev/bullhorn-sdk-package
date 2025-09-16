@@ -159,13 +159,13 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         
         guard let validPost = postsManager?.post else { return }
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play \(validPost.title)"
+        playButton.accessibilityLabel = "Play episode \(validPost.title)"
         likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = "Like \(validPost.title)"
+        likeButton.accessibilityLabel = "Like episode \(validPost.title)"
         shareButton.isAccessibilityElement = true
-        shareButton.accessibilityLabel = "Share \(validPost.title)"
+        shareButton.accessibilityLabel = "Share episode \(validPost.title)"
         downloadButton.isAccessibilityElement = true
-        downloadButton.accessibilityLabel = "Download \(validPost.title)"
+        downloadButton.accessibilityLabel = "Download episode \(validPost.title)"
         
         reloadData()
     }

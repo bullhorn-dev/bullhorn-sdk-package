@@ -194,14 +194,17 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         searchBarView.searchBar.placeholder = "Search..."
         searchBarView.mode = searchActive ? .dark : .light
         
-        ///accessibility
+        setupAccessibility()
+        reloadData()
+    }
+    
+    private func setupAccessibility() {
         shareButton.accessibilityLabel = "Share podcast"
         followButton.accessibilityLabel = "Follow podcast"
         unfollowButton.accessibilityLabel = "Following options"
         linkButton.accessibilityLabel = "Open podcast website"
+        
         ratingView.isAccessibilityElement = false
-
-        reloadData()
     }
     
     // MARK: - Private
@@ -230,9 +233,11 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     fileprivate func updateCollapseButton() {
         if isCollapsed {
             collapseButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+            collapseButton.accessibilityLabel = "Expand podcast details"
             numberOfLines = 5
         } else {
             collapseButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+            collapseButton.accessibilityLabel = "Collapse podcast details"
             numberOfLines = 0
         }
     }

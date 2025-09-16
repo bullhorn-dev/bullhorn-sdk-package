@@ -145,8 +145,8 @@ class BHMiniPlayerView: UIView {
         closeButton.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.accessibilityLabel = "Close player"
         
-        playButton.accessibilityLabel = "Play episode"
-        expandButton.accessibilityLabel = "Open player"
+        playButton.accessibilityLabel = "Play"
+        expandButton.accessibilityLabel = "Expand full screen player"
 
         expandButton.addTarget(self, action: #selector(onExpandButton(_:)), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(onPlayButton(_:)), for: .touchUpInside)
@@ -267,15 +267,18 @@ class BHMiniPlayerView: UIView {
             controlsEnabled = true
             showIndicator = stateFlags == .buffering
             playButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playButton.accessibilityLabel = "Pause"
         case .paused:
             controlsEnabled = true
             playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+            playButton.accessibilityLabel = "Play"
         case .ended:
             controlsEnabled = true
             playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
         case .failed:
             showRefresh = true
             playButton.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
+            playButton.accessibilityLabel = "Retry"
         }
         
         if showIndicator {

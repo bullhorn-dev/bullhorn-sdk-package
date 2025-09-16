@@ -15,6 +15,8 @@ class BHUserCarouselCell: UICollectionViewCell {
         }
     }
     
+    var context: String = "Podcast"
+    
     var showCategory: Bool = true
     var showBadge: Bool = false
 
@@ -83,6 +85,11 @@ class BHUserCarouselCell: UICollectionViewCell {
         super.layoutSubviews()
         
         badgeLabel.layer.cornerRadius = badgeSize / 2
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
     }
         
     // MARK: - Private Methods
@@ -166,6 +173,18 @@ class BHUserCarouselCell: UICollectionViewCell {
         } else {
             nameLabel.numberOfLines = showCategory ? 1 : 0
         }
+        
+        /// accessability
+        guard let fullName = user?.fullName else {
+            self.isAccessibilityElement = false
+            return
+        }
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .selected
+        self.accessibilityLabel = "\(context) \(fullName)"
+        
+        categoryLabel.isAccessibilityElement = false
+        nameLabel.isAccessibilityElement = false
     }
     
     private func isTextScaled() -> Bool {
