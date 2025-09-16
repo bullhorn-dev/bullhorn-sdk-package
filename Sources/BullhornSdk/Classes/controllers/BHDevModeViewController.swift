@@ -56,13 +56,13 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
         models.removeAll()
 
         models.append(Section(title: "Network", options: [
-            .radioCell(model: SettingsRadioOption(title: "Default", selected: UserDefaults.standard.networkId == nil, hasText: false, handler: {
-                UserDefaults.standard.networkId = nil
+            .radioCell(model: SettingsRadioOption(title: "Default", selected: !UserDefaults.standard.isCustomNetworkSelected, hasText: false, handler: {
+                UserDefaults.standard.isCustomNetworkSelected = false
                 self.configure()
                 self.tableView.reloadData()
             })),
-            .radioCell(model: SettingsRadioOption(title: "Custom", selected: UserDefaults.standard.networkId != nil, hasText: true, handler: {
-                // TODO
+            .radioCell(model: SettingsRadioOption(title: "Custom", selected: UserDefaults.standard.isCustomNetworkSelected, hasText: true, handler: {
+                UserDefaults.standard.isCustomNetworkSelected = true
             }))
         ]))
         

@@ -24,7 +24,9 @@ extension UserDefaults {
     fileprivate static let userSessionIdDefaultsKey = "userSessionIdDefaultsKey"
     fileprivate static let userSessionTimeDefaultsKey = "userSessionTimeDefaultsKey"
     fileprivate static let selectedChannelIdDefaultsKey = "selectedChannelIdDefaultsKey"
+
     fileprivate static let networkIdDefaultsKey = "networkIdDefaultsKey"
+    fileprivate static let isCustomNetworkSelectedDefaultsKey = "isCustomNetworkSelectedDefaultsKey"
 
     fileprivate static let isDevModeEnabledUserDefaultsKey = "isDevModeEnabledUserDefaultsKey"
 
@@ -237,12 +239,23 @@ extension UserDefaults {
         }
     }
     
+    ///network
+
     var networkId: String? {
         get {
             return UserDefaults.standard.string(forKey: UserDefaults.networkIdDefaultsKey)
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.networkIdDefaultsKey)
+        }
+    }
+    
+    var isCustomNetworkSelected: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: UserDefaults.isCustomNetworkSelectedDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.isCustomNetworkSelectedDefaultsKey)
         }
     }
     

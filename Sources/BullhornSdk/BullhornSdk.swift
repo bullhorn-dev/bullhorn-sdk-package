@@ -74,7 +74,11 @@ public class BullhornSdk: NSObject {
     internal var defaultNetworkId: String = ""
 
     public var networkId: String {
-        return UserDefaults.standard.networkId ?? defaultNetworkId
+        if UserDefaults.standard.isCustomNetworkSelected {
+            return UserDefaults.standard.networkId ?? defaultNetworkId
+        } else {
+           return defaultNetworkId
+        }
     }
     
     public var externalUser: BHSdkUser?
