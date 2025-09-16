@@ -3,11 +3,11 @@ import Foundation
 
 class BHPlaybackSpeedPanel: UIView {
     
-    private var zeroTwoFive = BHPlayerSettingsButton(type: .system)
-    private var zeroFiveZero = BHPlayerSettingsButton(type: .system)
+    private var zeroSevenFive = BHPlayerSettingsButton(type: .system)
     private var normal = BHPlayerSettingsButton(type: .system)
     private var oneTwoFive = BHPlayerSettingsButton(type: .system)
     private var oneFiveZero = BHPlayerSettingsButton(type: .system)
+    private var oneSevenFive = BHPlayerSettingsButton(type: .system)
     private var twoZero = BHPlayerSettingsButton(type: .system)
     
     private var stackView: UIStackView!
@@ -23,11 +23,11 @@ class BHPlaybackSpeedPanel: UIView {
             unselectAll()
 
             switch val {
-            case .zeroTwoFive:  zeroTwoFive.select()
-            case .zeroFiveZero: zeroFiveZero.select()
+            case .zeroSevenFive:  zeroSevenFive.select()
             case .normal:       normal.select()
             case .oneTwoFive:   oneTwoFive.select()
             case .oneFiveZero:  oneFiveZero.select()
+            case .oneSevenFive: oneSevenFive.select()
             case .twoZero:      twoZero.select()
             }
         }
@@ -38,31 +38,31 @@ class BHPlaybackSpeedPanel: UIView {
         
         backgroundColor = .clear
         
-        zeroTwoFive.addTarget(self, action: #selector(onZeroTwoFive), for: .touchUpInside)
-        zeroTwoFive.setTitle(BHPlayerPlaybackSpeed.zeroTwoFive.getTitle(), for: .normal)
-        zeroTwoFive.accessibilityLabel = "Set playback speed to 0.25x"
-
-        zeroFiveZero.addTarget(self, action: #selector(onZeroFiveZero), for: .touchUpInside)
-        zeroFiveZero.setTitle(BHPlayerPlaybackSpeed.zeroFiveZero.getTitle(), for: .normal)
-        zeroFiveZero.accessibilityLabel = "Set playback speed to 0.5x"
+        zeroSevenFive.addTarget(self, action: #selector(onZeroSevenFive), for: .touchUpInside)
+        zeroSevenFive.setTitle(BHPlayerPlaybackSpeed.zeroSevenFive.getTitle(), for: .normal)
+        zeroSevenFive.accessibilityLabel = accessibilityTitle(.zeroSevenFive)
 
         normal.addTarget(self, action: #selector(onNormal), for: .touchUpInside)
         normal.setTitle(BHPlayerPlaybackSpeed.normal.getTitle(), for: .normal)
-        normal.accessibilityLabel = "Set playback speed to 1x"
+        normal.accessibilityLabel = accessibilityTitle(.normal)
 
         oneTwoFive.addTarget(self, action: #selector(onOneTwoFive), for: .touchUpInside)
         oneTwoFive.setTitle(BHPlayerPlaybackSpeed.oneTwoFive.getTitle(), for: .normal)
-        oneTwoFive.accessibilityLabel = "Set playback speed to 1.25x"
+        oneTwoFive.accessibilityLabel = accessibilityTitle(.oneTwoFive)
 
         oneFiveZero.addTarget(self, action: #selector(onOneFiveZero), for: .touchUpInside)
         oneFiveZero.setTitle(BHPlayerPlaybackSpeed.oneFiveZero.getTitle(), for: .normal)
-        oneFiveZero.accessibilityLabel = "Set playback speed to 1.5x"
+        oneFiveZero.accessibilityLabel = accessibilityTitle(.oneFiveZero)
+
+        oneSevenFive.addTarget(self, action: #selector(onOneSevenFive), for: .touchUpInside)
+        oneSevenFive.setTitle(BHPlayerPlaybackSpeed.oneSevenFive.getTitle(), for: .normal)
+        oneSevenFive.accessibilityLabel = accessibilityTitle(.oneSevenFive)
 
         twoZero.addTarget(self, action: #selector(onTwoZero), for: .touchUpInside)
         twoZero.setTitle(BHPlayerPlaybackSpeed.twoZero.getTitle(), for: .normal)
-        twoZero.accessibilityLabel = "Set playback speed to 2x"
+        twoZero.accessibilityLabel = accessibilityTitle(.twoZero)
 
-        stackView = UIStackView(arrangedSubviews: [zeroTwoFive, zeroFiveZero, normal, oneTwoFive, oneFiveZero, twoZero])
+        stackView = UIStackView(arrangedSubviews: [zeroSevenFive, normal, oneTwoFive, oneFiveZero, oneSevenFive, twoZero])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
@@ -81,11 +81,11 @@ class BHPlaybackSpeedPanel: UIView {
         addSubview(contentView)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        zeroTwoFive.translatesAutoresizingMaskIntoConstraints = false
-        zeroFiveZero.translatesAutoresizingMaskIntoConstraints = false
+        zeroSevenFive.translatesAutoresizingMaskIntoConstraints = false
         normal.translatesAutoresizingMaskIntoConstraints = false
         oneTwoFive.translatesAutoresizingMaskIntoConstraints = false
         oneFiveZero.translatesAutoresizingMaskIntoConstraints = false
+        oneSevenFive.translatesAutoresizingMaskIntoConstraints = false
         twoZero.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
@@ -94,11 +94,8 @@ class BHPlaybackSpeedPanel: UIView {
             stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -Constants.paddingHorizontal),
             stackView.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
             
-            zeroTwoFive.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
-            zeroTwoFive.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
-
-            zeroFiveZero.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
-            zeroFiveZero.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
+            zeroSevenFive.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
+            zeroSevenFive.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
 
             normal.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
             normal.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
@@ -108,6 +105,9 @@ class BHPlaybackSpeedPanel: UIView {
 
             oneFiveZero.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
             oneFiveZero.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
+
+            oneSevenFive.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
+            oneSevenFive.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
 
             twoZero.heightAnchor.constraint(equalToConstant: Constants.panelHeight),
             twoZero.widthAnchor.constraint(equalToConstant: Constants.panelHeight),
@@ -127,26 +127,24 @@ class BHPlaybackSpeedPanel: UIView {
     }
     
     func unselectAll() {
-        zeroTwoFive.deselect()
-        zeroFiveZero.deselect()
+        zeroSevenFive.deselect()
         normal.deselect()
         oneTwoFive.deselect()
         oneFiveZero.deselect()
+        oneSevenFive.deselect()
         twoZero.deselect()
+    }
+    
+    fileprivate func accessibilityTitle(_ item: BHPlayerPlaybackSpeed) -> String {
+        return "Set playback speed to \(item.getTitle())"
     }
                 
     // MARK: - Actions
     
-    @objc private func onZeroTwoFive() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.zeroTwoFive.rawValue)
+    @objc private func onZeroSevenFive() {
+        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.zeroSevenFive.rawValue)
         unselectAll()
-        zeroTwoFive.select()
-    }
-
-    @objc private func onZeroFiveZero() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.zeroFiveZero.rawValue)
-        unselectAll()
-        zeroFiveZero.select()
+        zeroSevenFive.select()
     }
 
     @objc private func onNormal() {
@@ -165,6 +163,12 @@ class BHPlaybackSpeedPanel: UIView {
         BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.oneFiveZero.rawValue)
         unselectAll()
         oneFiveZero.select()
+    }
+    
+    @objc private func onOneSevenFive() {
+        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.oneSevenFive.rawValue)
+        unselectAll()
+        oneSevenFive.select()
     }
 
     @objc private func onTwoZero() {

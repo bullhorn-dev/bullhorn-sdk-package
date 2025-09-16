@@ -2,38 +2,38 @@
 import Foundation
 
 public enum BHPlayerPlaybackSpeed: Float, CaseIterable {
-    case zeroTwoFive  = 0.75
-    case zeroFiveZero = 1.0
-    case normal       = 1.25
-    case oneTwoFive   = 1.5
-    case oneFiveZero  = 1.75
-    case twoZero      = 2
+    case zeroSevenFive = 0.75
+    case normal        = 1.0
+    case oneTwoFive    = 1.25
+    case oneFiveZero   = 1.5
+    case oneSevenFive  = 1.75
+    case twoZero       = 2
 
     func getTitle() -> String {
         switch self {
-        case .zeroTwoFive:  return ".75x"
-        case .zeroFiveZero: return "1x"
-        case .normal:       return "1.25x"
-        case .oneTwoFive:   return "1.5x"
-        case .oneFiveZero:  return "1.75x"
-        case .twoZero:      return "2x"
+        case .zeroSevenFive: return ".75x"
+        case .normal:        return "1x"
+        case .oneTwoFive:    return "1.25x"
+        case .oneFiveZero:   return "1.5x"
+        case .oneSevenFive:  return "1.75x"
+        case .twoZero:       return "2x"
         }
     }
     
     func getNext() -> Float {
         switch self {
-        case .zeroTwoFive:
-            return BHPlayerPlaybackSpeed.zeroFiveZero.rawValue
-        case .zeroFiveZero:
+        case .zeroSevenFive:
             return BHPlayerPlaybackSpeed.normal.rawValue
         case .normal:
             return BHPlayerPlaybackSpeed.oneTwoFive.rawValue
         case .oneTwoFive:
             return BHPlayerPlaybackSpeed.oneFiveZero.rawValue
         case .oneFiveZero:
+            return BHPlayerPlaybackSpeed.oneSevenFive.rawValue
+        case .oneSevenFive:
             return BHPlayerPlaybackSpeed.twoZero.rawValue
         case .twoZero:
-            return BHPlayerPlaybackSpeed.zeroTwoFive.rawValue
+            return BHPlayerPlaybackSpeed.zeroSevenFive.rawValue
         }
     }
 
