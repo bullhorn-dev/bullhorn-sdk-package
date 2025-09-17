@@ -158,7 +158,7 @@ class BHPostCell: UITableViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play \(context) \(title)"
+        playButton.context = context
         likeButton.isAccessibilityElement = true
         likeButton.accessibilityLabel = "Like \(context) \(title)"
         shareButton.isAccessibilityElement = true

@@ -17,6 +17,8 @@ class BHPlayButton: UIView {
         }
     }
     
+    var context: String = "Episode"
+    
     private let button: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("", for: .normal)
@@ -102,7 +104,7 @@ class BHPlayButton: UIView {
         if BHHybridPlayer.shared.isPostPlaying(post?.id ?? "") {
             button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
             button.setTitle("", for: .normal)
-            accessibilityLabel = "Pause Playback"
+            accessibilityLabel = "Pause \(context) \(post?.title ?? "")"
         } else {
             if let title = title {
                 button.setTitle(title, for: .normal)
@@ -111,7 +113,7 @@ class BHPlayButton: UIView {
             } else {
                 button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                 button.setTitle("", for: .normal)
-                accessibilityLabel = "Start Playback"
+                accessibilityLabel = "Play \(context) \(post?.title ?? "")"
             }
         }
     }
@@ -176,7 +178,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                     self.button.isHidden = stateFlags == .buffering
                     self.button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
                     self.button.setTitle("", for: .normal)
-                    self.accessibilityLabel = "Pause Playback"
+                    self.accessibilityLabel = "Pause \(self.context) \(self.post?.title ?? "")"
                 case .paused:
                     self.loadIndicator.stopAnimating()
                     self.loadIndicator.isHidden = true
@@ -188,7 +190,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                     } else {
                         self.button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                         self.button.setTitle("", for: .normal)
-                        self.accessibilityLabel = "Start Playback"
+                        self.accessibilityLabel = "Play \(self.context) \(self.post?.title ?? "")"
                     }
                 case .ended,
                      .failed:

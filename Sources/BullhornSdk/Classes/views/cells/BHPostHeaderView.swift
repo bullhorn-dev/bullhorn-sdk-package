@@ -159,7 +159,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         
         guard let validPost = postsManager?.post else { return }
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play episode \(validPost.title)"
+        playButton.context = "Episode"
         likeButton.isAccessibilityElement = true
         likeButton.accessibilityLabel = "Like episode \(validPost.title)"
         shareButton.isAccessibilityElement = true

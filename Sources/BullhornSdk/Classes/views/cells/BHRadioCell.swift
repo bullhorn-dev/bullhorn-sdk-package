@@ -66,6 +66,7 @@ class BHRadioCell: UITableViewCell {
         streamTitleLabel.isAccessibilityElement = false
 
         playButton.title = "Listen"
+        playButton.context = "Radio"
     }
 
     override func prepareForReuse() {
@@ -118,7 +119,7 @@ class BHRadioCell: UITableViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play \(context) \(title)"
+        playButton.context = "Radio"
         
         self.accessibilityElements = [contentView, playButton!]
         self.isAccessibilityElement = false

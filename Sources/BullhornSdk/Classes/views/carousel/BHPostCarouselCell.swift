@@ -91,13 +91,18 @@ class BHPostCarouselCell: UICollectionViewCell {
         shadowView.frame = CGRect(x: 0, y: Int(Constants.paddingVertical / 2), width: Int(frame.size.width), height: Int(frame.size.height - Constants.paddingVertical))
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        var view = playButton.hitTest(playButton.convert(point, from: self), with: event)
-        if view == nil {
-            view = super.hitTest(point, with: event)
-        }
-
-        return view
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//        var view = playButton.hitTest(playButton.convert(point, from: self), with: event)
+//        if view == nil {
+//            view = super.hitTest(point, with: event)
+//        }
+//
+//        return view
+//    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
     }
             
     // MARK: - Private Methods
@@ -179,16 +184,14 @@ class BHPostCarouselCell: UICollectionViewCell {
             return
         }
         
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(context) \(title)"
+
         playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play \(context) \(title)"
+        playButton.context = "Episode"
 
-        titleLabel.isAccessibilityElement = true
-        titleLabel.accessibilityLabel = "\(context) \(title)"
-
-        descriptionLabel.isAccessibilityElement = true
-        descriptionLabel.accessibilityLabel = "\(context) details \(post?.description ?? "")"
-
-//        self.isAccessibilityElement = false
-        self.accessibilityTraits = .selected
+        self.accessibilityElements = [playButton, contentView]
+        self.isAccessibilityElement = false
     }
 }

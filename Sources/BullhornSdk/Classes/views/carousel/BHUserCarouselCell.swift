@@ -174,7 +174,10 @@ class BHUserCarouselCell: UICollectionViewCell {
             nameLabel.numberOfLines = showCategory ? 1 : 0
         }
         
-        /// accessability
+        setupAccessibility()
+    }
+    
+    private func setupAccessibility() {
         guard let fullName = user?.fullName else {
             self.isAccessibilityElement = false
             return
