@@ -157,16 +157,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         progressActiveView.backgroundColor = .secondary()
         progressActiveView.clipsToBounds = true
         
-        guard let validPost = postsManager?.post else { return }
-        playButton.isAccessibilityElement = true
-        playButton.context = "Episode"
-        likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = "Like episode \(validPost.title)"
-        shareButton.isAccessibilityElement = true
-        shareButton.accessibilityLabel = "Share episode \(validPost.title)"
-        downloadButton.isAccessibilityElement = true
-        downloadButton.accessibilityLabel = "Download episode \(validPost.title)"
-        
+        setupAccessibility()
         reloadData()
     }
     
@@ -203,6 +194,19 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         
         BHHybridPlayer.shared.addListener(self)
     }
+    
+    fileprivate func setupAccessibility() {
+        guard let validPost = postsManager?.post else { return }
+
+        playButton.isAccessibilityElement = true
+        playButton.context = "episode"
+        likeButton.isAccessibilityElement = true
+        likeButton.accessibilityLabel = validPost.liked ? "Unlike episode" : "Like episode"
+        shareButton.isAccessibilityElement = true
+        shareButton.accessibilityLabel = "Share episode"
+        downloadButton.isAccessibilityElement = true
+        downloadButton.context = "episode"
+    }
 
     fileprivate func updateControls() {
         guard let validPost = postsManager?.post else { return }
@@ -214,11 +218,14 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         if BullhornSdk.shared.externalUser?.level == .external {
             if validPost.liked {
                 image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
+                likeButton.accessibilityLabel = "Unlike episode"
             } else {
                 image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+                likeButton.accessibilityLabel = "Like episode"
             }
         } else {
             image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+            likeButton.accessibilityLabel = "Like episode"
         }
         likeButton.setImage(image, for: .normal)
         shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)

@@ -68,6 +68,8 @@ class BHGridCollectionController: UICollectionViewController, UICollectionViewDe
 
             guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
             usersHeaderView.titleLabel.text = uiModels[indexPath.section].title
+            usersHeaderView.accessibilityLabel = uiModels[indexPath.section].title
+            usersHeaderView.isAccessibilityElement = true
 
             return usersHeaderView
         default:

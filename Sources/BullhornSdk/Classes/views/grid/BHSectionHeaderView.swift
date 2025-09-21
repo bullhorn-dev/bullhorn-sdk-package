@@ -18,6 +18,11 @@ class BHSectionHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         setup()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        accessibilityLabel = nil
+    }
 
     // MARK: - Private
 
@@ -25,5 +30,7 @@ class BHSectionHeaderView: UICollectionReusableView {
         titleLabel.textColor = .primary()
         titleLabel.font = .sectionTitle()
         titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.isAccessibilityElement = false
+        isAccessibilityElement = true
     }
 }

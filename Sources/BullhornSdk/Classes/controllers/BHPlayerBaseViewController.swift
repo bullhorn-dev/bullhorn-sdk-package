@@ -101,20 +101,6 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
         setNeedsStatusBarAppearanceUpdate()
 
-        ///accessibility
-        self.playButton.isAccessibilityElement = true
-        self.playButton.accessibilityLabel = "Play"
-        self.forwardButton.isAccessibilityElement = true
-        self.forwardButton.accessibilityLabel = "Forward 15 seconds"
-        self.backwardButton.isAccessibilityElement = true
-        self.backwardButton.accessibilityLabel = "Backward 15 seconds"
-        self.optionsButton.isAccessibilityElement = true
-        self.optionsButton.accessibilityLabel = "More options"
-        self.closeButton.isAccessibilityElement = true
-        self.closeButton.accessibilityLabel = "Collapse Player"
-        self.positionLabel.isAccessibilityElement = false
-        self.durationLabel.isAccessibilityElement = false
-
         self.isPortrait = UIDevice.current.orientation.isPortrait
         
         self.imageLayerView.clipsToBounds = false
@@ -157,6 +143,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         nextButton.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
+        
+        setupAccessibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -179,6 +167,21 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         BHHybridPlayer.shared.removeListener(self)
         BHLivePlayer.shared.removeListener(self)
         super.viewDidDisappear(animated)
+    }
+    
+    func setupAccessibility() {
+        playButton.isAccessibilityElement = true
+        playButton.accessibilityLabel = "Play"
+        forwardButton.isAccessibilityElement = true
+        forwardButton.accessibilityLabel = "Forward 15 seconds"
+        backwardButton.isAccessibilityElement = true
+        backwardButton.accessibilityLabel = "Backward 15 seconds"
+        optionsButton.isAccessibilityElement = true
+        optionsButton.accessibilityLabel = "More options"
+        closeButton.isAccessibilityElement = true
+        closeButton.accessibilityLabel = "Collapse Player"
+        positionLabel.accessibilityTraits = .updatesFrequently
+        durationLabel.accessibilityTraits = .updatesFrequently
     }
     
     func reloadData() {
@@ -385,9 +388,13 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func onPositionChanged(_ position: Double, duration: Double) {
         if  duration > 0 && !self.isSliding {
+            let pos = position.stringFormatted()
+            let dur = (duration-position).stringFormatted()
             self.slider.setValue(Float(position/duration), animated: true)
-            self.positionLabel.text = position.stringFormatted()
-            self.durationLabel.text = "-\((duration-position).stringFormatted())"
+            self.positionLabel.text = pos
+            self.durationLabel.text = "-\(dur)"
+            self.positionLabel.accessibilityLabel = "Position is \(pos)"
+            self.durationLabel.accessibilityLabel = "Remain \(dur)"
         }
         refreshTranscriptForPosition(position)
 //        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()

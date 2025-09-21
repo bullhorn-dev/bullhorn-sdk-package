@@ -168,10 +168,12 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         
         if BHHybridPlayer.shared.isTranscriptActive {
             transcriptButton.setImage(UIImage(systemName: "doc.plaintext.fill")?.withConfiguration(mediumConfig), for: .normal)
+            transcriptButton.accessibilityLabel = "Hide episode transcript"
             transcriptView.isHidden = false
             imageView.isHidden = true
         } else {
             transcriptButton.setImage(UIImage(systemName: "doc.plaintext")?.withConfiguration(mediumConfig), for: .normal)
+            transcriptButton.accessibilityLabel = "Show episode transcript"
             transcriptView.isHidden = true
             imageView.isHidden = false
         }

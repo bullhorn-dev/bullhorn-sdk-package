@@ -158,13 +158,13 @@ class BHPostCell: UITableViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         playButton.isAccessibilityElement = true
-        playButton.context = context
+        playButton.context = "\(context) \(title)"
         likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = "Like \(context) \(title)"
+        likeButton.accessibilityLabel = post?.liked == true ? "Unlike \(context) \(title)" : "Like \(context) \(title)"
         shareButton.isAccessibilityElement = true
         shareButton.accessibilityLabel = "Share \(context) \(title)"
         downloadButton.isAccessibilityElement = true
-        downloadButton.accessibilityLabel = "Download \(context) \(title)"
+        downloadButton.context = "\(context) \(title)"
         transcriptButton.isAccessibilityElement = true
         transcriptButton.accessibilityLabel = "Transcript \(context) \(title)"
         optionsButton.isAccessibilityElement = true
@@ -184,11 +184,14 @@ class BHPostCell: UITableViewCell {
         if BullhornSdk.shared.externalUser?.level == .external {
             if validPost.liked {
                 image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
+                likeButton.accessibilityLabel = "Unlike \(context) \(validPost.title)"
             } else {
                 image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+                likeButton.accessibilityLabel = "Like \(context) \(validPost.title)"
             }
         } else {
             image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
+            likeButton.accessibilityLabel = "Like \(context) \(validPost.title)"
         }
         likeButton.setImage(image, for: .normal)
         likeButton.setTitle("", for: .normal)

@@ -10,6 +10,8 @@ class BHDownloadButton: UIView {
             updateButtonState()
         }
     }
+    
+    var context: String = "Episode"
 
     private var status: DownloadStatus = .start
     private var reason: DownloadReason = .manually
@@ -90,16 +92,21 @@ class BHDownloadButton: UIView {
         switch status {
         case .pending:
             image = UIImage(systemName: "arrow.down.to.line")?.withConfiguration(mediumConfig)
+            accessibilityLabel = "Download \(context)"
             bgColor = .defaultYellow()
         case .start:
             image = UIImage(systemName: "arrow.down.to.line")?.withConfiguration(mediumConfig)
+            accessibilityLabel = "Download \(context)"
         case .progress:
             image = UIImage(systemName: "stop")?.withConfiguration(smallConfig)
+            accessibilityLabel = "Downloading \(context)"
             hasProgress = true
         case .success:
             image = UIImage(systemName: "checkmark")?.withConfiguration(mediumConfig)
+            accessibilityLabel = "\(context) is downloaded"
         case .failure:
             image = UIImage(systemName: "arrow.clockwise")?.withConfiguration(smallConfig)
+            accessibilityLabel = "Failed to download \(context)"
             bgColor = .accent().withAlphaComponent(0.3)
         }
 

@@ -189,7 +189,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
 
         playButton.isAccessibilityElement = true
-        playButton.context = "Episode"
+        playButton.context = "\(context) \(title)"
 
         self.accessibilityElements = [playButton, contentView]
         self.isAccessibilityElement = false

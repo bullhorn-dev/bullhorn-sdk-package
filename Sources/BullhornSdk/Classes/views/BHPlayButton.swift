@@ -104,7 +104,7 @@ class BHPlayButton: UIView {
         if BHHybridPlayer.shared.isPostPlaying(post?.id ?? "") {
             button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
             button.setTitle("", for: .normal)
-            accessibilityLabel = "Pause \(context) \(post?.title ?? "")"
+            accessibilityLabel = "Pause \(context)"
         } else {
             if let title = title {
                 button.setTitle(title, for: .normal)
@@ -113,7 +113,7 @@ class BHPlayButton: UIView {
             } else {
                 button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                 button.setTitle("", for: .normal)
-                accessibilityLabel = "Play \(context) \(post?.title ?? "")"
+                accessibilityLabel = "Play \(context)"
             }
         }
     }
@@ -178,7 +178,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                     self.button.isHidden = stateFlags == .buffering
                     self.button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)
                     self.button.setTitle("", for: .normal)
-                    self.accessibilityLabel = "Pause \(self.context) \(self.post?.title ?? "")"
+                    self.accessibilityLabel = "Pause \(self.context)"
                 case .paused:
                     self.loadIndicator.stopAnimating()
                     self.loadIndicator.isHidden = true
@@ -190,7 +190,7 @@ extension BHPlayButton: BHHybridPlayerListener {
                     } else {
                         self.button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                         self.button.setTitle("", for: .normal)
-                        self.accessibilityLabel = "Play \(self.context) \(self.post?.title ?? "")"
+                        self.accessibilityLabel = "Play \(self.context)"
                     }
                 case .ended,
                      .failed:
