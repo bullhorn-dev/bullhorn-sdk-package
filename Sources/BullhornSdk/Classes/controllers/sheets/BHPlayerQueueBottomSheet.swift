@@ -9,15 +9,9 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
     var heightConstraint: NSLayoutConstraint!
 
     // MARK: - Lifecycle
-    
-    deinit {
-//        BHHybridPlayer.shared.removeListener(self)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        BHHybridPlayer.shared.addListener(self)
 
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openQueue)
@@ -55,10 +49,12 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
         super.viewWillAppear(animated)
         
         tableView.reloadData()
+        BHHybridPlayer.shared.addListener(self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        BHHybridPlayer.shared.removeListener(self)
     }
     
     // MARK: - Private
