@@ -165,7 +165,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
         
     @objc func onPlayNextItem(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            UserDefaults.standard.playNextEnabled = !UserDefaults.standard.playNextEnabled
+            BHHybridPlayer.shared.updatePlayNextSetting(!UserDefaults.standard.playNextEnabled)
             self.updateSettings()
         })
     }

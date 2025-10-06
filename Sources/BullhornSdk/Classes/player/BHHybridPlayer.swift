@@ -68,8 +68,8 @@ class BHHybridPlayer {
     }
     var isTranscriptActive: Bool = false // UI flag for player
 
-    var playlist: [BHPost]?
-    
+//    var playlist: [BHPost]?
+        
     var playerItem: BHPlayerItem?
 
     var bulletin: BHBulletin? {
@@ -129,6 +129,7 @@ class BHHybridPlayer {
         }
     }
     
+    internal var playbackQueue: [BHQueueItem] = []
 
     // MARK: - Lifecycle
 
@@ -205,7 +206,7 @@ class BHHybridPlayer {
         BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
 
         BHLivePlayer.shared.close()
-        
+                
         if isPostActive(post.id) {
             if isPlaying() {
                 pause()
@@ -213,6 +214,14 @@ class BHHybridPlayer {
                 resume()
             }
         } else {
+            
+            if let previousPost = self.post {
+                removeFromPlaybackQueue(previousPost.id)
+            }
+            
+            if let validPlaylist = playlist, validPlaylist.count > 0 {
+                removeQueue()
+            }
 
             self.isTranscriptActive = false
             self.context = context
@@ -253,6 +262,7 @@ class BHHybridPlayer {
 
                     BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
                 }
+
             } else {
                 let vc = BHConnectionLostBottomSheet()
                 vc.preferredSheetSizing = .fit
@@ -286,13 +296,14 @@ class BHHybridPlayer {
 
         performStop()
         playerItem = nil
-        playlist = nil
         post = nil
         transcript = nil
         bulletinManager.reset()
         settings = .initial
         manualPosition = 0
         isTranscriptActive = false
+        removeQueue()
+        UserDefaults.standard.playerPostId = ""
         
         observersContainer.notifyObserversAsync {
             $0.hybridPlayerDidClose(self)
@@ -379,37 +390,36 @@ class BHHybridPlayer {
     func playNext() {
         BHLog.p("\(#function)")
         
-        guard let validPlaylist = playlist else { return }
-        guard let validPlayerItem = playerItem else { return }
-
-        if let index = validPlaylist.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-            if index < validPlaylist.count - 1 {
-                let indexAfter = validPlaylist.index(after: index)
-                let nextPost = validPlaylist[indexAfter]
+        if let validPlayerItem = playerItem,
+           let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
+            if index < playbackQueue.count - 1 {
+                let indexAfter = playbackQueue.index(after: index)
+                let nextItem = playbackQueue[indexAfter]
                 
-                playRequest(with: nextPost, playlist: validPlaylist)
+                playRequest(with: nextItem.post, playlist: [])
             } else {
                 BHLog.w("\(#function) - it is the last episode in playlist")
             }
+        } else if let nextItem = playbackQueue.first {
+            playRequest(with: nextItem.post, playlist: [])
         }
     }
     
     func playPrevious() {
         BHLog.p("\(#function)")
 
-        guard let validPlaylist = playlist else { return }
         guard let validPlayerItem = playerItem else { return }
         guard let validPlayer = mediaPlayer else { return }
         
         if validPlayer.currentTime() > 30 {
             performSeek(to: 0)
         } else {
-            if let index = validPlaylist.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
+            if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
                 if index > 0 {
-                    let indexBefore = validPlaylist.index(before: index)
-                    let previousPost = validPlaylist[indexBefore]
+                    let indexBefore = playbackQueue.index(before: index)
+                    let previousItem = playbackQueue[indexBefore]
                     
-                    if !performStart(with: previousPost) {
+                    if !performStart(with: previousItem.post) {
                         BHLog.w("Failed to play previous episode")
                     }
                 } else {
@@ -421,11 +431,10 @@ class BHHybridPlayer {
     
     func hasPrevious() -> Bool {
 
-        guard let validPlaylist = playlist else { return false }
         guard let validPlayerItem = playerItem else { return false }
         guard let validPlayer = mediaPlayer else { return false }
 
-        if let index = validPlaylist.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
+        if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
             return (index > 0 || validPlayer.currentTime() > 30) && isActive()
         }
         
@@ -434,11 +443,10 @@ class BHHybridPlayer {
     
     func hasNext() -> Bool {
         
-        guard let validPlaylist = playlist else { return false }
         guard let validPlayerItem = playerItem else { return false }
 
-        if let index = validPlaylist.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-            return index < validPlaylist.count - 1 ///&& isActive()
+        if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
+            return index < playbackQueue.count - 1 ///&& isActive()
         }
 
         return false
@@ -485,6 +493,14 @@ class BHHybridPlayer {
             $0.hybridPlayer(self, sleepTimerUpdated: value)
         }
     }
+    
+    func updatePlayNextSetting(_ value: Bool) {
+        UserDefaults.standard.playNextEnabled = value
+
+        observersContainer.notifyObserversAsync {
+            $0.hybridPlayer(self, playbackSettingsUpdated: self.settings)
+        }
+    }
         
     // MARK: - Video View
     
@@ -504,6 +520,12 @@ class BHHybridPlayer {
         guard let p = post else { return false }
 
         return p.id == id && isActive()
+    }
+    
+    @discardableResult func isInPlayer(_ id: String) -> Bool {
+        guard let p = post else { return false }
+
+        return p.id == id
     }
 
     @discardableResult func isPlaying() -> Bool { state.isPlaying() }
@@ -528,14 +550,20 @@ class BHHybridPlayer {
             BHLog.w("\(#function) - empty player item")
             return
         }
-                
+
+        guard let validPost = post else { return }
+
+        UserDefaults.standard.playerPostId = validPost.id
+
+        addToPlaybackQueue(validPost, reason: .auto, moveToTop: true)
+        addPostsToQueue(playlist ?? [])
+
         lastSentPosition = validItem.position
         lastSentDuration = validItem.duration
 
         settings = validItem.playbackSettings
         playerItem = validItem
         self.post = post
-        self.playlist = playlist
         
         if !hasNext() {
             getPlaylist()
@@ -700,7 +728,7 @@ class BHHybridPlayer {
             
         let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
             
-        start(with: playerItem, post: post, playlist: playlist)
+        start(with: playerItem, post: post, playlist: [])
             
         return true
     }
@@ -1132,7 +1160,7 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
     func configureRemoteCommandCenter(_ configureBlock: (BHRemoteCommandCenterManager.Mode) -> Void) {
         if let validItem = playerItem, validItem.isStream {
             configureBlock(.liveRadioStream)
-        } else if let validPlaylist = playlist, validPlaylist.count > 1 {
+        } else if playbackQueue.count > 1 {
             configureBlock(.trackList(backwardTimeIntervals: [self.settings.backwardLength], forwardTimeIntervals: [self.settings.forwardLength], supportedPlaybackRates: self.settings.supportedPlaybackRates()))
         } else {
             configureBlock(.singleTrack(backwardTimeIntervals: [self.settings.backwardLength], forwardTimeIntervals: [self.settings.forwardLength], supportedPlaybackRates: self.settings.supportedPlaybackRates()))

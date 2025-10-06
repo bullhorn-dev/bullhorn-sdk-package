@@ -289,7 +289,7 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: model)
             return cell
         case .radioCell(let model):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingRadioCell.reusableIndentifer, for: indexPath) as? BHSettingRadioCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingSelectNetworkCell.reusableIndentifer, for: indexPath) as? BHSettingSelectNetworkCell else {
                 return UITableViewCell()
             }
             cell.configure(with: model)

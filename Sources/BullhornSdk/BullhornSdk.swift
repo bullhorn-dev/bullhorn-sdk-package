@@ -111,6 +111,8 @@ public class BullhornSdk: NSObject {
 
         setupAppearance()
         
+        BHHybridPlayer.shared.updateQueueItems()
+        
         initBackgroundTask()
     }
     

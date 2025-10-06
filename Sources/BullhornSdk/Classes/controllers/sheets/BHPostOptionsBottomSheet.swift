@@ -6,6 +6,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
     private var shareItem: BHOptionsItem!
     private var reportItem: BHOptionsItem!
     private var downloadItem: BHOptionsItem!
+    private var addToQueueItem: BHOptionsItem!
 
     var post: BHPost?
 
@@ -17,9 +18,9 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
 
     override func loadView() {
         super.loadView()
-
+        
         guard let validPost = self.post else { return }
-
+        
         /// share
         shareItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Share", icon: "arrowshape.turn.up.right")
         let shareItemTap = UITapGestureRecognizer(target: self, action: #selector(onShareItem(_:)))
@@ -29,16 +30,23 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         var downloadTitle = "Download"
         var downloadIcon = "arrow.down.to.line"
         var type: BHOptionsItem.ItemType = .normal
-
+        
         if let item = BHDownloadsManager.shared.item(for: validPost.id), item.status != .progress {
             downloadTitle = "Remove from Downloads"
             downloadIcon = "trash"
             type = .destructive
         }
-
+        
         downloadItem = BHOptionsItem(withType: type, valueType: .text, title: downloadTitle, icon: downloadIcon)
         let downloadItemTap = UITapGestureRecognizer(target: self, action: #selector(onDownloadItem(_:)))
         downloadItem.addGestureRecognizer(downloadItemTap)
+        
+        /// play/add to playlist
+        if !BHHybridPlayer.shared.isPostPlaying(validPost.id) {
+            addToQueueItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Add to Queue", icon: "text.badge.plus")
+            let addToQueueItemTap = UITapGestureRecognizer(target: self, action: #selector(onAddToQueueItem(_:)))
+            addToQueueItem.addGestureRecognizer(addToQueueItemTap)
+        }
 
         /// report
         reportItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Report", icon: "exclamationmark.octagon")
@@ -50,6 +58,15 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(verticalStackView)
 
+        if !BHHybridPlayer.shared.isPostPlaying(validPost.id) && validPost.hasRecording() {
+            verticalStackView.addArrangedSubview(addToQueueItem)
+            
+            NSLayoutConstraint.activate([
+                addToQueueItem.heightAnchor.constraint(equalToConstant: 50),
+                addToQueueItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+                addToQueueItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            ])
+        }
         verticalStackView.addArrangedSubview(shareItem)
         if validPost.hasRecording() && !validPost.isLiveStream() {
             verticalStackView.addArrangedSubview(downloadItem)
@@ -127,6 +144,15 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
                 BHDownloadsManager.shared.download(validPost, reason: .manually)
                 self.dismiss(animated: true)
             }
+        })
+    }
+    
+    @objc func onAddToQueueItem(_ sender: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            guard let validPost = self.post else { return }
+
+            BHHybridPlayer.shared.addToPlaybackQueue(validPost, reason: .manually)
+            self.dismiss(animated: true)
         })
     }
     

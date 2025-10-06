@@ -166,6 +166,23 @@
                                                             <action selector="onTranscriptButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="kWl-A6-Wk3"/>
                                                         </connections>
                                                     </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJx-v5-55U">
+                                                        <rect key="frame" x="16" y="479" width="32" height="32"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="32" id="atZ-sI-GmO"/>
+                                                            <constraint firstAttribute="height" constant="32" id="dqX-gk-y0Y"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <imageReference key="image" image="list.bullet.circle" catalog="system" symbolScale="large"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="onQueueButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="ahX-Sm-trw"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -173,12 +190,14 @@
                                                     <constraint firstItem="rch-oU-K4o" firstAttribute="centerX" secondItem="BVl-tE-9Zl" secondAttribute="centerX" id="77e-fm-eAI"/>
                                                     <constraint firstAttribute="trailing" secondItem="tXr-nE-7pI" secondAttribute="trailing" constant="16" id="7t7-bG-X9q"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="width" secondItem="BVl-tE-9Zl" secondAttribute="width" id="Epo-9S-AcV"/>
+                                                    <constraint firstAttribute="bottom" secondItem="WJx-v5-55U" secondAttribute="bottom" constant="12" id="Hv1-ML-4XX"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="height" secondItem="BVl-tE-9Zl" secondAttribute="height" priority="999" id="KbQ-0r-Pq0"/>
                                                     <constraint firstAttribute="bottom" secondItem="tXr-nE-7pI" secondAttribute="bottom" constant="12" id="LVf-7p-TVQ"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="centerY" secondItem="BVl-tE-9Zl" secondAttribute="centerY" constant="-22" id="QRl-uk-ped"/>
                                                     <constraint firstItem="N1S-Af-jgj" firstAttribute="centerY" secondItem="BVl-tE-9Zl" secondAttribute="centerY" constant="-22" id="VYt-pg-OAJ"/>
                                                     <constraint firstItem="R0K-2c-Tik" firstAttribute="leading" secondItem="BVl-tE-9Zl" secondAttribute="leading" constant="16" id="ZlC-SJ-j7n"/>
                                                     <constraint firstAttribute="bottom" secondItem="R0K-2c-Tik" secondAttribute="bottom" constant="12" id="ebF-PF-4GE"/>
+                                                    <constraint firstItem="WJx-v5-55U" firstAttribute="leading" secondItem="BVl-tE-9Zl" secondAttribute="leading" constant="16" id="fZ3-PX-gtc"/>
                                                     <constraint firstItem="N1S-Af-jgj" firstAttribute="centerX" secondItem="BVl-tE-9Zl" secondAttribute="centerX" id="kI2-a0-Q2u"/>
                                                     <constraint firstItem="rch-oU-K4o" firstAttribute="height" secondItem="BVl-tE-9Zl" secondAttribute="height" priority="999" id="rAl-e0-Taa"/>
                                                     <constraint firstItem="rch-oU-K4o" firstAttribute="width" secondItem="BVl-tE-9Zl" secondAttribute="width" priority="999" id="rZE-gd-hv8"/>
@@ -436,6 +455,7 @@
                         <outlet property="playButton" destination="3Of-Un-IUE" id="loK-vW-laM"/>
                         <outlet property="positionLabel" destination="lDX-nk-lFf" id="sE1-SH-Us2"/>
                         <outlet property="previousButton" destination="Gnm-pA-0ht" id="jCR-qT-QCu"/>
+                        <outlet property="queueButton" destination="WJx-v5-55U" id="RV5-bp-8aV"/>
                         <outlet property="routePickerView" destination="zAy-dH-j2B" id="wWX-O0-NGr"/>
                         <outlet property="slider" destination="MaD-9f-YKA" id="8BK-b6-DvQ"/>
                         <outlet property="titleLabel" destination="aY0-ym-zuX" id="rqd-mG-VlN"/>
@@ -444,11 +464,12 @@
                         <outlet property="transcriptTableView" destination="uun-ZZ-EIu" id="Jce-ms-wkQ"/>
                         <outlet property="transcriptView" destination="N1S-Af-jgj" id="YSr-4J-b2K"/>
                         <outlet property="videoView" destination="WGY-KG-0b7" id="Eff-Hg-hka"/>
+                        <segue destination="kYN-DH-g2a" kind="presentation" identifier="Player.QueueSegueIdentifier" id="oJr-TG-e72"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbF-LS-b1K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-192" y="-859"/>
+            <point key="canvasLocation" x="-569" y="-1569"/>
         </scene>
         <!--Home-->
         <scene sceneID="hlX-Gp-Cxg">
@@ -822,11 +843,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -854,11 +875,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="34"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="81" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1236,7 +1257,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5bz-Hs-u9o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="655" y="-859"/>
+            <point key="canvasLocation" x="-569" y="-874"/>
         </scene>
         <!--Favorites-->
         <scene sceneID="Red-8c-gTz">
@@ -2442,27 +2463,27 @@
                                 <color key="sectionIndexColor" name="bhColorPrimary"/>
                                 <color key="sectionIndexBackgroundColor" name="bhColorSecondaryBg"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingRadioCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingRadioCell" rowHeight="56" id="bSl-71-URn" customClass="BHSettingRadioCell" customModule="BullhornSdk">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingSelectNetworkCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingSelectNetworkCell" rowHeight="56" id="bSl-71-URn" customClass="BHSettingSelectNetworkCell" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="50" width="390" height="56"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bSl-71-URn" id="oeC-tn-40j">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tHJ-tf-FqX">
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tHJ-tf-FqX">
                                                     <rect key="frame" x="20" y="8" width="350" height="40"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jg1-4B-jbw">
-                                                            <rect key="frame" x="0.0" y="0.0" width="350" height="6"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="350" height="0.0"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRO-QB-Fhg">
-                                                                    <rect key="frame" x="0.0" y="-30" width="326" height="36"/>
+                                                                    <rect key="frame" x="0.0" y="-36" width="326" height="36"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdv-HI-4Ig">
-                                                                    <rect key="frame" x="326" y="-30" width="24" height="36"/>
+                                                                    <rect key="frame" x="326" y="-36" width="24" height="36"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7ty-hh-ttU">
                                                                             <rect key="frame" x="0.0" y="10" width="24" height="17"/>
@@ -2488,14 +2509,28 @@
                                                                 <constraint firstAttribute="trailing" secondItem="fdv-HI-4Ig" secondAttribute="trailing" id="He3-ML-Fun"/>
                                                             </constraints>
                                                         </stackView>
-                                                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" restorationIdentifier="BHInputTextField" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XzZ-f4-gVV" customClass="BHInputTextField" customModule="BullhornSdk">
-                                                            <rect key="frame" x="0.0" y="6" width="350" height="34"/>
+                                                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" restorationIdentifier="BHInputTextField" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XzZ-f4-gVV" customClass="BHInputTextField" customModule="BullhornSdk">
+                                                            <rect key="frame" x="0.0" y="8" width="350" height="24"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="48" id="7sA-IZ-g6H"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                         </textField>
+                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nt2-3r-GaZ">
+                                                            <rect key="frame" x="0.0" y="40" width="350" height="0.0"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="48" id="dDh-Xb-OZU"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="filled" title="Button">
+                                                                <color key="baseForegroundColor" name="bhColorOnAccent"/>
+                                                                <color key="baseBackgroundColor" name="bhColorAccent"/>
+                                                            </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="onSave:" destination="bSl-71-URn" eventType="touchUpInside" id="tRa-RI-3l1"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
@@ -2510,6 +2545,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="checkmarkIcon" destination="fdv-HI-4Ig" id="rCw-ok-KIy"/>
+                                            <outlet property="saveButton" destination="Nt2-3r-GaZ" id="Ft8-2f-Rqx"/>
                                             <outlet property="textField" destination="XzZ-f4-gVV" id="aw1-6b-tH8"/>
                                             <outlet property="titleLabel" destination="oRO-QB-Fhg" id="PGM-aU-iDC"/>
                                         </connections>
@@ -2575,10 +2611,101 @@
             </objects>
             <point key="canvasLocation" x="-4152" y="3048"/>
         </scene>
+        <!--Playback Queue-->
+        <scene sceneID="lXy-aX-8fh">
+            <objects>
+                <viewController storyboardIdentifier="BHPlaybackQueueViewController" title="Playback Queue" hidesBottomBarWhenPushed="YES" id="58I-xY-gFU" customClass="BHPlaybackQueueViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ojf-jE-HkK">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Gom-GL-nsL">
+                                <rect key="frame" x="0.0" y="56" width="390" height="778"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KtP-s5-CXq">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="778"/>
+                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                        <color key="separatorColor" name="bhColorDivider"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="58I-xY-gFU" id="LDi-aa-4px"/>
+                                            <outlet property="delegate" destination="58I-xY-gFU" id="yGg-Sj-Jm4"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstItem="KtP-s5-CXq" firstAttribute="leading" secondItem="Gom-GL-nsL" secondAttribute="leading" id="6tc-DN-VsR"/>
+                                    <constraint firstAttribute="trailing" secondItem="KtP-s5-CXq" secondAttribute="trailing" id="wHl-Xy-aQR"/>
+                                </constraints>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MRh-ox-HbT" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Vhc-KN-u3l"/>
+                                    <constraint firstAttribute="width" constant="30" id="fyo-hH-EA6"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" name="bhColorAccent"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3p-Ws-Ddf">
+                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="iRs-Dk-KJR"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="PdL-BK-eDc"/>
+                        <color key="backgroundColor" name="bhColorAppBarBg"/>
+                        <constraints>
+                            <constraint firstItem="Gom-GL-nsL" firstAttribute="top" secondItem="PdL-BK-eDc" secondAttribute="top" id="7je-Nr-XYK"/>
+                            <constraint firstItem="MRh-ox-HbT" firstAttribute="centerX" secondItem="ojf-jE-HkK" secondAttribute="centerX" id="GPH-sU-Glj"/>
+                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="leading" secondItem="PdL-BK-eDc" secondAttribute="leading" id="NwR-xE-e0V"/>
+                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="top" secondItem="Gom-GL-nsL" secondAttribute="bottom" id="OJz-bt-m1g"/>
+                            <constraint firstItem="MRh-ox-HbT" firstAttribute="centerY" secondItem="ojf-jE-HkK" secondAttribute="centerY" id="W9w-Hi-K6n"/>
+                            <constraint firstItem="PdL-BK-eDc" firstAttribute="bottom" secondItem="Gom-GL-nsL" secondAttribute="bottom" id="YNh-Kj-HMK"/>
+                            <constraint firstItem="Gom-GL-nsL" firstAttribute="leading" secondItem="PdL-BK-eDc" secondAttribute="leading" id="ega-8M-J6B"/>
+                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="trailing" secondItem="PdL-BK-eDc" secondAttribute="trailing" id="nSA-hL-r9k"/>
+                            <constraint firstItem="PdL-BK-eDc" firstAttribute="trailing" secondItem="Gom-GL-nsL" secondAttribute="trailing" id="yUq-xh-9wQ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gvV-lQ-f4o">
+                        <barButtonItem key="backBarButtonItem" id="vBK-WU-ZIc"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicator" destination="MRh-ox-HbT" id="tj1-en-2Q4"/>
+                        <outlet property="bottomView" destination="w3p-Ws-Ddf" id="sQS-xS-Cit"/>
+                        <outlet property="tableView" destination="KtP-s5-CXq" id="EnR-vl-Jv8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H9z-tF-e1V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1423" y="-1386"/>
+        </scene>
+        <!--Playback Queue NC-->
+        <scene sceneID="pFe-Zn-EAu">
+            <objects>
+                <navigationController title="Playback Queue NC" id="kYN-DH-g2a" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BGn-Ib-nWr">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="58I-xY-gFU" kind="relationship" relationship="rootViewController" id="c8Y-Wr-YA5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E2D-y3-ksQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="422" y="-1386"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Dux-9E-9ph"/>
-        <segue reference="fUD-lq-Ug9"/>
+        <segue reference="80U-wY-S8m"/>
         <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -2592,6 +2719,7 @@
         <image name="gobackward.15" catalog="system" width="119" height="128"/>
         <image name="goforward.15" catalog="system" width="119" height="128"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
+        <image name="list.bullet.circle" catalog="system" width="128" height="123"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2601,6 +2729,9 @@
         </namedColor>
         <namedColor name="bhColorAppBarTitle">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="bhColorDivider">
+            <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorOnAccent">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

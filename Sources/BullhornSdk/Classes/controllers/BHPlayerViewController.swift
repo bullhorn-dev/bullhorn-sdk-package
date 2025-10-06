@@ -6,12 +6,15 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
     
+    fileprivate static let QueueSegueIdentifier = "Player.QueueSegueIdentifier"
+
     @IBOutlet private(set) weak var nameView: UIView!
     @IBOutlet private(set) weak var nameLabel: UILabel!
     @IBOutlet private(set) weak var titleView: UIView!
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var controlsView: UIView!
     @IBOutlet private(set) weak var bottomView: UIView!
+    @IBOutlet private(set) weak var queueButton: UIButton!
     @IBOutlet private(set) weak var transcriptButton: UIButton!
     @IBOutlet private(set) weak var transcriptView: UIView!
     @IBOutlet private(set) weak var transcriptTableView: UITableView!
@@ -41,6 +44,9 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         transcriptView.isHidden = BHHybridPlayer.shared.isTranscriptActive
         transcriptButton.isHidden = post?.hasTranscript == false
         
+        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+        queueButton.accessibilityLabel = "Show playback queue"
+
         let bundle = Bundle.module
         let transcriptCellNib = UINib(nibName: "BHPlayerTranscriptCell", bundle: bundle)
         transcriptTableView.register(transcriptCellNib, forCellReuseIdentifier: BHPlayerTranscriptCell.reusableIndentifer)
@@ -150,8 +156,18 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         }
     }
     
+    override func updateAfterSettingsChanged() {
+        super.updateAfterSettingsChanged()
+        
+        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+    }
+    
     // MARK: - Actions
     
+    @IBAction func onQueueButton() {
+        self.performSegue(withIdentifier: BHPlayerViewController.QueueSegueIdentifier, sender: self)
+    }
+
     @IBAction func onTranscriptButton() {
         let isActive = BHHybridPlayer.shared.isTranscriptActive
         

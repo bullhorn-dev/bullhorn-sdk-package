@@ -267,6 +267,82 @@ class DataBaseManager {
         }
     }
     
+    // MARK: - Queue
+    
+    func fetchQueue(completion: @escaping ([BHQueueItem]) -> Void) {
+        
+        var items: [BHQueueItem] = []
+        let request: NSFetchRequest<QueueItemMO> = QueueItemMO.fetchRequest()
+
+        if let moObjects = try? dataStack.viewContext.fetch(request) {
+            for itemMO in moObjects {
+                if let item = itemMO.toQueueItem() {
+                    items.append(item)
+                }
+            }
+        }
+        completion(items)
+    }
+
+    func fetchQueueItem(with id: String) -> BHQueueItem? {
+        
+        do {
+            let itemMO = try dataStack.fetch(id, inEntityNamed: QueueItemMO.entityName) as? QueueItemMO
+            let item = itemMO?.toQueueItem()
+            return item
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return nil
+        }
+    }
+    
+    func insertOrUpdateQueueItem(with item: BHQueueItem) -> Bool {
+
+        do {
+            let params = try item.toDictionary()
+            try dataStack.insertOrUpdate(params, inEntityNamed: QueueItemMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+
+    func updateQueue() -> Bool {
+        
+        var result: Bool = true
+        let items = BHHybridPlayer.shared.playbackQueue
+
+        for item in items {
+            result = updateQueueItem(with: item)
+        }
+        
+        return result
+    }
+
+    func updateQueueItem(with item: BHQueueItem) -> Bool {
+
+        do {
+            let params = try item.toDictionary()
+            try dataStack.update(item.id, with: params, inEntityNamed: QueueItemMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+
+    func removeQueueItem(with id: String) -> Bool {
+
+        do {
+            try dataStack.delete(id, inEntityNamed: QueueItemMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+    
     // MARK: - User Screen
 
     func fetchUser(with userId: String) -> BHUser? {

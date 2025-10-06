@@ -209,6 +209,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func refreshTranscriptForPosition(_ position: Double = 0) {}
     
+    func updateAfterSettingsChanged() {}
+    
     // MARK: - Notifications
     
     @objc fileprivate func onUserInterfaceStyleChangedNotification(notification: Notification) {
@@ -525,6 +527,12 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript) {
         DispatchQueue.main.async {
             self.onTranscriptChanged()
+        }
+    }
+    
+    func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {
+        DispatchQueue.main.async {
+            self.updateAfterSettingsChanged()
         }
     }
 }

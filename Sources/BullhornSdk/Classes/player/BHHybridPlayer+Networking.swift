@@ -226,11 +226,7 @@ extension BHHybridPlayer {
             postsManager.getPlaybackQueuePosts(validPost.id) { response in
                 switch response {
                 case .success(posts: let posts):
-                    if self.playlist == nil {
-                        self.playlist = posts
-                    } else {
-                        self.playlist?.append(contentsOf: posts)
-                    }
+                    self.addPostsToQueue(posts)
                 case .failure(error: _):
                     break
                 }

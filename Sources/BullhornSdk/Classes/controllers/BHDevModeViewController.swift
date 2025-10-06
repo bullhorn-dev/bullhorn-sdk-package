@@ -16,10 +16,10 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
         configure()
 
         let bundle = Bundle.module
-        let radioCellNib = UINib(nibName: "BHSettingRadioCell", bundle: bundle)
+        let radioCellNib = UINib(nibName: "BHSettingSelectNetworkCell", bundle: bundle)
         let toggleCellNib = UINib(nibName: "BHSettingToggleCell", bundle: bundle)
 
-        tableView.register(radioCellNib, forHeaderFooterViewReuseIdentifier: BHSettingRadioCell.reusableIndentifer)
+        tableView.register(radioCellNib, forHeaderFooterViewReuseIdentifier: BHSettingSelectNetworkCell.reusableIndentifer)
         tableView.register(toggleCellNib, forHeaderFooterViewReuseIdentifier: BHSettingToggleCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
@@ -152,7 +152,7 @@ extension BHDevModeViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: model)
             return cell
         case .radioCell(let model):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingRadioCell.reusableIndentifer, for: indexPath) as? BHSettingRadioCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingSelectNetworkCell.reusableIndentifer, for: indexPath) as? BHSettingSelectNetworkCell else {
                 return UITableViewCell()
             }
             cell.configure(with: model)
