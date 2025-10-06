@@ -464,7 +464,6 @@
                         <outlet property="transcriptTableView" destination="uun-ZZ-EIu" id="Jce-ms-wkQ"/>
                         <outlet property="transcriptView" destination="N1S-Af-jgj" id="YSr-4J-b2K"/>
                         <outlet property="videoView" destination="WGY-KG-0b7" id="Eff-Hg-hka"/>
-                        <segue destination="kYN-DH-g2a" kind="presentation" identifier="Player.QueueSegueIdentifier" id="oJr-TG-e72"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbF-LS-b1K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2611,97 +2610,6 @@
             </objects>
             <point key="canvasLocation" x="-4152" y="3048"/>
         </scene>
-        <!--Playback Queue-->
-        <scene sceneID="lXy-aX-8fh">
-            <objects>
-                <viewController storyboardIdentifier="BHPlaybackQueueViewController" title="Playback Queue" hidesBottomBarWhenPushed="YES" id="58I-xY-gFU" customClass="BHPlaybackQueueViewController" customModule="BullhornSdk" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ojf-jE-HkK">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Gom-GL-nsL">
-                                <rect key="frame" x="0.0" y="56" width="390" height="778"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KtP-s5-CXq">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="778"/>
-                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                        <color key="separatorColor" name="bhColorDivider"/>
-                                        <connections>
-                                            <outlet property="dataSource" destination="58I-xY-gFU" id="LDi-aa-4px"/>
-                                            <outlet property="delegate" destination="58I-xY-gFU" id="yGg-Sj-Jm4"/>
-                                        </connections>
-                                    </tableView>
-                                </subviews>
-                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                <constraints>
-                                    <constraint firstItem="KtP-s5-CXq" firstAttribute="leading" secondItem="Gom-GL-nsL" secondAttribute="leading" id="6tc-DN-VsR"/>
-                                    <constraint firstAttribute="trailing" secondItem="KtP-s5-CXq" secondAttribute="trailing" id="wHl-Xy-aQR"/>
-                                </constraints>
-                            </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MRh-ox-HbT" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Vhc-KN-u3l"/>
-                                    <constraint firstAttribute="width" constant="30" id="fyo-hH-EA6"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3p-Ws-Ddf">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
-                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="iRs-Dk-KJR"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="PdL-BK-eDc"/>
-                        <color key="backgroundColor" name="bhColorAppBarBg"/>
-                        <constraints>
-                            <constraint firstItem="Gom-GL-nsL" firstAttribute="top" secondItem="PdL-BK-eDc" secondAttribute="top" id="7je-Nr-XYK"/>
-                            <constraint firstItem="MRh-ox-HbT" firstAttribute="centerX" secondItem="ojf-jE-HkK" secondAttribute="centerX" id="GPH-sU-Glj"/>
-                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="leading" secondItem="PdL-BK-eDc" secondAttribute="leading" id="NwR-xE-e0V"/>
-                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="top" secondItem="Gom-GL-nsL" secondAttribute="bottom" id="OJz-bt-m1g"/>
-                            <constraint firstItem="MRh-ox-HbT" firstAttribute="centerY" secondItem="ojf-jE-HkK" secondAttribute="centerY" id="W9w-Hi-K6n"/>
-                            <constraint firstItem="PdL-BK-eDc" firstAttribute="bottom" secondItem="Gom-GL-nsL" secondAttribute="bottom" id="YNh-Kj-HMK"/>
-                            <constraint firstItem="Gom-GL-nsL" firstAttribute="leading" secondItem="PdL-BK-eDc" secondAttribute="leading" id="ega-8M-J6B"/>
-                            <constraint firstItem="w3p-Ws-Ddf" firstAttribute="trailing" secondItem="PdL-BK-eDc" secondAttribute="trailing" id="nSA-hL-r9k"/>
-                            <constraint firstItem="PdL-BK-eDc" firstAttribute="trailing" secondItem="Gom-GL-nsL" secondAttribute="trailing" id="yUq-xh-9wQ"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="gvV-lQ-f4o">
-                        <barButtonItem key="backBarButtonItem" id="vBK-WU-ZIc"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="activityIndicator" destination="MRh-ox-HbT" id="tj1-en-2Q4"/>
-                        <outlet property="bottomView" destination="w3p-Ws-Ddf" id="sQS-xS-Cit"/>
-                        <outlet property="tableView" destination="KtP-s5-CXq" id="EnR-vl-Jv8"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H9z-tF-e1V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1423" y="-1386"/>
-        </scene>
-        <!--Playback Queue NC-->
-        <scene sceneID="pFe-Zn-EAu">
-            <objects>
-                <navigationController title="Playback Queue NC" id="kYN-DH-g2a" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BGn-Ib-nWr">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="58I-xY-gFU" kind="relationship" relationship="rootViewController" id="c8Y-Wr-YA5"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="E2D-y3-ksQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="422" y="-1386"/>
-        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Dux-9E-9ph"/>
@@ -2729,9 +2637,6 @@
         </namedColor>
         <namedColor name="bhColorAppBarTitle">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="bhColorDivider">
-            <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorOnAccent">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

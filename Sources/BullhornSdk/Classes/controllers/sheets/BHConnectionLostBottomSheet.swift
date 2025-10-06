@@ -75,7 +75,7 @@ final class BHConnectionLostBottomSheet: BHBottomSheetController {
         verticalStackView.distribution = .fill
         verticalStackView.spacing = Constants.paddingVertical / 2
 
-        view.addSubview(verticalStackView)
+        stackView.addArrangedSubview(verticalStackView)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -30,7 +30,7 @@ final class BHUserOptionsBottomSheet: BHBottomSheetController {
         let verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(verticalStackView)
+        stackView.addArrangedSubview(verticalStackView)
 
         verticalStackView.addArrangedSubview(shareItem)
         verticalStackView.addArrangedSubview(reportItem)

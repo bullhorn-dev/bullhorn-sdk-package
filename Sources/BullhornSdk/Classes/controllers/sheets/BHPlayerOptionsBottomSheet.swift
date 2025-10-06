@@ -67,7 +67,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
             ])
             verticalStackView.axis = .vertical
             
-            view.addSubview(verticalStackView)
+            stackView.addArrangedSubview(verticalStackView)
             
             verticalStackView.translatesAutoresizingMaskIntoConstraints = false
             
@@ -91,7 +91,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
             ])
             verticalStackView.axis = .vertical
             
-            view.addSubview(verticalStackView)
+            stackView.addArrangedSubview(verticalStackView)
             
             verticalStackView.translatesAutoresizingMaskIntoConstraints = false
             

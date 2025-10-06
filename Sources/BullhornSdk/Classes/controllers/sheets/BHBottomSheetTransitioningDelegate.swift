@@ -169,7 +169,9 @@ final class BHBottomSheetPresentationController: UIPresentationController {
             return
         }
 
-        presentedView.addGestureRecognizer(panGestureRecognizer)
+        if panToDismissEnabled {
+            presentedView.addGestureRecognizer(panGestureRecognizer)
+        }
 
         presentedView.layer.cornerRadius = sheetCornerRadius
         presentedView.layer.maskedCorners = [

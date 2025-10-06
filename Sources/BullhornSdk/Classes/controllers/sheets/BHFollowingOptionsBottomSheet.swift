@@ -42,7 +42,7 @@ final class BHFollowingOptionsBottomSheet: BHBottomSheetController {
         let verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(verticalStackView)
+        stackView.addArrangedSubview(verticalStackView)
         
         if UserDefaults.standard.isPushNotificationsFeatureEnabled {
             verticalStackView.addArrangedSubview(notificationsItem)

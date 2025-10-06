@@ -18,6 +18,10 @@ open class BHBottomSheetController: UIViewController {
         preferredSheetBackdropColor: preferredSheetBackdropColor
     )
     
+    var stackView = UIStackView()
+
+    var sheetTitle: String?
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +36,15 @@ open class BHBottomSheetController: UIViewController {
         view = UIView()
         view.backgroundColor = .cardBackground()
 
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView)
+
+        let buttonView = UIView(frame: .zero)
+        buttonView.backgroundColor = .clear
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+
         let closeButton = UIButton(type: .roundedRect)
         closeButton.setTitle("", for: .normal)
         closeButton.backgroundColor = .tertiary()
@@ -40,13 +53,38 @@ open class BHBottomSheetController: UIViewController {
 
         closeButton.addTarget(self, action: #selector(onCloseAction(_:)), for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(closeButton)
 
+        buttonView.addSubview(closeButton)
+        stackView.addArrangedSubview(buttonView)
+
+        if let validSheettitle = sheetTitle {
+
+            let titleLabel = UILabel(frame: .zero)
+            titleLabel.text = validSheettitle
+            titleLabel.font = .settingsPrimaryText()
+            titleLabel.textColor = .secondary()
+            titleLabel.textAlignment = .center
+            stackView.addArrangedSubview(titleLabel)
+            
+            NSLayoutConstraint.activate([
+                titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                titleLabel.heightAnchor.constraint(equalToConstant: 28),
+                titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+            ])
+        }
+            
         NSLayoutConstraint.activate([
+            buttonView.heightAnchor.constraint(equalToConstant: 10),
+
             closeButton.widthAnchor.constraint(equalToConstant: 36),
             closeButton.heightAnchor.constraint(equalToConstant: 5),
-            closeButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            closeButton.centerXAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerXAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerYAnchor),
+
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
 

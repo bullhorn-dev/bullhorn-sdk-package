@@ -2,18 +2,11 @@
 import UIKit
 import Foundation
 
-class BHPlaybackQueueViewController: UIViewController, ActivityIndicatorSupport {
+class BHPlayerQueueBottomSheet: BHBottomSheetController {
     
-    class var storyboardIndentifer: String { return String(describing: self) }
-
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var bottomView: UIView!
-
-    fileprivate var selectedPost: BHPost?
-    fileprivate var selectedTab: BHPostTabs = .details
+    var tableView: UITableView!
     
-    let dateFormatter: DateFormatter = DateFormatter()
+    var heightConstraint: NSLayoutConstraint!
 
     // MARK: - Lifecycle
     
@@ -23,35 +16,39 @@ class BHPlaybackQueueViewController: UIViewController, ActivityIndicatorSupport 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
 
-        bottomView.backgroundColor = .primaryBackground()
+        BHHybridPlayer.shared.addListener(self)
 
-        configureNavigationItems()
-
-        overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
-        setNeedsStatusBarAppearanceUpdate()
+        /// track event
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openQueue)
+        BHTracker.shared.trackEvent(with: request)
+    }
+    
+    override func loadView() {
+        super.loadView()
 
         let bundle = Bundle.module
         let queueCellNib = UINib(nibName: "BHPlaybackQueueCell", bundle: bundle)
-        
+
+        tableView = UITableView(frame: .zero, style: .plain)
         tableView.register(queueCellNib, forCellReuseIdentifier: BHPlaybackQueueCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .divider()
-        tableView.reloadData()
+        tableView.allowsSelectionDuringEditing = true
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(tableView)
         
-        BHHybridPlayer.shared.addListener(self)
+        let maxTableViewHeight: CGFloat = min(CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72), 2 * UIScreen.main.bounds.height / 3)
+        heightConstraint = NSLayoutConstraint(item: tableView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: maxTableViewHeight)
+        heightConstraint.isActive = true
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
-
-        /// track event
-        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openQueue)
-        BHTracker.shared.trackEvent(with: request)
+        NSLayoutConstraint.activate([
+            tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,43 +63,25 @@ class BHPlaybackQueueViewController: UIViewController, ActivityIndicatorSupport 
     
     // MARK: - Private
     
-    fileprivate func configureNavigationItems() {
-        
-        navigationItem.title = NSLocalizedString("Playback Queue", comment: "")
-        navigationItem.largeTitleDisplayMode = .never
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(onClose(_:)))
-    }
-    
-    // MARK: - Actions
-    
-    @objc fileprivate func onClose(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true)
-    }
-
-    // MARK: - Notifications
-    
-    @objc fileprivate func onUserInterfaceStyleChangedNotification(notification: Notification) {
-        guard let dict = notification.userInfo as? NSDictionary else { return }
-        guard let value = dict["style"] as? Int else { return }
-        
-        let style = UIUserInterfaceStyle(rawValue: value) ?? .light
-
-        overrideUserInterfaceStyle = style
-        setNeedsStatusBarAppearanceUpdate()
+    fileprivate func updateContent() {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            let maxTableViewHeight: CGFloat = min(CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72), 2 * UIScreen.main.bounds.height / 3)
+            self.heightConstraint.constant = maxTableViewHeight
+            self.tableView.reloadData()
+        })
     }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension BHPlaybackQueueViewController: UITableViewDataSource, UITableViewDelegate {
+extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
         
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHHybridPlayer.shared.playbackQueue.count == 0 && !activityIndicator.isAnimating {
+        if BHHybridPlayer.shared.playbackQueue.count == 0 {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 
@@ -137,7 +116,7 @@ extension BHPlaybackQueueViewController: UITableViewDataSource, UITableViewDeleg
             let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
             
             BHHybridPlayer.shared.removeFromPlaybackQueue(item.id)
-            self.tableView.reloadData()
+            self.updateContent()
             
             complete(true)
         }
@@ -149,11 +128,18 @@ extension BHPlaybackQueueViewController: UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.showsReorderControl = indexPath.row == 0 ? false : self.tableView(tableView, canMoveRowAt: indexPath)
+        cell.showsReorderControl = self.tableView(tableView, canMoveRowAt: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return indexPath.row != 0
+    }
+    
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath destinationIndexPath: IndexPath) -> IndexPath {
+        if destinationIndexPath.row == 0 {
+            return IndexPath(row: 1, section: 0)
+        }
+        return destinationIndexPath
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -162,21 +148,25 @@ extension BHPlaybackQueueViewController: UITableViewDataSource, UITableViewDeleg
         let movedItem = BHHybridPlayer.shared.playbackQueue.remove(at: sourceIndexPath.row)
         BHHybridPlayer.shared.playbackQueue.insert(movedItem, at: destinationIndexPath.row)
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72.0
+    }
 }
 
 // MARK: - BHHybridPlayerListener
 
-extension BHPlaybackQueueViewController: BHHybridPlayerListener {
+extension BHPlayerQueueBottomSheet: BHHybridPlayerListener {
 
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.updateContent()
         }
     }
     
     func hybridPlayer(_ player: BHHybridPlayer, initializedWith playerItem: BHPlayerItem) {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.updateContent()
         }
     }
 

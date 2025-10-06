@@ -6,8 +6,6 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
     
-    fileprivate static let QueueSegueIdentifier = "Player.QueueSegueIdentifier"
-
     @IBOutlet private(set) weak var nameView: UIView!
     @IBOutlet private(set) weak var nameLabel: UILabel!
     @IBOutlet private(set) weak var titleView: UIView!
@@ -165,7 +163,11 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     // MARK: - Actions
     
     @IBAction func onQueueButton() {
-        self.performSegue(withIdentifier: BHPlayerViewController.QueueSegueIdentifier, sender: self)
+        let optionsSheet = BHPlayerQueueBottomSheet()
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = false
+        optionsSheet.sheetTitle = NSLocalizedString("PLAYBACK QUEUE", comment: "")
+        present(optionsSheet, animated: true)
     }
 
     @IBAction func onTranscriptButton() {

@@ -56,7 +56,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
         let verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(verticalStackView)
+        stackView.addArrangedSubview(verticalStackView)
 
         if !BHHybridPlayer.shared.isPostPlaying(validPost.id) && validPost.hasRecording() {
             verticalStackView.addArrangedSubview(addToQueueItem)

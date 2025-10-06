@@ -40,7 +40,7 @@ class BHPlaybackQueueCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        backgroundColor = isActive ? .secondaryBackground() : .primaryBackground()
+        backgroundColor = isActive ? .fxPrimaryBackground() : .cardBackground()
         playView.isHidden = !isActive
         
         titleLabel.textColor = .primary()
