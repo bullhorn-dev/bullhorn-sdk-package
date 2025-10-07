@@ -180,6 +180,7 @@ extension BHHybridPlayer {
         BHOffsetsManager.shared.insertOrUpdateOffset(offset)
         
         post?.updatePlaybackOffset(localPosition, completed: isCompleted)
+        updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
         BHNetworkManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
         BHExploreManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
         BHDownloadsManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)

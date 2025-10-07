@@ -114,6 +114,8 @@ class BHHybridPlayer {
     
     var isSliding: Bool = false
     
+    var shouldPlayAutomatically: Bool = true
+    
     internal var bulletinManager = BHBulletinManager.shared
     internal var postsManager = BHPostsManager()
 
@@ -303,7 +305,7 @@ class BHHybridPlayer {
         manualPosition = 0
         isTranscriptActive = false
         removeQueue()
-        UserDefaults.standard.playerPostId = ""
+        UserDefaults.standard.playerPostId = nil
         
         observersContainer.notifyObserversAsync {
             $0.hybridPlayerDidClose(self)
@@ -998,10 +1000,16 @@ class BHHybridPlayer {
             playerState = .initializing
 
         case .playing:
-            playerState = .playing
-            startPlayback()
-            startTrackTimer()
-            startSleepTimerIfNeeded()
+            if !shouldPlayAutomatically {
+                performPause()
+                playerState = .paused
+                shouldPlayAutomatically = true
+            } else {
+                playerState = .playing
+                startPlayback()
+                startTrackTimer()
+                startSleepTimerIfNeeded()
+            }
 
         case .paused:
             playerState = .paused

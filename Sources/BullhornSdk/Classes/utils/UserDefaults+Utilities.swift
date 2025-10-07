@@ -102,9 +102,9 @@ extension UserDefaults {
         }
     }
     
-    var playerPostId: String {
+    var playerPostId: String? {
         get {
-            return UserDefaults.standard.string(forKey: UserDefaults.playerPostIdUserDefaultsKey) ?? ""
+            return UserDefaults.standard.string(forKey: UserDefaults.playerPostIdUserDefaultsKey)
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.playerPostIdUserDefaultsKey)

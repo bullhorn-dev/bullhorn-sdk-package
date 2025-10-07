@@ -214,7 +214,7 @@ extension BHPlayerContainingViewController: BHHybridPlayerListener {
         DispatchQueue.main.async {
             self.updateMiniPlayer()
 
-            if self.isVisible() && player.post != nil {
+            if self.isVisible() && player.post != nil && BHHybridPlayer.shared.shouldPlayAutomatically {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     if self.movin == nil {
                         self.presentPlayer()

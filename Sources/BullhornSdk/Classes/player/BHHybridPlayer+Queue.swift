@@ -5,6 +5,8 @@ import Foundation
 
 extension BHHybridPlayer {
     
+    // MARK: - Public
+    
     func addToPlaybackQueue(_ post: BHPost, reason: BHQueueReason = .auto, moveToTop: Bool = false) {
         BHLog.p("\(#function) - postId: \(post.id), title: \(post.title)")
         
@@ -38,6 +40,8 @@ extension BHHybridPlayer {
     func removeQueue(_ withManually: Bool = false) {
         BHLog.p("\(#function)")
 
+        removeStorageItems(withManually)
+
         if withManually {
             playbackQueue.removeAll()
         } else {
@@ -47,12 +51,16 @@ extension BHHybridPlayer {
     
     func updateQueueItems() {
         fetchStorageItems()
+        restorePlayer()
     }
     
-    func updatePost(_ post: BHPost) {
-        if let row = playbackQueue.firstIndex(where: {$0.post.id == post.id}) {
-            self.playbackQueue[row].post = post
-            self.updateStorageItem(self.playbackQueue[row])
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        let item = playbackQueue.first(where: { $0.id == postId })
+        item?.post.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validItem = item, let row = playbackQueue.firstIndex(where: {$0.id == postId}) {
+            playbackQueue[row] = validItem
+            updateStorageItem(validItem)
         }
     }
     
@@ -70,6 +78,19 @@ extension BHHybridPlayer {
         return UserDefaults.standard.playNextEnabled && validPost.hasRecording() && !validPost.isRadioStream() && !validPost.isLiveStream()
     }
     
+    func restorePlayer() {
+        BHLog.p("\(#function)")
+        
+        if let playedPostId = UserDefaults.standard.playerPostId, playedPostId.count > 0 {
+            if let playedItem = playbackQueue.first(where: { $0.id == playedPostId }) {
+                shouldPlayAutomatically = false
+                playRequest(with: playedItem.post, playlist: [], position: playedItem.post.playbackOffset)
+            }
+        }
+    }
+    
+    // MARK: - Private
+    
     internal func currenItemIndex() -> Int {
         return post == nil ? -1 : 0
     }
@@ -81,7 +102,7 @@ extension BHHybridPlayer {
             if !playbackQueue.contains(where: { $0.id == post.id }) {
                 let item = BHQueueItem(id: post.id, post: post, reason: .auto)
                 playbackQueue.append(item)
-            }
+                insertStorageItem(item)            }
         }
     }
     
@@ -112,6 +133,20 @@ extension BHHybridPlayer {
     fileprivate func removeStorageItem(_ id: String) {
         if !DataBaseManager.shared.removeQueueItem(with: id) {
             BHLog.w("\(#function) - failed to remove queue item")
+        }
+    }
+    
+    fileprivate func removeStorageItems(_ withManually: Bool = false) {
+        if withManually {
+            for item in playbackQueue {
+                removeStorageItem(item.id)
+            }
+        } else {
+            for item in playbackQueue {
+                if item.reason == .auto {
+                    removeStorageItem(item.id)
+                }
+            }
         }
     }
 }
