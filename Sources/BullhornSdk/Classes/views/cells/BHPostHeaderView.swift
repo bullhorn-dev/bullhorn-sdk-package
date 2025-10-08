@@ -201,11 +201,19 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         playButton.isAccessibilityElement = true
         playButton.context = "episode"
         likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = validPost.liked ? "Unlike episode" : "Like episode"
+        likeButton.accessibilityLabel = validPost.liked ? "Unfavorite episode" : "Favorite episode"
         shareButton.isAccessibilityElement = true
         shareButton.accessibilityLabel = "Share episode"
         downloadButton.isAccessibilityElement = true
         downloadButton.context = "episode"
+        
+        if let dateText = dateLabel.text {
+            dateLabel.accessibilityLabel = "Episode published: \(dateText)"
+        }
+        if let durationText = durationLabel.text {
+            durationLabel.accessibilityLabel = "Episode duration: \(durationText)"
+        }
+
     }
 
     fileprivate func updateControls() {
@@ -218,14 +226,14 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         if BullhornSdk.shared.externalUser?.level == .external {
             if validPost.liked {
                 image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
-                likeButton.accessibilityLabel = "Unlike episode"
+                likeButton.accessibilityLabel = "Unfavorite episode"
             } else {
                 image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
-                likeButton.accessibilityLabel = "Like episode"
+                likeButton.accessibilityLabel = "Favorite episode"
             }
         } else {
             image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
-            likeButton.accessibilityLabel = "Like episode"
+            likeButton.accessibilityLabel = "Favorite episode"
         }
         likeButton.setImage(image, for: .normal)
         shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)

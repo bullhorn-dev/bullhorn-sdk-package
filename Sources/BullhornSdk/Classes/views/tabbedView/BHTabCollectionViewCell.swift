@@ -5,6 +5,8 @@ import UIKit
 protocol BHTabItemProtocol: UIView {
     func onSelected()
     func onNotSelected()
+    
+    var title: String { get }
 }
 
 class BHTabCollectionViewCell: UICollectionViewCell {

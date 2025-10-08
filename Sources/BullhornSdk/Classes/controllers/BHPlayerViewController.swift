@@ -78,26 +78,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.alignment = .center
-        paragraphStyle.lineBreakMode = .byWordWrapping
-        
-        if let userName = playerItem.post.userName {
-            let attributedString = NSAttributedString(string: userName, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.primaryButton()
-            ])
-            nameLabel.attributedText = attributedString
-        }
-        
-        if let postTitle = playerItem.post.title {
-            let attributedString = NSAttributedString(string: postTitle, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.secondaryButton()
-            ])
-            titleLabel.attributedText = attributedString
-        }
+        nameLabel.text = playerItem.post.userName
+        titleLabel.text = playerItem.post.title
     }
         
     override func resetUI() {

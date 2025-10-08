@@ -88,15 +88,7 @@ import Foundation
             ])
         }
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-        
-        let attributedString = NSAttributedString(string: title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.fontWithName(.robotoLight, size: 18)
-        ])
-        titleLabel.attributedText = attributedString
+        titleLabel.text = title
         titleLabel.textColor = color
         arrangedSubviews.append(titleLabel)
 
@@ -165,20 +157,6 @@ import Foundation
     }
     
     func setValue(_ text: String?) {
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.alignment = .right
-        paragraphStyle.lineBreakMode = .byWordWrapping
-        
-        if let validText = text {
-            let attributedString = NSAttributedString(string: validText, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.fontWithName(.robotoRegular, size: 17)
-            ])
-            valueLabel.attributedText = attributedString
-        } else {
-            valueLabel.attributedText = NSAttributedString(string: "")
-        }
+        valueLabel.text = text
     }
 }

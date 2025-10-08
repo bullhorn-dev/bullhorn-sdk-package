@@ -53,17 +53,14 @@ class BHRadioCell: UITableViewCell {
         streamIcon.backgroundColor = .tertiary()
         streamIcon.contentMode = .scaleToFill
         streamIcon.clipsToBounds = true
-        streamIcon.isAccessibilityElement = false
 
         radioTitleLabel.textColor = .accent()
         radioTitleLabel.font = .sectionTitle()
         radioTitleLabel.adjustsFontForContentSizeCategory = true
-        radioTitleLabel.isAccessibilityElement = false
 
         streamTitleLabel.textColor = .primary()
         streamTitleLabel.font = .primaryText()
         streamTitleLabel.adjustsFontForContentSizeCategory = true
-        streamTitleLabel.isAccessibilityElement = false
 
         playButton.title = "Listen"
         playButton.context = "Radio"
@@ -72,7 +69,6 @@ class BHRadioCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
-        contentView.accessibilityLabel = nil
         playButton.accessibilityLabel = nil
     }
 
@@ -87,21 +83,8 @@ class BHRadioCell: UITableViewCell {
         guard let validRadio = radio else { return }
         guard let validStream = radio?.streams.first else { return }
     
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-            
-        let radioAttributedString = NSAttributedString(string: validRadio.title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.sectionTitle()
-        ])
-        radioTitleLabel.attributedText = radioAttributedString
-
-        let streamAttributedString = NSAttributedString(string: validStream.title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.primaryText()
-        ])
-        streamTitleLabel.attributedText = streamAttributedString
+        radioTitleLabel.text = validRadio.title
+        streamTitleLabel.text = validStream.title
 
         streamIcon.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)
                 
@@ -118,10 +101,16 @@ class BHRadioCell: UITableViewCell {
         contentView.accessibilityTraits = .selected
         contentView.accessibilityLabel = "\(context) \(title)"
         
+        radioTitleLabel.isAccessibilityElement = true
+        radioTitleLabel.accessibilityLabel = title
+        
+        streamTitleLabel.isAccessibilityElement = true
+        streamTitleLabel.accessibilityLabel = radio?.streams.first?.title
+
         playButton.isAccessibilityElement = true
         playButton.context = "Radio"
         
-        self.accessibilityElements = [contentView, playButton!]
+        self.accessibilityElements = [contentView, radioTitleLabel!, streamTitleLabel!, playButton!]
         self.isAccessibilityElement = false
     }
 }

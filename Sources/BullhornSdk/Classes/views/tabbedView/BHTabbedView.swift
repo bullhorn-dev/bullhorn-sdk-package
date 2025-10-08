@@ -109,6 +109,9 @@ class BHTabbedView: UIView {
             collectionView.bottomAnchor
                 .constraint(equalTo: self.bottomAnchor)
         ])
+        
+        collectionView.accessibilityTraits.insert(.tabBar)
+        collectionView.isAccessibilityElement = false
     }
 }
 
@@ -157,6 +160,15 @@ extension BHTabbedView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BHTabCollectionViewCell", for: indexPath) as! BHTabCollectionViewCell
         cell.view = tabs[indexPath.row]
+        
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = tabs[indexPath.row].title
+
+        if indexPath.row == self.currentlySelectedIndex {
+            cell.accessibilityTraits.insert(.selected)
+        } else {
+            cell.accessibilityTraits.remove(.selected)
+        }
         return cell
     }
 }

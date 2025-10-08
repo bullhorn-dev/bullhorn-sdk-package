@@ -48,7 +48,12 @@ extension UIViewController {
 
         configureBlock?(safariVC)
 
-        present(safariVC, animated: true, completion: nil)
+        present(safariVC, animated: true) {
+            // Announce to VoiceOver that a new page has opened after presentation
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .screenChanged, argument: "Opening web page.")
+            }
+        }
     }
     
     func presentEmailDialog(withUrl url: URL) {

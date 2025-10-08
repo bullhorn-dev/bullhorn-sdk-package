@@ -90,18 +90,9 @@ class BHStreamCarouselCell: UICollectionViewCell {
 
     private func update() {
         guard let validStream = stream else { return }
+
         imageView.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-            
-        let attributedString = NSAttributedString(string: "\(titleText) \(validStream.localStartTime())", attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.fontWithName(.robotoMedium, size: 13.0)
-        ])
-            
-        nameLabel.attributedText = attributedString
+        nameLabel.text = "\(titleText) \(validStream.localStartTime())"
     }
 }
 

@@ -81,39 +81,38 @@ class BHSettingUserCell: UITableViewCell {
     fileprivate func update() {
         guard let validUser = user else { return }
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-
-        let nameString = NSAttributedString(string: validUser.fullName ?? "A", attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.primaryText()
-        ])
-        nameLabel.attributedText = nameString
+        nameLabel.text = validUser.fullName ?? "A"
         userIcon.sd_setImage(with: validUser.coverUrl, placeholderImage: placeholderImage)
     }
 
     fileprivate func updateValue() {
         guard let validUser = user else { return }
-
+        
         switch type {
         case .notifications:
             switchControl.setOn(validUser.receiveNotifications, animated: false)
         case .downloads:
             switchControl.setOn(validUser.autoDownload, animated: false)
         }
-
+        
         switchControl.isEnabled = UserDefaults.standard.isPushNotificationsEnabled
         
-        /// accessibility
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = "Change settings for podcast \(validUser.fullName ?? "")"
+        setupAccessibility()
+    }
+    
+    fileprivate func setupAccessibility() {
+        
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = user?.fullName ?? "Podcast setting"
 
         nameLabel.isAccessibilityElement = false
 
         switchControl.isAccessibilityElement = true
-        switchControl.accessibilityLabel = "Toggle Settings for podcast \(validUser.fullName ?? "")"
+        switchControl.accessibilityLabel = "Toggle Setting for podcast \(user?.fullName ?? "")"
+        
+        self.accessibilityElements = [contentView, switchControl!]
+        self.isAccessibilityElement = false
     }
 }
 

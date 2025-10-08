@@ -16,7 +16,7 @@ class BHTabItemView: UIView, BHTabItemProtocol {
         fatalError("")
     }
         
-    private let title: String
+    var title: String
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()

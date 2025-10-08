@@ -185,23 +185,13 @@ class BHRadioStreamsView: UIView {
         guard let radio = radio else { return }
         guard let liveStream = radio.streams.first else { return }
 
-        self.playButton.post = radio.asPost()
-        self.playButton.isEnabled = true
+        playButton.post = radio.asPost()
+        playButton.isEnabled = true
         
-        self.laterStreamsView.streams = radio.laterStreams
+        laterStreamsView.streams = radio.laterStreams
         
-        self.imageView.sd_setImage(with: liveStream.coverUrl, placeholderImage: self.placeholderImage)
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-            
-        let attributedString = NSAttributedString(string: liveStream.title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.primaryText()
-        ])
-            
-        self.titleLabel.attributedText = attributedString
+        imageView.sd_setImage(with: liveStream.coverUrl, placeholderImage: self.placeholderImage)
+        titleLabel.text = liveStream.title
     }
 }
 

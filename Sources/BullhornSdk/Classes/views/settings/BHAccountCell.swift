@@ -40,15 +40,7 @@ class BHAccountCell: UITableViewCell {
 
         backgroundColor = .primaryBackground()
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-
-        let titleString = NSAttributedString(string: model.title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.settingsSecondaryText()
-        ])
-        titleLabel.attributedText = titleString
+        titleLabel.text = model.title
         titleLabel.textColor = .primary()
         titleLabel.font = .settingsSecondaryText()
         titleLabel.adjustsFontForContentSizeCategory = true
@@ -58,18 +50,10 @@ class BHAccountCell: UITableViewCell {
         subtitleLabel.font = .settingsPrimaryText()
         subtitleLabel.adjustsFontForContentSizeCategory = true
 
-        let initialsParagraphStyle = NSMutableParagraphStyle()
-        initialsParagraphStyle.hyphenationFactor = 1.0
-        initialsParagraphStyle.alignment = .center
-        initialsParagraphStyle.lineBreakMode = .byWordWrapping
-
-        let initialsString = NSAttributedString(string: model.initials ?? "A", attributes: [
-            .paragraphStyle: initialsParagraphStyle,
-            .font: UIFont.sectionTitle()
-        ])
-        iconLabel.attributedText = initialsString
+        iconLabel.text = model.initials ?? "A"
         iconLabel.textColor = .primary()
         iconLabel.font = .sectionTitle()
+        iconLabel.textAlignment = .center
         iconLabel.adjustsFontForContentSizeCategory = true
 
         iconContainer.backgroundColor = model.iconBackgroundColor

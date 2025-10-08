@@ -70,29 +70,22 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
     private func update() {
         guard let validChannel = channel else { return }
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.alignment = .center
-        paragraphStyle.lineBreakMode = .byWordWrapping
+        let isSelected = UserDefaults.standard.selectedChannelId == validChannel.id
 
-        if UserDefaults.standard.selectedChannelId == validChannel.id {
-            let attributedString = NSAttributedString(string: validChannel.title, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.fontWithName(.robotoMedium, size: 17)
-            ])
-            titleLabel.attributedText = attributedString
+        titleLabel.text = validChannel.title
+
+        if isSelected {
             titleLabel.textColor = .navigationText()
+            titleLabel.font = .fontWithName(.robotoMedium, size: 17)
             titleLabel.backgroundColor = .navigationBackground()
             titleLabel.layer.borderColor = UIColor.navigationBackground().cgColor
+            self.accessibilityValue = "selected"
         } else {
-            let attributedString = NSAttributedString(string: validChannel.title, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.fontWithName(.robotoRegular, size: 17)
-            ])
-            titleLabel.attributedText = attributedString
             titleLabel.textColor = .primary()
+            titleLabel.font = .fontWithName(.robotoRegular, size: 17)
             titleLabel.backgroundColor = .cardBackground()
             titleLabel.layer.borderColor = UIColor.primary().cgColor
+            self.accessibilityValue = ""
         }
 
         /// accessability

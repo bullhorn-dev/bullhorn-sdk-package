@@ -30,36 +30,35 @@ class BHSettingToggleCell: UITableViewCell {
     }
     
     func configure(with model : SettingsToggleOption) {
-
+        
         backgroundColor = .primaryBackground()
         
         accessoryType = .none
-
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-
-        let titleString = NSAttributedString(string: model.title, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.settingsPrimaryText()
-        ])
-        titleLabel.attributedText = titleString
+        
+        titleLabel.text = model.title
         titleLabel.textColor = .primary()
         titleLabel.font = .settingsPrimaryText()
         titleLabel.adjustsFontForContentSizeCategory = true
         
         switchControl.isUserInteractionEnabled = false
         switchControl.setOn(model.isActive, animated: false)
+        
+        setupAccessibility(with: model)
+    }
+    
+    fileprivate func setupAccessibility(with model : SettingsToggleOption) {
 
-        /// accessibility
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = model.title
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = model.title
 
         titleLabel.isAccessibilityElement = false
 
         switchControl.isAccessibilityElement = true
         switchControl.accessibilityLabel = "Toggle Settings \(model.title)"
+        
+        self.accessibilityElements = [contentView, switchControl!]
+        self.isAccessibilityElement = false
     }
 }
 

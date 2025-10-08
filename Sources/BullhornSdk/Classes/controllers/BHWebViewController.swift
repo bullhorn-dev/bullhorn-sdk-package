@@ -95,6 +95,12 @@ extension BHWebViewController: WKNavigationDelegate {
                        completion: { isFinished in
                            self.progressView.isHidden = isFinished
         })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .announcement, argument: "Web page loaded: \(self.webView.title ?? "Untitled")")
+            }
+        }
     }
 }
 

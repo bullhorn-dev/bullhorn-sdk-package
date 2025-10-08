@@ -24,12 +24,24 @@ class ThemeTableViewCell: UITableViewCell {
         super.prepareForReuse()
         titleLabel.text = nil
         checkmarkIcon.isHidden = true
+        self.accessibilityLabel = nil
     }
     
     public func configure(with model : ThemeOption) {
+        
         titleLabel.text = model.title
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.font = .fontWithName(.robotoRegular, size: 17)
         checkmarkIcon.isHidden = !model.selected
+        
+        /// accessibility
+        self.isAccessibilityElement = true
+        self.accessibilityTraits = .button
+        self.accessibilityLabel = "\(model.title)"
+        self.accessibilityValue = model.selected ? "selected" : ""
+
+        titleLabel.isAccessibilityElement = false
+        checkmarkIcon.isAccessibilityElement = false
     }
 }
+

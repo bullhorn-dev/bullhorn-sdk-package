@@ -66,6 +66,9 @@ class BHUserCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
+        nameLabel.accessibilityLabel = nil
+        bioLabel.accessibilityLabel = nil
     }
     
     // MARK: - Private
@@ -77,26 +80,8 @@ class BHUserCell: UITableViewCell {
     
     fileprivate func update() {
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-
-        if let name = user?.fullName {
-            let attributedString = NSAttributedString(string: name, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.primaryText()
-            ])
-            nameLabel.attributedText = attributedString
-        }
-
-        if let bio = user?.bio {
-            let attributedString = NSAttributedString(string: bio, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.secondaryText()
-            ])
-            bioLabel.attributedText = attributedString
-        }
-
+        nameLabel.text = user?.fullName
+        bioLabel.text = user?.bio
         userIcon.sd_setImage(with: user?.coverUrl, placeholderImage: placeholderImage)
         
         /// accessability
@@ -104,8 +89,15 @@ class BHUserCell: UITableViewCell {
             self.isAccessibilityElement = false
             return
         }
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = "\(context) \(fullName)"
+
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(context) \(fullName)"
+
+        nameLabel.accessibilityLabel = user?.fullName
+        bioLabel.accessibilityLabel = user?.bio
+        
+        self.accessibilityElements = [contentView, nameLabel!, bioLabel!]
+        self.isAccessibilityElement = false
     }
 }

@@ -155,26 +155,8 @@ class BHPostCarouselCell: UICollectionViewCell {
     private func update() {
         playButton.post = post
         imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-        
-        if let title = post?.title {
-            let attributedString = NSAttributedString(string: title, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.primaryText()
-            ])
-            titleLabel.attributedText = attributedString
-        }
-
-        if let description = post?.description {
-            let attributedString = NSAttributedString(string: description, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.secondaryText()
-            ])
-            descriptionLabel.attributedText = attributedString
-        }
+        titleLabel.text = post?.title
+        descriptionLabel.text = post?.description
         
         setupAccessibility()
     }
@@ -191,7 +173,13 @@ class BHPostCarouselCell: UICollectionViewCell {
         playButton.isAccessibilityElement = true
         playButton.context = "\(context) \(title)"
 
-        self.accessibilityElements = [playButton, contentView]
+        titleLabel.isAccessibilityElement = true
+        titleLabel.accessibilityLabel = post?.title
+
+        descriptionLabel.isAccessibilityElement = true
+        descriptionLabel.accessibilityLabel = post?.description
+
+        self.accessibilityElements = [playButton, titleLabel, descriptionLabel, contentView]
         self.isAccessibilityElement = false
     }
 }

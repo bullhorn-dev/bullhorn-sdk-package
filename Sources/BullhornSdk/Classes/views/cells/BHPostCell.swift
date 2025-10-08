@@ -114,6 +114,10 @@ class BHPostCell: UITableViewCell {
         transcriptButton.accessibilityLabel = nil
         optionsButton.accessibilityLabel = nil
         downloadButton.accessibilityLabel = nil
+        titleLabel.accessibilityLabel = nil
+        descriptionLabel.accessibilityLabel = nil
+        dateLabel.accessibilityLabel = nil
+        durationLabel.accessibilityLabel = nil
     }
 
     // MARK: - Private
@@ -124,25 +128,8 @@ class BHPostCell: UITableViewCell {
         downloadButton.post = post
         waitingRoomButton.post = post
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.lineBreakMode = .byWordWrapping
-        
-        if let title = post?.title {
-            let attributedString = NSAttributedString(string: title, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.primaryText()
-            ])
-            titleLabel.attributedText = attributedString
-        }
-
-        if let description = post?.description {
-            let attributedString = NSAttributedString(string: description, attributes: [
-                .paragraphStyle: paragraphStyle,
-                .font: UIFont.secondaryText()
-            ])
-            descriptionLabel.attributedText = attributedString
-        }
+        titleLabel.text = post?.title
+        descriptionLabel.text = post?.description
         userIcon.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
         
         updateTagLabel()
@@ -157,10 +144,21 @@ class BHPostCell: UITableViewCell {
         contentView.accessibilityTraits = .selected
         contentView.accessibilityLabel = "\(context) \(title)"
         
+        titleLabel.accessibilityLabel = "\(context) title: \(title)"
+        if let validDescription = post?.description {
+            descriptionLabel.accessibilityLabel = "\(context) details: \(validDescription)"
+        }
+        if let dateText = dateLabel.text {
+            dateLabel.accessibilityLabel = "\(context) published: \(dateText)"
+        }
+        if let durationText = durationLabel.text {
+            durationLabel.accessibilityLabel = "\(context) duration: \(durationText)"
+        }
+
         playButton.isAccessibilityElement = true
         playButton.context = "\(context) \(title)"
         likeButton.isAccessibilityElement = true
-        likeButton.accessibilityLabel = post?.liked == true ? "Unlike \(context) \(title)" : "Like \(context) \(title)"
+        likeButton.accessibilityLabel = post?.liked == true ? "Unfavorite \(context) \(title)" : "Favorite \(context) \(title)"
         shareButton.isAccessibilityElement = true
         shareButton.accessibilityLabel = "Share \(context) \(title)"
         downloadButton.isAccessibilityElement = true
@@ -170,7 +168,7 @@ class BHPostCell: UITableViewCell {
         optionsButton.isAccessibilityElement = true
         optionsButton.accessibilityLabel = "Options: \(context) \(title)"
         
-        self.accessibilityElements = [contentView, playButton!, likeButton!, shareButton!, downloadButton, transcriptButton!, optionsButton!]
+        self.accessibilityElements = [contentView, titleLabel!, descriptionLabel!, playButton!, likeButton!, shareButton!, downloadButton!, transcriptButton!, optionsButton!, dateLabel!, durationLabel!]
         self.isAccessibilityElement = false
     }
     
@@ -184,14 +182,14 @@ class BHPostCell: UITableViewCell {
         if BullhornSdk.shared.externalUser?.level == .external {
             if validPost.liked {
                 image = UIImage(systemName: "heart.fill")?.withConfiguration(mediumConfig)
-                likeButton.accessibilityLabel = "Unlike \(context) \(validPost.title)"
+                likeButton.accessibilityLabel = "Unfavorite \(context) \(validPost.title)"
             } else {
                 image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
-                likeButton.accessibilityLabel = "Like \(context) \(validPost.title)"
+                likeButton.accessibilityLabel = "Favorite \(context) \(validPost.title)"
             }
         } else {
             image = UIImage(systemName: "heart")?.withConfiguration(mediumConfig)
-            likeButton.accessibilityLabel = "Like \(context) \(validPost.title)"
+            likeButton.accessibilityLabel = "Favorite \(context) \(validPost.title)"
         }
         likeButton.setImage(image, for: .normal)
         likeButton.setTitle("", for: .normal)
