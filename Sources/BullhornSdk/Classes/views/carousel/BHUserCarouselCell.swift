@@ -91,6 +91,10 @@ class BHUserCarouselCell: UICollectionViewCell {
         super.prepareForReuse()
         self.accessibilityLabel = nil
     }
+    
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        return self.contentView.frame.size
+    }
         
     // MARK: - Private Methods
     

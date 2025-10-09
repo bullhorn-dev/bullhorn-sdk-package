@@ -11,8 +11,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     fileprivate static let NotificationsSegueIdentifier = "Home.NotificationsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
-    @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var collectionView: UICollectionView!
+
     fileprivate var headerView: BHHomeHeaderView?
 
     fileprivate var selectedChannelId: String = UserDefaults.standard.selectedChannelId
@@ -33,19 +33,20 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         activityIndicator.color = .accent()
 
         let bundle = Bundle.module
-        let gridCellNib = UINib(nibName: "BHUsersGridCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHHomeHeaderView", bundle: bundle)
+        let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
 
-        tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHHomeHeaderView.reusableIndentifer)
-        tableView.register(gridCellNib, forCellReuseIdentifier: BHUsersGridCell.reusableIndentifer)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .primaryBackground()
-
-        headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHHomeHeaderView.reusableIndentifer) as? BHHomeHeaderView
-        headerView?.initialize()
-        headerView?.delegate = self
-
+        collectionView.register(headerNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHHomeHeaderView.reusableIndentifer)
+        collectionView.register(sectionHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer)
+        collectionView.register(BHUserCarouselCell.self, forCellWithReuseIdentifier: BHUserCarouselCell.reusableIndentifer)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = true
+        collectionView.isPagingEnabled = false
+        collectionView.isScrollEnabled = true
+        collectionView.backgroundColor = .primaryBackground()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
         configureNavigationItems()
         configureRefreshControl()
 
@@ -81,6 +82,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         refreshControl?.endRefreshing()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
@@ -104,7 +109,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
         refreshControl = newRefreshControl
         refreshControl?.tintColor = .accent()
-        tableView.addSubview(newRefreshControl)
+        collectionView.addSubview(newRefreshControl)
     }
 
     // MARK: - Network
@@ -159,7 +164,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         
     fileprivate func reloadData() {
         BHNetworkManager.shared.splitUsers(selectedChannelId)
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     // MARK: - Action handlers
@@ -212,7 +217,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         
         switch info.type {
         case .connected, .connectedExpensive:
-            tableView.restore()
+            collectionView.restore()
             fetch()
         default:
             break
@@ -257,53 +262,149 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-extension BHHomeViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
             let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-            tableView.setEmptyMessage(message, image: image)
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            collectionView.setEmptyMessage(message, image: image)
         } else {
-            tableView.restore()
+            collectionView.restore()
         }
-        return BHNetworkManager.shared.splittedUsers.count > 0 ? 1 : 0
+        return BHNetworkManager.shared.splittedUsers.count + 1
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
-        cell.collectionViewController.uiModels = BHNetworkManager.shared.splittedUsers
-        cell.collectionViewController.delegate = self
 
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 { return 0 }
+        return BHNetworkManager.shared.splittedUsers[section - 1].users.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+          case UICollectionView.elementKindSectionHeader:
+            if indexPath.section == 0 {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHHomeHeaderView.reusableIndentifer, for: indexPath)
+                
+                guard let homeHeaderView = headerView as? BHHomeHeaderView else { return headerView }
+                
+                if self.headerView == nil {
+                    homeHeaderView.initialize()
+                    homeHeaderView.delegate = self
+                }
+                homeHeaderView.setup()
+                
+                self.headerView = homeHeaderView
+                
+                return  homeHeaderView
+            } else {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
+                
+                guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
+                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].title
+                
+                return usersHeaderView
+            }
+          default:
+            assert(false, "Invalid element type")
+          }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
+        
+        cell.showCategory = false
+        cell.user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.item]
+    
         return cell
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if shouldShowHeader {
-            headerView?.setup()
-            return headerView
-        }
-        return nil
+        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.row]
+        openUserDetails(user)
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if shouldShowHeader {
-            return headerView?.calculateHeight() ?? 0
-        }
-        return 0
+      
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (collectionView.frame.size.width - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3
+        let height = width + 35
+        return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.itemSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.itemSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: Constants.paddingHorizontal, bottom: Constants.itemSpacing/2, right: Constants.paddingHorizontal)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+
+        if section == 0 {
+            if shouldShowHeader {
+                return CGSize(width: view.frame.width, height: headerView?.calculateHeight() ?? 768.0)
+            } else {
+                return CGSize(width: view.frame.width, height: 0.0)
+            }
+        } else {
+            return CGSize(width: view.frame.width, height: 44.0)
+        }
+    }
+    
+    
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
+//            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+//            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
+//            tableView.setEmptyMessage(message, image: image)
+//        } else {
+//            tableView.restore()
+//        }
+//        return BHNetworkManager.shared.splittedUsers.count > 0 ? 1 : 0
+//    }
+//    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
+//        cell.collectionViewController.uiModels = BHNetworkManager.shared.splittedUsers
+//        cell.collectionViewController.delegate = self
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        if shouldShowHeader {
+//            headerView?.setup()
+//            return headerView
+//        }
+//        return nil
+//    }
+//    
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        if shouldShowHeader {
+//            return headerView?.calculateHeight() ?? 0
+//        }
+//        return 0
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+//    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return UITableView.automaticDimension
+//    }
 }
 
 // MARK: - BHHomeHeaderViewDelegate

@@ -23,6 +23,10 @@ class BHSectionHeaderView: UICollectionReusableView {
         super.prepareForReuse()
         accessibilityLabel = nil
     }
+    
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        return CGSize(width: frame.size.width, height: 44.0)
+    }
 
     // MARK: - Private
 

@@ -9,6 +9,7 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -481,16 +482,30 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="4y7-9u-Fli">
                                 <rect key="frame" x="0.0" y="47" width="390" height="763"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AUe-Z7-uLB">
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eEP-0J-jcO">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="703"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <color key="sectionIndexColor" name="bhColorPrimary"/>
-                                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="dataSource" destination="U2I-TR-bcv" id="4F8-sc-6e4"/>
-                                            <outlet property="delegate" destination="U2I-TR-bcv" id="7F2-4g-jLp"/>
-                                        </connections>
-                                    </tableView>
+                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XIX-fv-zxC">
+                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="headerReferenceSize" width="50" height="50"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="fQv-yC-P5g">
+                                                <rect key="frame" x="0.0" y="50" width="128" height="128"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="KvQ-3s-RfA">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionViewCellContentView>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="AkE-eW-xLR">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionReusableView>
+                                    </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g36-m7-2vo" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="703" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
@@ -501,8 +516,12 @@
                                 </subviews>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
+                                    <constraint firstItem="eEP-0J-jcO" firstAttribute="leading" secondItem="4y7-9u-Fli" secondAttribute="leading" id="4TV-6p-zU7"/>
+                                    <constraint firstAttribute="trailing" secondItem="eEP-0J-jcO" secondAttribute="trailing" id="Eqz-67-bQt"/>
                                     <constraint firstItem="g36-m7-2vo" firstAttribute="leading" secondItem="4y7-9u-Fli" secondAttribute="leading" id="Kf5-9T-2m2"/>
+                                    <constraint firstItem="eEP-0J-jcO" firstAttribute="top" secondItem="4y7-9u-Fli" secondAttribute="top" id="h8d-rV-p3B"/>
                                     <constraint firstAttribute="trailing" secondItem="g36-m7-2vo" secondAttribute="trailing" id="w0X-yo-nIF"/>
+                                    <constraint firstItem="g36-m7-2vo" firstAttribute="top" secondItem="eEP-0J-jcO" secondAttribute="bottom" id="wyk-lF-YSG"/>
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvm-3y-KYh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
@@ -535,8 +554,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="zvm-3y-KYh" id="XlT-rU-5Dk"/>
+                        <outlet property="collectionView" destination="eEP-0J-jcO" id="JNe-fN-TJ0"/>
                         <outlet property="miniPlayerView" destination="g36-m7-2vo" id="Hk0-26-tIN"/>
-                        <outlet property="tableView" destination="AUe-Z7-uLB" id="QYk-vB-ODu"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="Home.PostDetailsSegueIdentifier" id="TAw-Tl-Zg2"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="Home.UserDetailsSegueIdentifier" id="vP2-ST-MEt"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Home.FollowedPodcastsSegueIdentifier" id="Tnh-iY-7ke"/>
@@ -2612,8 +2631,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Dux-9E-9ph"/>
-        <segue reference="80U-wY-S8m"/>
+        <segue reference="Tnh-iY-7ke"/>
+        <segue reference="TAw-Tl-Zg2"/>
         <segue reference="vP2-ST-MEt"/>
     </inferredMetricsTieBreakers>
     <resources>

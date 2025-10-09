@@ -10,10 +10,11 @@ protocol BHHomeHeaderViewDelegate: AnyObject {
     func headerView(_ view: BHHomeHeaderView, didSelectSeeAll section: Sections)
 }
 
-class BHHomeHeaderView: UITableViewHeaderFooterView {
+class BHHomeHeaderView: UICollectionReusableView {
     
     class var reusableIndentifer: String { return String(describing: self) }
     
+//    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var radioStreamsView: BHRadioStreamsView!
     @IBOutlet weak var scheduledPostsTitle: UIView!
     @IBOutlet weak var scheduledPostsTitleLabel: UILabel!
@@ -36,10 +37,6 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
     weak var delegate: BHHomeHeaderViewDelegate?
 
     // MARK: - Lifecycle
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-    }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -53,6 +50,10 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
         super.prepareForReuse()
         self.accessibilityLabel = nil
         seeAllFollowedButton.accessibilityLabel = nil
+    }
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        return CGSize(width: frame.size.width, height: calculateHeight())
     }
     
     // MARK: - Public
@@ -74,7 +75,7 @@ class BHHomeHeaderView: UITableViewHeaderFooterView {
 
     func setup() {
         
-        contentView.backgroundColor = .primaryBackground()
+//        contentView.backgroundColor = .primaryBackground()
             
         scheduledPostsTitleLabel.textColor = .primary()
         scheduledPostsTitleLabel.font = .sectionTitle()
