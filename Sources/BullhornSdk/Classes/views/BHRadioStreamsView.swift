@@ -166,6 +166,7 @@ class BHRadioStreamsView: UIView {
                 playButton.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
                 playButton.heightAnchor.constraint(equalToConstant: playBtnHeight),
                 titleLabel.heightAnchor.constraint(equalToConstant: titleLblHeight),
+                heightAnchor.constraint(equalToConstant: calculateHeight())
             ])
         }
         

@@ -92,7 +92,8 @@ class BHChannelsView: UIView {
             collectionView.leftAnchor.constraint(equalTo: self.leftAnchor),
             collectionView.topAnchor.constraint(equalTo: self.topAnchor),
             collectionView.rightAnchor.constraint(equalTo: self.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: calculateHeight())
         ])
     }
 }

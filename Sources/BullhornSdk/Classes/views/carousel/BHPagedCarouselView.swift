@@ -75,9 +75,9 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
 
         NSLayoutConstraint.activate([
             pagerView.widthAnchor.constraint(equalTo: widthAnchor),
-            pagerView.heightAnchor.constraint(equalTo: heightAnchor),
             pagerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            pagerView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            pagerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            pagerView.heightAnchor.constraint(equalToConstant: calculateHeight())
         ])
     }
     

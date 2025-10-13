@@ -119,7 +119,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.featuredPosts.count > 0 && BHNetworkManager.shared.users.count > 0
+            self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0 && BHNetworkManager.shared.channels.count > 0
             self.refreshControl?.endRefreshing()
             self.reloadData()
             self.headerView?.reloadData()
@@ -133,10 +133,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
             BHNetworkManager.shared.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
-                    let showHeader = self.headerView != nil
-                    if showHeader || !BHReachabilityManager.shared.isConnected() {
-                        completeBlock()
-                    }
+                    completeBlock()
                     if BHNetworkManager.shared.users.count > 0 {
                         self.defaultHideActivityIndicatorView()
                     }
@@ -360,51 +357,6 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return CGSize(width: view.frame.width, height: 44.0)
         }
     }
-    
-    
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
-//            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
-//            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-//            tableView.setEmptyMessage(message, image: image)
-//        } else {
-//            tableView.restore()
-//        }
-//        return BHNetworkManager.shared.splittedUsers.count > 0 ? 1 : 0
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
-//        cell.collectionViewController.uiModels = BHNetworkManager.shared.splittedUsers
-//        cell.collectionViewController.delegate = self
-//
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        if shouldShowHeader {
-//            headerView?.setup()
-//            return headerView
-//        }
-//        return nil
-//    }
-//    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        if shouldShowHeader {
-//            return headerView?.calculateHeight() ?? 0
-//        }
-//        return 0
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-//    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return UITableView.automaticDimension
-//    }
 }
 
 // MARK: - BHHomeHeaderViewDelegate
