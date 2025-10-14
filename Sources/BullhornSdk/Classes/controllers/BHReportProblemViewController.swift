@@ -206,6 +206,25 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 //MARK: Drop down textfield delegate
 
 extension BHReportProblemViewController: BHDropDownTextFieldDelegate {
+
+    func onMenuRequested() {
+        let optionsSheet = BHReportReasonsBottomSheet()
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = true
+        optionsSheet.reasons = ReportReason.allCases.map({ $0.rawValue })
+        optionsSheet.selectReasonClosure = { [weak self] reason in
+            BHLog.p("Select reason: \(reason)")
+            self?.reasonTextField.textField.text = reason
+            self?.reportReason = reason
+            self?.validateSendButton()
+            
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .announcement, argument: "Selected reason \(reason)")
+            }
+        }
+        present(optionsSheet, animated: true)
+    }
+    
     
     func textChanged(text: String?) {
         reportReason = text
@@ -215,6 +234,11 @@ extension BHReportProblemViewController: BHDropDownTextFieldDelegate {
     func optionSelected(option: String) {
         BHLog.p("Option selected: \(option)")
         reportReason = option
+        
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: nameLabel)
+        }
+        
         validateSendButton()
     }
     

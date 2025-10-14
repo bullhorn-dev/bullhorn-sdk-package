@@ -37,6 +37,7 @@ enum BHTrackBanner: String, Codable {
     case openNotifications = "open_notifications"
     case openDownloads     = "open_downloads"
     case openQueue         = "open_queue"
+    case openReportReasons = "open_report_reasons"
     case openRecent        = "open_recent"
     case openReportProblem = "open_report_problem"
     case openMoreInfo      = "open_more_info"

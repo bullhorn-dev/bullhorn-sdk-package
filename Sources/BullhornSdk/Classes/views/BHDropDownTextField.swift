@@ -8,6 +8,7 @@ public protocol BHDropDownTextFieldDelegate {
     func menuDidAnimate(up: Bool)
     func optionSelected(option: String)
     func textChanged(text: String?)
+    func onMenuRequested()
 }
 
 // MARK: - BHDropDownItem
@@ -104,7 +105,8 @@ public class BHDropDownTextField: UIView {
     // MARK: - Private
     
     @objc private func animateMenu() {
-        menuAnimate(up: isDroppedDown)
+        delegate?.onMenuRequested()
+//        menuAnimate(up: isDroppedDown)
     }
 
     private func calculateHeight() {
@@ -155,6 +157,8 @@ public class BHDropDownTextField: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateMenu))
         tapView.addGestureRecognizer(tapGesture)
         tapView.backgroundColor = .cardBackground()
+        tapView.isAccessibilityElement = true
+        tapView.accessibilityLabel = isDroppedDown ? "Close problem options list" : "Open problem options list"
         addSubview(tapView)
         NSLayoutConstraint.activate([
             tapView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -219,6 +223,8 @@ public class BHDropDownTextField: UIView {
             self.animationView.isHidden = up
             self.animationView.frame = downFrame
 
+            self.tapView.accessibilityLabel = up ? "Open problem options list" : "Close problem options list"
+
             self.arrowIndicator.image = up ? UIImage.BHDropDown.down.image : UIImage.BHDropDown.up.image
             self.tableView.isHidden = up
             self.delegate?.menuDidAnimate(up: up)
@@ -257,6 +263,8 @@ extension BHDropDownTextField: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BHDropDownCell.reuseIdentifier) as? BHDropDownCell ?? BHDropDownCell()
         cell.item = options[indexPath.row]
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = options[indexPath.row].title
         cell.selectItemClosure = { [weak self] item in
             BHLog.p("Select drop down item: \(item.value)")
             self?.textField.text = item.value
