@@ -131,6 +131,11 @@ import Foundation
             stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
         ])
+        
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        titleLabel.isAccessibilityElement = false
+        valueLabel.isAccessibilityElement = false
     }
         
     required init?(coder: NSCoder) {
@@ -147,8 +152,10 @@ import Foundation
         if let validName = name, !validName.isEmpty {
             let config = UIImage.SymbolConfiguration(weight: .light)
             valueImageView.image = UIImage(systemName: validName)?.withConfiguration(config)
+            accessibilityValue = "On"
         } else {
             valueImageView.image = nil
+            accessibilityValue = "Off"
         }
     }
     
@@ -158,5 +165,6 @@ import Foundation
     
     func setValue(_ text: String?) {
         valueLabel.text = text
+        accessibilityValue = text ?? ""
     }
 }

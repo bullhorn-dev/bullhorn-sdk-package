@@ -48,6 +48,8 @@ class BHPlayerSettingsButton: UIButton {
         backgroundColor = bgColorSelected
         layer.borderColor = borderColorSelected.cgColor
         setTitleColor(textColorSelected, for: .normal)
+        
+        accessibilityTraits.insert(.selected)
     }
 
     func deselect() {
@@ -55,5 +57,7 @@ class BHPlayerSettingsButton: UIButton {
         backgroundColor = bgColorDeselected
         layer.borderColor = borderColorDeselected.cgColor
         setTitleColor(textColorDeselected, for: .normal)
+        
+        accessibilityTraits.remove(.selected)
     }
 }
