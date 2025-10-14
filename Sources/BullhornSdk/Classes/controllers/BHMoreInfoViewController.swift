@@ -161,6 +161,8 @@ extension BHMoreInfoViewController: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(with: model)
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = model.title
             return cell
             
         default: return UITableViewCell()

@@ -20,14 +20,6 @@ class BHSettingDetailsCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
     }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        titleLabel.text = nil
-        detailsLabel.text = nil
-        
-        self.accessibilityLabel = nil
-    }
     
     func configure(with model : SettingsDetailsOption) {
 
@@ -43,15 +35,7 @@ class BHSettingDetailsCell: UITableViewCell {
         detailsLabel.text = model.subtitle
         detailsLabel.textColor = .secondary()
         detailsLabel.font = .settingsSecondaryText()
-        detailsLabel.adjustsFontForContentSizeCategory = true
-        
-        /// accessibility
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = model.title
-
-        titleLabel.isAccessibilityElement = false
-        detailsLabel.isAccessibilityElement = false
+        detailsLabel.adjustsFontForContentSizeCategory = true        
     }
 }
 

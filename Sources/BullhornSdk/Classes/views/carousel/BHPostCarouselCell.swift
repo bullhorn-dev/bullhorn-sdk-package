@@ -179,7 +179,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         descriptionLabel.isAccessibilityElement = true
         descriptionLabel.accessibilityLabel = post?.description
 
-        self.accessibilityElements = [playButton, titleLabel, descriptionLabel, contentView]
+        self.accessibilityElements = [contentView, playButton, titleLabel, descriptionLabel]
         self.isAccessibilityElement = false
     }
 }

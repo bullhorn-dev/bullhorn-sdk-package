@@ -44,12 +44,7 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         titleLabel.layer.cornerRadius = labelHeight / 2
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.accessibilityLabel = nil
-    }
-    
+        
     // MARK: - UI Setup
 
     private func setupUI() {
@@ -79,20 +74,12 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
             titleLabel.font = .fontWithName(.robotoMedium, size: 17)
             titleLabel.backgroundColor = .navigationBackground()
             titleLabel.layer.borderColor = UIColor.navigationBackground().cgColor
-            self.accessibilityValue = "selected"
         } else {
             titleLabel.textColor = .primary()
             titleLabel.font = .fontWithName(.robotoRegular, size: 17)
             titleLabel.backgroundColor = .cardBackground()
             titleLabel.layer.borderColor = UIColor.primary().cgColor
-            self.accessibilityValue = ""
         }
-
-        /// accessability
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .button
-        self.accessibilityLabel = "\(validChannel.title) channel"
-        titleLabel.isAccessibilityElement = false
         
         self.layoutSubviews()
     }

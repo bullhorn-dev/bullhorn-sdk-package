@@ -95,6 +95,9 @@ class BHChannelsView: UIView {
             collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: calculateHeight())
         ])
+        
+        collectionView.accessibilityTraits.insert(.tabBar)
+        collectionView.isAccessibilityElement = false
     }
 }
 
@@ -124,6 +127,16 @@ extension BHChannelsView: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHChannelCollectionViewCell.reusableIndentifer, for: indexPath) as! BHChannelCollectionViewCell
         cell.channel = channels[indexPath.row]
+        
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = "\(channels[indexPath.row].title) channel"
+
+        if indexPath.row == self.currentlySelectedIndex {
+            cell.accessibilityTraits.insert(.selected)
+        } else {
+            cell.accessibilityTraits.remove(.selected)
+        }
+
         return cell
     }
     

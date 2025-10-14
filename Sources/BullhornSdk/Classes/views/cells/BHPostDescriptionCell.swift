@@ -65,8 +65,7 @@ class BHPostDescriptionCell: UITableViewCell {
         
         /// accessibility
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = "Episode description item"
+        self.accessibilityLabel = text
     }
     
     // MARK: - Actions

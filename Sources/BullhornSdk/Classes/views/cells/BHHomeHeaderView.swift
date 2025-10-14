@@ -14,7 +14,6 @@ class BHHomeHeaderView: UICollectionReusableView {
     
     class var reusableIndentifer: String { return String(describing: self) }
     
-//    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var radioStreamsView: BHRadioStreamsView!
     @IBOutlet weak var scheduledPostsTitle: UIView!
     @IBOutlet weak var scheduledPostsTitleLabel: UILabel!
@@ -75,22 +74,25 @@ class BHHomeHeaderView: UICollectionReusableView {
 
     func setup() {
         
-//        contentView.backgroundColor = .primaryBackground()
-            
         scheduledPostsTitleLabel.textColor = .primary()
         scheduledPostsTitleLabel.font = .sectionTitle()
+        scheduledPostsTitle.backgroundColor = .primaryBackground()
 
         livePostsTitleLabel.textColor = .primary()
         livePostsTitleLabel.font = .sectionTitle()
+        livePostsTitle.backgroundColor = .primaryBackground()
 
         featuredUsersTitleLabel.textColor = .primary()
         featuredUsersTitleLabel.font = .sectionTitle()
+        featuredPostsTitle.backgroundColor = .primaryBackground()
 
         featuredPostsTitleLabel.textColor = .primary()
         featuredPostsTitleLabel.font = .sectionTitle()
+        featuredUsersTitle.backgroundColor = .primaryBackground()
 
         followedUsersTitleLabel.textColor = .primary()
         followedUsersTitleLabel.font = .sectionTitle()
+        followedUsersTitle.backgroundColor = .primaryBackground()
 
         featuredUsersView.delegate = self
         featuredPostsView.delegate = self

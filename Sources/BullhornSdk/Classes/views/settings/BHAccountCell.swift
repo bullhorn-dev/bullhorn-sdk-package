@@ -25,17 +25,6 @@ class BHAccountCell: UITableViewCell {
         iconContainer.layer.cornerRadius = iconContainer.frame.size.height / 2
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        iconLabel.text = nil
-        titleLabel.text = nil
-        subtitleLabel.text = nil
-        iconContainer.backgroundColor = nil
-        
-        self.accessibilityLabel = nil
-    }
-    
     func configure(with model : SettingsAccountOption) {
 
         backgroundColor = .primaryBackground()
@@ -59,16 +48,6 @@ class BHAccountCell: UITableViewCell {
         iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5
         iconContainer.layer.borderColor = UIColor.divider().cgColor
-        
-        /// accessibility
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = model.title
-
-        titleLabel.isAccessibilityElement = false
-        subtitleLabel.isAccessibilityElement = false
-        iconLabel.isAccessibilityElement = false
-        iconContainer.isAccessibilityElement = false
     }
 
 }

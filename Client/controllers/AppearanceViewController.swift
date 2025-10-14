@@ -76,6 +76,17 @@ extension AppearanceViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         cell.configure(with: model)
+        
+        /// accessibility
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = "\(model.title)"
+
+        if model.selected {
+            cell.accessibilityTraits.insert(.selected)
+        } else {
+            cell.accessibilityTraits.remove(.selected)
+        }
+        
         return cell
     }
     
