@@ -281,7 +281,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
-          case UICollectionView.elementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
             if indexPath.section == 0 {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHHomeHeaderView.reusableIndentifer, for: indexPath)
                 
@@ -304,9 +304,9 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 
                 return usersHeaderView
             }
-          default:
-            assert(false, "Invalid element type")
-          }
+        default:
+            return UICollectionReusableView()
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
