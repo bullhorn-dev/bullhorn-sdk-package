@@ -20,6 +20,12 @@ class BHSettingCell: UITableViewCell {
         super.layoutSubviews()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
+    }
+    
     func configure(with model : SettingsOption) {
 
         backgroundColor = .primaryBackground()
@@ -29,7 +35,14 @@ class BHSettingCell: UITableViewCell {
         titleLabel.text = model.title
         titleLabel.textColor = .primary()
         titleLabel.font = .settingsPrimaryText()
-        titleLabel.adjustsFontForContentSizeCategory = true        
+        titleLabel.adjustsFontForContentSizeCategory = true
+        
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityLabel = model.title
+        contentView.accessibilityTraits = .button
+
+        self.accessibilityElements = [contentView]
+        self.isAccessibilityElement = false
     }
 }
 

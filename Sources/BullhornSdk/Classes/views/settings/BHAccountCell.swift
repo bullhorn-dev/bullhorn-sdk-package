@@ -24,6 +24,13 @@ class BHAccountCell: UITableViewCell {
         
         iconContainer.layer.cornerRadius = iconContainer.frame.size.height / 2
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
+        subtitleLabel.accessibilityLabel = nil
+    }
 
     func configure(with model : SettingsAccountOption) {
 
@@ -48,6 +55,13 @@ class BHAccountCell: UITableViewCell {
         iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5
         iconContainer.layer.borderColor = UIColor.divider().cgColor
+        
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityLabel = model.title
+        contentView.accessibilityTraits = .button
+
+        self.accessibilityElements = [contentView, subtitleLabel!]
+        self.isAccessibilityElement = false
     }
 
 }

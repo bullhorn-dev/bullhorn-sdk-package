@@ -267,8 +267,6 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(with: model)
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = model.title
             return cell
             
         case .detailsCell(let model):
@@ -276,8 +274,6 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(with: model)
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = model.title
             return cell
 
         case .accountCell(let model):
@@ -285,8 +281,6 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(with: model)
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = model.title
             return cell
         case .toggleCell(let model):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingToggleCell.reusableIndentifer, for: indexPath) as? BHSettingToggleCell else {
