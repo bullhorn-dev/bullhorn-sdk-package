@@ -73,7 +73,7 @@ class BHUsersCarouselView: UIView, UICollectionViewDelegateFlowLayout, UICollect
     }
     
     func calculateHeight() -> CGFloat {
-        return frame.size.height > 0 ? frame.size.height : Constants.usersCarouselHeight
+        return /*frame.size.height > 0 ? frame.size.height : */Constants.pagedCarouselHeight
     }
     
     // MARK: - Data Source
