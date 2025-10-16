@@ -52,7 +52,7 @@ class BHPlayerTranscriptCell: UITableViewCell {
         guard let validSegment = segment else { return }
 
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
+        self.accessibilityTraits = .staticText
         self.accessibilityLabel = "Transcript segment \(validSegment.text)"
     }
         

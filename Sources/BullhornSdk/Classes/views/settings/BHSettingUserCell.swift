@@ -103,7 +103,7 @@ class BHSettingUserCell: UITableViewCell {
     fileprivate func setupAccessibility() {
         
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .selected
+        contentView.accessibilityTraits = .button
         contentView.accessibilityLabel = user?.fullName ?? "Podcast setting"
 
         nameLabel.isAccessibilityElement = false

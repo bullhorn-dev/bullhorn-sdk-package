@@ -141,7 +141,7 @@ class BHPostCell: UITableViewCell {
         guard let title = post?.title else { return }
 
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .selected
+        contentView.accessibilityTraits = .button
         contentView.accessibilityLabel = "\(context) \(title)"
         
         titleLabel.accessibilityLabel = "\(context) title: \(title)"

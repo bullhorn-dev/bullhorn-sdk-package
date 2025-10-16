@@ -22,6 +22,7 @@ class BHSectionHeaderView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         accessibilityLabel = nil
+        titleLabel.text = nil
     }
     
     override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {

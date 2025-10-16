@@ -95,11 +95,13 @@ class BHHomeHeaderView: UICollectionReusableView {
         followedUsersTitle.backgroundColor = .primaryBackground()
 
         featuredUsersView.delegate = self
+        featuredUsersView.context = "Featured podcast"
         featuredPostsView.delegate = self
         livePostsView.delegate = self
         scheduledPostsView.delegate = self
         channelsView.delegate = self
         followedUsersView.delegate = self
+        followedUsersView.context = "Followed podcast"
 
         seeAllFollowedButton.titleLabel?.font = .secondaryButton()
         seeAllFollowedButton.backgroundColor = .clear

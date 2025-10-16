@@ -91,7 +91,7 @@ class BHUserCell: UITableViewCell {
         }
 
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .selected
+        contentView.accessibilityTraits = .button
         contentView.accessibilityLabel = "\(context) \(fullName)"
 
         nameLabel.accessibilityLabel = user?.fullName

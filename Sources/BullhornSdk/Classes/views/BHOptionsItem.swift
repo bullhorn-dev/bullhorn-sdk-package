@@ -134,6 +134,7 @@ import Foundation
         
         isAccessibilityElement = true
         accessibilityLabel = title
+        accessibilityTraits = .button
         titleLabel.isAccessibilityElement = false
         valueLabel.isAccessibilityElement = false
     }

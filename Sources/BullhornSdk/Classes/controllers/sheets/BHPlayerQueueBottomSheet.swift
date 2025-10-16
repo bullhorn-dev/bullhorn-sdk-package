@@ -92,8 +92,8 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPlaybackQueueCell", for: indexPath) as! BHPlaybackQueueCell
         let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
-        cell.item = item
         cell.isActive = BHHybridPlayer.shared.isInPlayer(item.post.id)
+        cell.item = item
 
         return cell
     }

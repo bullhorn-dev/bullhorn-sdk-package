@@ -113,7 +113,7 @@ class BHPlayButton: UIView {
             } else {
                 button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                 button.setTitle("", for: .normal)
-                accessibilityLabel = "Play \(context)"
+                accessibilityLabel = "Play \(context) \(post?.title ?? "")"
             }
         }
     }

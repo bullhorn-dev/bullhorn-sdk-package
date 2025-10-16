@@ -76,7 +76,9 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         contentView.backgroundColor = .primaryBackground()
 
         recentUsersView.delegate = self
+        recentUsersView.context = "Recent podcast"
         featuredUsersView.delegate = self
+        featuredUsersView.context = "Featured podcast"
         featuredPostsView.delegate = self
 
         recentUsersTitleLabel.textColor = .primary()

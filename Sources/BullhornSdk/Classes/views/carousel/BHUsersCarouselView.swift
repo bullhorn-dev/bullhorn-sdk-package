@@ -16,6 +16,8 @@ class BHUsersCarouselView: UIView, UICollectionViewDelegateFlowLayout, UICollect
         }
     }
     
+    var context: String = "Podcast"
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -85,6 +87,7 @@ class BHUsersCarouselView: UIView, UICollectionViewDelegateFlowLayout, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
         cell.user = users[indexPath.item]
+        cell.context = context
         return cell
     }
         

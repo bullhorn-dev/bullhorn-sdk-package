@@ -66,6 +66,8 @@ class BHPlaybackQueueCell: UITableViewCell {
         self.accessibilityLabel = nil
         contentView.accessibilityLabel = nil
         playButton.accessibilityLabel = nil
+        nameLabel.accessibilityLabel = nil
+        titleLabel.accessibilityLabel = nil
     }
 
     // MARK: - Private
@@ -85,12 +87,18 @@ class BHPlaybackQueueCell: UITableViewCell {
         guard let title = item?.post.title else { return }
 
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .selected
+        contentView.accessibilityTraits = .button
         contentView.accessibilityLabel = "\(context) \(title)"
-        playButton.isAccessibilityElement = true
-        playButton.context = "Play \(context) \(title)"
+        
+        if isActive {
+            playButton.isAccessibilityElement = true
+            playButton.context = "Play \(context) \(title)"
+            accessibilityElements = [contentView, playButton!]
+        } else {
+            playButton.isAccessibilityElement = false
+            accessibilityElements = [contentView]
+        }
 
-        self.accessibilityElements = [contentView, playButton!]
         self.isAccessibilityElement = false
     }
     

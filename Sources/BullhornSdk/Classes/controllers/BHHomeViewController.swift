@@ -61,8 +61,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        reloadData()
     }
 
     override func viewIsAppearing(_ animated: Bool) {
@@ -70,10 +68,16 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         refreshControl?.resetUIState()
         configureNavigationItems()
-
+        
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openHome)
         BHTracker.shared.trackEvent(with: request)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -160,7 +164,11 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     }
         
     fileprivate func reloadData() {
+        BHLog.p("\(#function)")
+        
         BHNetworkManager.shared.splitUsers(selectedChannelId)
+
+        collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
     }
     
@@ -328,7 +336,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.frame.size.width - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3
+        let width = floor((collectionView.frame.size.width - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3)
         let height = width + 35
         return CGSize(width: width, height: height)
     }

@@ -79,6 +79,7 @@ extension AppearanceViewController: UITableViewDelegate, UITableViewDataSource {
         
         /// accessibility
         cell.isAccessibilityElement = true
+        cell.accessibilityTraits = .button
         cell.accessibilityLabel = "\(model.title)"
 
         if model.selected {

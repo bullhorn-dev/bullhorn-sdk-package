@@ -74,6 +74,7 @@ extension BHReportReasonsBottomSheet: UITableViewDataSource, UITableViewDelegate
         cell.textLabel?.textColor = .primary()
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = reason
+        cell.contentView.backgroundColor = .cardBackground()
 
         return cell
     }

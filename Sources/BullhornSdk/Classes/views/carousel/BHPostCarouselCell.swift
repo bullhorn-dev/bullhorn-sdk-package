@@ -167,7 +167,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         }
         
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .selected
+        contentView.accessibilityTraits = .button
         contentView.accessibilityLabel = "\(context) \(title)"
 
         playButton.isAccessibilityElement = true

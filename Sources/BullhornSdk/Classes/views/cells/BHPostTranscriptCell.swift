@@ -68,7 +68,7 @@ class BHPostTranscriptCell: UITableViewCell {
         guard let validSegment = segment else { return }
 
         self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
+        self.accessibilityTraits = .button
         self.accessibilityLabel = "Transcript segment \(validSegment.text)"
         textLbl.isAccessibilityElement = false
         timeLbl.isAccessibilityElement = false

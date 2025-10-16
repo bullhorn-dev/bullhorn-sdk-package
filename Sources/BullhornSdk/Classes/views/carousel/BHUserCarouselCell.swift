@@ -90,6 +90,10 @@ class BHUserCarouselCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
+        imageView.image = nil
+        nameLabel.text = nil
+        categoryLabel.text = nil
+        badgeLabel.text = nil
     }
     
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
@@ -168,12 +172,23 @@ class BHUserCarouselCell: UICollectionViewCell {
             self.isAccessibilityElement = false
             return
         }
-        self.isAccessibilityElement = true
-        self.accessibilityTraits = .selected
-        self.accessibilityLabel = "\(context) \(fullName)"
-        
-        categoryLabel.isAccessibilityElement = false
-        nameLabel.isAccessibilityElement = false
+
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .button
+        contentView.accessibilityLabel = "\(context) \(fullName)"
+
+        nameLabel.isAccessibilityElement = true
+        nameLabel.accessibilityLabel = fullName
+
+        if showCategory || !isTextScaled() {
+            categoryLabel.isAccessibilityElement = true
+            categoryLabel.accessibilityLabel = user?.categoryName ?? ""
+        } else {
+            categoryLabel.isAccessibilityElement = false
+        }
+ 
+        self.accessibilityElements = [contentView, nameLabel, categoryLabel]
+        self.isAccessibilityElement = false
     }
     
     private func isTextScaled() -> Bool {
