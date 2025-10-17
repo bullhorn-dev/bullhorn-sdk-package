@@ -26,6 +26,8 @@ class BHSettingToggleCell: UITableViewCell {
         titleLabel.text = nil
         
         self.accessibilityLabel = nil
+        self.contentView.accessibilityLabel = nil
+        self.contentView.accessibilityValue = nil
         switchControl.accessibilityLabel = nil
     }
     
@@ -52,10 +54,16 @@ class BHSettingToggleCell: UITableViewCell {
         contentView.accessibilityTraits = .selected
         contentView.accessibilityLabel = model.title
 
+        if model.isActive {
+            contentView.accessibilityValue = "On"
+        } else {
+            contentView.accessibilityValue = "Off"
+        }
+
         titleLabel.isAccessibilityElement = false
 
         switchControl.isAccessibilityElement = true
-        switchControl.accessibilityLabel = "Toggle Settings \(model.title)"
+        switchControl.accessibilityLabel = "Toggle Setting \(model.title)"
         
         self.accessibilityElements = [contentView, switchControl!]
         self.isAccessibilityElement = false

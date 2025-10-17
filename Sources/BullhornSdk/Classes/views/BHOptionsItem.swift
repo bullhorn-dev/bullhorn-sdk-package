@@ -109,6 +109,7 @@ import Foundation
             ])
         case .toggle:
             arrangedSubviews.append(valueSwitch)
+            accessibilityValue = valueSwitch.isOn ? "On" : "Off"
         }
 
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
@@ -137,6 +138,7 @@ import Foundation
         accessibilityTraits = .button
         titleLabel.isAccessibilityElement = false
         valueLabel.isAccessibilityElement = false
+        valueSwitch.accessibilityLabel = "Toggle \(title)"
     }
         
     required init?(coder: NSCoder) {
@@ -162,6 +164,7 @@ import Foundation
     
     func setToggleValue(_ value: Bool) {
         valueSwitch.setOn(value, animated: true)
+        accessibilityValue = valueSwitch.isOn ? "On" : "Off"
     }
     
     func setValue(_ text: String?) {

@@ -169,6 +169,9 @@ extension BHSettingsDownloadsViewController: UITableViewDataSource, UITableViewD
         return BHUserManager.shared.followedUsers.count > 0 ? Constants.panelHeight : 0
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = BHUserManager.shared.followedUsers[indexPath.row]
+        enableUserAutoDownloads(user.id, enable: !user.autoDownload)
+    }
 }
 

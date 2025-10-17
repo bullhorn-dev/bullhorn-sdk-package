@@ -169,5 +169,8 @@ extension BHSettingsNotificationsViewController: UITableViewDataSource, UITableV
         return BHUserManager.shared.followedUsers.count > 0 ? Constants.panelHeight : 0
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = BHUserManager.shared.followedUsers[indexPath.row]
+        enableUserNotifications(user.id, enable: !user.receiveNotifications)
+    }
 }

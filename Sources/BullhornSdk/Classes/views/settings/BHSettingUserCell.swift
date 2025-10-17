@@ -29,6 +29,8 @@ class BHSettingUserCell: UITableViewCell {
         }
     }
     
+    var context: String = "Setting for podcast"
+    
     fileprivate var placeholderImage: UIImage?
     
     // MARK: - Lifecycle
@@ -62,6 +64,8 @@ class BHSettingUserCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.accessibilityLabel = nil
+        self.contentView.accessibilityLabel = nil
+        self.contentView.accessibilityValue = nil
         switchControl.accessibilityLabel = nil
     }
     
@@ -103,13 +107,19 @@ class BHSettingUserCell: UITableViewCell {
     fileprivate func setupAccessibility() {
         
         contentView.isAccessibilityElement = true
-        contentView.accessibilityTraits = .button
-        contentView.accessibilityLabel = user?.fullName ?? "Podcast setting"
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(context) \(user?.fullName ?? "")"
+        
+        if switchControl.isOn  {
+            contentView.accessibilityValue = "On"
+        } else {
+            contentView.accessibilityValue = "Off"
+        }
 
         nameLabel.isAccessibilityElement = false
 
         switchControl.isAccessibilityElement = true
-        switchControl.accessibilityLabel = "Toggle Setting for podcast \(user?.fullName ?? "")"
+        switchControl.accessibilityLabel = "Toggle \(context) \(user?.fullName ?? "")"
         
         self.accessibilityElements = [contentView, switchControl!]
         self.isAccessibilityElement = false
