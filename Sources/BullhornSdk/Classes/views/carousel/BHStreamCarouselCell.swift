@@ -58,6 +58,14 @@ class BHStreamCarouselCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessibilityLabel = nil
+        contentView.accessibilityLabel = nil
+        nameLabel.text = nil
+        imageView.image = nil
+    }
         
     // MARK: - Private Methods
     
@@ -93,6 +101,22 @@ class BHStreamCarouselCell: UICollectionViewCell {
 
         imageView.sd_setImage(with: validStream.coverUrl, placeholderImage: placeholderImage)
         nameLabel.text = "\(titleText) \(validStream.localStartTime())"
+        
+        setupAccessibility()
+    }
+    
+    private func setupAccessibility() {
+        guard let validStream = stream else {
+            self.isAccessibilityElement = false
+            return
+        }
+
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .selected
+        contentView.accessibilityLabel = "\(titleText) \(validStream.title) at \(validStream.localStartTime())"
+
+        self.accessibilityElements = [contentView]
+        self.isAccessibilityElement = false
     }
 }
 

@@ -38,7 +38,7 @@ class BHRadioStreamsView: UIView {
         return imageView
     }()
 
-    private let titleLabel: UILabel = {
+    public let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "News Radio"
         label.font = .primaryText()
@@ -48,7 +48,7 @@ class BHRadioStreamsView: UIView {
         return label
     }()
     
-    private let laterStreamsView: BHStreamsCarouselView = {
+    public let laterStreamsView: BHStreamsCarouselView = {
         let view = BHStreamsCarouselView()
         
         return view        
@@ -57,7 +57,6 @@ class BHRadioStreamsView: UIView {
     public let playButton: BHPlayButton = {
         let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 120, height: 48))
         button.title = "Live Now!"
-        button.context = "Radio"
         return button
     }()
     
@@ -193,6 +192,12 @@ class BHRadioStreamsView: UIView {
         
         imageView.sd_setImage(with: liveStream.coverUrl, placeholderImage: self.placeholderImage)
         titleLabel.text = liveStream.title
+                
+        titleLabel.isAccessibilityElement = true
+        titleLabel.accessibilityLabel = liveStream.title
+
+        playButton.isAccessibilityElement = true
+        playButton.context = "Live Now Radio"  
     }
 }
 

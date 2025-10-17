@@ -109,12 +109,11 @@ class BHPlayButton: UIView {
             if let title = title {
                 button.setTitle(title, for: .normal)
                 button.setImage(nil, for: .normal)
-                accessibilityLabel = title
             } else {
                 button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                 button.setTitle("", for: .normal)
-                accessibilityLabel = "Play \(context) \(post?.title ?? "")"
             }
+            accessibilityLabel = "Play \(context) \(post?.title ?? "")"
         }
     }
     
@@ -186,12 +185,11 @@ extension BHPlayButton: BHHybridPlayerListener {
                     if let title = self.title {
                         self.button.setTitle(title, for: .normal)
                         self.button.setImage(nil, for: .normal)
-                        self.accessibilityLabel = title
                     } else {
                         self.button.setImage(UIImage(systemName: "play.fill")?.withConfiguration(config), for: .normal)
                         self.button.setTitle("", for: .normal)
-                        self.accessibilityLabel = "Play \(self.context)"
                     }
+                    self.accessibilityLabel = "Play \(self.context)"
                 case .ended,
                      .failed:
                     self.resetState()

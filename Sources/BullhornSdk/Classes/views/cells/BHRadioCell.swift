@@ -100,17 +100,14 @@ class BHRadioCell: UITableViewCell {
         contentView.isAccessibilityElement = true
         contentView.accessibilityTraits = .selected
         contentView.accessibilityLabel = "\(context) \(title)"
-        
-        radioTitleLabel.isAccessibilityElement = true
-        radioTitleLabel.accessibilityLabel = title
-        
+                
         streamTitleLabel.isAccessibilityElement = true
         streamTitleLabel.accessibilityLabel = radio?.streams.first?.title
 
         playButton.isAccessibilityElement = true
         playButton.context = "Radio"
         
-        self.accessibilityElements = [contentView, radioTitleLabel!, streamTitleLabel!, playButton!]
+        self.accessibilityElements = [contentView, streamTitleLabel!, playButton!]
         self.isAccessibilityElement = false
     }
 }

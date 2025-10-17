@@ -83,12 +83,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         BHLog.p("Refresh all sections")
     }
     
-    func getAllSectionsIndexSet() -> IndexSet {
-        let numberOfSections = collectionView.numberOfSections
-        let allSections = IndexSet(integersIn: 1..<numberOfSections)
-        return allSections
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
@@ -123,6 +117,12 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         refreshControl = newRefreshControl
         refreshControl?.tintColor = .accent()
         collectionView.addSubview(newRefreshControl)
+    }
+    
+    fileprivate func getAllSectionsIndexSet() -> IndexSet {
+        let numberOfSections = collectionView.numberOfSections
+        let allSections = IndexSet(integersIn: 1..<numberOfSections)
+        return allSections
     }
 
     // MARK: - Network
