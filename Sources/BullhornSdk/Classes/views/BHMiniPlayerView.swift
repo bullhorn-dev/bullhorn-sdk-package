@@ -61,20 +61,6 @@ class BHMiniPlayerView: UIView {
         button.tintColor = .primary()
         return button
     }()
-
-    private let forwardButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("", for: .normal)
-        button.tintColor = .primary()
-        return button
-    }()
-
-    private let backwardButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("", for: .normal)
-        button.tintColor = .primary()
-        return button
-    }()
     
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
@@ -136,12 +122,6 @@ class BHMiniPlayerView: UIView {
         
         backgroundColor = .cardBackground()
         
-        backwardButton.setBackgroundImage(UIImage(systemName: "gobackward.15"), for: .normal)
-        backwardButton.accessibilityLabel = "Backward 15 seconds"
-
-        forwardButton.setBackgroundImage(UIImage(systemName: "goforward.15"), for: .normal)
-        forwardButton.accessibilityLabel = "Forward 15 seconds"
-
         closeButton.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.accessibilityLabel = "Close player"
         
@@ -150,11 +130,9 @@ class BHMiniPlayerView: UIView {
 
         expandButton.addTarget(self, action: #selector(onExpandButton(_:)), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(onPlayButton(_:)), for: .touchUpInside)
-        backwardButton.addTarget(self, action: #selector(onBackwardButton(_:)), for: .touchUpInside)
-        forwardButton.addTarget(self, action: #selector(onForwardButton(_:)), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(onCloseButton(_:)), for: .touchUpInside)
 
-        let stackView = UIStackView(arrangedSubviews: [backwardButton, playButton, forwardButton, loadIndicator])
+        let stackView = UIStackView(arrangedSubviews: [playButton, loadIndicator])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
@@ -178,9 +156,7 @@ class BHMiniPlayerView: UIView {
         actionView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         userLabel.translatesAutoresizingMaskIntoConstraints = false
-        backwardButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
-        forwardButton.translatesAutoresizingMaskIntoConstraints = false
         loadIndicator.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         expandButton.translatesAutoresizingMaskIntoConstraints = false
@@ -215,14 +191,8 @@ class BHMiniPlayerView: UIView {
             userLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: Constants.paddingHorizontal / 2),
             userLabel.rightAnchor.constraint(equalTo: stackView.leftAnchor, constant: -Constants.paddingHorizontal / 2),
 
-            backwardButton.heightAnchor.constraint(equalToConstant: btnSize),
-            backwardButton.widthAnchor.constraint(equalToConstant: btnSize),
-
             playButton.heightAnchor.constraint(equalToConstant: btnSize),
             playButton.widthAnchor.constraint(equalToConstant: 4 * btnSize / 5),
-
-            forwardButton.heightAnchor.constraint(equalToConstant: btnSize),
-            forwardButton.widthAnchor.constraint(equalToConstant: btnSize),
 
             loadIndicator.heightAnchor.constraint(equalToConstant: btnSize),
             loadIndicator.widthAnchor.constraint(equalToConstant: btnSize),
@@ -285,42 +255,25 @@ class BHMiniPlayerView: UIView {
             self.loadIndicator.startAnimating()
             self.loadIndicator.isHidden = false
             self.playButton.isHidden = true
-            self.backwardButton.isHidden = true
-            self.forwardButton.isHidden = true
         } else if showRefresh {
             self.loadIndicator.stopAnimating()
             self.loadIndicator.isHidden = true
             self.playButton.isHidden = false
-            self.backwardButton.isHidden = true
-            self.forwardButton.isHidden = true
         } else {
             self.loadIndicator.stopAnimating()
             self.loadIndicator.isHidden = true
             self.playButton.isHidden = false
-            self.backwardButton.isHidden = false
-            self.forwardButton.isHidden = false
             self.playButton.isEnabled = controlsEnabled
-            self.backwardButton.isEnabled = controlsEnabled
-            self.forwardButton.isEnabled = controlsEnabled
         }
         
         if isLiveNow() {
             self.loadIndicator.isHidden = true
             self.playButton.isHidden = true
-            self.backwardButton.isHidden = true
-            self.forwardButton.isHidden = true
-        }
-        
-        if playerItem.isStream || isLiveStream() {
-            self.backwardButton.isHidden = true
-            self.forwardButton.isHidden = true
         }
     }
 
     private func resetControls() {
         playButton.isEnabled = false
-        backwardButton.isEnabled = false
-        forwardButton.isEnabled = false
         loadIndicator.stopAnimating()
         loadIndicator.isHidden = true
         userLabel.text = ""
@@ -361,22 +314,6 @@ class BHMiniPlayerView: UIView {
             BHHybridPlayer.shared.pause()
         } else {
             BHHybridPlayer.shared.resume()
-        }
-    }
-    
-    @objc private func onForwardButton(_ sender: Any) {
-        guard BHHybridPlayer.shared.playerItem != nil else { return }
-        
-        if BHHybridPlayer.shared.isActive() {
-            BHHybridPlayer.shared.seekForward()
-        }
-    }
-    
-    @objc private func onBackwardButton(_ sender: Any) {
-        guard BHHybridPlayer.shared.playerItem != nil else { return }
-        
-        if BHHybridPlayer.shared.isActive() {
-            BHHybridPlayer.shared.seekBackward()
         }
     }
     
