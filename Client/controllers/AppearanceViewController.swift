@@ -40,20 +40,30 @@ class AppearanceViewController: UIViewController {
         models.append(contentsOf: [
             ThemeOption(title: "System", selected: currentTheme == Appearance.system, handler: {
                 ThemesManager.shared.updateTheme(theme: .system)
-                self.configure()
-                self.tableView.reloadData()
+                self.reloadData()
             }),
             ThemeOption(title: "Light", selected: currentTheme == Appearance.light, handler: {
                 ThemesManager.shared.updateTheme(theme: .light)
-                self.configure()
-                self.tableView.reloadData()
+                self.reloadData()
             }),
             ThemeOption(title: "Dark", selected: currentTheme == Appearance.dark, handler: {
                 ThemesManager.shared.updateTheme(theme: .dark)
-                self.configure()
-                self.tableView.reloadData()
+                self.reloadData()
             })
         ])
+    }
+    
+    fileprivate func reloadData() {
+        configure()
+    
+        let numberOfRows = tableView.numberOfRows(inSection: 0)
+        var indexPaths: [IndexPath] = []
+        
+        for index in 0...numberOfRows {
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        tableView.reloadRows(at: indexPaths, with: .none)
     }
 }
 
@@ -79,20 +89,19 @@ extension AppearanceViewController: UITableViewDelegate, UITableViewDataSource {
         
         /// accessibility
         cell.isAccessibilityElement = true
-        cell.accessibilityTraits = .button
+        cell.accessibilityTraits = .selected
         cell.accessibilityLabel = "\(model.title)"
 
         if model.selected {
-            cell.accessibilityTraits.insert(.selected)
+            cell.accessibilityValue = "On"
         } else {
-            cell.accessibilityTraits.remove(.selected)
+            cell.accessibilityValue = "Off"
         }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         let model = models[indexPath.row]
         model.handler()
     }
