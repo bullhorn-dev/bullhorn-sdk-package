@@ -18,6 +18,7 @@ enum SettingsOptionType {
 
 struct SettingsOption {
     let title: String
+    let accessibilityText: String?
     let icon: UIImage?
     let iconBackgroundColor: UIColor
     let handler: (() -> Void)
@@ -130,7 +131,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         } else {
             models.append(Section(title: "Account", options: [
-                .staticCell(model: SettingsOption(title: "Log In", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Log In", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
                 }, disclosure: true)),
                 .detailsCell(model: SettingsDetailsOption(title: "Create a free account", subtitle: "Create your free account to like episodes and join in on the fun.", icon: nil, iconBackgroundColor: .accent(), handler: {
@@ -141,19 +142,19 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         if BullhornSdk.shared.externalUser?.level == .external {
             models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Downloaded Episodes", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Liked Episodes", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Liked Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.FavoritesSegueIdentifier, sender: self)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Followed Podcasts", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Followed Podcasts", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         } else {
             models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Downloaded Episodes", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
@@ -161,22 +162,22 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         if UserDefaults.standard.isDevModeEnabled {
             models.append(Section(title: "App Preferences", options: [
-                .staticCell(model: SettingsOption(title: "Settings", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Settings", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.SettingsSegueIdentifier, sender: self)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "More Info", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "More Info", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Developer mode options", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Developer mode options", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DevModeSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         } else {
             models.append(Section(title: "App Preferences", options: [
-                .staticCell(model: SettingsOption(title: "Appearance", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "Appearance", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
                 }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "More Info", icon: nil, iconBackgroundColor: .accent(), handler: {
+                .staticCell(model: SettingsOption(title: "More Info", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))

@@ -67,7 +67,7 @@ class BHSettingsViewController: BHPlayerContainingViewController {
         models.removeAll()
 
         models.append(Section(title: "Display", options: [
-            .staticCell(model: SettingsOption(title: "Appearance", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Appearance", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                 NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
             }, disclosure: true)),
         ]))
@@ -86,10 +86,10 @@ class BHSettingsViewController: BHPlayerContainingViewController {
                 self.configure()
                 self.tableView.reloadData()
             })),
-            .staticCell(model: SettingsOption(title: "Notifications Settings", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Notifications Settings", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.performSegue(withIdentifier: BHSettingsViewController.NotificationsSegueIdentifier, sender: self)
             }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Downloads Settings", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Downloads Settings", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.performSegue(withIdentifier: BHSettingsViewController.DownloadsSegueIdentifier, sender: self)
             }, disclosure: true)),
         ]))

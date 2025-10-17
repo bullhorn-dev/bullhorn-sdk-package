@@ -89,26 +89,26 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
         models.removeAll()
         
         models.append(Section(title: "Information", options: [
-            .staticCell(model: SettingsOption(title: "Terms of Service", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Terms of Service", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .termsOfService })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Privacy Policy", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyPolicy })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Your Privacy Choices", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Your Privacy Choices", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .yourPrivacyChoices })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
         ]))
         
         models.append(Section(title: "Support", options: [
-            .staticCell(model: SettingsOption(title: "Contact Us", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Contact Us", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .contactUs })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Report a problem", icon: nil, iconBackgroundColor: .accent(), handler: {
+            .staticCell(model: SettingsOption(title: "Report a problem", accessibilityText: "", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.performSegue(withIdentifier: BHMoreInfoViewController.ReportSegueIdentifier, sender: self)
             }, disclosure: true)),
         ]))

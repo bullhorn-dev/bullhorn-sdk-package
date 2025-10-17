@@ -39,7 +39,8 @@ class BHSettingCell: UITableViewCell {
         
         contentView.isAccessibilityElement = true
         contentView.accessibilityLabel = model.title
-        contentView.accessibilityTraits = .button
+        contentView.accessibilityValue = model.accessibilityText ?? ""
+        contentView.accessibilityTraits.insert(.button)
 
         self.accessibilityElements = [contentView]
         self.isAccessibilityElement = false
