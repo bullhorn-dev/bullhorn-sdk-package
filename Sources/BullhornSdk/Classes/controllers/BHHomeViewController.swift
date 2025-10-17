@@ -77,7 +77,16 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        reloadData()
+        let sections = getAllSectionsIndexSet()
+        collectionView.reloadSections(sections)
+        
+        BHLog.p("Refresh all sections")
+    }
+    
+    func getAllSectionsIndexSet() -> IndexSet {
+        let numberOfSections = collectionView.numberOfSections
+        let allSections = IndexSet(integersIn: 1..<numberOfSections)
+        return allSections
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -336,9 +345,15 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = floor((collectionView.frame.size.width - 2 * (Constants.paddingHorizontal + Constants.itemSpacing)) / 3)
-        let height = width + 35
-        return CGSize(width: width, height: height)
+        
+        let itemsPerRow: CGFloat = 3
+        let padding: CGFloat = 2 * Constants.paddingHorizontal
+        let spacing: CGFloat = 2 * Constants.itemSpacing
+        let availableWidth: CGFloat = collectionView.bounds.width - padding - spacing
+        let itemWidth = floor(availableWidth / itemsPerRow)
+        let itemHeight = itemWidth + 24
+
+        return CGSize(width: itemWidth, height: itemHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -362,7 +377,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 return CGSize(width: view.frame.width, height: 0.0)
             }
         } else {
-            return CGSize(width: view.frame.width, height: 44.0)
+            return CGSize(width: view.frame.width, height: Constants.panelHeight)
         }
     }
 }

@@ -26,7 +26,7 @@ class BHSectionHeaderView: UICollectionReusableView {
     }
     
     override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
-        return CGSize(width: frame.size.width, height: 44.0)
+        return CGSize(width: frame.size.width, height: Constants.panelHeight)
     }
 
     // MARK: - Private

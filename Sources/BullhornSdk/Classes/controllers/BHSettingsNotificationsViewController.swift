@@ -166,7 +166,7 @@ extension BHSettingsNotificationsViewController: UITableViewDataSource, UITableV
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return BHUserManager.shared.followedUsers.count > 0 ? 44.0 : 0
+        return BHUserManager.shared.followedUsers.count > 0 ? Constants.panelHeight : 0
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}

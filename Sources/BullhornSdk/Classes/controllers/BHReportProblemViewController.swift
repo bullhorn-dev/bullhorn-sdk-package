@@ -246,9 +246,9 @@ extension BHReportProblemViewController: BHDropDownTextFieldDelegate {
         BHLog.p("menuDidAnimate: \(up)")
         
         if up {
-            reasonHeightConstraint.constant = 44.0
+            reasonHeightConstraint.constant = Constants.panelHeight
         } else {
-            reasonHeightConstraint.constant = 44.0 + CGFloat(reasons.count) * 40.0
+            reasonHeightConstraint.constant = Constants.panelHeight + CGFloat(reasons.count) * 40.0
         }
     }
 }

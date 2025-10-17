@@ -70,7 +70,7 @@ class BHUsersCarouselView: UIView, UICollectionViewDelegateFlowLayout, UICollect
             collectionView.widthAnchor.constraint(equalTo: widthAnchor),
             collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
             collectionView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: calculateHeight())
+            collectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
     }
     
