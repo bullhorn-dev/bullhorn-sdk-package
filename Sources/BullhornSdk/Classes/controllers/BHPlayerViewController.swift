@@ -12,7 +12,6 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var controlsView: UIView!
     @IBOutlet private(set) weak var bottomView: UIView!
-    @IBOutlet private(set) weak var queueButton: UIButton!
     @IBOutlet private(set) weak var transcriptButton: UIButton!
     @IBOutlet private(set) weak var transcriptView: UIView!
     @IBOutlet private(set) weak var transcriptTableView: UITableView!
@@ -42,9 +41,6 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         transcriptView.isHidden = BHHybridPlayer.shared.isTranscriptActive
         transcriptButton.isHidden = post?.hasTranscript == false
         
-        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
-        queueButton.accessibilityLabel = "Show playback queue"
-
         let bundle = Bundle.module
         let transcriptCellNib = UINib(nibName: "BHPlayerTranscriptCell", bundle: bundle)
         transcriptTableView.register(transcriptCellNib, forCellReuseIdentifier: BHPlayerTranscriptCell.reusableIndentifer)
@@ -136,22 +132,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         }
     }
     
-    override func updateAfterSettingsChanged() {
-        super.updateAfterSettingsChanged()
-        
-        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
-    }
-    
     // MARK: - Actions
     
-    @IBAction func onQueueButton() {
-        let optionsSheet = BHPlayerQueueBottomSheet()
-        optionsSheet.preferredSheetSizing = .fit
-        optionsSheet.panToDismissEnabled = false
-        optionsSheet.sheetTitle = NSLocalizedString("PLAYBACK QUEUE", comment: "")
-        present(optionsSheet, animated: true)
-    }
-
     @IBAction func onTranscriptButton() {
         let isActive = BHHybridPlayer.shared.isTranscriptActive
         

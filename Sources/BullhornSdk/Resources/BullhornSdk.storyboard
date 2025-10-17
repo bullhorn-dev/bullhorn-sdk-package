@@ -955,13 +955,29 @@
                                                                         </connections>
                                                                     </button>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5CK-e6-Cyq">
-                                                                        <rect key="frame" x="162" y="0.0" width="50" height="44"/>
+                                                                        <rect key="frame" x="108" y="0.0" width="50" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="cte-aQ-9xD"/>
                                                                             <constraint firstAttribute="width" constant="50" id="hlp-6b-8Af"/>
                                                                         </constraints>
                                                                     </view>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3T3-wO-uCk">
+                                                                        <rect key="frame" x="222" y="0.0" width="44" height="44"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="44" id="roi-L4-RBO"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                        <state key="normal">
+                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <imageReference key="image" image="list.bullet.circle" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="onQueueButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="BhB-sO-gdF"/>
+                                                                        </connections>
+                                                                    </button>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="AVRoutePickerView">
                                                                         <rect key="frame" x="286" y="0.0" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1263,6 +1279,7 @@
                         <outlet property="playButton" destination="JjD-qu-HCL" id="8Pw-La-rRH"/>
                         <outlet property="positionLabel" destination="rG6-w4-xJL" id="PJM-qM-jX3"/>
                         <outlet property="previousButton" destination="iCT-g5-6UY" id="ohS-cM-Cdb"/>
+                        <outlet property="queueButton" destination="3T3-wO-uCk" id="0G6-Jm-7PQ"/>
                         <outlet property="routePickerView" destination="m3P-Xr-jNS" id="vAw-CW-yAU"/>
                         <outlet property="slider" destination="Ctc-KZ-Oxf" id="006-3W-RB9"/>
                         <outlet property="tabbedView" destination="sio-JJ-vAg" id="iS1-pF-26r"/>
@@ -2691,10 +2708,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

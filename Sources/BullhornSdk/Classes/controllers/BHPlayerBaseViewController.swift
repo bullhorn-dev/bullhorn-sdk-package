@@ -35,6 +35,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var optionsButton: UIButton!
+    @IBOutlet weak var queueButton: UIButton!
 
     weak var delegate: BHPlayerBaseViewControllerDelegate?
 
@@ -118,7 +119,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.videoView.isHidden = true
         
         self.slider.isContinuous = true
-        
+
+        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+
         if type == .waitingRoom {
             playButton.isHidden = true
             backwardButton.isHidden = true
@@ -180,6 +183,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         optionsButton.accessibilityLabel = "More options"
         closeButton.isAccessibilityElement = true
         closeButton.accessibilityLabel = "Collapse Player"
+        queueButton.accessibilityLabel = "Show playback queue"
         positionLabel.accessibilityTraits = .updatesFrequently
         durationLabel.accessibilityTraits = .updatesFrequently
     }
@@ -209,7 +213,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func refreshTranscriptForPosition(_ position: Double = 0) {}
     
-    func updateAfterSettingsChanged() {}
+    func updateAfterSettingsChanged() {
+        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+    }
     
     // MARK: - Notifications
     
@@ -280,6 +286,14 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         optionsSheet.preferredSheetSizing = .fit
         optionsSheet.panToDismissEnabled = true
         optionsSheet.type = type
+        present(optionsSheet, animated: true)
+    }
+    
+    @IBAction func onQueueButton() {
+        let optionsSheet = BHPlayerQueueBottomSheet()
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = false
+        optionsSheet.sheetTitle = NSLocalizedString("PLAYBACK QUEUE", comment: "")
         present(optionsSheet, animated: true)
     }
 
@@ -379,12 +393,15 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             positionLabel.isHidden = true
             durationLabel.isHidden = true
             liveTagLabel.isHidden = false
+            optionsButton.isEnabled = controlsEnabled
         } else {
             slider.isHidden = false
             positionLabel.isHidden = false
             durationLabel.isHidden = false
             liveTagLabel.isHidden = true
             slider.isEnabled = controlsEnabled
+            queueButton.isEnabled = controlsEnabled
+            optionsButton.isEnabled = controlsEnabled
         }
     }
     
