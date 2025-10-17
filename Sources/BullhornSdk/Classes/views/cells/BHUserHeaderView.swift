@@ -186,6 +186,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         linkIcon.tintColor = .primary()
         linkButton.titleLabel?.font = .secondaryText()
         linkButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        linkButton.accessibilityLabel = "Open podcast website"
+        linkButton.accessibilityValue = "External link"
 
         userView.isHidden = searchActive
         bioView.isHidden = searchActive

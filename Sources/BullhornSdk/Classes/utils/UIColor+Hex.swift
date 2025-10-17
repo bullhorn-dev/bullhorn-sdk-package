@@ -203,4 +203,8 @@ extension UIColor {
     static func fxPrimaryBackground() -> UIColor {
         return UIColor.init(named: "fxColorPrimaryBg") ?? .white
     }
+    
+    static func selectedBackground() -> UIColor {
+        return UIColor.init(named: "bhColorSelectedBg") ?? .red
+    }
 }

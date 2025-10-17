@@ -72,8 +72,8 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
         if isSelected {
             titleLabel.textColor = .navigationText()
             titleLabel.font = .fontWithName(.robotoMedium, size: 17)
-            titleLabel.backgroundColor = .navigationBackground()
-            titleLabel.layer.borderColor = UIColor.navigationBackground().cgColor
+            titleLabel.backgroundColor = .selectedBackground()
+            titleLabel.layer.borderColor = UIColor.selectedBackground().cgColor
         } else {
             titleLabel.textColor = .primary()
             titleLabel.font = .fontWithName(.robotoRegular, size: 17)
