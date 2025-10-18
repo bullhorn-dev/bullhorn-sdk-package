@@ -57,7 +57,7 @@ class BHAccountCell: UITableViewCell {
         iconContainer.layer.borderColor = UIColor.divider().cgColor
         
         contentView.isAccessibilityElement = true
-        contentView.accessibilityLabel = model.title
+        contentView.accessibilityLabel = "\(model.title) \(model.subtitle ?? "")"
         contentView.accessibilityTraits = .button
 
         self.accessibilityElements = [contentView, subtitleLabel!]
