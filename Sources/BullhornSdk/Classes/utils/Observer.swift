@@ -49,9 +49,13 @@ public class ObserversContainer<T> {
 
     public init() {}
 
-    @discardableResult public func addObserver(_ observer: ObserverProtocol) -> Bool {
+    @discardableResult public func addObserver(_ observer: ObserverProtocol, withDuplicates: Bool = false) -> Bool {
 
-        guard indexOfObserver(with: observer.objectIdentifier) == nil else { return false }
+        if !withDuplicates {
+            guard indexOfObserver(with: observer.objectIdentifier) == nil else {
+                return false
+            }
+        }
 
         return ObserverWrapper<T>.init(observer).map { observers.append($0) } != nil
     }

@@ -152,8 +152,8 @@ class BHHybridPlayer {
     
     // MARK: - Public listener
 
-    func addListener(_ listener: BHHybridPlayerListener) {
-        workingQueue.async { self.observersContainer.addObserver(listener) }
+    func addListener(_ listener: BHHybridPlayerListener, withDuplicates: Bool = false) {
+        workingQueue.async { self.observersContainer.addObserver(listener, withDuplicates: withDuplicates) }
     }
 
     func removeListener(_ listener: BHHybridPlayerListener) {

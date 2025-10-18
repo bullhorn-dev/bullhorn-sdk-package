@@ -49,7 +49,7 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
         super.viewWillAppear(animated)
         
         tableView.reloadData()
-        BHHybridPlayer.shared.addListener(self)
+        BHHybridPlayer.shared.addListener(self, withDuplicates: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

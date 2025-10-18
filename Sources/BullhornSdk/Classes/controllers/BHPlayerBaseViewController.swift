@@ -91,9 +91,6 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        BHHybridPlayer.shared.addListener(self)
-        BHLivePlayer.shared.addListener(self)
-        
         self.view.backgroundColor = .playerDisplayBackground()
 
         activityIndicator.type = .circleStrokeSpin
@@ -148,6 +145,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
         
         setupAccessibility()
+                
+        BHHybridPlayer.shared.addListener(self, withDuplicates: true)
+//        BHLivePlayer.shared.addListener(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -168,7 +168,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     override func viewDidDisappear(_ animated: Bool) {
         BHHybridPlayer.shared.removeListener(self)
-        BHLivePlayer.shared.removeListener(self)
+//        BHLivePlayer.shared.removeListener(self)
         super.viewDidDisappear(animated)
     }
     
