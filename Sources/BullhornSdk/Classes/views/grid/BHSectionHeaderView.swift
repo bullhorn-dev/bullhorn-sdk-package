@@ -22,7 +22,6 @@ class BHSectionHeaderView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         accessibilityLabel = nil
-        titleLabel.text = nil
     }
     
     override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
@@ -35,7 +34,8 @@ class BHSectionHeaderView: UICollectionReusableView {
         titleLabel.textColor = .primary()
         titleLabel.font = .sectionTitle()
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.isAccessibilityElement = false
-        isAccessibilityElement = true
+        titleLabel.isAccessibilityElement = true
+        titleLabel.accessibilityTraits.insert(.header)
+        isAccessibilityElement = false
     }
 }

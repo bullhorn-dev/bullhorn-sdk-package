@@ -76,22 +76,27 @@ class BHHomeHeaderView: UICollectionReusableView {
         
         scheduledPostsTitleLabel.textColor = .primary()
         scheduledPostsTitleLabel.font = .sectionTitle()
+        scheduledPostsTitleLabel.accessibilityTraits.insert(.header)
         scheduledPostsTitle.backgroundColor = .primaryBackground()
 
         livePostsTitleLabel.textColor = .primary()
         livePostsTitleLabel.font = .sectionTitle()
+        livePostsTitleLabel.accessibilityTraits.insert(.header)
         livePostsTitle.backgroundColor = .primaryBackground()
 
         featuredUsersTitleLabel.textColor = .primary()
         featuredUsersTitleLabel.font = .sectionTitle()
+        featuredUsersTitleLabel.accessibilityTraits.insert(.header)
         featuredPostsTitle.backgroundColor = .primaryBackground()
 
         featuredPostsTitleLabel.textColor = .primary()
         featuredPostsTitleLabel.font = .sectionTitle()
+        featuredPostsTitleLabel.accessibilityTraits.insert(.header)
         featuredUsersTitle.backgroundColor = .primaryBackground()
 
         followedUsersTitleLabel.textColor = .primary()
         followedUsersTitleLabel.font = .sectionTitle()
+        followedUsersTitleLabel.accessibilityTraits.insert(.header)
         followedUsersTitle.backgroundColor = .primaryBackground()
 
         featuredUsersView.delegate = self

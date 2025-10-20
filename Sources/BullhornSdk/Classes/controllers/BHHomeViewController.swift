@@ -38,7 +38,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         collectionView.register(headerNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHHomeHeaderView.reusableIndentifer)
         collectionView.register(sectionHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer)
-        collectionView.register(BHUserCarouselCell.self, forCellWithReuseIdentifier: BHUserCarouselCell.reusableIndentifer)
+        collectionView.register(BHUserGridCell.self, forCellWithReuseIdentifier: BHUserGridCell.reusableIndentifer)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = true
         collectionView.isPagingEnabled = false
@@ -327,9 +327,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
-        
-        cell.showCategory = false
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserGridCell.reusableIndentifer, for: indexPath) as! BHUserGridCell
         cell.user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.item]
     
         return cell
