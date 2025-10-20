@@ -39,28 +39,34 @@ class BHPlaybackSpeedPanel: UIView {
         backgroundColor = .clear
         
         zeroSevenFive.addTarget(self, action: #selector(onZeroSevenFive), for: .touchUpInside)
-        zeroSevenFive.setTitle(BHPlayerPlaybackSpeed.zeroSevenFive.getTitle(), for: .normal)
-        zeroSevenFive.accessibilityLabel = accessibilityTitle(.zeroSevenFive)
+        zeroSevenFive.setTitle(buttonTitle(.zeroSevenFive), for: .normal)
+        zeroSevenFive.accessibilityLabel = "Playback speed"
+        zeroSevenFive.accessibilityValue = buttonTitle(.zeroSevenFive)
 
         normal.addTarget(self, action: #selector(onNormal), for: .touchUpInside)
-        normal.setTitle(BHPlayerPlaybackSpeed.normal.getTitle(), for: .normal)
-        normal.accessibilityLabel = accessibilityTitle(.normal)
+        normal.setTitle(buttonTitle(.normal), for: .normal)
+        normal.accessibilityLabel = "Playback speed"
+        normal.accessibilityValue = buttonTitle(.normal)
 
         oneTwoFive.addTarget(self, action: #selector(onOneTwoFive), for: .touchUpInside)
-        oneTwoFive.setTitle(BHPlayerPlaybackSpeed.oneTwoFive.getTitle(), for: .normal)
-        oneTwoFive.accessibilityLabel = accessibilityTitle(.oneTwoFive)
+        oneTwoFive.setTitle(buttonTitle(.oneTwoFive), for: .normal)
+        oneTwoFive.accessibilityLabel = "Playback speed"
+        oneTwoFive.accessibilityValue = buttonTitle(.oneTwoFive)
 
         oneFiveZero.addTarget(self, action: #selector(onOneFiveZero), for: .touchUpInside)
-        oneFiveZero.setTitle(BHPlayerPlaybackSpeed.oneFiveZero.getTitle(), for: .normal)
-        oneFiveZero.accessibilityLabel = accessibilityTitle(.oneFiveZero)
+        oneFiveZero.setTitle(buttonTitle(.oneFiveZero), for: .normal)
+        oneFiveZero.accessibilityLabel = "Playback speed"
+        oneFiveZero.accessibilityValue = buttonTitle(.oneFiveZero)
 
         oneSevenFive.addTarget(self, action: #selector(onOneSevenFive), for: .touchUpInside)
-        oneSevenFive.setTitle(BHPlayerPlaybackSpeed.oneSevenFive.getTitle(), for: .normal)
-        oneSevenFive.accessibilityLabel = accessibilityTitle(.oneSevenFive)
+        oneSevenFive.setTitle(buttonTitle(.oneSevenFive), for: .normal)
+        oneSevenFive.accessibilityLabel = "Playback speed"
+        oneSevenFive.accessibilityValue = buttonTitle(.oneSevenFive)
 
         twoZero.addTarget(self, action: #selector(onTwoZero), for: .touchUpInside)
-        twoZero.setTitle(BHPlayerPlaybackSpeed.twoZero.getTitle(), for: .normal)
-        twoZero.accessibilityLabel = accessibilityTitle(.twoZero)
+        twoZero.setTitle(buttonTitle(.twoZero), for: .normal)
+        twoZero.accessibilityLabel = "Playback speed"
+        twoZero.accessibilityValue = buttonTitle(.twoZero)
 
         stackView = UIStackView(arrangedSubviews: [zeroSevenFive, normal, oneTwoFive, oneFiveZero, oneSevenFive, twoZero])
         stackView.axis = .horizontal
@@ -135,8 +141,8 @@ class BHPlaybackSpeedPanel: UIView {
         twoZero.deselect()
     }
     
-    fileprivate func accessibilityTitle(_ item: BHPlayerPlaybackSpeed) -> String {
-        return "Set playback speed to \(item.getTitle())"
+    fileprivate func buttonTitle(_ item: BHPlayerPlaybackSpeed) -> String {
+        return item.getTitle()
     }
                 
     // MARK: - Actions

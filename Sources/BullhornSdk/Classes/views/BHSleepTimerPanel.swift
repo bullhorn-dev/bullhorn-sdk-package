@@ -40,27 +40,33 @@ class BHSleepTimerPanel: UIView {
         
         off.addTarget(self, action: #selector(onOff), for: .touchUpInside)
         off.setTitle(BHPlayerSleepTime.off.getTitle(), for: .normal)
-        off.accessibilityLabel = "Set sleep timer off"
+        off.accessibilityLabel = "Sleep timer"
+        off.accessibilityValue = "Off"
 
         fiveMin.addTarget(self, action: #selector(onFiveMin), for: .touchUpInside)
         fiveMin.setTitle(BHPlayerSleepTime.fiveMin.getTitle(), for: .normal)
-        fiveMin.accessibilityLabel = "Set sleep timer to 5 minutes"
+        fiveMin.accessibilityLabel = "Sleep timer"
+        fiveMin.accessibilityValue = "5 minutes"
 
         fifteenMin.addTarget(self, action: #selector(onFifteenMin), for: .touchUpInside)
         fifteenMin.setTitle(BHPlayerSleepTime.fifteenMin.getTitle(), for: .normal)
-        fifteenMin.accessibilityLabel = "Set sleep timer to 15 minutes"
+        fifteenMin.accessibilityLabel = "Sleep timer"
+        fifteenMin.accessibilityValue = "15 minutes"
 
         thirtyMin.addTarget(self, action: #selector(onThirtyMin), for: .touchUpInside)
         thirtyMin.setTitle(BHPlayerSleepTime.thirtyMin.getTitle(), for: .normal)
-        thirtyMin.accessibilityLabel = "Set sleep timer to 30 minutes"
+        thirtyMin.accessibilityLabel = "Sleep timer"
+        thirtyMin.accessibilityValue = "30 minutes"
 
         oneHour.addTarget(self, action: #selector(onOneHour), for: .touchUpInside)
         oneHour.setTitle(BHPlayerSleepTime.oneHour.getTitle(), for: .normal)
-        oneHour.accessibilityLabel = "Set sleep timer to 1 hour"
+        oneHour.accessibilityLabel = "Sleep timer"
+        oneHour.accessibilityValue = "1 hour"
 
         twoHours.addTarget(self, action: #selector(onTwoHours), for: .touchUpInside)
         twoHours.setTitle(BHPlayerSleepTime.twoHours.getTitle(), for: .normal)
-        twoHours.accessibilityLabel = "Set sleep timer to 2 hours"
+        twoHours.accessibilityLabel = "Sleep timer"
+        twoHours.accessibilityValue = "2 hours"
 
         stackView = UIStackView(arrangedSubviews: [off, fiveMin, fifteenMin, thirtyMin, oneHour, twoHours])
         stackView.axis = .horizontal
