@@ -48,7 +48,7 @@ class BHRadioHeaderView: UITableViewHeaderFooterView {
         radioStreamsView.accessibilityLabel = "Radio \(liveStream.title)"
         radioStreamsView.accessibilityTraits = .selected
 
-        self.accessibilityElements = [radioStreamsView!.subviews, radioStreamsView!]
+        self.accessibilityElements = [radioStreamsView!, radioStreamsView!.subviews]
         self.isAccessibilityElement = false
     }
     

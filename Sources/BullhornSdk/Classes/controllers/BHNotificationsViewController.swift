@@ -7,7 +7,7 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
     fileprivate static let UserDetailsSegueIdentifier = "Notifications.UserDetailsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
@@ -26,12 +26,17 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
-        let gridCellNib = UINib(nibName: "BHUsersGridCell", bundle: bundle)
+        let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
 
-        tableView.register(gridCellNib, forCellReuseIdentifier: BHUsersGridCell.reusableIndentifer)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .primaryBackground()
+        collectionView.register(sectionHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer)
+        collectionView.register(BHUserCarouselCell.self, forCellWithReuseIdentifier: BHUserCarouselCell.reusableIndentifer)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = true
+        collectionView.isPagingEnabled = false
+        collectionView.isScrollEnabled = true
+        collectionView.backgroundColor = .primaryBackground()
+        collectionView.delegate = self
+        collectionView.dataSource = self
 
         configureNavigationItems()
         configureRefreshControl()
@@ -52,7 +57,7 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
 
         refreshControl?.resetUIState()
         configureNavigationItems()
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,7 +87,7 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
         refreshControl = newRefreshControl
         refreshControl?.tintColor = .accent()
-        tableView.addSubview(newRefreshControl)
+        collectionView.addSubview(newRefreshControl)
     }
     
     // MARK: - Network
@@ -91,7 +96,7 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
         let completeBlock = {
             self.refreshControl?.endRefreshing()
             self.defaultHideActivityIndicatorView()
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
 
         if initial {
@@ -145,7 +150,7 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
             case .success:
                 DispatchQueue.main.async {
                     self.configureNavigationItems()
-                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
                     BHNotificationsManager.shared.removeAllDeliveredNotifications()
                 }
             case .failure(error: let error):
@@ -157,50 +162,84 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-extension BHNotificationsViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+extension BHNotificationsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if userManager.newEpisodesUsers.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle.module
-            let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "No notifications yet" : "The Internet connection is lost"
-            tableView.setEmptyMessage(message, image: image)
-        } else {
-            tableView.restore()
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if userManager.newEpisodesUsers.count == 0 {
+            if !activityIndicator.isAnimating {
+                let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+                collectionView.setEmptyMessage(message, image: image)
+            } else {
+                collectionView.restore()
+            }
         }
-
-        return userManager.newEpisodesUsers.count > 0 ? 1 : 0
+        return userManager.newEpisodesUsers.count == 0 ? 0 : 1
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BHUsersGridCell.reusableIndentifer, for: indexPath) as! BHUsersGridCell
-        
-        let uiModel = UIUsersModel(title: "Podcasts with new episodes", users: userManager.newEpisodesUsers)
-        cell.collectionViewController.uiModels = [uiModel]
-        cell.collectionViewController.showNewEpisodesBadge = true
-        cell.collectionViewController.delegate = self
-        
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return userManager.newEpisodesUsers.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
+                
+            guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
+            usersHeaderView.titleLabel.text = "Podcasts with new episodes"
+                
+            return usersHeaderView
+        default:
+            return UICollectionReusableView()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
+        cell.user = userManager.newEpisodesUsers[indexPath.row]
+        cell.showCategory = false
+        cell.showBadge = true
+
         return cell
     }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-}
-
-// MARK: - BHGridControllerDelegate
-
-extension BHNotificationsViewController: BHGridControllerDelegate {
-
-    func gridController(_ controller: BHGridCollectionController, didSelectUser user: BHUser) {
+        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let user = userManager.newEpisodesUsers[indexPath.row]
         openUserDetails(user)
+    }
+      
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemsPerRow: CGFloat = 3
+        let padding: CGFloat = 2 * Constants.paddingHorizontal
+        let spacing: CGFloat = 2 * Constants.itemSpacing
+        let availableWidth: CGFloat = collectionView.bounds.width - padding - spacing
+        let itemWidth = floor(availableWidth / itemsPerRow)
+        let itemHeight = itemWidth + 24
+
+        return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.itemSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.itemSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: Constants.paddingHorizontal, bottom: Constants.itemSpacing/2, right: Constants.paddingHorizontal)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: Constants.panelHeight)
     }
 }

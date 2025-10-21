@@ -6,7 +6,7 @@ extension UICollectionView {
 
     func setEmptyMessage(_ message: String, image: UIImage?, topOffset: CGFloat = 0) {
 
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: 120))
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
         messageLabel.text = message
         messageLabel.textColor = .tertiary()
         messageLabel.numberOfLines = 0
@@ -14,32 +14,7 @@ extension UICollectionView {
         messageLabel.font = .fontWithName(.robotoRegular, size: 16)
         messageLabel.sizeToFit()
 
-        if let validImage = image {
-            let imageView = UIImageView(image: validImage)
-
-            let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel])
-            stackView.axis = .vertical
-            stackView.alignment = .fill
-            stackView.distribution = .fill
-            stackView.spacing = Constants.paddingVertical
-            
-            self.backgroundView = stackView
-
-//            self.backgroundView?.backgroundColor = .yellow
-            
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                imageView.heightAnchor.constraint(equalToConstant: 120),
-                imageView.widthAnchor.constraint(equalToConstant: 120),
-                stackView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0),
-                stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: topOffset),
-            ])
-        } else {
-            self.backgroundView = messageLabel
-            self.backgroundView?.contentMode = .center
-        }
+        self.backgroundView = messageLabel;
     }
     
     func setEmptyMessage(_ message: String, onRefresh: @escaping () -> Void, topOffset: CGFloat = 0) {

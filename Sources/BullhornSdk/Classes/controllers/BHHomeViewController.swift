@@ -414,12 +414,3 @@ extension BHHomeViewController: BHHomeHeaderViewDelegate {
         }
     }
 }
-
-// MARK: - BHGridControllerDelegate
-
-extension BHHomeViewController: BHGridControllerDelegate {
-
-    func gridController(_ controller: BHGridCollectionController, didSelectUser user: BHUser) {
-        openUserDetails(user)
-    }
-}
