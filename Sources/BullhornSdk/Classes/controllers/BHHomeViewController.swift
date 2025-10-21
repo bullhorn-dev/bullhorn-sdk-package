@@ -46,7 +46,10 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         collectionView.backgroundColor = .primaryBackground()
         collectionView.delegate = self
         collectionView.dataSource = self
-        
+
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        layout?.sectionHeadersPinToVisibleBounds = true
+
         configureNavigationItems()
         configureRefreshControl()
 

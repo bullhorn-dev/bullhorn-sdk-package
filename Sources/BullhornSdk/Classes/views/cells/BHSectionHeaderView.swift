@@ -36,6 +36,9 @@ class BHSectionHeaderView: UICollectionReusableView {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.isAccessibilityElement = true
         titleLabel.accessibilityTraits.insert(.header)
+        
+        backgroundColor = .primaryBackground()
+        
         isAccessibilityElement = false
     }
 }
