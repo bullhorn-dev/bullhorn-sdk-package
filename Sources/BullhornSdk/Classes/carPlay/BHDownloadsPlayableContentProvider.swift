@@ -61,7 +61,8 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
                 BHLog.p("CarPlay item selected")
                 
                 if let post = self.playlist?[index] {
-                    self.play(post, playlist: self.playlist)
+                    let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: self.playlist, order: .straight)
+                    self.play(post, playlist: playlist)
                 }
                 
                 if let listItem = item as? CPListItem {

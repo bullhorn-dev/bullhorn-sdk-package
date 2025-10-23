@@ -148,7 +148,10 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
         let post = BHDownloadsManager.shared.groupedItems[indexPath.section].posts[indexPath.row]
         cell.post = post
-        cell.playlist = BHDownloadsManager.shared.items.map({ $0.post })
+        
+        let posts = BHDownloadsManager.shared.items.map({ $0.post })
+        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: posts, order: .straight)
+
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton

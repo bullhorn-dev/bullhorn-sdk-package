@@ -51,8 +51,9 @@ extension BHPlayableContentProvider {
                 
                 if index < episodes.count {
                     let post = episodes[index]
+                    let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: episodes, order: .straight)
                     
-                    self.play(post, playlist: episodes)
+                    self.play(post, playlist: playlist)
                     
                     /// update playing item
                     if let listItem = item as? CPListItem {

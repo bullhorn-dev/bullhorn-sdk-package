@@ -5,6 +5,11 @@ import Foundation
 
 extension BHHybridPlayer {
     
+    enum BHQueueOrder: Int {
+        case straight
+        case reversed
+    }
+    
     // MARK: - Public
     
     func addToPlaybackQueue(_ post: BHPost, reason: BHQueueReason = .auto, moveToTop: Bool = false) {
@@ -89,8 +94,21 @@ extension BHHybridPlayer {
         }
     }
     
-    // MARK: - Private
+    func composeOrderedQueue(_ activePostId: String, posts: [BHPost]?, order: BHQueueOrder) -> [BHPost]?  {
+        guard let unsorted = posts else { return nil }
+        guard let activeIndex = posts?.firstIndex(where: { $0.id == activePostId }) else { return nil }
+
+        switch order {
+        case .straight:
+            return Array(unsorted[activeIndex...])
+        case .reversed:
+            let itemsBeforeIndexSlice = unsorted.prefix(activeIndex)
+            return Array(itemsBeforeIndexSlice).reversed()
+        }
+    }
     
+    // MARK: - Private
+        
     internal func currenItemIndex() -> Int {
         return post == nil ? -1 : 0
     }

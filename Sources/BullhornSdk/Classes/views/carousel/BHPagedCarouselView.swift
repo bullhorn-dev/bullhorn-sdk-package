@@ -93,9 +93,10 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
     
     func pagerView(_ pagerView: BHPagerView, cellForItemAt index: Int) -> UICollectionViewCell {
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: BHPostCarouselCell.reusableIndentifer, at: index) as! BHPostCarouselCell
+        let post = posts[index]
 
-        cell.post = posts[index]
-        cell.playlist = posts
+        cell.post = post
+        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: posts, order: .straight)
 
         return cell
     }

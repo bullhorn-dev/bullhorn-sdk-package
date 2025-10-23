@@ -203,7 +203,7 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
         let post = feedManager.favorites[indexPath.row]
         cell.post = post
-        cell.playlist = feedManager.favorites
+        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: feedManager.favorites, order: .straight)
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton
