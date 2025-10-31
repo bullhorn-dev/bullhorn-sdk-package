@@ -569,7 +569,7 @@
         <!--User Details-->
         <scene sceneID="hdB-Gy-d99">
             <objects>
-                <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" hidesBottomBarWhenPushed="YES" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VXZ-pS-Kzd">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -652,7 +652,7 @@
         <!--Post Details-->
         <scene sceneID="7H0-aY-EL8">
             <objects>
-                <viewController storyboardIdentifier="BHPostDetailsViewController" title="Post Details" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TEG-MA-Hda" customClass="BHPostDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHPostDetailsViewController" title="Post Details" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TEG-MA-Hda" customClass="BHPostDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jhH-2Z-9e5">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -735,7 +735,7 @@
         <!--Downloads-->
         <scene sceneID="Eyn-fP-r8X">
             <objects>
-                <viewController storyboardIdentifier="BHDownloadsViewController" title="Downloads" hidesBottomBarWhenPushed="YES" id="cko-RD-0fW" customClass="BHDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHDownloadsViewController" title="Downloads" id="cko-RD-0fW" customClass="BHDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="les-XU-KcI">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1297,7 +1297,7 @@
         <!--Favorites-->
         <scene sceneID="Red-8c-gTz">
             <objects>
-                <viewController restorationIdentifier="BHFavoritesViewController" storyboardIdentifier="BHFavoritesViewController" title="Favorites" hidesBottomBarWhenPushed="YES" id="ISO-h0-mfF" customClass="BHFavoritesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHFavoritesViewController" storyboardIdentifier="BHFavoritesViewController" title="Favorites" id="ISO-h0-mfF" customClass="BHFavoritesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MhH-QD-bJf">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1948,7 +1948,7 @@
         <!--Recent Users-->
         <scene sceneID="04n-RI-syS">
             <objects>
-                <viewController storyboardIdentifier="BHRecentUsersViewController" title="Recent Users" hidesBottomBarWhenPushed="YES" id="vEi-jC-e0X" customClass="BHRecentUsersViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BHRecentUsersViewController" title="Recent Users" id="vEi-jC-e0X" customClass="BHRecentUsersViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yIY-X3-kd5">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2033,7 +2033,7 @@
         <!--Followed Podcasts-->
         <scene sceneID="Lbf-VW-w1q">
             <objects>
-                <viewController restorationIdentifier="BHFollowedViewController" storyboardIdentifier="BHFollowedViewController" title="Followed Podcasts" hidesBottomBarWhenPushed="YES" id="Q2p-ct-dwZ" customClass="BHFollowedViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHFollowedViewController" storyboardIdentifier="BHFollowedViewController" title="Followed Podcasts" id="Q2p-ct-dwZ" customClass="BHFollowedViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QdS-3I-jbE">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2118,7 +2118,7 @@
         <!--Notifications-->
         <scene sceneID="29M-FS-gvI">
             <objects>
-                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications" hidesBottomBarWhenPushed="YES" id="bvR-f5-TVh" customClass="BHNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications" id="bvR-f5-TVh" customClass="BHNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="u7h-wZ-RQZ">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2668,7 +2668,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Tnh-iY-7ke"/>
-        <segue reference="TAw-Tl-Zg2"/>
+        <segue reference="4Qk-s4-pJO"/>
         <segue reference="o17-EU-xWZ"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -2727,10 +2727,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
