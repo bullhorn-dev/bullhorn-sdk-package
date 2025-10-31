@@ -26,8 +26,6 @@ public class UserMO: NSManagedObject {
         user.hasActiveLive = hasActiveLive
         user.shareLink = shareLink != nil ? URL(string: shareLink!) : nil
         user.website = website != nil ? URL(string: website!) : nil
-        user.ratingsCount = ratingsCount?.intValue
-        user.ratingValue = ratingValue?.doubleValue
         user.outgoingStatus = outgoingStatus
         user.receiveNotifications = receiveNotifications
         user.autoDownload = autoDownload

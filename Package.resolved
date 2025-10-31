@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "Cosmos",
-        "repositoryURL": "https://github.com/evgenyneu/Cosmos.git",
-        "state": {
-          "branch": null,
-          "revision": "40ba10aaf175bf50abefd0e518bd3b40862af3b1",
-          "version": "25.0.1"
-        }
-      },
-      {
         "package": "FLAnimatedImage",
         "repositoryURL": "https://github.com/Flipboard/FLAnimatedImage.git",
         "state": {

@@ -571,16 +571,6 @@
                 <entry key="hyper.remoteKey" value="profile_picture_tiny"/>
             </userInfo>
         </attribute>
-        <attribute name="ratingsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="ratings_count"/>
-            </userInfo>
-        </attribute>
-        <attribute name="ratingValue" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="rating_value"/>
-            </userInfo>
-        </attribute>
         <attribute name="receiveNotifications" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
             <userInfo>
                 <entry key="hyper.remoteKey" value="receive_notifications"/>

@@ -1,7 +1,6 @@
 
 import Foundation
 import UIKit
-internal import Cosmos
 
 protocol BHUserHeaderViewDelegate: AnyObject {
     func userHeaderViewOnCollapseButtonPressed(_ view: BHUserHeaderView)
@@ -20,8 +19,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bioLabel: BHHyperlinkLabel!
-    @IBOutlet weak var ratingView: CosmosView!
-    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var unfollowButton: UIButton!
@@ -74,7 +71,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         self.unfollowButton.accessibilityLabel = nil
         self.collapseButton.accessibilityLabel = nil
         self.linkButton.accessibilityLabel = nil
-        self.ratingView.isAccessibilityElement = false
     }
     
     // MARK: - Public
@@ -82,8 +78,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     func reloadData() {
         titleLabel.text = userManager?.user?.fullName
         userIcon.sd_setImage(with: userManager?.user?.coverUrl, placeholderImage: placeholderImage)
-        ratingView.rating = userManager?.user?.ratingValue ?? 0
-        ratingLabel.text = "\(userManager?.user?.ratingsCount ?? 0) Reviews"
         categoryLabel.text = userManager?.user?.categoryName
         
         setupBio(with: didTap)
@@ -156,28 +150,14 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         unfollowButton.titleLabel?.adjustsFontForContentSizeCategory = true
 
         updateFollowButton()
-
-        ratingView.settings.updateOnTouch = false
-        ratingView.settings.fillMode = .half
-        ratingView.settings.starSize = 16
-        ratingView.settings.starMargin = 0
-        ratingView.settings.filledColor = .secondary()
-        ratingView.settings.emptyBorderColor = .secondary()
-        ratingView.settings.filledBorderColor = .secondary()
-        ratingView.settings.emptyColor = .primaryBackground()
-        ratingView.backgroundColor = .primaryBackground()
         
         titleLabel.textColor = .primary()
-        titleLabel.font = .primaryText()
+        titleLabel.font = .primaryButton()
         titleLabel.adjustsFontForContentSizeCategory = true
 
         bioLabel.textColor = .primary()
         bioLabel.font = .secondaryText()
         bioLabel.adjustsFontForContentSizeCategory = true
-
-        ratingLabel.textColor = .secondary()
-        ratingLabel.font = .secondaryText()
-        ratingLabel.adjustsFontForContentSizeCategory = true
 
         categoryLabel.textColor = .secondary()
         categoryLabel.font = .secondaryText()
@@ -205,8 +185,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         followButton.accessibilityLabel = "Follow podcast"
         unfollowButton.accessibilityLabel = "Following options"
         linkButton.accessibilityLabel = "Open podcast website"
-        
-        ratingView.isAccessibilityElement = false
     }
     
     // MARK: - Private

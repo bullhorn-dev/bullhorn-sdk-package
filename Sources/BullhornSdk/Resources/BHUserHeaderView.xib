@@ -66,58 +66,6 @@
                                                         <color key="textColor" name="bhColorSecondary"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tpe-pb-Clu">
-                                                        <rect key="frame" x="0.0" y="64" width="342" height="16"/>
-                                                        <subviews>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BzB-Wj-nsO" customClass="CosmosView" customModule="Cosmos">
-                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="16"/>
-                                                                <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="80" id="JMG-ZX-emd"/>
-                                                                    <constraint firstAttribute="height" constant="16" id="RRr-Vt-bdB"/>
-                                                                </constraints>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="rating">
-                                                                        <real key="value" value="5"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="totalStars">
-                                                                        <integer key="value" value="5"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="filledColor">
-                                                                        <color key="value" name="bhColorSecondary"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyColor">
-                                                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyBorderColor">
-                                                                        <color key="value" name="bhColorSecondary"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="starSize">
-                                                                        <real key="value" value="16"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="emptyBorderWidth">
-                                                                        <real key="value" value="1"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="filledBorderColor">
-                                                                        <color key="value" name="bhColorSecondary"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="filledBorderWidth">
-                                                                        <real key="value" value="1"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </view>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="432 Reviews" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t2Z-Xt-rJn">
-                                                                <rect key="frame" x="84" y="0.0" width="258" height="16"/>
-                                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                                                <color key="textColor" name="bhColorSecondary"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="16" id="psH-34-8ca"/>
-                                                        </constraints>
-                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="pF7-hx-3bl">
                                                         <rect key="frame" x="0.0" y="90" width="342" height="30"/>
                                                         <subviews>
@@ -192,15 +140,12 @@
                                                     <constraint firstItem="1eM-l8-pYj" firstAttribute="top" secondItem="qrc-BL-aaD" secondAttribute="top" id="0GD-av-e3L"/>
                                                     <constraint firstAttribute="bottom" secondItem="pF7-hx-3bl" secondAttribute="bottom" id="3Sg-OH-L92"/>
                                                     <constraint firstItem="1eM-l8-pYj" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="5dC-dO-qdu"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Tpe-pb-Clu" secondAttribute="trailing" id="FZZ-6z-Ssm"/>
                                                     <constraint firstItem="pF7-hx-3bl" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="LYc-19-a55"/>
                                                     <constraint firstItem="aU5-x1-tbq" firstAttribute="top" secondItem="1eM-l8-pYj" secondAttribute="bottom" constant="4" id="QDO-PV-rEa"/>
                                                     <constraint firstAttribute="trailing" secondItem="aU5-x1-tbq" secondAttribute="trailing" id="SjI-gp-SwJ"/>
                                                     <constraint firstAttribute="trailing" secondItem="pF7-hx-3bl" secondAttribute="trailing" id="Viv-Rt-quu"/>
                                                     <constraint firstAttribute="trailing" secondItem="1eM-l8-pYj" secondAttribute="trailing" id="Zrb-mW-Foy"/>
                                                     <constraint firstItem="aU5-x1-tbq" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="fR6-Q1-5as"/>
-                                                    <constraint firstItem="Tpe-pb-Clu" firstAttribute="top" secondItem="aU5-x1-tbq" secondAttribute="bottom" constant="4" id="uy7-Fr-M0W"/>
-                                                    <constraint firstItem="Tpe-pb-Clu" firstAttribute="leading" secondItem="qrc-BL-aaD" secondAttribute="leading" id="w9t-uz-vpT"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -330,8 +275,6 @@
                 <outlet property="linkButton" destination="jrh-DD-Jga" id="W4k-go-URj"/>
                 <outlet property="linkIcon" destination="bbh-tz-Rvg" id="EzI-f1-4XG"/>
                 <outlet property="linkView" destination="cUB-I6-Wdn" id="W8f-hS-WQI"/>
-                <outlet property="ratingLabel" destination="t2Z-Xt-rJn" id="7AW-YG-Bcf"/>
-                <outlet property="ratingView" destination="BzB-Wj-nsO" id="ibm-h5-Wcf"/>
                 <outlet property="searchBarView" destination="nY7-Ic-36B" id="YwE-jL-EwB"/>
                 <outlet property="shareButton" destination="5uv-n8-dP3" id="jvH-H4-DZ1"/>
                 <outlet property="titleLabel" destination="1eM-l8-pYj" id="hxo-eC-0bj"/>
@@ -353,11 +296,8 @@
         <namedColor name="bhColorPrimary">
             <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="bhColorPrimaryBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="bhColorSecondary">
-            <color red="0.53333333333333333" green="0.59999999999999998" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemCyanColor">
             <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

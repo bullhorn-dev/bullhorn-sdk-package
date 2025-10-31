@@ -32,7 +32,6 @@
 		D9D7884329DD5CF7002A5631 /* MainWindowSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D7884229DD5CF7002A5631 /* MainWindowSceneDelegate.swift */; };
 		D9D7884829DD5CF7002A5631 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884629DD5CF7002A5631 /* Main.storyboard */; };
 		D9D7884A29DD5CFA002A5631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9D7884929DD5CFA002A5631 /* Assets.xcassets */; };
-		D9DBD6CE2E05667F00BA0B52 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = D9DBD6CD2E05667F00BA0B52 /* Cosmos */; };
 		D9E2C5E92B3C1F96005B953D /* UITextView+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2C5E82B3C1F96005B953D /* UITextView+Utils.swift */; };
 		D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F53C592D8C2AC1002CB44D /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
@@ -103,7 +102,6 @@
 			files = (
 				D9F53C5A2D8C2AC1002CB44D /* UserNotifications.framework in Frameworks */,
 				D95D1A102D79B57000DCB282 /* CarPlay.framework in Frameworks */,
-				D9DBD6CE2E05667F00BA0B52 /* Cosmos in Frameworks */,
 				D9CA69902D9E7DEC0066E6C5 /* BullhornSdk in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,7 +241,6 @@
 			name = BHSdkApp;
 			packageProductDependencies = (
 				D9CA698F2D9E7DEC0066E6C5 /* BullhornSdk */,
-				D9DBD6CD2E05667F00BA0B52 /* Cosmos */,
 			);
 			productName = BullhornSdkTest;
 			productReference = D9D7883E29DD5CF7002A5631 /* BHSdkApp.app */;
@@ -277,7 +274,6 @@
 				D9536DF72D9AC7B5001F7970 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D9536DFA2D9ACECC001F7970 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				D9536DFD2D9AD1D2001F7970 /* XCRemoteSwiftPackageReference "SwiftMessages" */,
-				D9536E002D9AD5EE001F7970 /* XCRemoteSwiftPackageReference "Cosmos" */,
 				D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */,
 			);
 			productRefGroup = D9D7880629DD409B002A5631 /* Products */;
@@ -618,14 +614,6 @@
 				minimumVersion = 10.0.1;
 			};
 		};
-		D9536E002D9AD5EE001F7970 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 25.0.1;
-			};
-		};
 		D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bullhorn-dev/bullhorn-sdk-package.git";
@@ -646,11 +634,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D9CA698E2D9E7DEC0066E6C5 /* XCRemoteSwiftPackageReference "bullhorn-sdk-package" */;
 			productName = BullhornSdk;
-		};
-		D9DBD6CD2E05667F00BA0B52 /* Cosmos */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D9536E002D9AD5EE001F7970 /* XCRemoteSwiftPackageReference "Cosmos" */;
-			productName = Cosmos;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -20,8 +20,6 @@ struct BHUser: Codable, Hashable {
         case website
         case channels = "network_channels"
         case categories
-        case ratingsCount = "ratings_count"
-        case ratingValue = "rating_value"
         case outgoingStatus = "outgoing_status"
         case receiveNotifications = "receive_notifications"
         case autoDownload = "auto_download"
@@ -54,8 +52,6 @@ struct BHUser: Codable, Hashable {
     var website: URL?
     var channels: [BHChannel]?
     var categories: [BHUserCategory]?
-    var ratingsCount: Int?
-    var ratingValue: Double?
     var outgoingStatus: String?
     var receiveNotifications: Bool = false
     var autoDownload: Bool = false
