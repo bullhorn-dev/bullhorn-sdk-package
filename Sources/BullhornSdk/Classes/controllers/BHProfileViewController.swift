@@ -57,6 +57,7 @@ struct SettingsRadioOption {
 
 class BHProfileViewController: BHPlayerContainingViewController {
     
+    fileprivate static let ChannelsSegueIdentifier = "Profile.ChannelsSegueIdentifier"
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
@@ -142,6 +143,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         if BullhornSdk.shared.externalUser?.level == .external {
             models.append(Section(title: "Collections", options: [
+                .staticCell(model: SettingsOption(title: "Channels", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
+                }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
                 }, disclosure: true)),
@@ -154,6 +158,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         } else {
             models.append(Section(title: "Collections", options: [
+                .staticCell(model: SettingsOption(title: "Channels", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
+                }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
                 }, disclosure: true)),
