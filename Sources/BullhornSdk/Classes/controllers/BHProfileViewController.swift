@@ -143,9 +143,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         if BullhornSdk.shared.externalUser?.level == .external {
             models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Channels", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
-                }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
                 }, disclosure: true)),
@@ -154,6 +151,9 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Followed Podcasts", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
+                }, disclosure: true)),
+                .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         } else {
