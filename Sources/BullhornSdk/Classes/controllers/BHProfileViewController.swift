@@ -158,11 +158,11 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         } else {
             models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Channels", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
-                }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
+                }, disclosure: true)),
+                .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         }

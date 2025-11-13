@@ -51,7 +51,7 @@ class BHChannelsViewController: BHPlayerContainingViewController {
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        navigationItem.title = "Channels"
+        navigationItem.title = "Verticals"
         navigationItem.largeTitleDisplayMode = .never
 
         let backButton = UIBarButtonItem()
