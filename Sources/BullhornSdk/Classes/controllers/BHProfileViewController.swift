@@ -141,29 +141,38 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         }
         
+        let downloadsCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+            self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
+        }, disclosure: true))
+        let likedCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Liked Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+            self.performSegue(withIdentifier: BHProfileViewController.FavoritesSegueIdentifier, sender: self)
+        }, disclosure: true))
+        let followedCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Followed Podcasts", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+            self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
+        }, disclosure: true))
+        let verticalsCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+            self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
+        }, disclosure: true))
+        
         if BullhornSdk.shared.externalUser?.level == .external {
-            models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Liked Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.FavoritesSegueIdentifier, sender: self)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Followed Podcasts", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
-                }, disclosure: true)),
-            ]))
+            models.append(Section(title: "Collections", options:
+                UserDefaults.standard.isVerticalsFeatureEnabled ? [
+                    downloadsCell,
+                    likedCell,
+                    followedCell,
+                    verticalsCell
+                ] : [
+                    downloadsCell,
+                    likedCell,
+                    followedCell
+                ]))
         } else {
-            models.append(Section(title: "Collections", options: [
-                .staticCell(model: SettingsOption(title: "Downloaded Episodes", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.DownloadsSegueIdentifier, sender: self)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
-                }, disclosure: true)),
+            models.append(Section(title: "Collections", options:
+                UserDefaults.standard.isVerticalsFeatureEnabled ? [
+                    downloadsCell,
+                    verticalsCell
+                ] : [
+                    downloadsCell
             ]))
         }
         

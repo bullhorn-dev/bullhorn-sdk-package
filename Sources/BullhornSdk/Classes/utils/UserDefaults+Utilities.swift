@@ -35,6 +35,7 @@ extension UserDefaults {
     fileprivate static let autoDownloadsFeatureEnabledDefaultsKey = "autoDownloadsFeatureEnabledDefaultsKey"
     fileprivate static let interactiveTranscriptsFeatureEnabledDefaultsKey = "interactiveTranscriptsFeatureEnabledDefaultsKey"
     fileprivate static let episodeAnimatedLogoFeatureEnabledDefaultsKey = "episodeAnimatedLogoFeatureEnabledDefaultsKey"
+    fileprivate static let verticalsFeatureEnabledDefaultsKey = "verticalsFeatureEnabledDefaultsKey"
 
     
     static let playNextEnabledDefaultsKey = "playNextEnabledDefaultsKey"
@@ -294,6 +295,15 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.episodeAnimatedLogoFeatureEnabledDefaultsKey)
+        }
+    }
+    
+    var isVerticalsFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.verticalsFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.verticalsFeatureEnabledDefaultsKey)
         }
     }
 }
