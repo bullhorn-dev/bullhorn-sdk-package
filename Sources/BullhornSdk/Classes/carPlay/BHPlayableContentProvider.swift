@@ -213,7 +213,7 @@ extension BHPlayableContentProvider {
 
     // MARK: - Categories
     
-    func convertCategories(_ models: [UIUsersModel]) -> [CPListItem] {
+    func convertCategories(_ models: [UICategoryModel]) -> [CPListItem] {
         let items = models.map { $0.toCPListItem() }
 
         for (index, item) in items.enumerated() {

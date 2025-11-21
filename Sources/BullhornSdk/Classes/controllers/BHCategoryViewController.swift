@@ -2,12 +2,12 @@
 import UIKit
 import Foundation
 
-class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
-    fileprivate static let UserDetailsSegueIdentifier = "Channel.UserDetailsSegueIdentifier"
-    fileprivate static let PostDetailsSegueIdentifier = "Channel.PostDetailsSegueIdentifier"
+    fileprivate static let UserDetailsSegueIdentifier = "Category.UserDetailsSegueIdentifier"
+    fileprivate static let PostDetailsSegueIdentifier = "Category.PostDetailsSegueIdentifier"
 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -22,7 +22,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
 
     fileprivate var shouldShowHeader: Bool = false
     
-    var channel: UIUsersModel?
+    var categoryModel: UICategoryModel?
 
     // MARK: - Lifecycle
     
@@ -47,7 +47,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
         bottomView.backgroundColor = .primaryBackground()
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHChannelHeaderView.reusableIndentifer) as? BHChannelHeaderView
-        headerView?.podcasts = channel?.users ?? []
+        headerView?.podcasts = categoryModel?.users ?? []
         headerView?.delegate = self
         
         footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
@@ -60,7 +60,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
 
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openChannel)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openCategory)
         BHTracker.shared.trackEvent(with: request)
     }
     
@@ -82,7 +82,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        let title = channel?.title ?? NSLocalizedString("Channel", comment: "")
+        let title = categoryModel?.title ?? NSLocalizedString("Channel", comment: "")
         navigationItem.title = title
         navigationItem.largeTitleDisplayMode = .never
         
@@ -106,7 +106,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
     fileprivate func fetch(initial: Bool = false) {
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.posts.count > 0
+            self.shouldShowHeader = BHFeedManager.shared.categoryPosts.count > 0
             self.refreshControl?.endRefreshing()
             self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
@@ -114,16 +114,18 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
             self.configureNavigationItems()
         }
 
-        let networkId = BHAppConfiguration.shared.networkId
+        guard let categoryId = categoryModel?.id else { return }
         
         if initial {
+            BHFeedManager.shared.removeCategoryRecentPosts()
+
             self.shouldShowHeader = false
             self.defaultShowActivityIndicatorView()
             
-            BHNetworkManager.shared.fetchPosts(networkId) { response in
+            BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
                 switch response {
                 case .success:
-                    if BHNetworkManager.shared.posts.count > 0 || !BHReachabilityManager.shared.isConnected() {
+                    if BHFeedManager.shared.categoryPosts.count > 0 || !BHReachabilityManager.shared.isConnected() {
                         completeBlock()
                     }
                 case .failure(error: let error):
@@ -134,7 +136,7 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
             }
         } else {
             
-            BHNetworkManager.shared.fetchPosts(networkId) { response in
+            BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
                 switch response {
                 case .success:
                     break
@@ -149,29 +151,13 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
             }
         }
     }
-    
-    fileprivate func fetchPosts() {
-
-        let networkId = BHAppConfiguration.shared.networkId
-
-        BHNetworkManager.shared.fetchPosts(networkId) { response in
-            switch response {
-            case .success:
-                self.tableView.reloadData()
-            case .failure(error: _):
-                break
-            }
-
-            self.defaultHideActivityIndicatorView()
-        }
-    }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == BHChannelViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
+        if segue.identifier == BHCategoryViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
             vc.user = selectedUser
-        } else if segue.identifier == BHChannelViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
+        } else if segue.identifier == BHCategoryViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
             vc.selectedTab = .details
         }
@@ -181,12 +167,12 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
     
     override func openUserDetails(_ user: BHUser?) {
         selectedUser = user
-        performSegue(withIdentifier: BHChannelViewController.UserDetailsSegueIdentifier, sender: self)
+        performSegue(withIdentifier: BHCategoryViewController.UserDetailsSegueIdentifier, sender: self)
     }
     
     override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
         selectedPost = post
-        performSegue(withIdentifier: BHChannelViewController.PostDetailsSegueIdentifier, sender: self)
+        performSegue(withIdentifier: BHCategoryViewController.PostDetailsSegueIdentifier, sender: self)
     }
     
     // MARK: - Action handlers
@@ -213,14 +199,14 @@ class BHChannelViewController: BHPlayerContainingViewController, ActivityIndicat
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension BHChannelViewController: UITableViewDataSource, UITableViewDelegate {
+extension BHCategoryViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHNetworkManager.shared.posts.count == 0 && !activityIndicator.isAnimating {
+        if BHFeedManager.shared.categoryPosts.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
@@ -229,14 +215,14 @@ extension BHChannelViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.restore()
         }
 
-        return activityIndicator.isAnimating ? 0 : BHNetworkManager.shared.posts.count
+        return activityIndicator.isAnimating ? 0 : BHFeedManager.shared.categoryPosts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        let post = BHNetworkManager.shared.posts[indexPath.row]
+        let post = BHFeedManager.shared.categoryPosts[indexPath.row]
         cell.post = post
-        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHNetworkManager.shared.posts, order: .straight)
+        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .straight)
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton
@@ -247,10 +233,6 @@ extension BHChannelViewController: UITableViewDataSource, UITableViewDelegate {
         }
         cell.errorClosure = { [weak self] message in
             self?.showError(message)
-        }
-
-        if BHNetworkManager.shared.hasMorePosts && indexPath.row == BHNetworkManager.shared.posts.count - 1 {
-            fetchPosts()
         }
         
         return cell
@@ -272,25 +254,21 @@ extension BHChannelViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if BHNetworkManager.shared.hasMorePosts {
-            footerView?.setup()
-            return footerView
-        }
         return nil
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return BHNetworkManager.shared.hasMorePosts ? 40 : 0
+        return 0
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openPostDetails(BHNetworkManager.shared.posts[indexPath.row])
+        openPostDetails(BHFeedManager.shared.categoryPosts[indexPath.row])
     }
 }
 
 // MARK: - BHChannelHeaderViewDelegate
 
-extension BHChannelViewController: BHChannelHeaderViewDelegate {
+extension BHCategoryViewController: BHChannelHeaderViewDelegate {
 
     func headerView(_ view: BHChannelHeaderView, didSelectUser user: BHUser) {
         openUserDetails(user)

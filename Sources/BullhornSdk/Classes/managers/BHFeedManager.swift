@@ -17,6 +17,7 @@ class BHFeedManager {
     fileprivate var feedActual: [BHPost]?
     fileprivate var continueListening: [BHPost]?
     fileprivate var likedPosts: [BHPost]?
+    fileprivate var recentCategoryPosts: [BHPost]?
 
     var feedPosts: [BHPost] {
         return feed ?? []
@@ -33,7 +34,11 @@ class BHFeedManager {
     var favorites: [BHPost] {
         return likedPosts ?? []
     }
-
+    
+    var categoryPosts: [BHPost] {
+        return recentCategoryPosts ?? []
+    }
+    
     var hasMore: Bool {
         return page < pages
     }
@@ -76,6 +81,25 @@ class BHFeedManager {
                     self.feedActual = posts
                 case .failure(error: let error):
                     BHLog.w("Feed actual posts load failed \(error.localizedDescription)")
+                }
+                completion(response)
+            }
+        }
+    }
+    
+    func removeCategoryRecentPosts() {
+        recentCategoryPosts?.removeAll()
+    }
+    
+    func getCategoryPosts(categoryId: Int, text: String?, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
+
+        server.getCategoryPosts(authToken: authToken, categoryId: categoryId, text: text) { response in
+            DispatchQueue.main.async {
+                switch response {
+                case .success(posts: let posts):
+                    self.recentCategoryPosts = posts
+                case .failure(error: let error):
+                    BHLog.w("Category recent posts load failed \(error.localizedDescription)")
                 }
                 completion(response)
             }

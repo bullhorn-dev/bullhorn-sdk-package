@@ -24,7 +24,7 @@ extension BHUser {
 }
 
 
-extension UIUsersModel {
+extension UICategoryModel {
     
     func toCPListItem() -> CPListItem {
         

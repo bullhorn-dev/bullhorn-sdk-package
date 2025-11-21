@@ -4,14 +4,14 @@ import Foundation
 
 // MARK: - BHMoreInfoViewController
 
-class BHChannelsViewController: BHPlayerContainingViewController {
+class BHCategoriesViewController: BHPlayerContainingViewController {
     
-    fileprivate static let ChannelSegueIdentifier = "Channels.ChannelSegueIdentifier"
+    fileprivate static let CategorySegueIdentifier = "Categories.CategorySegueIdentifier"
     
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
     
-    private var selectedChannel: UIUsersModel?
+    private var selectedCategoryModel: UICategoryModel?
 
     // MARK: - Lifecycle
 
@@ -44,14 +44,14 @@ class BHChannelsViewController: BHPlayerContainingViewController {
         super.viewIsAppearing(animated)
         
         /// track event
-        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openChannels)
+        let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openCategories)
         BHTracker.shared.trackEvent(with: request)
     }
         
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        navigationItem.title = "Verticals"
+        navigationItem.title = "Categories"
         navigationItem.largeTitleDisplayMode = .never
 
         let backButton = UIBarButtonItem()
@@ -63,16 +63,15 @@ class BHChannelsViewController: BHPlayerContainingViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == BHChannelsViewController.ChannelSegueIdentifier, let vc = segue.destination as? BHChannelViewController {
-            vc.channel = selectedChannel
+        if segue.identifier == BHCategoriesViewController.CategorySegueIdentifier, let vc = segue.destination as? BHCategoryViewController {
+            vc.categoryModel = selectedCategoryModel
         }
     }
-
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension BHChannelsViewController: UITableViewDelegate, UITableViewDataSource {
+extension BHCategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
@@ -98,10 +97,10 @@ extension BHChannelsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let channel = BHNetworkManager.shared.carPlaySplittedUsers[indexPath.row]
+        let categoryModel = BHNetworkManager.shared.carPlaySplittedUsers[indexPath.row]
 
-        selectedChannel = channel
-        performSegue(withIdentifier: BHChannelsViewController.ChannelSegueIdentifier, sender: self)
+        selectedCategoryModel = categoryModel
+        performSegue(withIdentifier: BHCategoriesViewController.CategorySegueIdentifier, sender: self)
     }
 }
 

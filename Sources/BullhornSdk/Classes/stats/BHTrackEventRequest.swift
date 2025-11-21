@@ -44,8 +44,8 @@ enum BHTrackBanner: String, Codable {
     case openSettings      = "open_settings"
     case openNotificationsSettings = "open_notifications_settings"
     case openDownloadsSettings = "open_downloads_settings"
-    case openChannels      = "open_channels"
-    case openChannel       = "open_channel"
+    case openCategories    = "open_categories"
+    case openCategory      = "open_category"
     /// ui-explore
     case openPodcast       = "open_podcast"
     case openEpisode       = "open_episode"

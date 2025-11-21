@@ -1939,7 +1939,7 @@
                         <segue destination="0tn-Pd-tIz" kind="show" identifier="Profile.MoreInfoSegueIdentifier" id="ppD-0V-INu"/>
                         <segue destination="REK-qd-AQy" kind="show" identifier="Profile.SettingsSegueIdentifier" id="iPA-XL-ErK"/>
                         <segue destination="0Gn-EZ-aJ4" kind="show" identifier="Profile.DevModeSegueIdentifier" id="T4E-CU-pHH"/>
-                        <segue destination="u19-7X-5hU" kind="show" identifier="Profile.ChannelsSegueIdentifier" id="brW-fu-ex3"/>
+                        <segue destination="u19-7X-5hU" kind="show" identifier="Profile.CategoriesSegueIdentifier" id="brW-fu-ex3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6g-Q0-eO2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2666,10 +2666,10 @@
             </objects>
             <point key="canvasLocation" x="-4152" y="3048"/>
         </scene>
-        <!--Channels-->
+        <!--Categories-->
         <scene sceneID="Ert-YX-zeu">
             <objects>
-                <viewController restorationIdentifier="BHChannelsViewController" storyboardIdentifier="BHChannelsViewController" title="Channels" id="u19-7X-5hU" customClass="BHChannelsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHCategoriesViewController" storyboardIdentifier="BHCategoriesViewController" title="Categories" id="u19-7X-5hU" customClass="BHCategoriesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uaB-rh-n4g">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2751,17 +2751,17 @@
                         <outlet property="miniPlayerView" destination="33O-oB-qpC" id="7gj-Ps-nTL"/>
                         <outlet property="stackView" destination="1px-va-bt3" id="poJ-wc-nTI"/>
                         <outlet property="tableView" destination="3k9-lL-P2h" id="oM2-d9-mum"/>
-                        <segue destination="acM-HP-1P4" kind="show" identifier="Channels.ChannelSegueIdentifier" id="GIf-YS-mzZ"/>
+                        <segue destination="acM-HP-1P4" kind="show" identifier="Categories.CategorySegueIdentifier" id="GIf-YS-mzZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W8x-MX-13g" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1060" y="2669"/>
         </scene>
-        <!--Channel-->
+        <!--Category-->
         <scene sceneID="W6n-ZS-1Ao">
             <objects>
-                <viewController restorationIdentifier="BHChannelViewController" storyboardIdentifier="BHChannelViewController" title="Channel" id="acM-HP-1P4" customClass="BHChannelViewController" customModule="BullhornSdk" sceneMemberID="viewController">
+                <viewController restorationIdentifier="BHCategoryViewController" storyboardIdentifier="BHCategoryViewController" title="Category" id="acM-HP-1P4" customClass="BHCategoryViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="78K-ia-EkU">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2839,8 +2839,8 @@
                         <outlet property="bottomView" destination="vBb-eh-SAt" id="Uus-1N-lQN"/>
                         <outlet property="miniPlayerView" destination="9Hv-AC-97U" id="tea-0x-0UD"/>
                         <outlet property="tableView" destination="UYL-vh-U3W" id="Lfa-ru-khY"/>
-                        <segue destination="bIr-LV-sBK" kind="show" identifier="Channel.UserDetailsSegueIdentifier" id="yWz-wB-dY7"/>
-                        <segue destination="TEG-MA-Hda" kind="show" identifier="Channel.PostDetailsSegueIdentifier" id="G2h-VU-adC"/>
+                        <segue destination="bIr-LV-sBK" kind="show" identifier="Category.UserDetailsSegueIdentifier" id="yWz-wB-dY7"/>
+                        <segue destination="TEG-MA-Hda" kind="show" identifier="Category.PostDetailsSegueIdentifier" id="G2h-VU-adC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="19s-Gd-meb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2851,7 +2851,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="Tnh-iY-7ke"/>
         <segue reference="G2h-VU-adC"/>
-        <segue reference="2Ut-JK-cZ6"/>
+        <segue reference="yWz-wB-dY7"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="backward.end" catalog="system" width="128" height="112"/>

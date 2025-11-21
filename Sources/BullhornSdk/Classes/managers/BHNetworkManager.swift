@@ -7,7 +7,8 @@ protocol BHNetworkManagerListener: ObserverProtocol {
     func networkManagerDidUpdateUsers(_ manager: BHNetworkManager)
 }
 
-struct UIUsersModel {
+struct UICategoryModel {
+    let id: Int
     let title: String
     let users: [BHUser]
 }
@@ -53,7 +54,7 @@ class BHNetworkManager {
     
     var users: [BHUser] = []
         
-    var splittedUsers: [UIUsersModel] = []
+    var splittedUsers: [UICategoryModel] = []
 
     func splitUsers(_ channelId: String) {
         
@@ -66,7 +67,7 @@ class BHNetworkManager {
                 selectedChannel.categories?.forEach({ category in
                     let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
                     if let validName = category.name, cusers.count > 0 {
-                        let uimodel = UIUsersModel(title: validName, users: cusers)
+                        let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
                         splittedUsers.append(uimodel)
                     }
                 })
@@ -74,7 +75,7 @@ class BHNetworkManager {
                 selectedChannel.categories?.forEach({ category in
                     let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
                     if let validName = category.name, cusers.count > 0 {
-                        let uimodel = UIUsersModel(title: validName, users: cusers)
+                        let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
                         splittedUsers.append(uimodel)
                     }
                 })
@@ -82,7 +83,7 @@ class BHNetworkManager {
         }
     }
 
-    var carPlaySplittedUsers: [UIUsersModel] = []
+    var carPlaySplittedUsers: [UICategoryModel] = []
 
     func splitUsersForCarPlay() {
         
@@ -94,7 +95,7 @@ class BHNetworkManager {
             selectedChannel.categories?.forEach({ category in
                 let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
                 if let validName = category.name, cusers.count > 0 {
-                    let uimodel = UIUsersModel(title: validName, users: cusers)
+                    let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
                     carPlaySplittedUsers.append(uimodel)
                 }
             })

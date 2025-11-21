@@ -124,4 +124,31 @@ class BHServerApiFeed: BHServerApiBase {
                 })
         }
     }
+    
+    func getCategoryPosts(authToken: String?, categoryId: Int, text: String?, pageSize: Int = 20, _ completion: @escaping (PostsResult) -> Void) {
+
+        updateConfig { (configError: ServerApiError?) in
+            if let error = configError {
+                completion(.failure(error: error))
+                return
+            }
+
+            let path = "categories/\(categoryId)/recent_episodes?filter[per_page]=\(pageSize)" + self.composeTextFilter(text: text)
+            let fullPath = self.composeFullApiURL(with: path)
+
+            let headers = self.composeHeaders(authToken)
+            
+            AF.request(fullPath, method: .get, headers: headers)
+              .validate()
+              .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
+                  debugPrint(response)
+                  switch response.result {
+                  case .success(let posts):
+                      completion(.success(posts: posts.posts))
+                  case .failure(let error):
+                      completion(.failure(error: error))
+                  }
+              })
+        }
+    }
 }

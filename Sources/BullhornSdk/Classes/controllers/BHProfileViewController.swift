@@ -57,7 +57,7 @@ struct SettingsRadioOption {
 
 class BHProfileViewController: BHPlayerContainingViewController {
     
-    fileprivate static let ChannelsSegueIdentifier = "Profile.ChannelsSegueIdentifier"
+    fileprivate static let CategoriesSegueIdentifier = "Profile.CategoriesSegueIdentifier"
     fileprivate static let DownloadsSegueIdentifier = "Profile.DownloadsSegueIdentifier"
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
@@ -150,29 +150,21 @@ class BHProfileViewController: BHPlayerContainingViewController {
         let followedCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Followed Podcasts", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
             self.performSegue(withIdentifier: BHProfileViewController.FollowedSegueIdentifier, sender: self)
         }, disclosure: true))
-        let verticalsCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Verticals", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-            self.performSegue(withIdentifier: BHProfileViewController.ChannelsSegueIdentifier, sender: self)
+        let categoriesCell: SettingsOptionType = .staticCell(model: SettingsOption(title: "Categories", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
+            self.performSegue(withIdentifier: BHProfileViewController.CategoriesSegueIdentifier, sender: self)
         }, disclosure: true))
         
         if BullhornSdk.shared.externalUser?.level == .external {
-            models.append(Section(title: "Collections", options:
-                UserDefaults.standard.isVerticalsFeatureEnabled ? [
-                    downloadsCell,
-                    likedCell,
-                    followedCell,
-                    verticalsCell
-                ] : [
-                    downloadsCell,
-                    likedCell,
-                    followedCell
-                ]))
+            models.append(Section(title: "Collections", options: [
+                downloadsCell,
+                likedCell,
+                followedCell,
+                categoriesCell
+            ]))
         } else {
-            models.append(Section(title: "Collections", options:
-                UserDefaults.standard.isVerticalsFeatureEnabled ? [
-                    downloadsCell,
-                    verticalsCell
-                ] : [
-                    downloadsCell
+            models.append(Section(title: "Collections", options: [
+                downloadsCell,
+                categoriesCell
             ]))
         }
         

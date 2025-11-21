@@ -90,12 +90,6 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
                 UserDefaults.standard.isEpisodeProgressViewFeatureEnabled = !value
                 self.configure()
                 self.tableView.reloadData()
-            })),
-            .toggleCell(model: SettingsToggleOption(title: "Verticals", isActive: UserDefaults.standard.isVerticalsFeatureEnabled, handler: {
-                let value = UserDefaults.standard.isVerticalsFeatureEnabled
-                UserDefaults.standard.isVerticalsFeatureEnabled = !value
-                self.configure()
-                self.tableView.reloadData()
             }))
         ]))
     }
