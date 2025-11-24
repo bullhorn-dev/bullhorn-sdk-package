@@ -2,25 +2,22 @@
 import UIKit
 import Foundation
 
-class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHCategoryViewController: BHPlayerContainingViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let UserDetailsSegueIdentifier = "Category.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Category.PostDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-    fileprivate var headerView: BHChannelHeaderView?
-    fileprivate var footerView: BHListFooterView?
+
+    fileprivate var isFetching: Bool = false
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
-
-    fileprivate var shouldShowHeader: Bool = false
     
     var categoryModel: UICategoryModel?
 
@@ -29,29 +26,28 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-        
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
-        let headerNib = UINib(nibName: "BHChannelHeaderView", bundle: bundle)
-        let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
+        let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
+        let sectionFooterNib = UINib(nibName: "BHCollectionFooterView", bundle: bundle)
+        
+        collectionView.register(sectionHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer)
+        collectionView.register(sectionFooterNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: BHCollectionFooterView.reusableIndentifer)
+        collectionView.register(BHUserCarouselCell.self, forCellWithReuseIdentifier: BHUserCarouselCell.reusableIndentifer)
+        collectionView.register(BHPostCollectionCell.self, forCellWithReuseIdentifier: BHPostCollectionCell.reusableIndentifer)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = true
+        collectionView.isPagingEnabled = false
+        collectionView.isScrollEnabled = true
+        collectionView.backgroundColor = .primaryBackground()
+        collectionView.delegate = self
+        collectionView.dataSource = self
 
-        tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHChannelHeaderView.reusableIndentifer)
-        tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .primaryBackground()
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        layout?.sectionHeadersPinToVisibleBounds = true
+        layout?.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
 
         bottomView.backgroundColor = .primaryBackground()
-
-        headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHChannelHeaderView.reusableIndentifer) as? BHChannelHeaderView
-        headerView?.podcasts = categoryModel?.users ?? []
-        headerView?.delegate = self
         
-        footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
-
         configureNavigationItems()
         configureRefreshControl()
 
@@ -66,12 +62,12 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         refreshControl?.resetUIState()
+        collectionView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -98,7 +94,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
         refreshControl = newRefreshControl
         refreshControl?.tintColor = .accent()
-        tableView.addSubview(newRefreshControl)
+        collectionView.addSubview(newRefreshControl)
     }
     
     // MARK: - Network
@@ -106,49 +102,32 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     fileprivate func fetch(initial: Bool = false) {
         
         let completeBlock = {
-            self.shouldShowHeader = BHFeedManager.shared.categoryPosts.count > 0
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
-            self.tableView.reloadData()
-            self.headerView?.reloadData()
-            self.configureNavigationItems()
+            self.isFetching = false
+            self.collectionView.reloadData()
         }
 
         guard let categoryId = categoryModel?.id else { return }
-        
+
+        isFetching = true
+
         if initial {
             BHFeedManager.shared.removeCategoryRecentPosts()
-
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+        }
             
-            BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
-                switch response {
-                case .success:
-                    if BHFeedManager.shared.categoryPosts.count > 0 || !BHReachabilityManager.shared.isConnected() {
-                        completeBlock()
-                    }
-                case .failure(error: let error):
+        BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
+            switch response {
+            case .success: break
+            case .failure(error: let error):
+                if BHReachabilityManager.shared.isConnected() {
                     let message = "Failed to fetch recent episodes. \(error.localizedDescription)"
                     BHLog.w(message)
                     self.showError(message)
+                } else {
+                    self.showConnectionError()
                 }
             }
-        } else {
-            
-            BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
-                switch response {
-                case .success:
-                    break
-                case .failure(error: let error):
-                    if BHReachabilityManager.shared.isConnected() {
-                        self.showError("Failed to fetch recent episodes from backend. \(error.localizedDescription)")
-                    } else if !initial {
-                        self.showConnectionError()
-                    }
-                }
-                completeBlock()
-            }
+            completeBlock()
         }
     }
 
@@ -162,7 +141,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
             vc.selectedTab = .details
         }
     }
-    
+        
     // MARK: - Private
     
     override func openUserDetails(_ user: BHUser?) {
@@ -189,7 +168,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         
         switch info.type {
         case .connected, .connectedExpensive:
-            tableView.restore()
+            collectionView.restore()
             fetch(initial: true)
         default:
             break
@@ -197,80 +176,144 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 
-extension BHCategoryViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHFeedManager.shared.categoryPosts.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle.module
-            let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-            tableView.setEmptyMessage(message, image: image)
-        } else {
-            tableView.restore()
-        }
-
-        return activityIndicator.isAnimating ? 0 : BHFeedManager.shared.categoryPosts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        let post = BHFeedManager.shared.categoryPosts[indexPath.row]
-        cell.post = post
-        cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .straight)
-        cell.shareBtnTapClosure = { [weak self] url in
-            self?.presentShareDialog(with: [url], configureBlock: { controller in
-                controller.popoverPresentationController?.sourceView = cell.shareButton
-            })
-        }
-        cell.transcriptBtnTapClosure = { [weak self] postId in
-            self?.openPostDetails(post, tab: .transcript)
-        }
-        cell.errorClosure = { [weak self] message in
-            self?.showError(message)
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if categoryModel?.users.count == 0 && BHFeedManager.shared.categoryPosts.count == 0 {
+            if !isFetching {
+                let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+                collectionView.setEmptyMessage(message, image: image)
+            } else {
+                collectionView.restore()
+            }
         }
         
-        return cell
+//        var sectionsCount: Int = 0
+        
+//        if let users = categoryModel?.users, users.count > 0 { sectionsCount += 1 }
+//        if BHFeedManager.shared.categoryPosts.count > 0 { sectionsCount += 1 }
+        
+        return 2
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return categoryModel?.users.count ?? 0
+        } else if section == 1 {
+            return BHFeedManager.shared.categoryPosts.count
+        } else {
+            return 0
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
+                
+            guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
+            usersHeaderView.titleLabel.text = indexPath.section == 0 ? "Podcasts" : "Recent Episodes"
+                
+            return usersHeaderView
+        case UICollectionView.elementKindSectionFooter:
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHCollectionFooterView.reusableIndentifer, for: indexPath)
+                
+            guard let progressFooterView = footerView as? BHCollectionFooterView else { return footerView }
+            progressFooterView.setup()
+                
+            return progressFooterView
+        default:
+            return UICollectionReusableView()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if indexPath.section == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
+            cell.user = categoryModel?.users[indexPath.row]
+            cell.showCategory = false
+            cell.showBadge = false
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHPostCollectionCell.reusableIndentifer, for: indexPath) as! BHPostCollectionCell
+            let post = BHFeedManager.shared.categoryPosts[indexPath.row]
+            cell.post = post
+            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .straight)
+            cell.shareBtnTapClosure = { [weak self] url in
+                self?.presentShareDialog(with: [url], configureBlock: { controller in
+                    controller.popoverPresentationController?.sourceView = cell.shareButton
+                })
+            }
+            cell.transcriptBtnTapClosure = { [weak self] postId in
+                self?.openPostDetails(post, tab: .transcript)
+            }
+            cell.errorClosure = { [weak self] message in
+                self?.showError(message)
+            }
+            return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            let user = categoryModel?.users[indexPath.row]
+            openUserDetails(user)
+        } else {
+            let post = BHFeedManager.shared.categoryPosts[indexPath.row]
+            openPostDetails(post)
+        }
+    }
+      
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if indexPath.section == 0 {
+            let itemsPerRow: CGFloat = 3
+            let padding: CGFloat = 2 * Constants.paddingHorizontal
+            let spacing: CGFloat = 2 * Constants.itemSpacing
+            let availableWidth: CGFloat = collectionView.bounds.width - padding - spacing
+            let itemWidth = floor(availableWidth / itemsPerRow)
+            let itemHeight = itemWidth + 24
+            
+            return CGSize(width: itemWidth, height: itemHeight)
+        } else {
+            return CGSize(width: collectionView.bounds.width, height: 230)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return section == 0 ? Constants.itemSpacing : 0
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if shouldShowHeader {
-            headerView?.setup()
-            return headerView
-        }
-        return nil
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if shouldShowHeader {
-            return headerView?.calculateHeight() ?? 0
-        }
-        return 0
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return section == 0 ? Constants.itemSpacing : 0
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: Constants.paddingHorizontal, bottom: Constants.itemSpacing / 2, right: Constants.paddingHorizontal)
+        } else {
+            return UIEdgeInsets.zero
+        }
     }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: Constants.panelHeight)
     }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openPostDetails(BHFeedManager.shared.categoryPosts[indexPath.row])
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if section == 0 { return .zero }
+        return isFetching ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
     }
-}
-
-// MARK: - BHChannelHeaderViewDelegate
-
-extension BHCategoryViewController: BHChannelHeaderViewDelegate {
-
-    func headerView(_ view: BHChannelHeaderView, didSelectUser user: BHUser) {
-        openUserDetails(user)
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,  forItemAt indexPath: IndexPath) {
+        cell.layoutSubviews()
     }
 }

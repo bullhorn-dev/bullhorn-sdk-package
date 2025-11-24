@@ -2769,14 +2769,25 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="M5b-yz-4Be">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="UYL-vh-U3W">
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="u6a-YY-Jjv">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="dataSource" destination="bIr-LV-sBK" id="jCQ-ZR-R62"/>
-                                            <outlet property="delegate" destination="bIr-LV-sBK" id="3bo-yy-Kk2"/>
-                                        </connections>
-                                    </tableView>
+                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zn1-NJ-Xff">
+                                            <size key="itemSize" width="390" height="258"/>
+                                            <size key="headerReferenceSize" width="50" height="50"/>
+                                            <size key="footerReferenceSize" width="50" height="50"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells/>
+                                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="eQF-EI-gao">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionReusableView>
+                                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="keU-43-zfm">
+                                            <rect key="frame" x="0.0" y="50" width="390" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionReusableView>
+                                    </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Hv-AC-97U" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="774" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
@@ -2787,28 +2798,15 @@
                                 </subviews>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
+                                    <constraint firstItem="9Hv-AC-97U" firstAttribute="top" secondItem="u6a-YY-Jjv" secondAttribute="bottom" id="3sL-np-Ym4"/>
+                                    <constraint firstItem="u6a-YY-Jjv" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="JDw-A5-cec"/>
+                                    <constraint firstAttribute="trailing" secondItem="u6a-YY-Jjv" secondAttribute="trailing" id="NlL-lQ-oX2"/>
                                     <constraint firstAttribute="trailing" secondItem="9Hv-AC-97U" secondAttribute="trailing" id="Uwe-b1-wyU"/>
                                     <constraint firstAttribute="bottom" secondItem="9Hv-AC-97U" secondAttribute="bottom" id="cQj-sB-yFD"/>
-                                    <constraint firstItem="UYL-vh-U3W" firstAttribute="top" secondItem="M5b-yz-4Be" secondAttribute="top" id="cgb-Aj-NpZ"/>
-                                    <constraint firstItem="9Hv-AC-97U" firstAttribute="top" secondItem="UYL-vh-U3W" secondAttribute="bottom" id="hRU-tS-93K"/>
-                                    <constraint firstItem="UYL-vh-U3W" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="nj2-aY-o5s"/>
+                                    <constraint firstItem="u6a-YY-Jjv" firstAttribute="top" secondItem="M5b-yz-4Be" secondAttribute="top" id="ldi-Aa-DEt"/>
                                     <constraint firstItem="9Hv-AC-97U" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="oQD-dN-v8w"/>
-                                    <constraint firstAttribute="trailing" secondItem="UYL-vh-U3W" secondAttribute="trailing" id="sej-rR-3A3"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P9b-Vu-2RS" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="2Hm-6h-Oef"/>
-                                    <constraint firstAttribute="height" constant="30" id="6Ac-CY-g1f"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vBb-eh-SAt">
                                 <rect key="frame" x="0.0" y="834" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -2821,12 +2819,10 @@
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
                             <constraint firstItem="JWT-aI-kJs" firstAttribute="bottom" secondItem="M5b-yz-4Be" secondAttribute="bottom" id="4Ry-BJ-9NJ"/>
-                            <constraint firstItem="P9b-Vu-2RS" firstAttribute="centerX" secondItem="78K-ia-EkU" secondAttribute="centerX" id="8a6-On-NXn"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="leading" secondItem="JWT-aI-kJs" secondAttribute="leading" id="BUS-8t-fGo"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="leading" secondItem="JWT-aI-kJs" secondAttribute="leading" id="P8L-Vd-E0q"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="top" secondItem="M5b-yz-4Be" secondAttribute="bottom" id="bYU-0u-E9m"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="trailing" secondItem="JWT-aI-kJs" secondAttribute="trailing" id="dk0-L4-s3q"/>
-                            <constraint firstItem="P9b-Vu-2RS" firstAttribute="centerY" secondItem="78K-ia-EkU" secondAttribute="centerY" id="esw-Sx-efP"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="trailing" secondItem="JWT-aI-kJs" secondAttribute="trailing" id="pxe-uT-GPu"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="top" secondItem="JWT-aI-kJs" secondAttribute="top" id="udw-FW-ZnP"/>
                         </constraints>
@@ -2835,21 +2831,20 @@
                         <barButtonItem key="backBarButtonItem" id="Fbf-3i-3FC"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="P9b-Vu-2RS" id="4rR-nF-jtX"/>
                         <outlet property="bottomView" destination="vBb-eh-SAt" id="Uus-1N-lQN"/>
+                        <outlet property="collectionView" destination="u6a-YY-Jjv" id="jG5-cB-wc2"/>
                         <outlet property="miniPlayerView" destination="9Hv-AC-97U" id="tea-0x-0UD"/>
-                        <outlet property="tableView" destination="UYL-vh-U3W" id="Lfa-ru-khY"/>
                         <segue destination="bIr-LV-sBK" kind="show" identifier="Category.UserDetailsSegueIdentifier" id="yWz-wB-dY7"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="Category.PostDetailsSegueIdentifier" id="G2h-VU-adC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="19s-Gd-meb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1985" y="2669"/>
+            <point key="canvasLocation" x="1984.6153846153845" y="2668.7203791469192"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Tnh-iY-7ke"/>
+        <segue reference="Dux-9E-9ph"/>
         <segue reference="G2h-VU-adC"/>
         <segue reference="yWz-wB-dY7"/>
     </inferredMetricsTieBreakers>

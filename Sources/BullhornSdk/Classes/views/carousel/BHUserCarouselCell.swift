@@ -39,7 +39,7 @@ class BHUserCarouselCell: UICollectionViewCell {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.font = .primaryText()
-        label.lineBreakMode = .byWordWrapping
+        label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .left
         label.textColor = .primary()
         return label
@@ -151,19 +151,18 @@ class BHUserCarouselCell: UICollectionViewCell {
 
         if !showCategory || isTextScaled() {
             categoryLabel.isHidden = true
-            nameLabel.sizeToFit()
         } else {
             categoryLabel.isHidden = false
-            nameLabel.sizeToFit()
         }
         
         if isTextScaled() {
             nameLabel.numberOfLines = 1
-            nameLabel.lineBreakMode = .byTruncatingTail
         } else {
             nameLabel.numberOfLines = showCategory ? 1 : 0
         }
-        
+        nameLabel.sizeToFit()
+        nameLabel.lineBreakMode = .byTruncatingTail
+
         setupAccessibility()
     }
     
