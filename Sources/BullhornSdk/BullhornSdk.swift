@@ -237,8 +237,10 @@ public class BullhornSdk: NSObject {
         if let webURL = url {
             if let webURL1FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL1String), let webURL2FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL2String) {
 
-                if webURL1FromConfiguration.host == webURL.host || webURL2FromConfiguration.host == webURL.host || BHAppConfiguration.shared.customSchemeString == webURL.scheme {
+                if webURL1FromConfiguration.host == webURL.host || webURL2FromConfiguration.host == webURL.host {
                     return BHLinkResolver.shared.resolveUniversalLink(webURL)
+                } else if BHAppConfiguration.shared.customSchemeString == webURL.scheme {
+                    return shouldOpenUrl(webURL)
                 }
             }
         }
