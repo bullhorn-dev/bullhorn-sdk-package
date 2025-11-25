@@ -34,7 +34,20 @@ extension UITableView {
                 stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: topOffset)
             ])
         } else {
-            self.backgroundView = messageLabel
+            let stackView = UIStackView(arrangedSubviews: [messageLabel])
+            stackView.axis = .vertical
+            stackView.alignment = .center
+            stackView.distribution = .fill
+            stackView.spacing = Constants.paddingVertical
+            
+            self.backgroundView = stackView
+            
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                stackView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0),
+                stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: topOffset)
+            ])
         }
 
         self.separatorStyle = .none

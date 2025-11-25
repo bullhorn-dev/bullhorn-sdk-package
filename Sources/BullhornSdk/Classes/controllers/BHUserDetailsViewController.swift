@@ -140,7 +140,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         userManager.clearUserCounters(u)
 
         let completeBlock = {
-            self.shouldShowHeader = self.userManager.posts.count > 0
+            self.shouldShowHeader = self.userManager.posts.count > 0 || BHReachabilityManager.shared.isConnected()
             self.refreshControl?.endRefreshing()
             self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
@@ -258,10 +258,8 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if userManager.posts.count == 0 && !activityIndicator.isAnimating {
-            let bundle = Bundle.module
-            let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-            tableView.setEmptyMessage(message, image: image)
+            tableView.setEmptyMessage(message, image: nil, topOffset: 50)
         } else {
             tableView.restore()
         }
