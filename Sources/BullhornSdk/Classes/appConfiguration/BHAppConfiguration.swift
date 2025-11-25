@@ -17,13 +17,13 @@ public class BHAppConfiguration {
         BHAppConfiguration.KeyWebConfigURL:     "https://bullhorn.fm/bullhorn_app_config.json",
         BHAppConfiguration.KeyWebSiteURL1:      "https://l.bullhorn.fm",
         BHAppConfiguration.KeyWebSiteURL2:      "https://www.l.bullhorn.fm",
-        BHAppConfiguration.KeyCustomScheme:     "bullhorn"]
+        BHAppConfiguration.KeyCustomScheme:     "app.foxpodcasts"]
 
     private static let qaDefaults = [
         BHAppConfiguration.KeyWebConfigURL:     "https://qa-www.bullhorn.fm/bullhorn_app_config.json",
         BHAppConfiguration.KeyWebSiteURL1:      "https://qa-www.bullhorn.fm",
         BHAppConfiguration.KeyWebSiteURL2:      "https://qa-www.bullhorn.fm",
-        BHAppConfiguration.KeyCustomScheme:     "bullhorn-qa"]
+        BHAppConfiguration.KeyCustomScheme:     "app.foxpodcasts"]
 
     static let shared: BHAppConfiguration = BHAppConfiguration()
     

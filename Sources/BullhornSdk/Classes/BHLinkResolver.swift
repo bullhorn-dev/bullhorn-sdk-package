@@ -41,7 +41,7 @@ class BHLinkResolver {
 
         guard let webSiteURL1 = URL.init(string: BHAppConfiguration.shared.webSiteURL1String) else { return .unknown }
         guard let webSiteURL2 = URL.init(string: BHAppConfiguration.shared.webSiteURL2String) else { return .unknown }
-        if url.host != webSiteURL2.host && url.host != webSiteURL1.host { return .unknown }
+        if url.host != webSiteURL2.host && url.host != webSiteURL1.host && url.host != BHAppConfiguration.shared.customSchemeString { return .unknown }
 
         let pathComponentsWithoutDelimiters = url.pathComponentsWithoutDelimiters
 
