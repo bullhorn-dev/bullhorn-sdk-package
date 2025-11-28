@@ -7,7 +7,7 @@ struct BHUserCategory: Codable, Hashable {
     enum CodingKeys: String, CodingKey {
         case id
 //        case icon
-//        case alias
+        case alias
 //        case gradientFrom = "gradient_from"
 //        case gradientTo = "gradient_to"
 //        case gradientDegree = "gradient_degree"
@@ -18,7 +18,7 @@ struct BHUserCategory: Codable, Hashable {
     
     let id: Int
 //    var icon: URL?
-//    var alias: String?
+    var alias: String?
 //    var gradientFrom: String?
 //    var gradientTo: String?
 //    var gradientDegree: Int?
@@ -36,6 +36,7 @@ struct BHUserCategory: Codable, Hashable {
     
     static func fromDictionary(_ params: [String: Any]) -> BHUserCategory? {
         guard let validId = params[CodingKeys.id.rawValue] as? Int else { return nil }
+        guard let validAlias = params[CodingKeys.alias.rawValue] as? String else { return nil }
         guard let validName = params[CodingKeys.name.rawValue] as? String else { return nil }
         
         return BHUserCategory(id: validId, name: validName)

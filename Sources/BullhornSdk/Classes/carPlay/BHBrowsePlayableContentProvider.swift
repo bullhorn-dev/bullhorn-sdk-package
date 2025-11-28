@@ -87,7 +87,7 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
             if recentPodcasts.count > 2 {
                 sections.append(CPListSection(items: [recentPodcastsRowItem]))
             } else {
-                let model = UICategoryModel(id: 0, title: "Recent Searches", users: recentPodcasts)
+                let model = UICategoryModel(id: 0, alias: "recent-searches", title: "Recent Searches", users: recentPodcasts)
                 let recent = self.convertCategories([model])
                 sections.append(CPListSection(items: recent))
             }

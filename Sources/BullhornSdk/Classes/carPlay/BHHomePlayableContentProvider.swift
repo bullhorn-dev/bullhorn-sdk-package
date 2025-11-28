@@ -129,7 +129,7 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
             if followedPodcasts.count > 2 {
                 sections.append(CPListSection(items: [followedPodcastsRowItem]))
             } else {
-                let model = UICategoryModel(id: 0, title: "Followed Podcasts", users: followedPodcasts)
+                let model = UICategoryModel(id: 0, alias: "followed", title: "Followed Podcasts", users: followedPodcasts)
                 let followed = self.convertCategories([model])
                 sections.append(CPListSection(items: followed))
             }
@@ -139,7 +139,7 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
             if featuredPodcasts.count > 2 {
                 sections.append(CPListSection(items: [featuredPodcastsRowItem]))
             } else {
-                let model = UICategoryModel(id: 0, title: "Featured Podcasts", users: featuredPodcasts)
+                let model = UICategoryModel(id: 0, alias: "featured", title: "Featured Podcasts", users: featuredPodcasts)
                 let featured = self.convertCategories([model])
                 sections.append(CPListSection(items: featured))
             }

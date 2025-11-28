@@ -7,6 +7,7 @@ import UIKit
 enum UniversalLinkType: String {
     case podcast = "podcast"
     case episode = "episode"
+    case category = "category"
     case unknown
 }
 
@@ -32,9 +33,10 @@ class BHLinkResolver {
 
     static let shared = BHLinkResolver()
     
-    fileprivate let validShortURLPathFirstComponents: Set<String> = ["posts"]
+    fileprivate let validShortURLPathFirstComponents: Set<String> = ["posts", "categories"]
     
     fileprivate let podcastLinkDelimitersCount = 1
+    fileprivate let categoryLinkDelimitersCount = 2
     fileprivate let episodeLinkDelimitersCount = 3
 
     func validateLink(_ url: URL) -> UniversalLinkType {
@@ -48,6 +50,13 @@ class BHLinkResolver {
         /// podcast link
         if pathComponentsWithoutDelimiters.count == podcastLinkDelimitersCount {
             return .podcast
+        }
+        
+        /// episode link
+        if pathComponentsWithoutDelimiters.count == categoryLinkDelimitersCount {
+            let firstPathComponent = pathComponentsWithoutDelimiters[0]
+            guard validShortURLPathFirstComponents.contains(firstPathComponent) else { return .unknown }
+            return .category
         }
         
         /// episode link
@@ -69,6 +78,8 @@ class BHLinkResolver {
             return resolvePodcastLink(url)
         case .episode:
             return resolveEpisodeLink(url)
+        case .category:
+            return resolveCategoryLink(url)
         case .unknown:
             BHLog.w("Unsupported type of universal link")
         }
@@ -155,6 +166,38 @@ class BHLinkResolver {
             BHLog.w("Failed to read username and alias from universal link")
         }
 
+        return result
+    }
+    
+    fileprivate func resolveCategoryLink(_ url: URL) -> Bool {
+        var result = false
+        let pathComponentsWithoutDelimiters = url.pathComponentsWithoutDelimiters
+
+        if pathComponentsWithoutDelimiters.count == categoryLinkDelimitersCount {
+            let alias = pathComponentsWithoutDelimiters[1]
+            
+            if !alias.isEmpty {
+                if BHReachabilityManager.shared.isConnected() {
+                    // TODO: fetch category with podcasts
+                    
+                    BHNetworkManager.shared.splitUsersForCarPlay()
+                    if let categoryModel = BHNetworkManager.shared.getCategoryModel(with: alias) {
+                        let bundle = Bundle.module
+                        let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                        let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
+                        vc.categoryModel = categoryModel
+                        
+                        UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                    }
+                } else {
+                    UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
+                }
+                result = true
+            }
+        } else {
+            BHLog.w("Failed to read username from universal link")
+        }
+        
         return result
     }
 }

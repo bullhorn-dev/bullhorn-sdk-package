@@ -9,6 +9,7 @@ protocol BHNetworkManagerListener: ObserverProtocol {
 
 struct UICategoryModel {
     let id: Int
+    let alias: String
     let title: String
     let users: [BHUser]
 }
@@ -66,16 +67,16 @@ class BHNetworkManager {
             if selectedChannel.isMain() {
                 selectedChannel.categories?.forEach({ category in
                     let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
-                    if let validName = category.name, cusers.count > 0 {
-                        let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
+                    if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
+                        let uimodel = UICategoryModel(id: category.id, alias: validAlias, title: validName, users: cusers)
                         splittedUsers.append(uimodel)
                     }
                 })
             } else {
                 selectedChannel.categories?.forEach({ category in
                     let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
-                    if let validName = category.name, cusers.count > 0 {
-                        let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
+                    if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
+                        let uimodel = UICategoryModel(id: category.id, alias: validAlias, title: validName, users: cusers)
                         splittedUsers.append(uimodel)
                     }
                 })
@@ -94,12 +95,16 @@ class BHNetworkManager {
         if let selectedChannel = channels.first(where: { $0.id == BHChannel.mainChannelId }) {
             selectedChannel.categories?.forEach({ category in
                 let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
-                if let validName = category.name, cusers.count > 0 {
-                    let uimodel = UICategoryModel(id: category.id, title: validName, users: cusers)
+                if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
+                    let uimodel = UICategoryModel(id: category.id, alias: validAlias, title: validName, users: cusers)
                     carPlaySplittedUsers.append(uimodel)
                 }
             })
         }
+    }
+    
+    func getCategoryModel(with alias: String) -> UICategoryModel? {
+        return carPlaySplittedUsers.first(where: { $0.alias == alias })
     }
 
     // MARK: - Initialization

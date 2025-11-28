@@ -598,6 +598,11 @@
         <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkUsers" inverseName="users" inverseEntity="NetworkUsers"/>
     </entity>
     <entity name="UserCategory" representedClassName="UserCategoryMO" syncable="YES">
+        <attribute name="alias" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="alias"/>
+            </userInfo>
+        </attribute>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
             <userInfo>
                 <entry key="hyper.isPrimaryKey" value="true"/>
