@@ -178,17 +178,31 @@ class BHLinkResolver {
             
             if !alias.isEmpty {
                 if BHReachabilityManager.shared.isConnected() {
-                    // TODO: fetch category with podcasts
-                    
-                    BHNetworkManager.shared.splitUsersForCarPlay()
-                    if let categoryModel = BHNetworkManager.shared.getCategoryModel(with: alias) {
-                        let bundle = Bundle.module
-                        let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-                        let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
-                        vc.categoryModel = categoryModel
-                        
-                        UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                    let networkId = BHAppConfiguration.shared.networkId
+                    BHNetworkManager.shared.fetchCategories(networkId) { result in
+                        switch result {
+                        case .success:
+                            DispatchQueue.main.async {
+                                BHNetworkManager.shared.splitUsersForCarPlay()
+                                if let categoryModel = BHNetworkManager.shared.getCategoryModel(with: alias) {
+                                    let bundle = Bundle.module
+                                    let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                                    let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
+                                    vc.categoryModel = categoryModel
+                                    
+                                    UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                                }
+                            }
+                            
+                        case .failure(error: let e):
+                            BHLog.w(e)
+                            DispatchQueue.main.async {
+                                UIApplication.topViewController()?.showError("Failed to load episode details. This episode is no longer available.")
+                            }
+                            break
+                        }
                     }
+                    
                 } else {
                     UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
                 }

@@ -407,6 +407,47 @@ class BHNetworkManager {
         }
     }
     
+    func fetchCategories(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
+        
+        let fetchGroup = DispatchGroup()
+        var responseError: Error?
+
+        fetchGroup.enter()
+                
+        getNetworkChannels(networkId) { response in
+            switch response {
+            case .success(channels: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+
+        fetchGroup.enter()
+        
+        getNetworkUsers(networkId) { response in
+            switch response {
+            case .success(users: _): break
+            case .failure(error: let error):
+                responseError = error
+            }
+            fetchGroup.leave()
+        }
+                    
+        fetchGroup.notify(queue: .main) {
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.networkManagerDidFetch(self)
+            }
+
+            if let error = responseError {
+                completion(.failure(error: error))
+            } else {
+                completion(.success)
+            }
+        }
+    }
+    
     func fetchPosts(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
         
         postsPage = 0
