@@ -60,6 +60,8 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(notification:)), name: BHAccountManager.AccountChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onExternalAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
+        
+        BHUserManager.shared.addListener(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -416,4 +418,20 @@ extension BHHomeViewController: BHHomeHeaderViewDelegate {
             BHLivePlayer.shared.playRequest(with: post)
         }
     }
+}
+
+// MARK: - BHUserManagerListener
+
+extension BHHomeViewController: BHUserManagerListener {
+
+    func userManagerDidUpdateFollowedUsers(_ manager: BHUserManager) {
+        DispatchQueue.main.async {
+            self.reloadData()
+            self.headerView?.reloadData()
+        }
+    }
+    
+    func userManagerDidFetchPosts(_ manager: BHUserManager) {}
+    
+    func userManagerDidUpdatePosts(_ manager: BHUserManager) {}
 }
