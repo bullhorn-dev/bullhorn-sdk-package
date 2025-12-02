@@ -15,7 +15,8 @@ public class UserCategoryMO: NSManagedObject {
         var userCategory = BHUserCategory(id: validId.intValue)
         
 //        userCategory.icon = URL(string: icon ?? "")
-//        userCategory.alias = alias
+        userCategory.alias = alias
+        userCategory.shareLink = shareLink != nil ? URL(string: shareLink!) : nil
 //        userCategory.gradientFrom = gradientFrom
 //        userCategory.gradientTo = gradientTo
 //        userCategory.gradientDegree = gradientDegree?.intValue

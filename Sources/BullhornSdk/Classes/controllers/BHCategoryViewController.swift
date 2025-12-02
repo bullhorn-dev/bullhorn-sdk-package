@@ -78,10 +78,14 @@ class BHCategoryViewController: BHPlayerContainingViewController {
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        let title = categoryModel?.title ?? NSLocalizedString("Channel", comment: "")
+        let title = categoryModel?.category.name ?? NSLocalizedString("Category", comment: "")
         navigationItem.title = title
         navigationItem.largeTitleDisplayMode = .never
-        
+
+        let config = UIImage.SymbolConfiguration(weight: .light)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis")?.withConfiguration(config), style: .plain, target: self, action: #selector(openOptionsAction(_:)))
+        navigationItem.rightBarButtonItem?.accessibilityLabel = "More Options"
+
         let backButton = UIBarButtonItem()
         backButton.title = ""
         backButton.accessibilityLabel = "Back"
@@ -107,7 +111,7 @@ class BHCategoryViewController: BHPlayerContainingViewController {
             self.collectionView.reloadData()
         }
 
-        guard let categoryId = categoryModel?.id else { return }
+        guard let categoryId = categoryModel?.category.id else { return }
 
         isFetching = true
 
@@ -158,6 +162,14 @@ class BHCategoryViewController: BHPlayerContainingViewController {
     
     @objc fileprivate func onRefreshControlAction(_ sender: Any) {
         fetch(initial: false)
+    }
+    
+    @objc fileprivate func openOptionsAction(_ sender: Any) {
+        let optionsSheet = BHCategoryOptionsBottomSheet()
+        optionsSheet.category = categoryModel?.category
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = true
+        present(optionsSheet, animated: true)
     }
     
     // MARK: - Notifications

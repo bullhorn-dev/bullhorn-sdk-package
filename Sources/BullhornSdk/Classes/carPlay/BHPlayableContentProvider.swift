@@ -223,7 +223,7 @@ extension BHPlayableContentProvider {
                 if index < models.count {
                     let model = models[index]
                     
-                    convertPodcastsToCPListTemplate(title: model.title, podcasts: model.users)
+                    convertPodcastsToCPListTemplate(title: model.category.name ?? "Undefined", podcasts: model.users)
                 }
                 completion()
             }

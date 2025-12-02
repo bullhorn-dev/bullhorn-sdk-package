@@ -86,8 +86,8 @@ extension BHCategoriesViewController: UITableViewDelegate, UITableViewDataSource
     }
             
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let channel = BHNetworkManager.shared.carPlaySplittedUsers[indexPath.row]
-        let model = SettingsOption(title: channel.title, accessibilityText: channel.title, icon: nil, iconBackgroundColor: .accent(), handler: {}, disclosure: true)
+        let uiModel = BHNetworkManager.shared.carPlaySplittedUsers[indexPath.row]
+        let model = SettingsOption(title: uiModel.category.name ?? "Undefined", accessibilityText: uiModel.category.name, icon: nil, iconBackgroundColor: .accent(), handler: {}, disclosure: true)
             
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingCell.reusableIndentifer, for: indexPath) as? BHSettingCell else {
                 return UITableViewCell()

@@ -9,7 +9,8 @@ extension UserCategoryMO {
     
     @NSManaged public var id: NSNumber?
 //    @NSManaged public var icon: String?
-//    @NSManaged public var alias: String?
+    @NSManaged public var alias: String?
+    @NSManaged public var shareLink: String?
 //    @NSManaged public var gradientFrom: String?
 //    @NSManaged public var gradientTo: String?
 //    @NSManaged public var gradientDegree: NSNumber?

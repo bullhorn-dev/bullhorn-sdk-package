@@ -28,6 +28,6 @@ extension UICategoryModel {
     
     func toCPListItem() -> CPListItem {
         
-        return CPListItem(text: title, detailText: nil, image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
+        return CPListItem(text: category.name ?? "Undefined", detailText: nil, image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
     }
 }

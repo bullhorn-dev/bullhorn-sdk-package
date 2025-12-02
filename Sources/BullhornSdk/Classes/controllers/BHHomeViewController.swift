@@ -322,7 +322,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
                 
                 guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
-                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].title
+                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].category.name
                 
                 return usersHeaderView
             }

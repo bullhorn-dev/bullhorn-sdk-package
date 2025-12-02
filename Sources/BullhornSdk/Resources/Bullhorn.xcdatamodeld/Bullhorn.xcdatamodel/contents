@@ -614,6 +614,11 @@
                 <entry key="hyper.remoteKey" value="name"/>
             </userInfo>
         </attribute>
+        <attribute name="shareLink" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="share_link"/>
+            </userInfo>
+        </attribute>
         <userInfo>
             <entry key="hyper.remoteKey" value="categories"/>
         </userInfo>
