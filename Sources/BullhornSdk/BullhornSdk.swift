@@ -219,8 +219,8 @@ public class BullhornSdk: NSObject {
     
     public func shouldOpenUrl(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
 
-        if url.scheme == BHAppConfiguration.shared.customSchemeString {
-            let schemeString = url.absoluteString
+        if url.scheme == BHAppConfiguration.shared.customSchemeString,
+           let schemeString = url.absoluteString.removingPercentEncoding {
             let replaceFrom = BHAppConfiguration.shared.customSchemeString + "://"
             let replaceTo = BHAppConfiguration.shared.webSiteURL1String + "/"
             let urlString = schemeString.replacingOccurrences(of: replaceFrom, with: replaceTo)
