@@ -134,6 +134,22 @@ class BHCategoryViewController: BHPlayerContainingViewController {
             completeBlock()
         }
     }
+    
+    fileprivate func fetchPosts() {
+        guard let categoryId = categoryModel?.category.id else { return }
+
+        isFetching = true
+
+        BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
+            switch response {
+            case .success:
+                self.collectionView.reloadData()
+            case .failure(error: _):
+                break
+            }
+            self.isFetching = false
+        }
+    }
 
     // MARK: - Navigation
 
@@ -266,6 +282,11 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
             cell.errorClosure = { [weak self] message in
                 self?.showError(message)
             }
+            
+            if BHFeedManager.shared.hasMoreCategoryPosts && indexPath.row == BHFeedManager.shared.categoryPosts.count - 1 {
+                fetchPosts()
+            }
+            
             return cell
         }
     }

@@ -31,12 +31,10 @@ class BHFeedManager {
         return continueListening ?? []
     }
     
+    /// Favorites
+
     var favorites: [BHPost] {
         return likedPosts ?? []
-    }
-    
-    var categoryPosts: [BHPost] {
-        return recentCategoryPosts ?? []
     }
     
     var hasMore: Bool {
@@ -51,6 +49,26 @@ class BHFeedManager {
         return min(page + 1, pages)
     }
     
+    /// Category posts
+    
+    var categoryPosts: [BHPost] {
+        return recentCategoryPosts ?? []
+    }
+    
+    var hasMoreCategoryPosts: Bool {
+        return categoryPostsPage < categoryPostsPages
+    }
+    
+    fileprivate var categoryPostsPage: Int = 0
+    fileprivate var categoryPostsPages: Int = 0
+    fileprivate var categoryPostsSearchText: String = ""
+     
+    fileprivate var categoryPostsNextPage: Int {
+        return min(categoryPostsPage + 1, categoryPostsPages)
+    }
+
+    ///
+
     fileprivate var userId: String {
         return BHAccountManager.shared.user?.sdkUserId ?? "123321"
     }
@@ -89,15 +107,31 @@ class BHFeedManager {
     
     func removeCategoryRecentPosts() {
         recentCategoryPosts?.removeAll()
+        categoryPostsPage = 0
+        categoryPostsPages = 0
+        categoryPostsSearchText = ""
     }
     
-    func getCategoryPosts(categoryId: Int, text: String?, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
+    func getCategoryPosts(categoryId: Int, text: String?, completion: @escaping (BHServerApiFeed.PaginatedPostsResult) -> Void) {
 
-        server.getCategoryPosts(authToken: authToken, categoryId: categoryId, text: text) { response in
+        if let validText = text, validText != categoryPostsSearchText {
+            categoryPostsPage = 0
+            categoryPostsPages = 0
+        }
+        
+        categoryPostsSearchText = text ?? ""
+
+        server.getCategoryPosts(authToken: authToken, categoryId: categoryId, text: categoryPostsSearchText, page: categoryPostsNextPage) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(posts: let posts):
-                    self.recentCategoryPosts = posts
+                case .success(posts: let posts, page: let page, pages: let pages):
+                    if page > 1 {
+                        self.recentCategoryPosts?.append(contentsOf: posts)
+                    } else {
+                        self.recentCategoryPosts = posts
+                    }
+                    self.categoryPostsPage = page
+                    self.categoryPostsPages = pages
                 case .failure(error: let error):
                     BHLog.w("Category recent posts load failed \(error.localizedDescription)")
                 }
