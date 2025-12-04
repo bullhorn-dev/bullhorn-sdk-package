@@ -270,7 +270,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHPostCollectionCell.reusableIndentifer, for: indexPath) as! BHPostCollectionCell
             let post = BHFeedManager.shared.categoryPosts[indexPath.row]
             cell.post = post
-            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .straight)
+            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .reversed)
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
                     controller.popoverPresentationController?.sourceView = cell.shareButton

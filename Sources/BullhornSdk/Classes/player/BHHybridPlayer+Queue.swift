@@ -19,8 +19,18 @@ extension BHHybridPlayer {
 
         if let currentIndex = playbackQueue.firstIndex(where: { $0.id == post.id }) {
             validReason = playbackQueue[currentIndex].reason == .manually ? .manually : reason
-            playbackQueue.remove(at: currentIndex)
-            removeStorageItem(post.id)
+            var playbackQueueCopy = playbackQueue
+
+            for index in 0..<currentIndex+1 {
+                let item = playbackQueue[index]
+                if item.reason == .auto {
+                    removeStorageItem(item.post.id)
+                    if let idx = playbackQueueCopy.firstIndex(where: { $0.id == item.id }) {
+                        playbackQueueCopy.remove(at: idx)
+                    }
+                }
+            }
+            playbackQueue = playbackQueueCopy
         }
         
         let item = BHQueueItem(id: post.id, post: post, reason: validReason)
