@@ -59,7 +59,7 @@ class BHRadioCell: UITableViewCell {
         radioTitleLabel.adjustsFontForContentSizeCategory = true
 
         streamTitleLabel.textColor = .primary()
-        streamTitleLabel.font = .primaryText()
+        streamTitleLabel.font = .primaryButton()
         streamTitleLabel.adjustsFontForContentSizeCategory = true
 
         playButton.title = "Listen"

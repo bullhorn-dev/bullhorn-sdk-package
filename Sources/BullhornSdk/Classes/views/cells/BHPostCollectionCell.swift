@@ -65,7 +65,7 @@ class BHPostCollectionCell: UICollectionViewCell {
     }()
     
     let playButton: BHPlayButton = {
-        let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        let button = BHPlayButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         return button
     }()
 
@@ -190,7 +190,7 @@ class BHPostCollectionCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        let iconSize: CGFloat = 48
+        let iconSize: CGFloat = 52
         
         contentView.backgroundColor = .primaryBackground()
         
@@ -202,7 +202,11 @@ class BHPostCollectionCell: UICollectionViewCell {
         transcriptButton.addTarget(self, action: #selector(onTranscriptButton(_:)), for: .touchUpInside)
         optionsButton.addTarget(self, action: #selector(onOptionsButton(_:)), for: .touchUpInside)
         
-        let hTopStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, playButton])
+        let playButtonView = UIView()
+        playButtonView.addSubview(playButton)
+        playButtonView.backgroundColor = .clear
+        
+        let hTopStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, playButtonView])
         hTopStackView.axis = .horizontal
         hTopStackView.alignment = .center
         hTopStackView.distribution = .equalSpacing
@@ -230,6 +234,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         contentView.addSubview(shadowView)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        playButtonView.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         shareButton.translatesAutoresizingMaskIntoConstraints = false
@@ -249,8 +254,13 @@ class BHPostCollectionCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalToConstant: iconSize),
             imageView.heightAnchor.constraint(equalToConstant: iconSize),
 
-            playButton.widthAnchor.constraint(equalToConstant: 48),
-            playButton.heightAnchor.constraint(equalToConstant: 48),
+            playButtonView.widthAnchor.constraint(equalToConstant: 40),
+            playButtonView.heightAnchor.constraint(equalToConstant: iconSize),
+
+            playButton.widthAnchor.constraint(equalToConstant: 40),
+            playButton.heightAnchor.constraint(equalToConstant: 40),
+            playButton.centerXAnchor.constraint(equalTo: playButtonView.centerXAnchor),
+            playButton.centerYAnchor.constraint(equalTo: playButtonView.centerYAnchor),
 
             likeButton.widthAnchor.constraint(equalToConstant: 44),
             likeButton.heightAnchor.constraint(equalToConstant: 44),
