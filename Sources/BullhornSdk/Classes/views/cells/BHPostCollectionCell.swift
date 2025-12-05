@@ -208,21 +208,18 @@ class BHPostCollectionCell: UICollectionViewCell {
         
         let hTopStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, playButtonView])
         hTopStackView.axis = .horizontal
-        hTopStackView.alignment = .center
-        hTopStackView.distribution = .equalSpacing
-        hTopStackView.spacing = 12
-
-        let hButtonsStackView = UIStackView(arrangedSubviews: [likeButton, shareButton, downloadButton, transcriptButton, optionsButton, UIView()])
-        hTopStackView.axis = .horizontal
-        hTopStackView.alignment = .leading
-        hTopStackView.distribution = .equalSpacing
-        hTopStackView.spacing = 8
-
-        let hBottomStackView = UIStackView(arrangedSubviews: [dateLabel, playedLabel, durationLabel])
-        hTopStackView.axis = .horizontal
         hTopStackView.alignment = .fill
         hTopStackView.distribution = .fill
         hTopStackView.spacing = 12
+
+        let hButtonsStackView = UIStackView(arrangedSubviews: [likeButton, shareButton, downloadButton, transcriptButton, optionsButton, UIView()])
+        hButtonsStackView.axis = .horizontal
+
+        let hBottomStackView = UIStackView(arrangedSubviews: [dateLabel, playedLabel, durationLabel])
+        hBottomStackView.axis = .horizontal
+        hBottomStackView.alignment = .fill
+        hBottomStackView.distribution = .fill
+        hBottomStackView.spacing = 12
 
         let vStackView = UIStackView(arrangedSubviews: [hTopStackView, descriptionLabel, hButtonsStackView, hBottomStackView])
         vStackView.axis = .vertical

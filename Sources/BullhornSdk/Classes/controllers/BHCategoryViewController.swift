@@ -317,7 +317,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
             
             return CGSize(width: itemWidth, height: itemHeight)
         } else {
-            return CGSize(width: collectionView.bounds.width, height: 230)
+            return CGSize(width: collectionView.bounds.width, height: 240)
         }
     }
 
