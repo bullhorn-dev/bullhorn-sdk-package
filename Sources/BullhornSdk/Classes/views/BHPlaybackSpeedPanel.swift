@@ -14,7 +14,6 @@ class BHPlaybackSpeedPanel: UIView {
     private var contentView = UIView()
     
     private var topBorder = CALayer()
-    private var bottomBorder = CALayer()
     
     var selectedValue: Float = BHPlayerPlaybackSpeed.normal.rawValue {
         didSet {
@@ -79,10 +78,7 @@ class BHPlaybackSpeedPanel: UIView {
         contentView.backgroundColor = .clear
 
         topBorder.backgroundColor = UIColor.tertiary().cgColor
-        bottomBorder.backgroundColor = UIColor.tertiary().cgColor
-       
         contentView.layer.addSublayer(topBorder)
-        contentView.layer.addSublayer(bottomBorder)
 
         addSubview(contentView)
         
@@ -127,9 +123,7 @@ class BHPlaybackSpeedPanel: UIView {
     override func layoutSubviews() {
         
         contentView.frame = self.bounds
-        
         topBorder.frame = CGRect(x: 0, y: 0, width: contentView.frame.size.width, height: Constants.dividerHeight)
-        bottomBorder.frame = CGRect(x: 0, y: contentView.frame.size.height - Constants.dividerHeight, width: contentView.frame.size.width, height: Constants.dividerHeight)
     }
     
     func unselectAll() {

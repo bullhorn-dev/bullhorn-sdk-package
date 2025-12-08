@@ -32,8 +32,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var backwardButton: UIButton!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var previousButton: UIButton!
+    @IBOutlet weak var sleepTimerButton: UIButton!
+    @IBOutlet weak var playbackSpeedButton: UIButton!
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var queueButton: UIButton!
 
@@ -112,6 +112,14 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.positionLabel.font = .primaryText()
         self.durationLabel.adjustsFontForContentSizeCategory = true
         self.durationLabel.font = .primaryText()
+        
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        self.playbackSpeedButton.setTitle("1x", for: .normal)
+        self.playbackSpeedButton.titleLabel?.font = font
+        
+        let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .medium, scale: .large)
+        let image = UIImage(systemName: "timer")?.withConfiguration(config)
+        self.sleepTimerButton.setImage(image, for: .normal)
 
         self.videoView.isHidden = true
         
@@ -123,6 +131,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             playButton.isHidden = true
             backwardButton.isHidden = true
             forwardButton.isHidden = true
+            playbackSpeedButton.isHidden = true
+            sleepTimerButton.isHidden = true
             routePickerView.isHidden = true
             slider.isHidden = true
             positionLabel.isHidden = true
@@ -132,15 +142,14 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if type == .stream || post?.isLiveStream() == true {
             backwardButton.isHidden = true
             forwardButton.isHidden = true
+            playbackSpeedButton.isHidden = true
+            sleepTimerButton.isHidden = true
             optionsButton.isHidden = true
             slider.isHidden = true
             positionLabel.isHidden = true
             durationLabel.isHidden = true
             liveTagLabel.isHidden = false
         }
-        
-        previousButton.isHidden = true
-        nextButton.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
         
@@ -154,6 +163,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         super.viewWillAppear(animated)
 
         reloadData()
+        updateSettingsControls()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -179,6 +189,10 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         forwardButton.accessibilityLabel = "Forward 15 seconds"
         backwardButton.isAccessibilityElement = true
         backwardButton.accessibilityLabel = "Backward 15 seconds"
+        playbackSpeedButton.isAccessibilityElement = true
+        playbackSpeedButton.accessibilityLabel = "Playback speed"
+        sleepTimerButton.isAccessibilityElement = true
+        sleepTimerButton.accessibilityLabel = "Sleep timer"
         optionsButton.isAccessibilityElement = true
         optionsButton.accessibilityLabel = "More options"
         closeButton.isAccessibilityElement = true
@@ -215,6 +229,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func updateAfterSettingsChanged() {
         queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+    }
+    
+    func updateSettingsControls() {
+        guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
+        playbackSpeedButton.setTitle(playerItem.playbackSettings.playbackSpeedString(), for: .normal)
     }
     
     // MARK: - Notifications
@@ -279,6 +298,22 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if BHHybridPlayer.shared.isActive() {
             BHHybridPlayer.shared.playPrevious()
         }
+    }
+    
+    @IBAction func onPlaybackSpeedButton() {
+        let optionsSheet = BHPlaybackSpeedBottomSheet()
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = true
+        optionsSheet.sheetTitle = NSLocalizedString("PLAYBACK SPEED", comment: "")
+        present(optionsSheet, animated: true)
+    }
+    
+    @IBAction func onSleepTimerButton() {
+        let optionsSheet = BHSleepTimerBottomSheet()
+        optionsSheet.preferredSheetSizing = .fit
+        optionsSheet.panToDismissEnabled = true
+        optionsSheet.sheetTitle = NSLocalizedString("SLEEP TIMER", comment: "")
+        present(optionsSheet, animated: true)
     }
 
     @IBAction func onOptionsButton() {
@@ -364,6 +399,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             playButton.isHidden = true
             backwardButton.isHidden = true
             forwardButton.isHidden = true
+            playbackSpeedButton.isHidden = true
+            sleepTimerButton.isHidden = true
             routePickerView.isHidden = true
         } else if showRefresh {
             activityIndicator.stopAnimating()
@@ -371,6 +408,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             playButton.isHidden = false
             backwardButton.isHidden = true
             forwardButton.isHidden = true
+            playbackSpeedButton.isHidden = true
+            sleepTimerButton.isHidden = true
             playButton.isEnabled = true
         } else {
             activityIndicator.stopAnimating()
@@ -378,9 +417,13 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             playButton.isHidden = false
             backwardButton.isHidden = false
             forwardButton.isHidden = false
+            playbackSpeedButton.isHidden = false
+            sleepTimerButton.isHidden = false
             playButton.isEnabled = true
             backwardButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
             forwardButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
+            playbackSpeedButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
+            sleepTimerButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
             routePickerView.isHidden = !controlsEnabled
         }
                 
@@ -388,6 +431,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             backwardButton.isHidden = true
             forwardButton.isHidden = true
             optionsButton.isHidden = true
+            playbackSpeedButton.isHidden = true
+            sleepTimerButton.isHidden = true
             slider.isHidden = true
             slider.isEnabled = false
             positionLabel.isHidden = true
@@ -426,6 +471,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         playButton.isEnabled = true
         backwardButton.isEnabled = false
         forwardButton.isEnabled = false
+        playbackSpeedButton.isEnabled = false
         routePickerView.isHidden = true
         slider.isEnabled = false
         hasVideo = false
@@ -550,8 +596,9 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {
         DispatchQueue.main.async {
             self.updateAfterSettingsChanged()
+            self.playbackSpeedButton.setTitle(settings.playbackSpeedString(), for: .normal)
         }
-    }
+    }    
 }
 
 // MARK: - BHLivePlayerListener

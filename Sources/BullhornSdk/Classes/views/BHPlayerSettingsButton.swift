@@ -4,7 +4,7 @@ import Foundation
 class BHPlayerSettingsButton: UIButton {
 
     var borderColorSelected: UIColor = .clear
-    var borderColorDeselected: UIColor = .tertiary()
+    var borderColorDeselected: UIColor = .primary()
 
     var textColorDeselected: UIColor = .primary()
     var textColorSelected: UIColor = .onAccent()

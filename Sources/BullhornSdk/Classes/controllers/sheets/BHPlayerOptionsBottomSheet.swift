@@ -5,13 +5,11 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     
     var type: PlayerType = .recording
     
-    private var playbackSpeedItem: BHOptionsItem!
-    private var playbackSpeedPanel: BHPlaybackSpeedPanel!
-    private var sleepTimerItem: BHOptionsItem!
-    private var sleepTimerPanel: BHSleepTimerPanel!
+    private var downloadItem: BHOptionsItem!
     private var playNextItem: BHOptionsItem!
     private var shareItem: BHOptionsItem!
-    
+    private var reportItem: BHOptionsItem!
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -31,135 +29,101 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     override func loadView() {
         super.loadView()
         
-        // playback speed (recording)
+        guard let validPost = BHHybridPlayer.shared.post else { return }
         
-        playbackSpeedPanel = BHPlaybackSpeedPanel()
-        playbackSpeedPanel.isHidden = true
-        
-        playbackSpeedItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Playback Speed", icon: "speedometer")
-        let playbackSpeedItemTap = UITapGestureRecognizer(target: self, action: #selector(onPlaybackSpeedItem(_:)))
-        playbackSpeedItem.addGestureRecognizer(playbackSpeedItemTap)
-        
-        // sleep timer (recording)
-        
-        sleepTimerPanel = BHSleepTimerPanel()
-        sleepTimerPanel.isHidden = true
-        
-        sleepTimerItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Sleep Timer", icon: "timer")
-        let sleepTimerItemTap = UITapGestureRecognizer(target: self, action: #selector(onSleepTimerItem(_:)))
-        sleepTimerItem.addGestureRecognizer(sleepTimerItemTap)
-
-        // play next (recording)
-        
+        /// play next (recording)
         playNextItem = BHOptionsItem(withType: .normal, valueType: .image, title: "Play Next", icon: "forward.end")
         let playNextItemTap = UITapGestureRecognizer(target: self, action: #selector(onPlayNextItem(_:)))
         playNextItem.addGestureRecognizer(playNextItemTap)
+
+        /// download
+        var downloadTitle = "Download"
+        var downloadIcon = "arrow.down.to.line"
+        var type: BHOptionsItem.ItemType = .normal
         
-        // share (recording, live, waiting room)
+        if let item = BHDownloadsManager.shared.item(for: validPost.id), item.status != .progress {
+            downloadTitle = "Remove from Downloads"
+            downloadIcon = "trash"
+            type = .destructive
+        }
         
+        downloadItem = BHOptionsItem(withType: type, valueType: .text, title: downloadTitle, icon: downloadIcon)
+        let downloadItemTap = UITapGestureRecognizer(target: self, action: #selector(onDownloadItem(_:)))
+        downloadItem.addGestureRecognizer(downloadItemTap)
+        
+        /// share (recording, live, waiting room)
         shareItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Share", icon: "arrowshape.turn.up.right")
         let shareItemTap = UITapGestureRecognizer(target: self, action: #selector(onShareItem(_:)))
         shareItem.addGestureRecognizer(shareItemTap)
         
-        if type == .waitingRoom {
-            let verticalStackView = UIStackView(arrangedSubviews: [
-                shareItem
-            ])
-            verticalStackView.axis = .vertical
-            
-            stackView.addArrangedSubview(verticalStackView)
-            
-            verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                shareItem.heightAnchor.constraint(equalToConstant: 50),
-                shareItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                shareItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                
-                verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-                verticalStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-                verticalStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-            ])
-        } else {
-            let verticalStackView = UIStackView(arrangedSubviews: [
-                playbackSpeedItem,
-                playbackSpeedPanel,
-                sleepTimerItem,
-                sleepTimerPanel,
-                playNextItem,
-                shareItem
-            ])
-            verticalStackView.axis = .vertical
-            
-            stackView.addArrangedSubview(verticalStackView)
-            
-            verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        /// report
+        reportItem = BHOptionsItem(withType: .normal, valueType: .text, title: "Report", icon: "exclamationmark.octagon")
+        let reportItemTap = UITapGestureRecognizer(target: self, action: #selector(onReportItem(_:)))
+        reportItem.addGestureRecognizer(reportItemTap)
+        
+        let verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(verticalStackView)
+
+        if validPost.hasRecording() && !validPost.isLiveStream() {
+            verticalStackView.addArrangedSubview(playNextItem)
+            verticalStackView.addArrangedSubview(downloadItem)
             
             NSLayoutConstraint.activate([
-                playbackSpeedItem.heightAnchor.constraint(equalToConstant: 50),
-                playbackSpeedItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                playbackSpeedItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+                downloadItem.heightAnchor.constraint(equalToConstant: 50),
+                downloadItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+                downloadItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
                 
-                playbackSpeedPanel.heightAnchor.constraint(equalToConstant: Constants.panelHeight + 2 * Constants.paddingVertical),
-                playbackSpeedPanel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                playbackSpeedPanel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                
-                sleepTimerItem.heightAnchor.constraint(equalToConstant: 50),
-                sleepTimerItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                sleepTimerItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                
-                sleepTimerPanel.heightAnchor.constraint(equalToConstant: Constants.panelHeight + 2 * Constants.paddingVertical),
-                sleepTimerPanel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                sleepTimerPanel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                                                
                 playNextItem.heightAnchor.constraint(equalToConstant: 50),
                 playNextItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
                 playNextItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                
-                shareItem.heightAnchor.constraint(equalToConstant: 50),
-                shareItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-                shareItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-                
-                verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-                verticalStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-                verticalStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
             ])
         }
+        
+        verticalStackView.addArrangedSubview(shareItem)
+        verticalStackView.addArrangedSubview(reportItem)
+
+        NSLayoutConstraint.activate([
+            shareItem.heightAnchor.constraint(equalToConstant: 50),
+            shareItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+            shareItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            reportItem.heightAnchor.constraint(equalToConstant: 50),
+            reportItem.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+            reportItem.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+
+            verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            verticalStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            verticalStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        ])
         
         updateSettings()
     }
     
     func updateSettings() {
-        guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
-        
-        playbackSpeedItem.setValue(playerItem.playbackSettings.playbackSpeedString())
-        playbackSpeedPanel.selectedValue = playerItem.playbackSettings.playbackSpeed
-        
-        updateSleepTimer()
-        
         playNextItem.setValueImage(UserDefaults.standard.playNextEnabled ? "checkmark" : nil)
-    }
-    
-    fileprivate func updateSleepTimer() {
-        let sleepTimerTime = BHHybridPlayer.shared.getSleepTimerInterval()
-        let sleepTimerString = sleepTimerTime > 0 ? "+\(sleepTimerTime.stringFormatted())" : BHPlayerSleepTime.off.getTitle()
-        self.sleepTimerItem.setValue(sleepTimerString)
-        sleepTimerPanel.selectedValue = BHHybridPlayer.shared.sleepTimerInterval
     }
     
     // MARK: - Actions
     
-    @objc func onPlaybackSpeedItem(_ sender: UITapGestureRecognizer) {
+    @objc func onDownloadItem(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            self.playbackSpeedPanel.isHidden = !self.playbackSpeedPanel.isHidden
-            self.playbackSpeedPanel.alpha = self.playbackSpeedPanel.isHidden ? 0 : 1
-        })
-    }
+            guard let validPost = BHHybridPlayer.shared.post else { return }
 
-    @objc func onSleepTimerItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            self.sleepTimerPanel.isHidden = !self.sleepTimerPanel.isHidden
-            self.sleepTimerPanel.alpha = self.sleepTimerPanel.isHidden ? 0 : 1
+            if let item = BHDownloadsManager.shared.item(for: validPost.id), item.status != .progress {
+                let alert = UIAlertController.init(title: "Remove this download?", message: "This episode will be removed from device memory and your downloads list. Do you want to remove it?", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction.init(title: "Remove", style: .destructive) { _ in
+                    BHDownloadsManager.shared.removeFromDownloads(validPost)
+                    self.dismiss(animated: true)
+                })
+
+                UIApplication.topViewController()?.present(alert, animated: true)
+            } else {
+                BHDownloadsManager.shared.download(validPost, reason: .manually)
+                self.dismiss(animated: true)
+            }
         })
     }
         
@@ -189,26 +153,41 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
             self.present(vc, animated: true, completion: nil)
         })
     }
+    
+    @objc func onReportItem(_ sender: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            guard let validPost = BHHybridPlayer.shared.post else { return }
+            
+            let bundle = Bundle.module
+            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+
+            if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
+                
+                viewController.reportReason = ReportReason.experiencingABug.rawValue
+                viewController.reportName = validPost.user.fullName
+                viewController.reportDetails = validPost.shareLink.absoluteString
+
+                UIApplication.topNavigationController()?.dismiss(animated: false) {
+                    UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
+
+                }
+            }
+            
+            self.dismiss(animated: true)
+        })
+    }
 }
 
 extension BHPlayerOptionsBottomSheet: BHHybridPlayerListener {
     
-    func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {
-        DispatchQueue.main.async { self.updateSleepTimer() }
-    }
+    func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
 
-    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
-        DispatchQueue.main.async { self.updateSleepTimer() }
-    }
+    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {}
 
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {
         DispatchQueue.main.async {
-            self.playbackSpeedItem.setValue(settings.playbackSpeedString())
+            self.updateSettings()
         }
-    }
-
-    func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double) {
-        DispatchQueue.main.async { self.updateSleepTimer() }
     }
 }
 

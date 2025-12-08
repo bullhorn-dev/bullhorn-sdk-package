@@ -49,8 +49,8 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         playButton.tintColor = .playerOnDisplayBackground()
         backwardButton.tintColor = .playerOnDisplayBackground()
         forwardButton.tintColor = .playerOnDisplayBackground()
-        previousButton.tintColor = .playerOnDisplayBackground()
-        nextButton.tintColor = .playerOnDisplayBackground()
+        playbackSpeedButton.tintColor = .playerOnDisplayBackground()
+        sleepTimerButton.tintColor = .playerOnDisplayBackground()
 
         showOverlay(true)
 

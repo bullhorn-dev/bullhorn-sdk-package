@@ -31,8 +31,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         playButton.tintColor = .primary()
         backwardButton.tintColor = .primary()
         forwardButton.tintColor = .primary()
-        previousButton.tintColor = .primary()
-        nextButton.tintColor = .primary()
+        playbackSpeedButton.tintColor = .primary()
+        sleepTimerButton.tintColor = .primary()
         bottomView.backgroundColor = .primaryBackground()
         
         nameLabel.font = .primaryButton()

@@ -277,10 +277,25 @@
                                                         <rect key="frame" x="8" y="60" width="374" height="64"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="A3E-kP-cft">
-                                                                <rect key="frame" x="67" y="0.0" width="240" height="64"/>
+                                                                <rect key="frame" x="37" y="0.0" width="300" height="64"/>
                                                                 <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gnm-pA-0ht">
+                                                                        <rect key="frame" x="0.0" y="12" width="44" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="44" id="kBO-AW-WJo"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="slN-mN-NRW"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                        <color key="tintColor" name="bhColorPrimary"/>
+                                                                        <state key="normal" title="1.75x">
+                                                                            <color key="titleColor" name="bhColorPrimary"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="onPlaybackSpeedButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="hDj-pV-lgD"/>
+                                                                        </connections>
+                                                                    </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v8Q-Hi-Ynj">
-                                                                        <rect key="frame" x="0.0" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="64.666666666666671" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="wNc-hs-ROx"/>
                                                                             <constraint firstAttribute="width" constant="44" id="xGv-AU-CXi"/>
@@ -294,23 +309,8 @@
                                                                             <action selector="onBackwardButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="mAI-Ir-VM0"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gnm-pA-0ht">
-                                                                        <rect key="frame" x="48" y="12.666666666666668" width="44" height="38.666666666666657"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="kBO-AW-WJo"/>
-                                                                            <constraint firstAttribute="height" constant="44" id="slN-mN-NRW"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" name="bhColorPrimary"/>
-                                                                        <state key="normal">
-                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <imageReference key="backgroundImage" image="backward.end" catalog="system" symbolScale="medium"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="onPreviousButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="X4h-yc-9MV"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sip-qC-siB" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                                                        <rect key="frame" x="48" y="10" width="44" height="44"/>
+                                                                        <rect key="frame" x="112.66666666666666" y="10" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="YbU-qF-iqO"/>
@@ -323,7 +323,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Of-Un-IUE">
-                                                                        <rect key="frame" x="96" y="6.3333333333333357" width="48" height="51.666666666666671"/>
+                                                                        <rect key="frame" x="127" y="6.3333333333333357" width="48" height="51.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="56" id="meK-a4-sZQ"/>
                                                                             <constraint firstAttribute="width" constant="48" id="xDs-s5-fpB"/>
@@ -338,24 +338,8 @@
                                                                             <action selector="onPlayButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="ILi-IJ-jdH"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Me-0y-yNY">
-                                                                        <rect key="frame" x="148" y="12.666666666666668" width="44" height="38.666666666666657"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="6cA-b5-j2u"/>
-                                                                            <constraint firstAttribute="height" constant="44" id="ubr-JV-hG3"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" name="bhColorPrimary"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal">
-                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <imageReference key="backgroundImage" image="forward.end" catalog="system" symbolScale="medium"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="onNextButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="Pc5-Ri-o9V"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lr3-8z-Pac">
-                                                                        <rect key="frame" x="196" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="193.66666666666666" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="0rD-Ld-jbP"/>
                                                                             <constraint firstAttribute="height" constant="44" id="jHI-bi-tkx"/>
@@ -370,11 +354,28 @@
                                                                             <action selector="onForwardButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="2CU-yn-cgX"/>
                                                                         </connections>
                                                                     </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Me-0y-yNY">
+                                                                        <rect key="frame" x="260" y="12" width="40" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="40" id="6cA-b5-j2u"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="ubr-JV-hG3"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                                        <color key="tintColor" name="bhColorPrimary"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                        <state key="normal">
+                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <imageReference key="image" image="timer" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="onSleepTimerButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="PG8-pf-ziC"/>
+                                                                        </connections>
+                                                                    </button>
                                                                 </subviews>
                                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="64" id="cV4-vm-avs"/>
-                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="999" constant="240" id="sD4-9q-oUT"/>
+                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="999" constant="300" id="sD4-9q-oUT"/>
                                                                 </constraints>
                                                             </stackView>
                                                         </subviews>
@@ -451,13 +452,13 @@
                         <outlet property="liveTagLabel" destination="R0K-2c-Tik" id="uaa-ME-9cA"/>
                         <outlet property="nameLabel" destination="SBV-XQ-ouN" id="vIp-fa-oMy"/>
                         <outlet property="nameView" destination="XDK-m3-Q1D" id="VeD-8O-zhl"/>
-                        <outlet property="nextButton" destination="8Me-0y-yNY" id="kiP-fx-8Mc"/>
                         <outlet property="optionsButton" destination="gir-R1-i9J" id="Hqk-ef-Und"/>
                         <outlet property="playButton" destination="3Of-Un-IUE" id="loK-vW-laM"/>
+                        <outlet property="playbackSpeedButton" destination="Gnm-pA-0ht" id="UK8-H6-QAg"/>
                         <outlet property="positionLabel" destination="lDX-nk-lFf" id="sE1-SH-Us2"/>
-                        <outlet property="previousButton" destination="Gnm-pA-0ht" id="jCR-qT-QCu"/>
                         <outlet property="queueButton" destination="WJx-v5-55U" id="RV5-bp-8aV"/>
                         <outlet property="routePickerView" destination="zAy-dH-j2B" id="wWX-O0-NGr"/>
+                        <outlet property="sleepTimerButton" destination="8Me-0y-yNY" id="Axq-4A-SgZ"/>
                         <outlet property="slider" destination="MaD-9f-YKA" id="8BK-b6-DvQ"/>
                         <outlet property="titleLabel" destination="aY0-ym-zuX" id="rqd-mG-VlN"/>
                         <outlet property="titleView" destination="JsL-64-ILe" id="EMd-K4-rLe"/>
@@ -861,11 +862,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -893,11 +894,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="34"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="81" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1026,10 +1027,24 @@
                                                         <rect key="frame" x="16" y="141.66666666666666" width="358" height="64"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="EvK-7A-Pnr">
-                                                                <rect key="frame" x="93" y="0.0" width="172" height="64"/>
+                                                                <rect key="frame" x="29" y="0.0" width="300" height="64"/>
                                                                 <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCT-g5-6UY">
+                                                                        <rect key="frame" x="0.0" y="10" width="44" height="44"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="44" id="NOD-S1-HMe"/>
+                                                                            <constraint firstAttribute="width" constant="44" id="li3-09-bkb"/>
+                                                                        </constraints>
+                                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                        <state key="normal" title="1.75x">
+                                                                            <color key="titleColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="onPlaybackSpeedButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="Hqs-SZ-7ok"/>
+                                                                        </connections>
+                                                                    </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SyG-hr-ZdY">
-                                                                        <rect key="frame" x="0.0" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="64" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="F5i-lW-2C8"/>
                                                                             <constraint firstAttribute="height" constant="44" id="kkC-dl-41q"/>
@@ -1043,23 +1058,8 @@
                                                                             <action selector="onBackwardButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="EWd-38-0bw"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCT-g5-6UY">
-                                                                        <rect key="frame" x="54" y="12.666666666666668" width="44" height="38.666666666666657"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="44" id="NOD-S1-HMe"/>
-                                                                            <constraint firstAttribute="width" constant="44" id="li3-09-bkb"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
-                                                                        <state key="normal">
-                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <imageReference key="backgroundImage" image="backward.end" catalog="system" symbolScale="medium"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="onPreviousButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="Vxp-TM-6cc"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JjD-qu-HCL">
-                                                                        <rect key="frame" x="64" y="6.3333333333333357" width="44" height="51.666666666666671"/>
+                                                                        <rect key="frame" x="128" y="6.3333333333333357" width="44" height="51.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="2EL-a0-mfo"/>
                                                                             <constraint firstAttribute="height" constant="56" id="p9q-lU-dhw"/>
@@ -1074,24 +1074,8 @@
                                                                             <action selector="onPlayButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="Pqo-f3-WS3"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEv-td-YwK">
-                                                                        <rect key="frame" x="118" y="12.666666666666668" width="44" height="38.666666666666657"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="CbD-hh-Nom"/>
-                                                                            <constraint firstAttribute="height" constant="44" id="m9x-1Z-Pq4"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal">
-                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <imageReference key="backgroundImage" image="forward.end" catalog="system" symbolScale="medium"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="onNextButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="5qX-kj-2gL"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pnL-VQ-BDs">
-                                                                        <rect key="frame" x="128" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="192" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="fwh-1r-tpk"/>
                                                                             <constraint firstAttribute="width" constant="44" id="sbI-Fk-qu5"/>
@@ -1104,6 +1088,22 @@
                                                                         </state>
                                                                         <connections>
                                                                             <action selector="onForwardButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="BcQ-FZ-coL"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEv-td-YwK">
+                                                                        <rect key="frame" x="256" y="10" width="44" height="44"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="44" id="CbD-hh-Nom"/>
+                                                                            <constraint firstAttribute="height" constant="44" id="m9x-1Z-Pq4"/>
+                                                                        </constraints>
+                                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                        <state key="normal">
+                                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <imageReference key="image" image="timer" catalog="system" symbolScale="medium"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="onSleepTimerButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="xOQ-DM-Xrc"/>
                                                                         </connections>
                                                                     </button>
                                                                 </subviews>
@@ -1271,16 +1271,16 @@
                         <outlet property="interactiveStackView" destination="gm0-iV-bj2" id="h9y-4j-bzX"/>
                         <outlet property="interactiveView" destination="J65-Nu-rNX" id="SLO-CZ-OXq"/>
                         <outlet property="liveTagLabel" destination="x1h-Sb-HGY" id="7b4-ja-Z5p"/>
-                        <outlet property="nextButton" destination="LEv-td-YwK" id="Yo1-XX-FKK"/>
                         <outlet property="optionsButton" destination="3I5-VL-1T9" id="ELK-Lv-ifD"/>
                         <outlet property="overlayBottomOffsetConstraint" destination="eDM-cG-9GL" id="n8Q-aE-EiF"/>
                         <outlet property="overlayTopOffsetConstraint" destination="Vt8-p0-pcC" id="hG9-ae-aDf"/>
                         <outlet property="overlayView" destination="fVd-sW-hzf" id="rCW-iG-2HK"/>
                         <outlet property="playButton" destination="JjD-qu-HCL" id="8Pw-La-rRH"/>
+                        <outlet property="playbackSpeedButton" destination="iCT-g5-6UY" id="QKj-Mw-nxg"/>
                         <outlet property="positionLabel" destination="rG6-w4-xJL" id="PJM-qM-jX3"/>
-                        <outlet property="previousButton" destination="iCT-g5-6UY" id="ohS-cM-Cdb"/>
                         <outlet property="queueButton" destination="3T3-wO-uCk" id="0G6-Jm-7PQ"/>
                         <outlet property="routePickerView" destination="m3P-Xr-jNS" id="vAw-CW-yAU"/>
+                        <outlet property="sleepTimerButton" destination="LEv-td-YwK" id="EV1-4W-Bak"/>
                         <outlet property="slider" destination="Ctc-KZ-Oxf" id="006-3W-RB9"/>
                         <outlet property="tabbedView" destination="sio-JJ-vAg" id="iS1-pF-26r"/>
                         <outlet property="tableView" destination="dHk-Zh-HYW" id="Bav-vN-D7H"/>
@@ -2849,18 +2849,17 @@
         <segue reference="yWz-wB-dY7"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="backward.end" catalog="system" width="128" height="112"/>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="chevron.compact.down" catalog="system" width="128" height="42"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="doc.plaintext" catalog="system" width="115" height="128"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <image name="forward.end" catalog="system" width="128" height="112"/>
         <image name="gobackward.15" catalog="system" width="119" height="128"/>
         <image name="goforward.15" catalog="system" width="119" height="128"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
         <image name="list.bullet.circle" catalog="system" width="128" height="123"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
+        <image name="timer" catalog="system" width="128" height="123"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -2904,10 +2903,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
