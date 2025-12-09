@@ -201,8 +201,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         playButton.isAccessibilityElement = true
         playButton.context = "episode"
         likeButton.isAccessibilityElement = true
+        likeButton.accessibilityTraits = .button
         likeButton.accessibilityLabel = validPost.liked ? "Unfavorite episode" : "Favorite episode"
         shareButton.isAccessibilityElement = true
+        shareButton.accessibilityTraits = .button
         shareButton.accessibilityLabel = "Share episode"
         downloadButton.isAccessibilityElement = true
         downloadButton.context = "episode"
