@@ -103,6 +103,7 @@ class BHDownloadsManager {
         if let row = downloadsQueue.firstIndex(where: {$0.post.id == post.id}) {
             self.downloadsQueue[row].post = post
             self.updateStorageItem(self.downloadsQueue[row])
+            self.groupItems()
             
             self.observersContainer.notifyObserversAsync {
                 $0.downloadsManagerItemsUpdated(self)
