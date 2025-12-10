@@ -54,7 +54,7 @@ class BHDownloadsManager {
         
         for (date, values) in grouped {
             let uiModel = UIDownloadsModel(date: date,
-                                           posts: values.sorted(by: { $0.post.validPublishedDate > $1.post.validPublishedDate }).map { $0.post })
+                                           posts: values.map { $0.post })
             models.append(uiModel)
         }
         
