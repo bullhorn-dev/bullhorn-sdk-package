@@ -46,12 +46,15 @@ public class BHDropDownTextField: UIView {
     private var initialHeight: CGFloat = 0
     private let rowHeight: CGFloat = 40
     
-    private let arrowIndicator: UIImageView = {
-        let image = UIImage.BHDropDown.down.image
-        image.withRenderingMode(.alwaysTemplate)
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+    private let arrowButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage.BHDropDown.down.image, for: .normal)
+        button.setTitle("", for: .normal)
+        button.backgroundColor = .clear
+        button.tintColor = .primary()
+        button.accessibilityLabel = "Show problem reasons list"
+        button.accessibilityTraits = .button
+        return button
     }()
     
     lazy var tableView: UITableView = {
@@ -75,8 +78,6 @@ public class BHDropDownTextField: UIView {
         textField.keyboardType = .alphabet
         return textField
     }()
-    
-    private let tapView: UIView = UIView()
     
     // MARK: - Lifecycle
 
@@ -104,7 +105,7 @@ public class BHDropDownTextField: UIView {
 
     // MARK: - Private
     
-    @objc private func animateMenu() {
+    @objc private func animateMenu(_ sender: Any) {
         delegate?.onMenuRequested()
 //        menuAnimate(up: isDroppedDown)
     }
@@ -118,11 +119,9 @@ public class BHDropDownTextField: UIView {
     
     private func setupViews() {
         removeSubviews()
-        addTapView()
-        addDropDownIndicator()
+        addDropDownButton()
         addTextField()
         addTableView()
-//        addAnimationView()
     }
     
     private func removeSubviews() {
@@ -137,7 +136,7 @@ public class BHDropDownTextField: UIView {
         NSLayoutConstraint.activate([
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
             textField.centerYAnchor.constraint(equalTo: topAnchor, constant: initialHeight / 2),
-            textField.trailingAnchor.constraint(equalTo: arrowIndicator.leadingAnchor)
+            textField.trailingAnchor.constraint(equalTo: arrowButton.leadingAnchor)
         ])
         textField.font = .secondaryButton()
         textField.backgroundColor = .clear
@@ -146,39 +145,23 @@ public class BHDropDownTextField: UIView {
         textField.delegate = self
         textField.adjustsFontForContentSizeCategory = true
 
-        self.backgroundColor = .cardBackground()
-        self.layer.borderColor = UIColor.divider().cgColor
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 4
+        textField.backgroundColor = .cardBackground()
+        textField.layer.borderColor = UIColor.divider().cgColor
+        textField.layer.borderWidth = 1
+        textField.layer.cornerRadius = 4
+        
+        self.backgroundColor = .clear
     }
-    
-    private func addTapView() {
-        tapView.translatesAutoresizingMaskIntoConstraints = false
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateMenu))
-        tapView.addGestureRecognizer(tapGesture)
-        tapView.backgroundColor = .cardBackground()
-        tapView.isAccessibilityElement = true
-        tapView.accessibilityLabel = isDroppedDown ? "Close problem options list" : "Open problem options list"
-        addSubview(tapView)
+        
+    private func addDropDownButton() {
+        arrowButton.addTarget(self, action: #selector(animateMenu(_:)), for: .touchUpInside)
+        arrowButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(arrowButton)
         NSLayoutConstraint.activate([
-            tapView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tapView.heightAnchor.constraint(equalToConstant: 44),
-            tapView.widthAnchor.constraint(equalToConstant: 44),
-            tapView.centerYAnchor.constraint(equalTo: topAnchor, constant: initialHeight / 2)
-        ])
-    }
-    
-    private func addDropDownIndicator() {
-        arrowIndicator.translatesAutoresizingMaskIntoConstraints = false
-        arrowIndicator.tintColor = .secondary()
-        arrowIndicator.backgroundColor = .cardBackground()
-        tapView.addSubview(arrowIndicator)
-        let triSize: CGFloat = 24.0
-        NSLayoutConstraint.activate([
-            arrowIndicator.trailingAnchor.constraint(equalTo: tapView.trailingAnchor, constant: -8.0),
-            arrowIndicator.heightAnchor.constraint(equalToConstant: triSize),
-            arrowIndicator.widthAnchor.constraint(equalToConstant: triSize),
-            arrowIndicator.centerYAnchor.constraint(equalTo: topAnchor, constant: initialHeight / 2)
+            arrowButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            arrowButton.heightAnchor.constraint(equalToConstant: 44),
+            arrowButton.widthAnchor.constraint(equalToConstant: 44),
+            arrowButton.centerYAnchor.constraint(equalTo: topAnchor, constant: initialHeight / 2)
         ])
     }
     
@@ -223,9 +206,9 @@ public class BHDropDownTextField: UIView {
             self.animationView.isHidden = up
             self.animationView.frame = downFrame
 
-            self.tapView.accessibilityLabel = up ? "Open problem options list" : "Close problem options list"
+            self.arrowButton.accessibilityLabel = up ? "Open problem options list" : "Close problem options list"
 
-            self.arrowIndicator.image = up ? UIImage.BHDropDown.down.image : UIImage.BHDropDown.up.image
+            self.arrowButton.setImage(up ? UIImage.BHDropDown.down.image : UIImage.BHDropDown.up.image, for: .normal)
             self.tableView.isHidden = up
             self.delegate?.menuDidAnimate(up: up)
         })
@@ -269,7 +252,7 @@ extension BHDropDownTextField: UITableViewDelegate, UITableViewDataSource {
             BHLog.p("Select drop down item: \(item.value)")
             self?.textField.text = item.value
             self?.delegate?.optionSelected(option: item.value)
-            self?.animateMenu()
+//            self?.animateMenu(self)
         }
         return cell
     }
