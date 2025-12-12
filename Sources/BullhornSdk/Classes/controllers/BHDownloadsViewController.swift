@@ -112,8 +112,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
 extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let date = BHDownloadsManager.shared.groupedItems[section].date
-        return dateFormatter.prettyDayFormatString(from: date)
+        return BHDownloadsManager.shared.groupedItems[section].date.prettyString()
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -124,14 +123,13 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if BHDownloadsManager.shared.groupedItems.count == 1 {
+            return 0
+        }
         return 50.0
     }
         
     func numberOfSections(in tableView: UITableView) -> Int {
-        return BHDownloadsManager.shared.groupedItems.count
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if BHDownloadsManager.shared.groupedItems.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
@@ -141,6 +139,10 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
             tableView.restore()
         }
 
+        return BHDownloadsManager.shared.groupedItems.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return BHDownloadsManager.shared.groupedItems[section].posts.count
     }
     

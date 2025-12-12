@@ -2,8 +2,32 @@
 import Foundation
 internal import Alamofire
 
+enum DownloadDate: Int, Comparable {
+    case today = 0
+    case yesterday
+    case week
+    case month
+    case year
+    case earlier
+    
+    func prettyString() -> String {
+        switch self {
+        case .today: return "Today"
+        case .yesterday: return "Yesterday"
+        case .week: return "This Week"
+        case .month: return "This Month"
+        case .year: return "This Year"
+        case .earlier: return "Earlier"
+        }
+    }
+    
+    static func < (lhs: DownloadDate, rhs: DownloadDate) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}
+
 struct UIDownloadsModel {
-    let date: Date
+    let date: DownloadDate
     let posts: [BHPost]
 }
 
@@ -46,10 +70,30 @@ class BHDownloadsManager {
         groupedItems.removeAll()
         
         let items = downloadsQueue.sorted(by: { $0.time > $1.time })
+        let now = Date()
+        var grouped: [DownloadDate: [BHDownloadItem]] = [:]
         var models: [UIDownloadsModel] = []
 
-        let grouped = Dictionary(grouping: items) { item -> Date in
-            calendar.startOfDay(for: item.date)
+        for item in items {
+            let date = Date(timeIntervalSince1970: item.time)
+            var key: DownloadDate = .earlier
+
+            if calendar.isDateInToday(date) {
+                key = .today
+            } else if calendar.isDateInYesterday(date) {
+                key = .yesterday
+            } else if calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear) {
+                key = .week
+            } else if calendar.isDate(date, equalTo: now, toGranularity: .month) {
+                key = .month
+            } else if calendar.isDate(date, equalTo: now, toGranularity: .year) {
+                key = .year
+            } else {
+                key = .earlier
+            }
+
+            if !grouped.keys.contains(where: { $0 == key}) { grouped[key] = [] }
+            grouped[key]?.append(item)
         }
         
         for (date, values) in grouped {
@@ -58,7 +102,7 @@ class BHDownloadsManager {
             models.append(uiModel)
         }
         
-        groupedItems = models.sorted(by: { $0.date > $1.date })
+        groupedItems = models.sorted(by: { $0.date < $1.date })
     }
     
     // MARK: - Initialization
