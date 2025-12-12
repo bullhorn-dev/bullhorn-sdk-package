@@ -29,7 +29,8 @@ final class BHSleepTimerBottomSheet: BHBottomSheetController {
         sleepTimerLabel.contentMode = .center
         sleepTimerLabel.textAlignment = .center
         sleepTimerLabel.font = .secondaryText()
-        sleepTimerLabel.textColor = .primary();
+        sleepTimerLabel.textColor = .primary()
+        sleepTimerLabel.accessibilityTraits = .updatesFrequently
         stackView.addArrangedSubview(sleepTimerLabel)
 
         sleepTimerPanel = BHSleepTimerPanel()

@@ -189,10 +189,6 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         forwardButton.accessibilityLabel = "Forward 15 seconds"
         backwardButton.isAccessibilityElement = true
         backwardButton.accessibilityLabel = "Backward 15 seconds"
-        playbackSpeedButton.isAccessibilityElement = true
-        playbackSpeedButton.accessibilityLabel = "Playback speed"
-        sleepTimerButton.isAccessibilityElement = true
-        sleepTimerButton.accessibilityLabel = "Sleep timer"
         optionsButton.isAccessibilityElement = true
         optionsButton.accessibilityLabel = "More options"
         closeButton.isAccessibilityElement = true
@@ -200,6 +196,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         queueButton.accessibilityLabel = "Show playback queue"
         positionLabel.accessibilityTraits = .updatesFrequently
         durationLabel.accessibilityTraits = .updatesFrequently
+        
+        updateSettingsControls()
     }
     
     func reloadData() {
@@ -233,7 +231,15 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func updateSettingsControls() {
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
+
         playbackSpeedButton.setTitle(playerItem.playbackSettings.playbackSpeedString(), for: .normal)
+        playbackSpeedButton.isAccessibilityElement = true
+        playbackSpeedButton.accessibilityLabel = "Playback speed \(playerItem.playbackSettings.playbackSpeedString())"
+
+        let sleepTimerEnabled = BHHybridPlayer.shared.getSleepTimerInterval() > 0
+        let sleepTimerStatus = sleepTimerEnabled ? "On" : "Off"
+        sleepTimerButton.isAccessibilityElement = true
+        sleepTimerButton.accessibilityLabel = "Sleep timer \(sleepTimerStatus)"
     }
     
     // MARK: - Notifications
@@ -573,6 +579,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             if  duration > 0 && !self.isSliding {
                 self.onPositionChanged(position, duration: duration)
                 self.updateLayout(self.isExpanded, position: position)
+                self.updateSettingsControls()
             }
         }
     }
@@ -596,7 +603,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {
         DispatchQueue.main.async {
             self.updateAfterSettingsChanged()
-            self.playbackSpeedButton.setTitle(settings.playbackSpeedString(), for: .normal)
+            self.updateSettingsControls()
         }
     }    
 }

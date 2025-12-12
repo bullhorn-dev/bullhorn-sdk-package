@@ -133,6 +133,13 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         }
     }
     
+    override func updateSettingsControls() {
+        super.updateSettingsControls()
+        
+        let sleepTimerEnabled = BHHybridPlayer.shared.getSleepTimerInterval() > 0
+        sleepTimerButton.tintColor = sleepTimerEnabled ? .primary() : .secondary()
+    }
+    
     // MARK: - Actions
     
     @IBAction func onTranscriptButton() {
