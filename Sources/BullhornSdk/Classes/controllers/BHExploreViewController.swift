@@ -67,6 +67,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onNetworkIdChangedNotification(notification:)), name: BullhornSdk.NetworkIdChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onExternalAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onContentSizeCategoryChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -317,6 +318,10 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     
     @objc fileprivate func onExternalAccountChangedNotification(_ notification: Notification) {
         fetch(true)
+    }
+    
+    @objc fileprivate func onContentSizeCategoryChanged(_ notification: Notification) {
+        tableView.reloadData()
     }
 }
 

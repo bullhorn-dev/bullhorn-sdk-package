@@ -60,6 +60,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(notification:)), name: BHAccountManager.AccountChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onExternalAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onContentSizeCategoryChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
         
         BHUserManager.shared.addListener(self)
     }
@@ -278,6 +279,11 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
     @objc private func onApplicationDidBecomeActive(_ notification: Notification) {
         headerView?.scrollToSelectedChannel()
+    }
+    
+    @objc fileprivate func onContentSizeCategoryChanged(_ notification: Notification) {
+        BHLog.p("\(#function)")
+        reloadData()
     }
 }
 

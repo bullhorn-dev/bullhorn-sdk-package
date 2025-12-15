@@ -42,6 +42,7 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onNetworkIdChangedNotification(notification:)), name: BullhornSdk.NetworkIdChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onContentSizeCategoryChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,6 +160,10 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
             
             self.fetch(true)
         }
+    }
+    
+    @objc fileprivate func onContentSizeCategoryChanged(_ notification: Notification) {
+        tableView.reloadData()
     }
 }
 
