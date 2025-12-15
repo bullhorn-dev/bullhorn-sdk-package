@@ -199,7 +199,7 @@ extension BHHybridPlayer {
         }
     }
     
-    func getTranscript() {
+    func fetchTranscript() {
         guard let validPost = post else { return }
         if !validPost.hasTranscript { return }
         
@@ -218,7 +218,7 @@ extension BHHybridPlayer {
         }
     }
     
-    func getPlaylist() {
+    func fetchPlaylist() {
         guard let validPost = post else { return }
 
         BHLog.p("\(#function)")

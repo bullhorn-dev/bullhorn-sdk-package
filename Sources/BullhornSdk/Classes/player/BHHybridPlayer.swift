@@ -58,7 +58,7 @@ class BHHybridPlayer {
         didSet {
             BHBulletinManager.shared.reset()
             fetchInteractive() { _ in }
-            getTranscript()
+            fetchTranscript()
         }
     }
 
@@ -567,8 +567,8 @@ class BHHybridPlayer {
         playerItem = validItem
         self.post = post
         
-        if !hasNext() {
-            getPlaylist()
+        if !hasNext() && !validItem.isStream  {
+            fetchPlaylist()
         }
         
         observersContainer.notifyObserversAsync {
@@ -1111,6 +1111,8 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
     }
     
     func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase) {
+        BHLog.p("\(#function)")
+
         guard let validPlayerItem = playerItem else {
             stop()
             return
@@ -1118,7 +1120,11 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         
         if validPlayerItem.isStream {
             mediaPlayerPlaybackStalled(player)
+        } else if lastSentDuration - lastSentPosition > 10 {
+            BHLog.p("\(#function)- Failed to play. Stop.")
+            mediaPlayerFailedToPlayToEndTime(player)
         } else {
+            BHLog.p("\(#function) - Ended to play. Try to play next.")
             handlePlayerState(.ended)
             if hasNext() && UserDefaults.standard.playNextEnabled {
                 playNext()
@@ -1127,16 +1133,22 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
     }
     
     func mediaPlayerPlaybackStalled(_ player: BHMediaPlayerBase) {
+        BHLog.p("\(#function)")
+
         let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
         handlePlayerState(.failed(e: error))
     }
     
     func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase) {
+        BHLog.p("\(#function)")
+
         let error = NSError.error(with: NSError.LocalCodes.common, description: "Failed to play because of bad network connection.")
         handlePlayerState(.failed(e: error))
     }
 
     func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase) {
+        BHLog.p("\(#function)")
+
         if playerItem?.isStream == true {
             mediaPlayerPlaybackStalled(player)
         } else {
@@ -1145,7 +1157,7 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
     }
     
     func mediaPlayerServicesWereReset(_ player: BHMediaPlayerBase) {
-        
+        BHLog.p("\(#function)")
     }
 
     func mediaPlayerDidRequestNowPlayingItemInfo(_ player: BHMediaPlayerBase) -> BHNowPlayingItemInfo {
