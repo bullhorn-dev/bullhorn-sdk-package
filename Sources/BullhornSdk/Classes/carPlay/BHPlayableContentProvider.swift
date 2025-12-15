@@ -81,7 +81,7 @@ extension BHPlayableContentProvider {
         let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
         listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
 
-        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true)
+        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true, completion: nil)
     }
     
     func convertEpisodesToListItem(_ title: String, episodes: [BHPost], handler: Bool = true) -> CPListItem {
@@ -144,7 +144,7 @@ extension BHPlayableContentProvider {
         let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: items)], assistantCellConfiguration: configuration)
         listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
 
-        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true)
+        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true, completion: nil)
     }
     
     func convertPodcastsToImageRowItem(_ title: String, podcasts: [BHUser], placeholderImage: UIImage, imagesCount: Int = CPMaximumNumberOfGridImages) -> CPListImageRowItem {
@@ -237,7 +237,7 @@ extension BHPlayableContentProvider {
     func play(_ episode: BHPost, playlist: [BHPost]?) {
         if BHHybridPlayer.shared.isPostPlaying(episode.id) {
             if let topTemplate = self.carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-                self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
+                self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
             }
         } else {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(episode.id)

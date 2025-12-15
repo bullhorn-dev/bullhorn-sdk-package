@@ -145,7 +145,12 @@ class BHPlayableContentController: NSObject {
     func presentAlert(title: String, message: String? = nil) {
         guard let interfaceController = carplayInterfaceController else { return }
         
-        BHLog.p("CarPlay present alert, title: \(title), message: \(message ?? "nil")")
+        if interfaceController.presentedTemplate?.isMember(of: CPAlertTemplate.self) == true {
+            BHLog.p("CarPlay CPAlertTemplate is already presented")
+            return
+        }
+        
+        BHLog.p("CarPlay present CPAlertTemplate, title: \(title), message: \(message ?? "nil")")
 
         let titleVariants = message == nil ? [title] : [title, message!]
         let okAction = CPAlertAction(title: "OK", style: .default) { action in
@@ -155,6 +160,14 @@ class BHPlayableContentController: NSObject {
         let alert = CPAlertTemplate(titleVariants: titleVariants, actions: actions)
 
         interfaceController.presentTemplate(alert, animated: true, completion: nil)
+    }
+    
+    func dismissAlertIfNeeded() {
+        guard let interfaceController = carplayInterfaceController else { return }
+        
+        if interfaceController.presentedTemplate?.isMember(of: CPAlertTemplate.self) == true {
+            interfaceController.dismissTemplate(animated: true, completion: nil)
+        }
     }
 
     // MARK: - Private
@@ -194,10 +207,12 @@ extension BHPlayableContentController: BHHybridPlayerListener {
         switch state {
         case .initializing:
             
+            dismissAlertIfNeeded()
+
             providers.forEach({ $0.updatePlayingItemForEpisode(title) })
                         
             if !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-                carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true)
+                carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
             } else {
                 updatePlaybackRateButton()
             }
@@ -212,7 +227,7 @@ extension BHPlayableContentController: BHHybridPlayerListener {
         providers.forEach({ $0.updatePlayingItem(nil, items: $0.items) })
 
         if topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-            carplayInterfaceController?.popToRootTemplate(animated: true)
+            carplayInterfaceController?.popToRootTemplate(animated: true, completion: nil)
         }
     }
     
