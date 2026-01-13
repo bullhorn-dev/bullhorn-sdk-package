@@ -269,8 +269,8 @@ class BHHybridPlayer {
                 let vc = BHConnectionLostBottomSheet()
                 vc.preferredSheetSizing = .fit
                 vc.panToDismissEnabled = true
-                    
-                UIApplication.topNavigationController()?.present(vc, animated: true)
+                
+                UIApplication.topViewController()?.present(vc, animated: true)
             }
         }
     }
