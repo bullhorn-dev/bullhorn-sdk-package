@@ -5,10 +5,10 @@ import Foundation
 // MARK: - Info Links
 
 public enum BHInfoLinkType {
-    case termsOfService
+    case termsOfUse
     case privacyPolicy
-    case yourPrivacyChoices
     case contactUs
+    case support
 }
 
 public struct BHInfoLink {
@@ -89,16 +89,12 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
         models.removeAll()
         
         models.append(Section(title: "Information", options: [
-            .staticCell(model: SettingsOption(title: "Terms of Service", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .termsOfService })
+            .staticCell(model: SettingsOption(title: "Terms of Use", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                self.selectedLink = self.infoLinks.first(where: { $0.type == .termsOfUse })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyPolicy })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
-            }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Your Privacy Choices", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .yourPrivacyChoices })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
         ]))

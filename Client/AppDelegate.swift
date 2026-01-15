@@ -17,9 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var clientId: String
         let networkId: String = AuthConfig.shared.networkId
         let infoLinks: [BHInfoLink] = [
-            BHInfoLink(type: .termsOfService, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
+            BHInfoLink(type: .termsOfUse, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
             BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),
-            BHInfoLink(type: .yourPrivacyChoices, title: "Your Privacy Choices", url: "https://l.bullhorn.fm/privacy-policy"),
+            BHInfoLink(type: .support, title: "Your Privacy Choices", url: "https://l.bullhorn.fm/privacy-policy"),
             BHInfoLink(type: .contactUs, title: "Contact Us", url: "https://l.bullhorn.fm/#get-in-touch")
         ]
 
