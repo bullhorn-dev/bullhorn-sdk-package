@@ -8,8 +8,6 @@ class BHSearchBarView: UIView {
         case dark
     }
     
-    fileprivate let barHeight: CGFloat = 36
-
     var mode: Mode = .light {
         didSet {
             setupUI()
@@ -36,6 +34,14 @@ class BHSearchBarView: UIView {
     }
     
     // MARK: - Private
+    
+    private var barHeight: CGFloat {
+        if #available(iOS 26.0, *) {
+            return 44.0
+        } else {
+            return 36.0
+        }
+    }
     
     private func setupUI() {
         
@@ -81,7 +87,7 @@ class BHSearchBarView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         searchBar.setTextFiledColor(color: .cardBackground())
         searchBar.searchTextField.layer.cornerRadius = barHeight / 2
         searchBar.searchTextField.layer.borderWidth = 1

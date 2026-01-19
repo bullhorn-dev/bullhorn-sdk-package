@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bQh-0M-9Ry">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bQh-0M-9Ry">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -32,7 +32,7 @@
                         <imageReference key="image" image="ic_account" symbolScale="large"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="RiR-iy-X7Z">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <color key="tintColor" name="bhColorAppBarTitle"/>
@@ -65,7 +65,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vrL-65-vZy">
-                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="172" width="393" height="563"/>
                                 <connections>
                                     <segue destination="6Id-2M-0hf" kind="embed" id="bwk-EK-vMd"/>
                                 </connections>
@@ -103,7 +103,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hXE-6L-oPk">
-                                <rect key="frame" x="0.0" y="103" width="413" height="749"/>
+                                <rect key="frame" x="0.0" y="172" width="413" height="680"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <color key="separatorColor" name="bhColorDivider"/>
                                 <prototypes>
@@ -215,7 +215,7 @@
                         <imageReference key="image" image="ic_home" symbolScale="large"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zDY-mC-nhq">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <color key="tintColor" name="bhColorAppBarTitle"/>
@@ -241,7 +241,7 @@
                 <navigationController title="Search NC" id="XyU-cy-eXG" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="ic_search" id="fgL-Qs-xbG"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="S5m-sC-bD0">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <color key="tintColor" name="bhColorAppBarTitle"/>
@@ -267,7 +267,7 @@
                 <navigationController title="Radio NC" id="mkh-k3-kzc" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Radio" image="ic_radio" id="ZYc-c8-9Sm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tuh-Bw-gt0">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <color key="tintColor" name="bhColorAppBarTitle"/>

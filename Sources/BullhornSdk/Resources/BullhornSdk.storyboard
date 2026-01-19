@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U2I-TR-bcv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U2I-TR-bcv">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -33,10 +33,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IVV-At-OCY">
-                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Gx-8g-Kfq">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="763"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="682"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUO-bW-qDU">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
@@ -109,10 +109,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BVl-tE-9Zl">
-                                                <rect key="frame" x="0.0" y="44" width="390" height="523"/>
+                                                <rect key="frame" x="0.0" y="44" width="390" height="442"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N1S-Af-jgj">
-                                                        <rect key="frame" x="0.0" y="44.666666666666657" width="390" height="390"/>
+                                                        <rect key="frame" x="0.0" y="4" width="390" height="390"/>
                                                         <subviews>
                                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="uun-ZZ-EIu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="390"/>
@@ -129,18 +129,18 @@
                                                         </constraints>
                                                     </view>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_avatar_placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="rch-oU-K4o">
-                                                        <rect key="frame" x="0.0" y="-22" width="390" height="523"/>
+                                                        <rect key="frame" x="0.0" y="-22" width="390" height="442"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </imageView>
                                                     <view hidden="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="WGY-KG-0b7" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="44.666666666666657" width="390" height="390"/>
+                                                        <rect key="frame" x="0.0" y="4" width="390" height="390"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="WGY-KG-0b7" secondAttribute="height" multiplier="1:1" id="gaE-eH-1db"/>
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIVE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R0K-2c-Tik">
-                                                        <rect key="frame" x="16" y="483" width="50" height="28"/>
+                                                        <rect key="frame" x="16" y="402" width="50" height="28"/>
                                                         <color key="backgroundColor" name="bhColorAccent"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="28" id="Wxq-JC-Oh6"/>
@@ -151,7 +151,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tXr-nE-7pI">
-                                                        <rect key="frame" x="342" y="479" width="32" height="32"/>
+                                                        <rect key="frame" x="342" y="398" width="32" height="32"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="32" id="5dx-BL-Xza"/>
                                                             <constraint firstAttribute="height" constant="32" id="S5S-QW-2bu"/>
@@ -168,7 +168,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJx-v5-55U">
-                                                        <rect key="frame" x="16" y="479" width="32" height="32"/>
+                                                        <rect key="frame" x="16" y="398" width="32" height="32"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="32" id="atZ-sI-GmO"/>
                                                             <constraint firstAttribute="height" constant="32" id="dqX-gk-y0Y"/>
@@ -208,7 +208,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XDK-m3-Q1D">
-                                                <rect key="frame" x="0.0" y="567" width="390" height="36"/>
+                                                <rect key="frame" x="0.0" y="486" width="390" height="36"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Podcast Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-XQ-ouN">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="36"/>
@@ -229,7 +229,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JsL-64-ILe">
-                                                <rect key="frame" x="0.0" y="603" width="390" height="20"/>
+                                                <rect key="frame" x="0.0" y="522" width="390" height="20"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Episode Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY0-ym-zuX">
                                                         <rect key="frame" x="16" y="0.0" width="358" height="20"/>
@@ -250,10 +250,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t9U-L8-Opr">
-                                                <rect key="frame" x="0.0" y="623" width="390" height="140"/>
+                                                <rect key="frame" x="0.0" y="542" width="390" height="140"/>
                                                 <subviews>
                                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MaD-9f-YKA">
-                                                        <rect key="frame" x="14" y="10" width="362" height="31"/>
+                                                        <rect key="frame" x="16" y="10" width="358" height="34"/>
                                                         <color key="minimumTrackTintColor" name="bhColorAccent"/>
                                                         <color key="maximumTrackTintColor" name="bhColorAccent"/>
                                                         <color key="thumbTintColor" name="bhColorAccent"/>
@@ -262,13 +262,13 @@
                                                         </connections>
                                                     </slider>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDX-nk-lFf">
-                                                        <rect key="frame" x="15.999999999999996" y="44" width="35.666666666666657" height="16.666666666666671"/>
+                                                        <rect key="frame" x="15.999999999999996" y="48" width="35.666666666666657" height="16.666666666666671"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                                         <color key="textColor" name="bhColorSecondary"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5I-NX-DeK">
-                                                        <rect key="frame" x="338.33333333333331" y="44" width="35.666666666666686" height="16.666666666666671"/>
+                                                        <rect key="frame" x="338.33333333333331" y="48" width="35.666666666666686" height="16.666666666666671"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                                         <color key="textColor" name="bhColorSecondary"/>
                                                         <nil key="highlightedColor"/>
@@ -420,7 +420,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xrJ-JW-9YI">
-                                <rect key="frame" x="0.0" y="810" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="776" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="fgl-CF-Xqw"/>
@@ -481,10 +481,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="4y7-9u-Fli">
-                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eEP-0J-jcO">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="703"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="622"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XIX-fv-zxC">
                                             <size key="itemSize" width="128" height="128"/>
@@ -508,7 +508,7 @@
                                         </collectionReusableView>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g36-m7-2vo" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="703" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="622" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Brz-2c-qfc"/>
@@ -550,9 +550,7 @@
                             <constraint firstItem="TCd-he-GQl" firstAttribute="bottom" secondItem="4y7-9u-Fli" secondAttribute="bottom" id="sfs-mG-Edn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="vAE-gS-TVx">
-                        <barButtonItem key="backBarButtonItem" title=" " id="2cX-Gi-kwx"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="vAE-gS-TVx"/>
                     <connections>
                         <outlet property="activityIndicator" destination="zvm-3y-KYh" id="XlT-rU-5Dk"/>
                         <outlet property="collectionView" destination="eEP-0J-jcO" id="JNe-fN-TJ0"/>
@@ -572,14 +570,14 @@
             <objects>
                 <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VXZ-pS-Kzd">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Mem-fg-Z6d">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="7Ug-Ge-1oP">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="bIr-LV-sBK" id="yYQ-Rb-e7h"/>
@@ -587,7 +585,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KVy-WU-Zhy" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="JoH-Ce-Uk2"/>
@@ -603,7 +601,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z62-Mf-z45" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="1TR-E3-mRi"/>
@@ -616,7 +614,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VSj-V3-dTO">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Xnq-4Y-Mny"/>
@@ -655,14 +653,14 @@
             <objects>
                 <viewController storyboardIdentifier="BHPostDetailsViewController" title="Post Details" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TEG-MA-Hda" customClass="BHPostDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jhH-2Z-9e5">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ylv-B0-sUz">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bye-Ao-Yod">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="TEG-MA-Hda" id="5bn-Ia-Mfd"/>
@@ -670,7 +668,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27V-cL-2AF" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="KP7-fe-Sxb"/>
@@ -686,7 +684,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bYr-AN-UN3" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="Ktg-qv-RfL"/>
@@ -699,7 +697,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lmw-eV-e7z">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="pux-Ec-VM9"/>
@@ -738,21 +736,21 @@
             <objects>
                 <viewController storyboardIdentifier="BHDownloadsViewController" title="Downloads" id="cko-RD-0fW" customClass="BHDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="les-XU-KcI">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gm6-L4-S2g">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BkJ-nH-gI2">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <connections>
                                             <outlet property="dataSource" destination="cko-RD-0fW" id="7mJ-kd-WMG"/>
                                             <outlet property="delegate" destination="cko-RD-0fW" id="yFu-QU-CZi"/>
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOX-I5-OX6" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Xrf-Wv-Xbo"/>
@@ -768,7 +766,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nCy-30-Njk" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="04T-PV-s95"/>
@@ -781,7 +779,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-hl-J3T">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Rpo-32-eLn"/>
@@ -1124,7 +1122,7 @@
                                                         </constraints>
                                                     </view>
                                                     <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ctc-KZ-Oxf">
-                                                        <rect key="frame" x="14" y="280.33333333333331" width="362" height="31"/>
+                                                        <rect key="frame" x="16" y="276.33333333333331" width="358" height="34"/>
                                                         <color key="minimumTrackTintColor" name="bhColorAccent"/>
                                                         <color key="maximumTrackTintColor" name="bhColorPlayerOnDisplayBg"/>
                                                         <color key="thumbTintColor" name="bhColorAccent"/>
@@ -1299,14 +1297,14 @@
             <objects>
                 <viewController restorationIdentifier="BHFavoritesViewController" storyboardIdentifier="BHFavoritesViewController" title="Favorites" id="ISO-h0-mfF" customClass="BHFavoritesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MhH-QD-bJf">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5Lh-fH-nUd">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kny-WC-ICj">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="ISO-h0-mfF" id="lce-Le-Ikn"/>
@@ -1314,7 +1312,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="maS-jn-QN0" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="mbf-11-1aB"/>
@@ -1330,7 +1328,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23m-8b-mZx" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="2F0-zW-gyR"/>
@@ -1343,7 +1341,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WmZ-rg-I3X">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="7WV-aY-DpE"/>
@@ -1384,11 +1382,11 @@
             <objects>
                 <viewController restorationIdentifier="BHSettingsNotificationsViewController" storyboardIdentifier="BHSettingsNotificationsViewController" title="Notifications Settings" hidesBottomBarWhenPushed="YES" id="Fzv-mz-Aod" customClass="BHSettingsNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dyV-Tw-0bt">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Sno-gr-KrC">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Fzv-mz-Aod" id="cbV-sl-CpX"/>
@@ -1396,7 +1394,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oC4-dH-2xP" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="HTk-cp-OIV"/>
@@ -1437,29 +1435,30 @@
             <objects>
                 <viewController restorationIdentifier="BHReportProblemViewController" storyboardIdentifier="BHReportProblemViewController" title="Report a Problem" hidesBottomBarWhenPushed="YES" id="14M-J2-kRm" customClass="BHReportProblemViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7OD-7D-nxC">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PT0-hw-oiW">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="k48-fR-Vab">
                                         <rect key="frame" x="16" y="16" width="358" height="355"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is a problem?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9Y-kL-mhk">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9Y-kL-mhk">
                                                 <rect key="frame" x="0.0" y="0.0" width="358" height="19"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hvf-cO-K2U" customClass="BHDropDownTextField" customModule="BullhornSdk">
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c4e-Da-JEl" customClass="BHInputTextField" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="29" width="358" height="44"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="44" id="VxV-xm-PU7"/>
+                                                    <constraint firstAttribute="height" constant="44" id="k0E-oJ-49r"/>
                                                 </constraints>
-                                            </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is a problem?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJD-yN-8NK">
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJD-yN-8NK">
                                                 <rect key="frame" x="0.0" y="83" width="358" height="19"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
@@ -1471,9 +1470,9 @@
                                                     <constraint firstAttribute="height" constant="44" id="Ig3-XQ-YbT"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" textContentType="email"/>
                                             </textField>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add problem details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoX-Qe-rPk">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Describe your issue:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GoX-Qe-rPk">
                                                 <rect key="frame" x="0.0" y="166" width="358" height="19"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
@@ -1501,7 +1500,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xQC-pR-ocy" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="dBV-Ly-QlP"/>
@@ -1533,11 +1532,10 @@
                         <outlet property="contentView" destination="PT0-hw-oiW" id="5jh-B7-Ain"/>
                         <outlet property="detailsLabel" destination="GoX-Qe-rPk" id="lld-RE-Ww3"/>
                         <outlet property="detailsTextField" destination="ez1-UI-rfT" id="TnI-8G-rLR"/>
-                        <outlet property="nameLabel" destination="rJD-yN-8NK" id="hML-md-Bxo"/>
-                        <outlet property="nameTextField" destination="piQ-Ry-9CX" id="bb2-jL-Z2P"/>
-                        <outlet property="reasonHeightConstraint" destination="VxV-xm-PU7" id="v9x-RA-wKK"/>
-                        <outlet property="reasonLabel" destination="W9Y-kL-mhk" id="u5M-0g-Sh7"/>
-                        <outlet property="reasonTextField" destination="Hvf-cO-K2U" id="yU1-ZE-D7Q"/>
+                        <outlet property="emailLabel" destination="rJD-yN-8NK" id="wQ0-qN-r4O"/>
+                        <outlet property="emailTextField" destination="piQ-Ry-9CX" id="GOk-cb-zUQ"/>
+                        <outlet property="nameLabel" destination="W9Y-kL-mhk" id="ykD-zt-GVy"/>
+                        <outlet property="nameTextField" destination="c4e-Da-JEl" id="c1K-UB-Za8"/>
                         <outlet property="stackView" destination="k48-fR-Vab" id="aAq-Yn-ptI"/>
                     </connections>
                 </viewController>
@@ -1550,11 +1548,11 @@
             <objects>
                 <viewController restorationIdentifier="BHWebViewController" storyboardIdentifier="BHWebViewController" title="Web" hidesBottomBarWhenPushed="YES" id="SmV-xe-rJb" customClass="BHWebViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TWp-FT-oGr">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lva-nc-vcl">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <color key="backgroundColor" name="fxColorPrimaryBg"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -1589,10 +1587,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ybI-8s-wbk">
-                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Z5w-0a-glA">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="703"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="622"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="Kuw-Kf-N3G" id="9gN-Cf-gqF"/>
@@ -1600,7 +1598,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mh4-rh-oZY" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="703" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="622" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="CaV-eY-67F"/>
@@ -1639,7 +1637,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="UVL-yV-WGk">
-                        <barButtonItem key="backBarButtonItem" title=" " id="3JJ-wN-yHV"/>
+                        <barButtonItem key="backBarButtonItem" width="42" systemItem="fixedSpace" id="3JJ-wN-yHV"/>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="Nth-N3-jin" id="Eq5-9Y-f4v"/>
@@ -1660,10 +1658,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NzI-gE-GV9">
-                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Au0-X4-I6F">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="703"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="622"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="HPf-bp-eMy" id="SNn-h9-Wqe"/>
@@ -1671,7 +1669,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bPM-md-aT4" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="703" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="622" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="3Wc-GU-vAi"/>
@@ -1710,7 +1708,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DBx-hE-BYl">
-                        <barButtonItem key="backBarButtonItem" title=" " id="HGj-kl-mcH"/>
+                        <barButtonItem key="backBarButtonItem" width="42" systemItem="fixedSpace" id="HGj-kl-mcH"/>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="UMW-vt-xHN" id="RXg-Yz-Nhx"/>
@@ -1734,10 +1732,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wW3-Qa-U1a">
-                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eoT-Yu-FJA">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="659"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="578"/>
                                         <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                         <color key="tintColor" name="bhColorPrimary"/>
                                         <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -1748,11 +1746,11 @@
                                                 <rect key="frame" x="0.0" y="50" width="390" height="84"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YKU-m9-Tla" id="yib-kO-RWb">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="84"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="84"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="hKT-ks-qy8">
-                                                            <rect key="frame" x="20" y="10" width="319.66666666666669" height="64"/>
+                                                            <rect key="frame" x="20" y="10" width="323.66666666666669" height="64"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7P-zi-GZ4">
                                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
@@ -1776,10 +1774,10 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="mAw-gJ-zuK">
-                                                                    <rect key="frame" x="83.999999999999986" y="11" width="235.66666666666663" height="42"/>
+                                                                    <rect key="frame" x="83.999999999999986" y="11" width="239.66666666666663" height="42"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5F6-Zi-dYv">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="235.66666666666666" height="18"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="239.66666666666666" height="18"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="18" id="vpm-wj-b2l"/>
                                                                             </constraints>
@@ -1788,7 +1786,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJd-Fd-3GJ">
-                                                                            <rect key="frame" x="0.0" y="22" width="235.66666666666666" height="20"/>
+                                                                            <rect key="frame" x="0.0" y="22" width="239.66666666666666" height="20"/>
                                                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                                                                             <color key="textColor" name="bhColorPrimary"/>
                                                                             <nil key="highlightedColor"/>
@@ -1820,14 +1818,14 @@
                                                 <rect key="frame" x="0.0" y="134" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MZf-Mj-2s5" id="d40-JB-iWd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="55"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="55"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X96-AH-PMq">
-                                                            <rect key="frame" x="20" y="16" width="319.66666666666669" height="23"/>
+                                                            <rect key="frame" x="20" y="16" width="323.66666666666669" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYL-y4-pHN">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="319.66666666666669" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="323.66666666666669" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
@@ -1850,23 +1848,23 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingDetailsCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingDetailsCell" id="jyT-Hh-OPa" customClass="BHSettingDetailsCell" customModule="BullhornSdk">
-                                                <rect key="frame" x="0.0" y="189" width="390" height="74"/>
+                                                <rect key="frame" x="0.0" y="189" width="390" height="74.666664123535156"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jyT-Hh-OPa" id="vL1-zA-3te">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="74"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="74.666664123535156"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="2Oq-pj-7K4">
-                                                            <rect key="frame" x="20" y="16" width="339.66666666666669" height="42"/>
+                                                            <rect key="frame" x="20" y="15.999999999999996" width="343.66666666666669" height="42.666666666666657"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W1v-Vm-UaZ">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="339.66666666666669" height="20"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="343.66666666666669" height="20"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description description description description" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNo-eo-a3m">
-                                                                    <rect key="frame" x="0.0" y="25" width="339.66666666666669" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="25" width="343.66666666666669" height="17.666666666666671"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <color key="textColor" name="bhColorSecondary"/>
                                                                     <nil key="highlightedColor"/>
@@ -1892,7 +1890,7 @@
                                         </prototypes>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version 0.0.6 (3)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riA-or-ieg">
-                                        <rect key="frame" x="0.0" y="659" width="390" height="44"/>
+                                        <rect key="frame" x="0.0" y="578" width="390" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="IJn-G1-vxT"/>
@@ -1902,7 +1900,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lQ-5O-eTP" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="703" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="622" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="pcL-Jy-DMW"/>
@@ -1926,7 +1924,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hNC-IX-48h">
-                        <barButtonItem key="backBarButtonItem" title=" " id="gVS-eN-uVq"/>
+                        <barButtonItem key="backBarButtonItem" width="42" systemItem="fixedSpace" id="gVS-eN-uVq"/>
                     </navigationItem>
                     <connections>
                         <outlet property="miniPlayerView" destination="1lQ-5O-eTP" id="geI-RT-VqG"/>
@@ -1951,14 +1949,14 @@
             <objects>
                 <viewController storyboardIdentifier="BHRecentUsersViewController" title="Recent Users" id="vEi-jC-e0X" customClass="BHRecentUsersViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yIY-X3-kd5">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-WK-g5W">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-Bz-ojo">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="vEi-jC-e0X" id="RcW-wW-nQy"/>
@@ -1966,7 +1964,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yk5-Zz-UKd" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Rb1-8n-egm"/>
@@ -1982,7 +1980,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GA1-ot-eO8" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="8xu-Yy-BYN"/>
@@ -1995,7 +1993,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yu3-2E-OZj">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="PxB-Xm-FXO"/>
@@ -2036,14 +2034,14 @@
             <objects>
                 <viewController restorationIdentifier="BHFollowedViewController" storyboardIdentifier="BHFollowedViewController" title="Followed Podcasts" id="Q2p-ct-dwZ" customClass="BHFollowedViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QdS-3I-jbE">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="mCb-6o-gKL">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="OJJ-3B-xrL">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="ISO-h0-mfF" id="jHo-ze-oGq"/>
@@ -2051,7 +2049,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6i2-ux-668" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="lnT-NZ-hpO"/>
@@ -2067,7 +2065,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4sZ-Ff-mnh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="AQA-B4-Y4R"/>
@@ -2080,7 +2078,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Mq-UC-Y2D">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="axM-Jt-joA"/>
@@ -2121,14 +2119,14 @@
             <objects>
                 <viewController restorationIdentifier="BHNotificationsViewController" storyboardIdentifier="BHNotificationsViewController" title="Notifications" id="bvR-f5-TVh" customClass="BHNotificationsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="u7h-wZ-RQZ">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QVB-bP-jaG">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="N8E-Fy-42w">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lCr-Mz-QIa">
                                             <size key="itemSize" width="128" height="128"/>
@@ -2152,7 +2150,7 @@
                                         </collectionReusableView>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZeQ-oS-xqD" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="eLf-a0-0sN"/>
@@ -2171,7 +2169,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lid-Zp-zMu" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="KeC-gS-2tq"/>
@@ -2184,7 +2182,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qz3-gD-SLT">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="gPT-Rx-ZeR"/>
@@ -2225,14 +2223,14 @@
             <objects>
                 <viewController restorationIdentifier="BHMoreInfoViewController" storyboardIdentifier="BHMoreInfoViewController" title="More Info" id="0tn-Pd-tIz" customClass="BHMoreInfoViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qxb-hk-5ew">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dF9-gf-DPl">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ZJo-2G-WBx">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                         <color key="tintColor" name="bhColorPrimary"/>
                                         <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -2243,14 +2241,14 @@
                                                 <rect key="frame" x="0.0" y="50" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kLz-TX-yp2" id="q0r-0J-jII">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="55"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="55"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODB-Vb-qBZ">
-                                                            <rect key="frame" x="20" y="16" width="319.66666666666669" height="23"/>
+                                                            <rect key="frame" x="20" y="16" width="323.66666666666669" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sZP-wH-8rp">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="319.66666666666669" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="323.66666666666669" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
@@ -2275,7 +2273,7 @@
                                         </prototypes>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9QR-9p-ARS" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="P48-Il-Cac"/>
@@ -2318,11 +2316,11 @@
             <objects>
                 <viewController restorationIdentifier="BHSettingDownloadsViewController" storyboardIdentifier="BHSettingDownloadsViewController" title="Downloads Settings" hidesBottomBarWhenPushed="YES" id="u9p-a2-xYQ" customClass="BHSettingsDownloadsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OoD-DW-edP">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dX0-Py-RM6">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="u9p-a2-xYQ" id="ux6-o8-uIS"/>
@@ -2330,7 +2328,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CIw-Er-e1p" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="402" width="30" height="30"/>
+                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="1gy-hc-4QT"/>
@@ -2371,14 +2369,14 @@
             <objects>
                 <viewController restorationIdentifier="BHSettingsViewController" storyboardIdentifier="BHSettingsViewController" title="Settings" id="REK-qd-AQy" customClass="BHSettingsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GxB-Ur-Bwj">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QKL-Fe-K47">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="7a3-qo-4eD">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                         <color key="tintColor" name="bhColorPrimary"/>
                                         <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -2389,14 +2387,14 @@
                                                 <rect key="frame" x="0.0" y="50" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="C6E-kG-dMt" id="gQu-S5-2M6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="55"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="55"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ar-c5-t2l">
-                                                            <rect key="frame" x="20" y="16" width="319.66666666666669" height="23"/>
+                                                            <rect key="frame" x="20" y="16" width="323.66666666666669" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJ5-hy-Agb">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="319.66666666666669" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="323.66666666666669" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
@@ -2426,16 +2424,16 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbV-cd-i4C">
-                                                            <rect key="frame" x="20" y="19" width="350" height="18"/>
+                                                            <rect key="frame" x="20" y="23" width="350" height="10"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qko-uW-m6O">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="301" height="18"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="289" height="10"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPA-d8-aC0">
-                                                                    <rect key="frame" x="301" y="0.0" width="51" height="18"/>
+                                                                    <rect key="frame" x="289" y="0.0" width="63" height="10"/>
                                                                     <color key="tintColor" name="bhColorAppBarTitle"/>
                                                                     <color key="onTintColor" name="bhColorAccent"/>
                                                                 </switch>
@@ -2460,7 +2458,7 @@
                                         </prototypes>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ1-0n-eQb" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="HI1-KT-z6e"/>
@@ -2507,11 +2505,11 @@
                         <viewControllerLayoutGuide type="bottom" id="8gj-aW-yg9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hp0-fo-Qq3">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="iB2-Kx-HEp">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <color key="tintColor" name="bhColorPrimary"/>
                                 <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -2613,16 +2611,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="33o-3l-raC">
-                                                    <rect key="frame" x="20" y="19" width="350" height="18"/>
+                                                    <rect key="frame" x="20" y="23" width="350" height="10"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crP-gA-wYd">
-                                                            <rect key="frame" x="0.0" y="0.0" width="301" height="18"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="289" height="10"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                             <color key="textColor" name="bhColorPrimary"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3jI-Qk-zHC">
-                                                            <rect key="frame" x="301" y="0.0" width="51" height="18"/>
+                                                            <rect key="frame" x="289" y="0.0" width="63" height="10"/>
                                                             <color key="tintColor" name="bhColorAppBarTitle"/>
                                                             <color key="onTintColor" name="bhColorAccent"/>
                                                         </switch>
@@ -2671,14 +2669,14 @@
             <objects>
                 <viewController restorationIdentifier="BHCategoriesViewController" storyboardIdentifier="BHCategoriesViewController" title="Categories" id="u19-7X-5hU" customClass="BHCategoriesViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uaB-rh-n4g">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1px-va-bt3">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="3k9-lL-P2h">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
                                         <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                         <color key="tintColor" name="bhColorPrimary"/>
                                         <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -2689,14 +2687,14 @@
                                                 <rect key="frame" x="0.0" y="50" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="R8u-KL-fed" id="P87-JC-7ol">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="55"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="55"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gOu-9R-j5s">
-                                                            <rect key="frame" x="20" y="16" width="319.66666666666669" height="23"/>
+                                                            <rect key="frame" x="20" y="16" width="323.66666666666669" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V7f-u5-8lm">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="319.66666666666669" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="323.66666666666669" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
@@ -2721,7 +2719,7 @@
                                         </prototypes>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="33O-oB-qpC" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="bY0-ok-0h4"/>
@@ -2763,14 +2761,14 @@
             <objects>
                 <viewController restorationIdentifier="BHCategoryViewController" storyboardIdentifier="BHCategoryViewController" title="Category" id="acM-HP-1P4" customClass="BHCategoryViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="78K-ia-EkU">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="M5b-yz-4Be">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="u6a-YY-Jjv">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="680"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zn1-NJ-Xff">
                                             <size key="itemSize" width="390" height="258"/>
@@ -2789,7 +2787,7 @@
                                         </collectionReusableView>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Hv-AC-97U" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="774" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="680" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="cbJ-S2-aZF"/>
@@ -2808,7 +2806,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vBb-eh-SAt">
-                                <rect key="frame" x="0.0" y="834" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="787" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="yiv-7r-6gn"/>
@@ -2845,8 +2843,8 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Dux-9E-9ph"/>
-        <segue reference="G2h-VU-adC"/>
-        <segue reference="yWz-wB-dY7"/>
+        <segue reference="W9h-Db-Gfg"/>
+        <segue reference="maU-b5-W5G"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>
@@ -2903,10 +2901,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78431372549019607" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.76470588235294112" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

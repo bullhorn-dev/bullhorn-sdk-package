@@ -109,10 +109,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis")?.withConfiguration(config), style: .plain, target: self, action: #selector(openOptionsAction(_:)))
         navigationItem.rightBarButtonItem?.accessibilityLabel = "More Options"
 
-        let backButton = UIBarButtonItem()
-        backButton.title = ""
-        backButton.accessibilityLabel = "Back"
-        navigationItem.backBarButtonItem = backButton
+        navigationItem.backButtonTitle = ""
+        navigationItem.backBarButtonItem?.accessibilityLabel = "Back"
     }
     
     fileprivate func configureRefreshControl() {
