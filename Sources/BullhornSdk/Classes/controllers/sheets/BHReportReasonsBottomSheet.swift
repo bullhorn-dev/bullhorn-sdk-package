@@ -2,6 +2,16 @@
 import UIKit
 import Foundation
 
+enum ReportReason: String, CaseIterable {
+    case experiencingABug = "Experiencing a bug"
+    case inappropriateContent = "Inappropriate content"
+    case spam = "Spam"
+    case scam = "Scam"
+    case hateOrNegativeSpeech = "Hate or negative speech"
+    case incitesViolence = "Incites violence"
+    case other = "Other"
+}
+
 class BHReportReasonsBottomSheet: BHBottomSheetController {
     
     var tableView: UITableView!

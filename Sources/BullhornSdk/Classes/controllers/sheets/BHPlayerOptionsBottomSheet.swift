@@ -163,9 +163,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
 
             if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
                 
-                viewController.reportReason = ReportReason.experiencingABug.rawValue
-                viewController.reportName = validPost.user.fullName
-                viewController.reportDetails = validPost.shareLink.absoluteString
+                viewController.reportDetails = "Experiencing a bug while playing the episode \(validPost.title)."
 
                 UIApplication.topNavigationController()?.dismiss(animated: false) {
                     UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)

@@ -2,16 +2,6 @@
 import UIKit
 import Foundation
 
-enum ReportReason: String, CaseIterable {
-    case experiencingABug = "Experiencing a bug"
-    case inappropriateContent = "Inappropriate content"
-    case spam = "Spam"
-    case scam = "Scam"
-    case hateOrNegativeSpeech = "Hate or negative speech"
-    case incitesViolence = "Incites violence"
-    case other = "Other"
-}
-
 class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport {
     
     class var storyboardIndentifer: String { return String(describing: self) }
@@ -19,16 +9,15 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var reasonLabel: UILabel!
-    @IBOutlet weak var reasonTextField: BHDropDownTextField!
-    @IBOutlet weak var reasonHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameTextField: BHInputTextField!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var emailTextField: BHInputTextField!
     @IBOutlet weak var detailsLabel: UILabel!
     @IBOutlet weak var detailsTextField: UITextView!
 
-    var reportReason: String?
     var reportName: String?
+    var reportEmail: String?
     var reportDetails: String?
 
     private var reasons: [BHDropDownItem] = []
@@ -45,24 +34,12 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
 
         configureNavigationItems()
 
-        reasons = ReportReason.allCases.map({ BHDropDownItem(value: $0.rawValue, title: $0.rawValue, extra: false) })
-
-        reasonTextField.delegate = self
-        reasonTextField.textField.placeholder = "Select the reason of problem"
-        reasonTextField.options = reasons
-        reasonTextField.textField.textColor = .primary()
-
-        reasonLabel.text = "What is the problem?"
-        reasonLabel.textColor = .primary()
-        reasonLabel.font = .primaryButton()
-        reasonLabel.adjustsFontForContentSizeCategory = true
-        
-        nameLabel.text = "Where is the problem?"
+        nameLabel.text = "Name:"
         nameLabel.textColor = .primary()
         nameLabel.font = .primaryButton()
         nameLabel.adjustsFontForContentSizeCategory = true
 
-        nameTextField.placeholder = "Enter page or name of show"
+        nameTextField.placeholder = "Enter your name"
         nameTextField.textColor = .primary()
         nameTextField.tintColor = .accent()
         nameTextField.autocapitalizationType = .sentences
@@ -74,7 +51,24 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         nameTextField.delegate = self
         nameTextField.adjustsFontForContentSizeCategory = true
 
-        detailsLabel.text = "Add problem details"
+        emailLabel.text = "Email:"
+        emailLabel.textColor = .primary()
+        emailLabel.font = .primaryButton()
+        emailLabel.adjustsFontForContentSizeCategory = true
+
+        emailTextField.placeholder = "Enter your email"
+        emailTextField.textColor = .primary()
+        emailTextField.tintColor = .accent()
+        emailTextField.autocapitalizationType = .sentences
+        emailTextField.returnKeyType = .done
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.font = .secondaryButton()
+        emailTextField.backgroundColor = .cardBackground()
+        emailTextField.textInsets = .init(top: 12, left: 8, bottom: 12, right: 8)
+        emailTextField.delegate = self
+        emailTextField.adjustsFontForContentSizeCategory = true
+        
+        detailsLabel.text = "Describe your issue:"
         detailsLabel.textColor = .primary()
         detailsLabel.font = .primaryButton()
         detailsLabel.adjustsFontForContentSizeCategory = true
@@ -91,15 +85,13 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         detailsTextField.textContainerInset = .init(top: 12, left: 8, bottom: 12, right: 8)
         detailsTextField.adjustsFontForContentSizeCategory = true
 
+        emailTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BHReportProblemViewController.dismissKeyboard)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if let validReportReason = reportReason {
-            reasonTextField.textField.text = validReportReason
-        }
         
         if let validReportName = reportName {
             nameTextField.text = validReportName
@@ -131,10 +123,8 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send", style: .plain, target: self, action: #selector(sendButtonAction(_:)))
         navigationItem.rightBarButtonItem?.accessibilityLabel = "Send Report"
 
-        let backButton = UIBarButtonItem()
-        backButton.title = ""
-        backButton.accessibilityLabel = "Back"
-        navigationItem.backBarButtonItem = backButton
+        navigationItem.backButtonTitle = ""
+        navigationItem.backBarButtonItem?.accessibilityLabel = "Back"
 
         validateSendButton()
     }
@@ -142,10 +132,8 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     fileprivate func validateSendButton() {
         var changed = false
 
-        if let reason = reasonTextField.text, !reason.isEmpty,
-           let name = nameTextField.text, !name.isEmpty,
-           let details = detailsTextField.text, !details.isEmpty, details != "Describe the bug or problem you're experiencing"
-        {
+        if let email = emailTextField.text, !email.isEmpty, email.isValidEmail(),
+           let details = detailsTextField.text, !details.isEmpty, details != "Describe the bug or problem you're experiencing" {
             changed = true
         }
 
@@ -164,33 +152,23 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     }
     
     @objc fileprivate func sendButtonAction(_ sender: Any) {
-        guard let user = BHAccountManager.shared.user else { return }
         
         defaultShowActivityIndicatorView()
 
-        let systemInfo: [String : String] = [
-            "who_reported": user.id,
-            "app_version": BHAppConfiguration.shared.appVersion(),
-            "device_info": BHDeviceUtils.shared.getDeviceName(),
-        ]
-        let report: [String : Any] =  [
-            "reason": reportReason ?? "",
-            "username": reportName ?? "",
-            "details": reportDetails ?? "",
-            "system_info": systemInfo
-        ]
-        let reportObj: [String : Any] = [
-            "report": report
+        let params: [String : Any] =  [
+            "name": reportName ?? "",
+            "email": reportEmail ?? "",
+            "description": reportDetails ?? ""
         ]
         
-        BHSettingsManager.shared.reportProblem(reportObj) { response in
+        BHSettingsManager.shared.reportProblem(params) { response in
             DispatchQueue.main.async {
                 self.defaultHideActivityIndicatorView()
 
                 switch response {
                 case .success:
                     /// track event
-                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sendReport, context: self.reportReason, variant: self.reportName)
+                    let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sendReport, context: self.reportDetails, variant: self.reportName)
                     BHTracker.shared.trackEvent(with: request)
 
                     self.showInfo("Report has been sent successfully")
@@ -201,55 +179,9 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
             }
         }
     }
-}
-
-//MARK: Drop down textfield delegate
-
-extension BHReportProblemViewController: BHDropDownTextFieldDelegate {
-
-    func onMenuRequested() {
-        let optionsSheet = BHReportReasonsBottomSheet()
-        optionsSheet.preferredSheetSizing = .fit
-        optionsSheet.panToDismissEnabled = true
-        optionsSheet.reasons = ReportReason.allCases.map({ $0.rawValue })
-        optionsSheet.selectReasonClosure = { [weak self] reason in
-            BHLog.p("Select reason: \(reason)")
-            self?.reasonTextField.textField.text = reason
-            self?.reportReason = reason
-            self?.validateSendButton()
-            
-            if UIAccessibility.isVoiceOverRunning {
-                UIAccessibility.post(notification: .announcement, argument: "Selected reason \(reason)")
-            }
-        }
-        present(optionsSheet, animated: true)
-    }
     
-    
-    func textChanged(text: String?) {
-        reportReason = text
+    @objc fileprivate func textFieldDidChange(_ textField: UITextField) {
         validateSendButton()
-    }
-    
-    func optionSelected(option: String) {
-        BHLog.p("Option selected: \(option)")
-        reportReason = option
-        
-        if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .layoutChanged, argument: nameLabel)
-        }
-        
-        validateSendButton()
-    }
-    
-    func menuDidAnimate(up: Bool) {
-        BHLog.p("menuDidAnimate: \(up)")
-        
-        if up {
-            reasonHeightConstraint.constant = Constants.panelHeight
-        } else {
-            reasonHeightConstraint.constant = Constants.panelHeight + CGFloat(reasons.count) * 40.0
-        }
     }
 }
 
@@ -259,13 +191,22 @@ extension BHReportProblemViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        reportName = text
+        if textField == nameTextField {
+            reportName = text
+        } else if textField == emailTextField {
+            reportEmail = text
+        }
         validateSendButton()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        nameTextField.resignFirstResponder()
-        reportName = textField.text
+        if textField == nameTextField {
+            nameTextField.resignFirstResponder()
+            reportName = textField.text
+        } else if textField == emailTextField {
+            emailTextField.resignFirstResponder()
+            reportEmail = textField.text
+        }
         return true
     }
 }

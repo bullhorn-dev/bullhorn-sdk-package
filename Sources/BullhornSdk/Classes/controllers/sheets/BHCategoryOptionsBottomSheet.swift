@@ -65,15 +65,14 @@ final class BHCategoryOptionsBottomSheet: BHBottomSheetController {
     
     @objc func onReportItem(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validName = self.category?.name else { return }
+            guard let validCategory = self.category else { return }
             
             let bundle = Bundle.module
             let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
 
             if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
                 
-                viewController.reportReason = ReportReason.experiencingABug.rawValue
-                viewController.reportName = validName
+                viewController.reportDetails = validCategory.name
 
                 UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
             }

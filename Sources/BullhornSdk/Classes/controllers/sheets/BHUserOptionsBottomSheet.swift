@@ -76,8 +76,7 @@ final class BHUserOptionsBottomSheet: BHBottomSheetController {
 
             if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
                 
-                viewController.reportReason = ReportReason.experiencingABug.rawValue
-                viewController.reportName = validUser.fullName
+                viewController.reportDetails = "Experiencing a bug in the podcast \(validUser.fullName ?? "")"
 
                 UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
             }
