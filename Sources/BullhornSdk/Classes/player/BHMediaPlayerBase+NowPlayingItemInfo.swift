@@ -70,7 +70,7 @@ extension BHMediaPlayerBase {
             info[MPMediaItemPropertyArtwork] = albumArt
         }
         
-        let validElapsedTime = nowPlayingItemInfo.elapsedTime ?? currentTime()
+        let validElapsedTime = currentTime()        
         info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = validElapsedTime
         
         let validDuration = max(nowPlayingItemInfo.duration ?? 0, duration())
