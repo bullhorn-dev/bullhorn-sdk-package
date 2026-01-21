@@ -16,11 +16,11 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     @IBOutlet weak var detailsLabel: UILabel!
     @IBOutlet weak var detailsTextField: UITextView!
 
+    var reportReason = ReportReason.experiencingABug
+    var reportPodcastName: String?
     var reportName: String?
     var reportEmail: String?
     var reportDetails: String?
-
-    private var reasons: [BHDropDownItem] = []
 
     // MARK: - Lifecycle
 
@@ -152,16 +152,25 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
     }
     
     @objc fileprivate func sendButtonAction(_ sender: Any) {
-        
+        guard let user = BHAccountManager.shared.user else { return }
+
         defaultShowActivityIndicatorView()
 
-        let params: [String : Any] =  [
+        let systemInfo: [String : String] = [
+            "who_reported": user.id,
+            "app_version": BHAppConfiguration.shared.appVersion(),
+            "device_info": BHDeviceUtils.shared.getDeviceName(),
+        ]
+        let report: [String : Any] =  [
+            "reason": reportReason.rawValue,
+            "username": reportPodcastName ?? "",
             "name": reportName ?? "",
             "email": reportEmail ?? "",
-            "description": reportDetails ?? ""
+            "description": reportDetails ?? "",
+            "system_info": systemInfo
         ]
         
-        BHSettingsManager.shared.reportProblem(params) { response in
+        BHSettingsManager.shared.reportProblem(report) { response in
             DispatchQueue.main.async {
                 self.defaultHideActivityIndicatorView()
 
@@ -169,6 +178,7 @@ class BHReportProblemViewController: UIViewController, ActivityIndicatorSupport 
                 case .success:
                     /// track event
                     let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sendReport, context: self.reportDetails, variant: self.reportName)
+                    
                     BHTracker.shared.trackEvent(with: request)
 
                     self.showInfo("Report has been sent successfully")

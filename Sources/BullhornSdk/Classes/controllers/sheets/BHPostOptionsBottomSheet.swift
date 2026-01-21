@@ -165,6 +165,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
 
             if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
                 
+                viewController.reportPodcastName = validPost.user.fullName
                 viewController.reportDetails = "Experiencing a bug in the episode \(validPost.title)."
 
                 UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)

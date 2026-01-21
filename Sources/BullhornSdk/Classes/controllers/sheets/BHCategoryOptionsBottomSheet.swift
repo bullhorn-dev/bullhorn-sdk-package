@@ -72,6 +72,7 @@ final class BHCategoryOptionsBottomSheet: BHBottomSheetController {
 
             if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
                 
+                viewController.reportPodcastName = validCategory.name
                 viewController.reportDetails = validCategory.name
 
                 UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)

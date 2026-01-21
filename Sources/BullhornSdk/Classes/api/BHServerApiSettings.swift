@@ -124,7 +124,7 @@ class BHServerApiSettings: BHServerApiBase {
                 return
             }
 
-            let path = "reports/form"
+            let path = "reports"
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
