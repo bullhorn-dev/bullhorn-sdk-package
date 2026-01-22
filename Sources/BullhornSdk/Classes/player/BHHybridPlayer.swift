@@ -266,11 +266,12 @@ class BHHybridPlayer {
                 }
 
             } else {
-                let vc = BHConnectionLostBottomSheet()
-                vc.preferredSheetSizing = .fit
-                vc.panToDismissEnabled = true
-                
-                UIApplication.topViewController()?.present(vc, animated: true)
+                let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream())
+
+                self.start(with: playerItem, post: post, playlist: playlist)
+
+                BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
             }
         }
     }
