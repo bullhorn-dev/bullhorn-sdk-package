@@ -9,6 +9,7 @@ public enum BHInfoLinkType {
     case privacyPolicy
     case privacyChoices
     case contactUs
+    case support
 }
 
 public struct BHInfoLink {
@@ -97,10 +98,10 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyPolicy })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
-//            .staticCell(model: SettingsOption(title: "Privacy Choices", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-//                self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyChoices })
-//                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
-//            }, disclosure: true)),
+            .staticCell(model: SettingsOption(title: "Your Privacy Choices", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyChoices })
+                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+            }, disclosure: true)),
         ]))
         
         models.append(Section(title: "Support", options: [
@@ -108,8 +109,9 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
                 self.selectedLink = self.infoLinks.first(where: { $0.type == .contactUs })
                 self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
-            .staticCell(model: SettingsOption(title: "Report a problem", accessibilityText: "", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.performSegue(withIdentifier: BHMoreInfoViewController.ReportSegueIdentifier, sender: self)
+            .staticCell(model: SettingsOption(title: "Report a problem", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                self.selectedLink = self.infoLinks.first(where: { $0.type == .support })
+                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
             }, disclosure: true)),
         ]))
     }

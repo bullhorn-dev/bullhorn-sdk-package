@@ -20,7 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             BHInfoLink(type: .termsOfUse, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
             BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),
             BHInfoLink(type: .privacyChoices, title: "Your Privacy Choices", url: "https://l.bullhorn.fm/privacy-policy"),
-            BHInfoLink(type: .contactUs, title: "Contact Us", url: "https://l.bullhorn.fm/#get-in-touch")
+            BHInfoLink(type: .contactUs, title: "Contact Us", url: "https://l.bullhorn.fm/#get-in-touch"),
+            BHInfoLink(type: .support, title: "Report a problem", url: "https://l.bullhorn.fm/privacy-policy")
         ]
 
         if let mainBundleInfo = Bundle.main.infoDictionary, let appConfigTypeString = mainBundleInfo["AppConfigType"] as? String, let clientIdString = mainBundleInfo["BullhornSdkId"] as? String {

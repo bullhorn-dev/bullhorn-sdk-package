@@ -161,14 +161,10 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
             let bundle = Bundle.module
             let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
 
-            if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
-                
-                viewController.reportPodcastName = validPost.user.fullName
-                viewController.reportDetails = "Experiencing a bug while playing the episode \(validPost.title)."
-
+            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
+                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
                 UIApplication.topNavigationController()?.dismiss(animated: false) {
-                    UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
-
+                    UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
                 }
             }
             

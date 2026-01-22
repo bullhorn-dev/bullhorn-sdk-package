@@ -70,12 +70,9 @@ final class BHCategoryOptionsBottomSheet: BHBottomSheetController {
             let bundle = Bundle.module
             let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
 
-            if let viewController = storyboard.instantiateViewController(withIdentifier: BHReportProblemViewController.storyboardIndentifer) as? BHReportProblemViewController {
-                
-                viewController.reportPodcastName = validCategory.name
-                viewController.reportDetails = validCategory.name
-
-                UIApplication.topNavigationController()?.pushViewController(viewController, animated: true)
+            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
+                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
+                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
             }
             
             self.dismiss(animated: true)

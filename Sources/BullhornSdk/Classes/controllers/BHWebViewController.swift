@@ -5,6 +5,8 @@ import WebKit
 
 class BHWebViewController: UIViewController {
     
+    class var storyboardIndentifer: String { return String(describing: self) }
+
     @IBOutlet weak var webView: WKWebView!
 
     private let progressView = UIProgressView(progressViewStyle: .default)
