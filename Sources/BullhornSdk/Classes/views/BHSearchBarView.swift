@@ -37,7 +37,7 @@ class BHSearchBarView: UIView {
     
     private var barHeight: CGFloat {
         if #available(iOS 26.0, *) {
-            return 44.0
+            return 36.0
         } else {
             return 36.0
         }
