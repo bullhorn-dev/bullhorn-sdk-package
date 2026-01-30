@@ -81,7 +81,6 @@ class BHSocialLinksView: UIView {
             collectionView.heightAnchor.constraint(equalToConstant: calculateHeight())
         ])
         
-        collectionView.accessibilityTraits.insert(.tabBar)
         collectionView.isAccessibilityElement = false
     }
 }
@@ -116,6 +115,7 @@ extension BHSocialLinksView: UICollectionViewDelegateFlowLayout, UICollectionVie
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = "Open \(links[indexPath.row].title)"
         cell.accessibilityValue = "External link"
+        cell.accessibilityTraits = .button
 
         return cell
     }
