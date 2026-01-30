@@ -202,56 +202,18 @@
                                     <constraint firstAttribute="trailing" secondItem="70q-dV-zXN" secondAttribute="trailing" constant="16" id="zMX-2b-HRu"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cUB-I6-Wdn">
-                                <rect key="frame" x="0.0" y="245" width="510" height="16"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="TDx-fl-BNA">
-                                        <rect key="frame" x="16" y="0.0" width="478" height="16"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bbh-tz-Rvg">
-                                                <rect key="frame" x="0.0" y="0.66666666666666607" width="20" height="14.666666666666666"/>
-                                                <color key="tintColor" name="bhColorPrimary"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="20" id="HhX-yH-Fn2"/>
-                                                    <constraint firstAttribute="height" constant="16" id="jg4-ok-1oH"/>
-                                                </constraints>
-                                                <imageReference key="image" image="network" catalog="system" symbolScale="medium"/>
-                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="thin"/>
-                                            </imageView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jrh-DD-Jga">
-                                                <rect key="frame" x="24" y="0.0" width="454" height="16"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="16" id="Gj6-5R-sU5"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Website">
-                                                    <color key="titleColor" name="bhColorAccent"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onLinkButton:" destination="wk1-wC-qQd" eventType="touchUpInside" id="pjm-2D-Rg1"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="16" id="7I1-Xg-z5Y"/>
-                                        </constraints>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mTh-Qn-rm1" customClass="BHSocialLinksView" customModule="BullhornSdk">
+                                <rect key="frame" x="0.0" y="245" width="510" height="32"/>
+                                <color key="backgroundColor" systemColor="systemTealColor"/>
                                 <constraints>
-                                    <constraint firstItem="TDx-fl-BNA" firstAttribute="leading" secondItem="cUB-I6-Wdn" secondAttribute="leading" constant="16" id="5uA-pt-L7U"/>
-                                    <constraint firstAttribute="height" constant="16" id="hJa-zr-aE3"/>
-                                    <constraint firstItem="TDx-fl-BNA" firstAttribute="centerY" secondItem="cUB-I6-Wdn" secondAttribute="centerY" id="sbW-FX-RuS"/>
-                                    <constraint firstAttribute="trailing" secondItem="TDx-fl-BNA" secondAttribute="trailing" constant="16" id="wOr-iZ-3wd"/>
+                                    <constraint firstAttribute="height" constant="32" id="wpw-iz-TJF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY7-Ic-36B" customClass="BHSearchBarView" customModule="BullhornSdk">
-                                <rect key="frame" x="0.0" y="273" width="510" height="60"/>
+                                <rect key="frame" x="0.0" y="289" width="510" height="44"/>
                                 <color key="backgroundColor" systemColor="systemCyanColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="Ods-2W-QyD"/>
+                                    <constraint firstAttribute="height" constant="44" id="Ods-2W-QyD"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -272,11 +234,10 @@
                 <outlet property="categoryLabel" destination="aU5-x1-tbq" id="hQh-Vt-tg9"/>
                 <outlet property="collapseButton" destination="mq2-bq-TDl" id="pfL-cn-sRZ"/>
                 <outlet property="followButton" destination="WhH-mf-wRo" id="Bmp-T4-6AG"/>
-                <outlet property="linkButton" destination="jrh-DD-Jga" id="W4k-go-URj"/>
-                <outlet property="linkIcon" destination="bbh-tz-Rvg" id="EzI-f1-4XG"/>
-                <outlet property="linkView" destination="cUB-I6-Wdn" id="W8f-hS-WQI"/>
                 <outlet property="searchBarView" destination="nY7-Ic-36B" id="YwE-jL-EwB"/>
                 <outlet property="shareButton" destination="5uv-n8-dP3" id="jvH-H4-DZ1"/>
+                <outlet property="socialLinksView" destination="mTh-Qn-rm1" id="m2N-Ci-GHI"/>
+                <outlet property="stackView" destination="rnA-fj-jBc" id="W5g-rK-V5p"/>
                 <outlet property="titleLabel" destination="1eM-l8-pYj" id="hxo-eC-0bj"/>
                 <outlet property="unfollowButton" destination="ggf-aF-J1o" id="j9X-s2-VhG"/>
                 <outlet property="userIcon" destination="2Us-Rq-kG8" id="8Nk-9b-qrf"/>
@@ -289,10 +250,6 @@
         <image name="arrowshape.turn.up.right" catalog="system" width="128" height="104"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
-        <image name="network" catalog="system" width="128" height="123"/>
-        <namedColor name="bhColorAccent">
-            <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="bhColorPrimary">
             <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -300,7 +257,10 @@
             <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemCyanColor">
-            <color red="0.0" green="0.75294117647058822" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemTealColor">
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

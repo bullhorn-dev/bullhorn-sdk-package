@@ -33,6 +33,7 @@ public class UserMO: NSManagedObject {
 
         var cnls: [BHChannel] = []
         var ctgrs: [BHUserCategory] = []
+        var links: BHSocialLinks?
 
         if let validChannels = channels {
             let channelsMO = NSKeyedUnarchiver.unarchiveObject(with: validChannels) as? [[String:Any]]
@@ -51,9 +52,16 @@ public class UserMO: NSManagedObject {
                 }
             })
         }
+        
+        if let validSocialLinks = socialLinks {
+            if let socialLinksMO = NSKeyedUnarchiver.unarchiveObject(with: validSocialLinks) as? [String: Any] {
+                links = BHSocialLinks.fromDictionary(socialLinksMO)
+            }
+        }
 
         user.channels = cnls
         user.categories = ctgrs
+        user.socialLinks = links
 
         return user
     }

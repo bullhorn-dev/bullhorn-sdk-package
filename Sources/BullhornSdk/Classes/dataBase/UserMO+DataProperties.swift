@@ -26,4 +26,5 @@ extension UserMO {
     @NSManaged public var receiveNotifications: Bool
     @NSManaged public var autoDownload: Bool
     @NSManaged public var newEpisodesCount: NSNumber?
+    @NSManaged public var socialLinks: Data?
 }

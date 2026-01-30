@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25C56" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Channel" representedClassName="ChannelMO" syncable="YES">
         <attribute name="categories" optional="YES" attributeType="Binary">
             <userInfo>
@@ -579,6 +579,11 @@
         <attribute name="shareLink" optional="YES" attributeType="String">
             <userInfo>
                 <entry key="hyper.remoteKey" value="share_link"/>
+            </userInfo>
+        </attribute>
+        <attribute name="socialLinks" optional="YES" attributeType="Binary">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="social_links"/>
             </userInfo>
         </attribute>
         <attribute name="username" optional="YES" attributeType="String">

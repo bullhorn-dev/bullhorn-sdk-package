@@ -14,6 +14,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     
     class var reusableIndentifer: String { return String(describing: self) }
 
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bioView: UIView!
     @IBOutlet weak var userIcon: UIImageView!
@@ -24,11 +25,9 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var unfollowButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var collapseButton: UIButton!
-    @IBOutlet weak var linkView: UIView!
-    @IBOutlet weak var linkIcon: UIImageView!
-    @IBOutlet weak var linkButton: UIButton!
+    @IBOutlet weak var socialLinksView: BHSocialLinksView!
     @IBOutlet weak var searchBarView: BHSearchBarView!
-    
+
     fileprivate var isCollapsed: Bool = BHUserHeaderView.shouldCollapse()
     fileprivate var numberOfLines: Int = 4
     fileprivate var uncollapsedWidth: Int = 300
@@ -36,6 +35,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     weak var delegate: BHUserHeaderViewDelegate?
 
     var userManager: BHUserManager?
+    
+    var links: [BHSocialLinkItem] = []
 
     fileprivate var placeholderImage: UIImage?
 
@@ -70,7 +71,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         self.followButton.accessibilityLabel = nil
         self.unfollowButton.accessibilityLabel = nil
         self.collapseButton.accessibilityLabel = nil
-        self.linkButton.accessibilityLabel = nil
     }
     
     // MARK: - Public
@@ -82,6 +82,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         
         setupBio(with: didTap)
         updateFollowButton()
+        setupSocialLinks()
         
         if BHUserHeaderView.shouldCollapse() {
             if let bio = userManager?.user?.bio {
@@ -99,12 +100,12 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         if searchActive {
             return searchBarView.frame.size.height
         } else {
-            let linkViewHeight = hasWebsite() ? linkView.frame.size.height + Constants.paddingVertical : 0
+            let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
             let spacing: CGFloat = 12
             let bio = bioLabel.attributedText?.string ?? ""
             let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
 
-            return 3 * spacing + userView.frame.size.height + heightForView(text: bio, font: bioLabel.font, width: bioWidth) + linkViewHeight + searchBarView.frame.size.height
+            return 3 * spacing + userView.frame.size.height + heightForView(text: bio, font: bioLabel.font, width: bioWidth) + linksViewHeight + searchBarView.frame.size.height
         }
     }
 
@@ -163,15 +164,9 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         categoryLabel.font = .secondaryText()
         categoryLabel.adjustsFontForContentSizeCategory = true
 
-        linkIcon.tintColor = .primary()
-        linkButton.titleLabel?.font = .secondaryText()
-        linkButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        linkButton.accessibilityLabel = "Open podcast website"
-        linkButton.accessibilityValue = "External link"
-
         userView.isHidden = searchActive
         bioView.isHidden = searchActive
-        linkView.isHidden = searchActive || !hasWebsite()
+        socialLinksView.isHidden = searchActive || !hasSocialLinks()
         
         searchBarView.searchBar.placeholder = "Search..."
         searchBarView.mode = searchActive ? .dark : .light
@@ -184,7 +179,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         shareButton.accessibilityLabel = "Share podcast"
         followButton.accessibilityLabel = "Follow podcast"
         unfollowButton.accessibilityLabel = "Following options"
-        linkButton.accessibilityLabel = "Open podcast website"
     }
     
     // MARK: - Private
@@ -196,6 +190,10 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     
     fileprivate func hasWebsite() -> Bool {
         return userManager?.user?.website != nil
+    }
+
+    fileprivate func hasSocialLinks() -> Bool {
+        return hasWebsite() || userManager?.user?.socialLinks != nil
     }
 
     fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
@@ -265,6 +263,46 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         bioLabel.textAlignment = .left
     }
     
+    fileprivate func setupSocialLinks() {
+        
+        links.removeAll()
+
+        if hasWebsite() {
+            let link = BHSocialLinkItem(title: "Website", url: userManager?.user?.website, image: "ic_website.png")
+            links.append(link)
+        }
+
+        if let socialLinks = userManager?.user?.socialLinks {
+            
+            if socialLinks.hasFacebook() {
+                links.append(socialLinks.facebookLink)
+            }
+            
+            if socialLinks.hasInstagram() {
+                links.append(socialLinks.instagramLink)
+            }
+            
+            if socialLinks.hasTwitch() {
+                links.append(socialLinks.twitchLink)
+            }
+            
+            if socialLinks.hasTwitter() {
+                links.append(socialLinks.twitterLink)
+            }
+            
+            if socialLinks.hasYouTube() {
+                links.append(socialLinks.youtubeLink)
+            }
+            
+            if socialLinks.hasLinkedIn() {
+                links.append(socialLinks.linkedinLink)
+            }
+        }
+        
+        socialLinksView.delegate = self
+        socialLinksView.links = links
+    }
+    
     // MARK: - Actions
 
     private func didTap(_ url: URL) {
@@ -272,12 +310,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Actions
-
-    @IBAction func onLinkButton(_ sender: UIButton) {
-        guard let website = userManager?.user?.website else { return }
-
-        delegate?.userHeaderViewOnLinkButtonPressed(self, websiteLink: website)
-    }
 
     @IBAction func onShareButton(_ sender: UIButton) {
         share()
@@ -429,5 +461,15 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
                 }
             }
         }
+    }
+}
+
+// MARK: - BHSocialLinksViewDelegate
+
+extension BHUserHeaderView: BHSocialLinksViewDelegate {
+
+    func socialLinksView(_ view: BHSocialLinksView, didSelectLink url: URL?) {
+        guard let validUrl = url else { return }
+        delegate?.userHeaderViewOnLinkButtonPressed(self, websiteLink: validUrl)
     }
 }

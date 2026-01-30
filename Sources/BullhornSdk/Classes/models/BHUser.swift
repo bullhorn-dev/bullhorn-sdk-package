@@ -24,6 +24,7 @@ struct BHUser: Codable, Hashable {
         case receiveNotifications = "receive_notifications"
         case autoDownload = "auto_download"
         case newEpisodesCount = "new_episodes_count"
+        case socialLinks = "social_links"
     }
     
     enum Level: Int, Codable {
@@ -56,6 +57,7 @@ struct BHUser: Codable, Hashable {
     var receiveNotifications: Bool = false
     var autoDownload: Bool = false
     var newEpisodesCount: Int?
+    var socialLinks: BHSocialLinks?
 
     var categoryName: String {
         return categories?.first?.name ?? "News Updates"
