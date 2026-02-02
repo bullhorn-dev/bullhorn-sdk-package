@@ -153,7 +153,7 @@ extension BHPlayableContentProvider {
 
         let listImageRowItem = CPListImageRowItem(text: title, images: images)
 
-        let urls = allowedPodcasts.map({ $0.coverUrl! })
+        let urls = allowedPodcasts.map({ $0.coverUrl })
         fetchImages(urls, placeholderImage: placeholderImage) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -294,33 +294,30 @@ extension BHPlayableContentProvider {
         carplayInterfaceController?.presentTemplate(alert, animated: true, completion: nil)
     }
         
-    internal func fetchImages(_ urls: [URL], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {
+    internal func fetchImages(_ urls: [URL?], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {
 
         let fetchGroup = DispatchGroup()
-        var responseError: Error?
         var images = [UIImage]()
         
         for url in urls {
+            
             fetchGroup.enter()
-
+            
             SDWebImageManager.shared.loadImage(with: url) { _, _, _ in
                 //
             } completed: { image, data, error, _, finished, _ in
                 if finished && error == nil {
                     images.append(image ?? placeholderImage)
                 } else if error != nil {
-                    responseError = error
+                    images.append(placeholderImage)
+//                    responseError = error
                 }
                 fetchGroup.leave()
             }
         }
                                 
         fetchGroup.notify(queue: .main) {
-            if let error = responseError {
-                completion(.failure(error: error))
-            } else {
-                completion(.success(images: images))
-            }
+            completion(.success(images: images))
         }
     }
 }
