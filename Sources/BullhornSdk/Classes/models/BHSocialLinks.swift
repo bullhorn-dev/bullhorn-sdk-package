@@ -61,6 +61,10 @@ struct BHSocialLinks: Codable, Hashable {
         return BHSocialLinkItem(title: "LinkedIn", url: linkedin, image: "ic_linkedin.png")
     }
     
+    func isEmpty() -> Bool {
+        return facebook == nil && instagram == nil && twitch == nil && twitter == nil && website == nil && youtube == nil && linkedin == nil
+    }
+    
     static func fromDictionary(_ params: [String: Any]) -> BHSocialLinks? {
         var facebookUrl: URL?
         var instagramUrl: URL?

@@ -193,7 +193,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
 
     fileprivate func hasSocialLinks() -> Bool {
-        return hasWebsite() || userManager?.user?.socialLinks != nil
+        return hasWebsite() || userManager?.user?.socialLinks?.isEmpty() != true
     }
 
     fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
