@@ -6,6 +6,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
     
+    @IBOutlet private(set) weak var contentStackView: UIStackView!
+    @IBOutlet private(set) weak var topNavigationView: UIView!
     @IBOutlet private(set) weak var nameView: UIView!
     @IBOutlet private(set) weak var nameLabel: UILabel!
     @IBOutlet private(set) weak var titleView: UIView!
@@ -48,6 +50,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         transcriptTableView.delegate = self
         transcriptTableView.dataSource = self
         transcriptTableView.reloadData()
+        
+        contentStackView.bringSubviewToFront(topNavigationView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
