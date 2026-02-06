@@ -27,10 +27,7 @@ public struct BHInfoLink {
 // MARK: - BHMoreInfoViewController
 
 class BHMoreInfoViewController: BHPlayerContainingViewController {
-    
-    fileprivate static let WebSegueIdentifier = "MoreInfo.WebSegueIdentifier"
-    fileprivate static let ReportSegueIdentifier = "MoreInfo.ReportSegueIdentifier"
-    
+        
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
     
