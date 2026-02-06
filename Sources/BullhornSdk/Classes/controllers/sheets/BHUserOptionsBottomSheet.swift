@@ -53,34 +53,17 @@ final class BHUserOptionsBottomSheet: BHBottomSheetController {
     // MARK: - Actions
     
     @objc func onShareItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let url = self.user?.shareLink else { return }
+        guard let url = self.user?.shareLink else { return }
             
-            /// track stats
-            let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: url.absoluteString, podcastId: user?.id, podcastTitle: user?.fullName)
-            BHTracker.shared.trackEvent(with: request)
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .sharePodcast, context: url.absoluteString, podcastId: user?.id, podcastTitle: user?.fullName)
+        BHTracker.shared.trackEvent(with: request)
             
-            let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            vc.popoverPresentationController?.sourceView = self.view
-                    
-            self.present(vc, animated: true, completion: nil)
-        })
+        openShareDialog(url)
     }
     
     @objc func onReportItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validUser = self.user else { return }
-            
-            let bundle = Bundle.module
-            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-
-            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
-                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
-                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
-            }
-            
-            self.dismiss(animated: true)
-        })
+        openSupport()
     }
 }
 

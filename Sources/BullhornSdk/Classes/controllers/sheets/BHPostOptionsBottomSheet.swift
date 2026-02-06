@@ -96,34 +96,28 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
     // MARK: - Actions
     
     @objc func onShareItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validPost = self.post else { return }
+        guard let validPost = self.post else { return }
 
-            if BHReachabilityManager.shared.isConnected() {
-                BHPostsManager.shared.getPost(validPost.id, context: nil) { result in
-                    switch result {
-                    case .success(post: let post):
-                        DispatchQueue.main.async {
-                            let vc = UIActivityViewController(activityItems: [post.shareLink], applicationActivities: nil)
-                            vc.popoverPresentationController?.sourceView = self.view
-                                    
-                            self.present(vc, animated: true, completion: nil)
-                        }
-                    case .failure(error: _):
-                        DispatchQueue.main.async {
-                            self.showError("Failed to share episode. This episode is no longer available.")
-                        }
+        if BHReachabilityManager.shared.isConnected() {
+            BHPostsManager.shared.getPost(validPost.id, context: nil) { result in
+                switch result {
+                case .success(post: let post):
+                    DispatchQueue.main.async {
+                        self.openShareDialog(post.shareLink)
+                    }
+                case .failure(error: _):
+                    DispatchQueue.main.async {
+                        self.showError("Failed to share episode. This episode is no longer available.")
                     }
                 }
                 
                 /// track stats
                 let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .shareEpisode, context: validPost.shareLink.absoluteString, podcastId: validPost.user.id, podcastTitle: validPost.user.fullName, episodeId: validPost.id, episodeTitle: validPost.title)
                 BHTracker.shared.trackEvent(with: request)
-
-            } else {
-                self.showError("Failed to share episode. The Internet connection is lost.")
             }
-        })
+        } else {
+            self.showError("Failed to share episode. The Internet connection is lost.")
+        }
     }
     
     @objc func onDownloadItem(_ sender: UITapGestureRecognizer) {
@@ -157,19 +151,7 @@ final class BHPostOptionsBottomSheet: BHBottomSheetController {
     }
     
     @objc func onReportItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validPost = self.post else { return }
-            
-            let bundle = Bundle.module
-            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-
-            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
-                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
-                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
-            }
-            
-            self.dismiss(animated: true)
-        })
+        openSupport()
     }
 }
 

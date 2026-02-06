@@ -152,6 +152,29 @@ open class BHBottomSheetController: UIViewController {
         }
     }
     
+    // MARK: -
+    
+    func openShareDialog(_ url: URL) {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            self.dismiss(animated: true) {
+                let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                vc.popoverPresentationController?.sourceView = UIApplication.topViewController()?.view
+                
+                UIApplication.topViewController()?.present(vc, animated: true, completion: nil)
+            }
+        })
+    }
+
+    func openSupport() {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+            self.dismiss(animated: true) {
+                if let link = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support }), let url = URL(string: link.url) {
+                    UIApplication.topViewController()?.presentSafari(url)
+                }
+            }
+        })
+    }
+    
     // MARK: - Action handlers
     
     @objc fileprivate func onCloseAction(_ sender: Any) {

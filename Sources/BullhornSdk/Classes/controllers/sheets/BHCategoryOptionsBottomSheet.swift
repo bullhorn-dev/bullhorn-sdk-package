@@ -53,30 +53,13 @@ final class BHCategoryOptionsBottomSheet: BHBottomSheetController {
     // MARK: - Actions
     
     @objc func onShareItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let url = self.category?.shareLink else { return }
+        guard let url = self.category?.shareLink else { return }
                         
-            let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            vc.popoverPresentationController?.sourceView = self.view
-                    
-            self.present(vc, animated: true, completion: nil)
-        })
+        openShareDialog(url)
     }
     
     @objc func onReportItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validCategory = self.category else { return }
-            
-            let bundle = Bundle.module
-            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-
-            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
-                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
-                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
-            }
-            
-            self.dismiss(animated: true)
-        })
+        openSupport()
     }
 }
 

@@ -45,6 +45,7 @@ extension UIViewController {
         safariVC.modalPresentationStyle = .overFullScreen
         safariVC.preferredControlTintColor = .playerOnDisplayBackground()
         safariVC.preferredBarTintColor = .defaultBlue()
+        safariVC.modalPresentationCapturesStatusBarAppearance = true
 
         configureBlock?(safariVC)
 

@@ -135,41 +135,21 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     }
     
     @objc func onShareItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
+        var post: BHPost?
             
-            var post: BHPost?
+        if type == .recording {
+            post = BHHybridPlayer.shared.post
+        } else {
+            post = BHLivePlayer.shared.post
+        }
             
-            if type == .recording {
-                post = BHHybridPlayer.shared.post
-            } else {
-                post = BHLivePlayer.shared.post
-            }
-            
-            guard let validPost = post else { return }
-            
-            let vc = UIActivityViewController(activityItems: [validPost.shareLink], applicationActivities: nil)
-            vc.popoverPresentationController?.sourceView = self.view
-            
-            self.present(vc, animated: true, completion: nil)
-        })
+        guard let validPost = post else { return }
+        
+        openShareDialog(validPost.shareLink)
     }
     
     @objc func onReportItem(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            guard let validPost = BHHybridPlayer.shared.post else { return }
-            
-            let bundle = Bundle.module
-            let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-
-            if let vc = storyboard.instantiateViewController(withIdentifier: BHWebViewController.storyboardIndentifer) as? BHWebViewController {
-                vc.infoLink = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support })
-                UIApplication.topNavigationController()?.dismiss(animated: false) {
-                    UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
-                }
-            }
-            
-            self.dismiss(animated: true)
-        })
+        openSupport()
     }
 }
 

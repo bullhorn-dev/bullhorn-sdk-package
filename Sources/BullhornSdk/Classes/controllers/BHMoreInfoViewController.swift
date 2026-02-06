@@ -35,8 +35,6 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private var models = [Section]()
-    private var selectedLink: BHInfoLink?
-
     private let infoLinks = BullhornSdk.shared.infoLinks
 
     // MARK: - Lifecycle
@@ -91,39 +89,35 @@ class BHMoreInfoViewController: BHPlayerContainingViewController {
         
         models.append(Section(title: "Information", options: [
             .staticCell(model: SettingsOption(title: "Terms of Use", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .termsOfUse })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+                if let link = self.infoLinks.first(where: { $0.type == .termsOfUse }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyPolicy })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+                if let link = self.infoLinks.first(where: { $0.type == .privacyPolicy }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Your Privacy Choices", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .privacyChoices })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+                if let link = self.infoLinks.first(where: { $0.type == .privacyChoices }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
             }, disclosure: true)),
         ]))
         
         models.append(Section(title: "Support", options: [
             .staticCell(model: SettingsOption(title: "Contact Us", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .contactUs })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+                if let link = self.infoLinks.first(where: { $0.type == .contactUs }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Report a problem", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                self.selectedLink = self.infoLinks.first(where: { $0.type == .support })
-                self.performSegue(withIdentifier: BHMoreInfoViewController.WebSegueIdentifier, sender: self)
+                if let link = self.infoLinks.first(where: { $0.type == .support }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
             }, disclosure: true)),
         ]))
     }
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == BHMoreInfoViewController.WebSegueIdentifier, let vc = segue.destination as? BHWebViewController {
-            vc.infoLink = selectedLink
-        }
-    }
-
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
