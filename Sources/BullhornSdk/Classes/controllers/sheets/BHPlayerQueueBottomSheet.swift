@@ -2,8 +2,11 @@
 import UIKit
 import Foundation
 
-class BHPlayerQueueBottomSheet: BHBottomSheetController {
+class BHPlayerQueueBottomSheet: UIViewController {
     
+    var sheetTitle: String?
+
+    var stackView = UIStackView()
     var tableView: UITableView!
     
     var heightConstraint: NSLayoutConstraint!
@@ -12,6 +15,13 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
+        setNeedsStatusBarAppearanceUpdate()
+        
+        sheetTitle = "PLAYBACK QUEUE"
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(_:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
 
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .interactive, action: .ui, banner: .openQueue)
@@ -24,6 +34,46 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
         let bundle = Bundle.module
         let queueCellNib = UINib(nibName: "BHPlaybackQueueCell", bundle: bundle)
 
+        view = UIView()
+        view.backgroundColor = .cardBackground()
+
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView)
+
+        let buttonView = UIView(frame: .zero)
+        buttonView.backgroundColor = .clear
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+
+        let closeButton = UIButton(type: .roundedRect)
+        closeButton.setTitle("", for: .normal)
+        closeButton.backgroundColor = .tertiary()
+        closeButton.layer.cornerRadius = 2
+        closeButton.accessibilityLabel = "Dismiss popup"
+        closeButton.addTarget(self, action: #selector(onCloseAction(_:)), for: .touchUpInside)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+
+        buttonView.addSubview(closeButton)
+        stackView.addArrangedSubview(buttonView)
+
+        if let validSheettitle = sheetTitle {
+
+            let titleLabel = UILabel(frame: .zero)
+            titleLabel.text = validSheettitle
+            titleLabel.font = .settingsPrimaryText()
+            titleLabel.textColor = .secondary()
+            titleLabel.textAlignment = .center
+            stackView.addArrangedSubview(titleLabel)
+            
+            NSLayoutConstraint.activate([
+                titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+                titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+                titleLabel.heightAnchor.constraint(equalToConstant: 28),
+                titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+            ])
+        }
+        
         tableView = UITableView(frame: .zero, style: .plain)
         tableView.register(queueCellNib, forCellReuseIdentifier: BHPlaybackQueueCell.reusableIndentifer)
         tableView.delegate = self
@@ -40,6 +90,17 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
         heightConstraint.isActive = true
 
         NSLayoutConstraint.activate([
+            buttonView.heightAnchor.constraint(equalToConstant: 10),
+
+            closeButton.widthAnchor.constraint(equalToConstant: 36),
+            closeButton.heightAnchor.constraint(equalToConstant: 5),
+            closeButton.centerXAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerXAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerYAnchor),
+
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+
             tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
         ])
@@ -66,6 +127,25 @@ class BHPlayerQueueBottomSheet: BHBottomSheetController {
             self.tableView.reloadData()
         })
     }
+    
+    // MARK: - Action handlers
+    
+    @objc fileprivate func onCloseAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+
+    // MARK: - Notifications
+    
+    @objc fileprivate func onUserInterfaceStyleChangedNotification(_ notification: Notification) {
+        guard let dict = notification.userInfo as? NSDictionary else { return }
+        guard let value = dict["style"] as? Int else { return }
+        
+        let style = UIUserInterfaceStyle(rawValue: value) ?? .light
+
+        overrideUserInterfaceStyle = style
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate

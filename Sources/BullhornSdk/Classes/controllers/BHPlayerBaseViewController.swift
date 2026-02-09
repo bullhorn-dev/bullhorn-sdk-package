@@ -331,11 +331,14 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     @IBAction func onQueueButton() {
-        let optionsSheet = BHPlayerQueueBottomSheet()
-        optionsSheet.preferredSheetSizing = .fit
-        optionsSheet.panToDismissEnabled = false
-        optionsSheet.sheetTitle = NSLocalizedString("PLAYBACK QUEUE", comment: "")
-        present(optionsSheet, animated: true)
+        let queueVC = BHPlayerQueueBottomSheet()
+
+        if let sheetPresentationController = queueVC.presentationController as? UISheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.prefersGrabberVisible = false
+        }
+
+        present(queueVC, animated: true, completion: nil)
     }
 
     // MARK: - Slider actions
