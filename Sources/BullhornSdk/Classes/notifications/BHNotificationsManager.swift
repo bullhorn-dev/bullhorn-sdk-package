@@ -312,7 +312,7 @@ extension BHNotificationsManager: BHLocalNotificationsManagerDelegate {
             return []
         }
 
-        let allOptions: UNNotificationPresentationOptions = [.list, .banner, .sound, .badge]
+        let allOptions: UNNotificationPresentationOptions = [.list, .sound, .badge]
         let options: UNNotificationPresentationOptions = allOptions
 
         return options

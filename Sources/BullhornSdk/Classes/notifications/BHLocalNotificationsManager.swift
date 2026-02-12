@@ -141,7 +141,7 @@ extension BHLocalNotificationsManager: UNUserNotificationCenterDelegate {
         
         let presentationOptions = delegate?.localNotificationsManager(self, presentationOptionsForNotification: info)
         
-        completionHandler(presentationOptions ?? [.list, .banner, .sound, .badge])
+        completionHandler(presentationOptions ?? [.list, .sound, .badge])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
