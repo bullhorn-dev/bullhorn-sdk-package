@@ -71,8 +71,8 @@ class BHPlayerQueueBottomSheet: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(tableView)
         
-        let maxTableViewHeight: CGFloat = min(CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72), 2 * UIScreen.main.bounds.height / 3)
-        heightConstraint = NSLayoutConstraint(item: tableView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: maxTableViewHeight)
+        let tableViewHeight = CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72)
+        heightConstraint = NSLayoutConstraint(item: tableView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: tableViewHeight)
         heightConstraint.isActive = true
 
         NSLayoutConstraint.activate([
@@ -113,8 +113,8 @@ class BHPlayerQueueBottomSheet: UIViewController {
     
     fileprivate func updateContent() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            let maxTableViewHeight: CGFloat = min(CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72), 2 * UIScreen.main.bounds.height / 3)
-            self.heightConstraint.constant = maxTableViewHeight
+            let tableViewHeight = CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72)
+            self.heightConstraint.constant = tableViewHeight
             self.tableView.reloadData()
         })
     }

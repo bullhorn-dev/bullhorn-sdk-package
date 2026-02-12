@@ -334,7 +334,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         let queueVC = BHPlayerQueueBottomSheet()
 
         if let sheetPresentationController = queueVC.presentationController as? UISheetPresentationController {
-            sheetPresentationController.detents = [.medium()]
+            sheetPresentationController.detents = [.medium(), .large()]
             sheetPresentationController.prefersGrabberVisible = false
         }
 
