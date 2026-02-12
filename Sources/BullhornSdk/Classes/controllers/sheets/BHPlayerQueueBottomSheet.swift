@@ -4,8 +4,6 @@ import Foundation
 
 class BHPlayerQueueBottomSheet: UIViewController {
     
-    var sheetTitle: String?
-
     var stackView = UIStackView()
     var tableView: UITableView!
     
@@ -19,8 +17,6 @@ class BHPlayerQueueBottomSheet: UIViewController {
         overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
         setNeedsStatusBarAppearanceUpdate()
         
-        sheetTitle = "PLAYBACK QUEUE"
-
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(_:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
 
         /// track event
@@ -57,23 +53,13 @@ class BHPlayerQueueBottomSheet: UIViewController {
         buttonView.addSubview(closeButton)
         stackView.addArrangedSubview(buttonView)
 
-        if let validSheettitle = sheetTitle {
-
-            let titleLabel = UILabel(frame: .zero)
-            titleLabel.text = validSheettitle
-            titleLabel.font = .settingsPrimaryText()
-            titleLabel.textColor = .secondary()
-            titleLabel.textAlignment = .center
-            stackView.addArrangedSubview(titleLabel)
+        let titleLabel = UILabel(frame: .zero)
+        titleLabel.text = "PLAYBACK QUEUE"
+        titleLabel.font = .settingsPrimaryText()
+        titleLabel.textColor = .secondary()
+        titleLabel.textAlignment = .center
+        stackView.addArrangedSubview(titleLabel)
             
-            NSLayoutConstraint.activate([
-                titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-                titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-                titleLabel.heightAnchor.constraint(equalToConstant: 28),
-                titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
-            ])
-        }
-        
         tableView = UITableView(frame: .zero, style: .plain)
         tableView.register(queueCellNib, forCellReuseIdentifier: BHPlaybackQueueCell.reusableIndentifer)
         tableView.delegate = self
@@ -96,6 +82,11 @@ class BHPlayerQueueBottomSheet: UIViewController {
             closeButton.heightAnchor.constraint(equalToConstant: 5),
             closeButton.centerXAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerXAnchor),
             closeButton.centerYAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerYAnchor),
+
+            titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 28),
+            titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
 
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
