@@ -20,6 +20,11 @@ class NewEpisodeNotificationInfo: NotificationInfoEpisodeObject {
     override var groupIdentifier: String { return userUuid }
 }
 
+class DownloadEpisodeNotificationInfo: NotificationInfoEpisodeObject {
+
+    override var groupIdentifier: String { return "BullhornSdk.DownloadEpisodeNtification" }
+}
+
 class LiveEpisodeMeetingRoomNotificationInfo: NotificationInfoEpisodeObject {
 
     override var groupIdentifier: String { return userUuid }

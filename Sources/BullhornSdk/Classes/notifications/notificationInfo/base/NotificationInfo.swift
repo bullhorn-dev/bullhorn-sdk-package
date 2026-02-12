@@ -62,6 +62,7 @@ struct NotificationInfo {
         case liveEpisodeScheduled   = "LIVE_EPISODE_SCHEDULED"
         case liveEpisodeMeetingRoom = "LIVE_EPISODE_WAITING_ROOM"
         case massNotification       = "MASS_NOTIFICATION"
+        case downloadEpisode        = "DOWNLOAD_EPISODE"
     }
 }
 

@@ -140,9 +140,33 @@ class BHNotificationsManager: NSObject {
         localNotificationsManager.removeAllDeliveredNotifications()
     }
     
-    func removeDeliveredNotifications(with userId: String) {
-        BHLog.p("\(#function) - userId: \(userId)")
-        localNotificationsManager.removeDeliveredNotifications(with: userId)
+    func removeDeliveredNotifications(with identifier: String) {
+        BHLog.p("\(#function) - userID: \(identifier)")
+        localNotificationsManager.removeDeliveredNotifications(with: identifier)
+    }
+    
+    func triggerDownloadEpisodeNotification(with post: BHPost) {
+        BHLog.p("\(#function) - postID: \(post.id)")
+        
+        let content = UNMutableNotificationContent()
+        content.title = post.title
+        content.body = "Downloading episode..."
+        content.sound = UNNotificationSound.default
+        let payload = [
+            NotificationInfo.DataKey.category.rawValue: NotificationInfo.PayloadType.downloadEpisode.rawValue,
+        ] as [String : Any]
+        content.userInfo = [
+            NotificationInfo.DataKey.aps.rawValue: payload,
+            NotificationInfo.DataKey.title.rawValue: post.title,
+            NotificationInfo.DataKey.message.rawValue: "Downloading episode...",
+            NotificationInfo.DataKey.eventUuid.rawValue: post.id,
+            NotificationInfo.DataKey.event.rawValue: post.title,
+            NotificationInfo.DataKey.userUuid.rawValue: post.user.id,
+            NotificationInfo.DataKey.user.rawValue: post.user.fullName ?? "",
+            NotificationInfo.DataKey.userPicture.rawValue: post.user.profilePicture?.absoluteString ?? "",
+        ] as [String : Any]
+        
+        localNotificationsManager.triggerLocalNotification(with: content)
     }
 
     // MARK: - Private
@@ -201,6 +225,15 @@ class BHNotificationsManager: NSObject {
                         break
                     }
                 }
+            }
+            
+        case .downloadEpisode:
+            if let infoEvent = info as? DownloadEpisodeNotificationInfo {
+                handled = true
+                let storyboard = UIStoryboard(name: StoryboardName.main, bundle: Bundle.module)
+                let vc = storyboard.instantiateViewController(withIdentifier: BHDownloadsViewController.storyboardIndentifer) as! BHDownloadsViewController
+                
+                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
             }
             
         case .newEpisodesReminder:
@@ -279,7 +312,7 @@ extension BHNotificationsManager: BHLocalNotificationsManagerDelegate {
             return []
         }
 
-        let allOptions: UNNotificationPresentationOptions = [.banner, .sound, .badge]
+        let allOptions: UNNotificationPresentationOptions = [.list, .banner, .sound, .badge]
         let options: UNNotificationPresentationOptions = allOptions
 
         return options

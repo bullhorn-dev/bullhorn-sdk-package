@@ -33,6 +33,7 @@ class BHLocalNotificationsManager: NSObject {
         typeClassMap[.liveEpisodeScheduled] = LiveEpisodeScheduledNotificationInfo.self
         typeClassMap[.liveEpisodeMeetingRoom] = LiveEpisodeMeetingRoomNotificationInfo.self
         typeClassMap[.massNotification] = MassNotificationInfo.self
+        typeClassMap[.downloadEpisode] = DownloadEpisodeNotificationInfo.self
     }
 
     // MARK: - Public
@@ -42,8 +43,8 @@ class BHLocalNotificationsManager: NSObject {
         updateApplicationIconBadgeNumber()
     }
     
-    func removeDeliveredNotifications(with userId: String) {
-        cleanNotifications(userId)
+    func removeDeliveredNotifications(with identifier: String) {
+        cleanNotifications(identifier)
         cleanNotifications([.massNotification, .newEpisodesReminder])
         updateApplicationIconBadgeNumber()
     }
@@ -54,6 +55,21 @@ class BHLocalNotificationsManager: NSObject {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count
             }
         }
+    }
+    
+    func triggerLocalNotification(with content: UNMutableNotificationContent) {
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                BHLog.p("\(#function) - Error adding notification request: \(error.localizedDescription)")
+            } else {
+                BHLog.p("\(#function) - Downloading notification scheduled successfully!")
+            }
+        }
+
     }
     
     // MARK: - Private
@@ -125,7 +141,7 @@ extension BHLocalNotificationsManager: UNUserNotificationCenterDelegate {
         
         let presentationOptions = delegate?.localNotificationsManager(self, presentationOptionsForNotification: info)
         
-        completionHandler(presentationOptions ?? [.banner, .sound, .badge])
+        completionHandler(presentationOptions ?? [.list, .banner, .sound, .badge])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {

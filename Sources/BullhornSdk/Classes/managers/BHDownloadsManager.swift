@@ -1,5 +1,6 @@
 
 import Foundation
+import UserNotifications
 internal import Alamofire
 
 enum DownloadDate: Int, Comparable {
@@ -321,12 +322,19 @@ class BHDownloadsManager {
             }
         }
     }
-
-    // MARK: - Private
         
     fileprivate func performDownload(_ item: BHDownloadItem) {
         var prevProgress: Double = 0
-        
+
+        /// Push notifications feature works  only under dev mode
+        if UserDefaults.standard.isPushNotificationsFeatureEnabled {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: { didAllow, error in
+                if error == nil {
+                    BHNotificationsManager.shared.triggerDownloadEpisodeNotification(with: item.post)
+                }
+            })
+        }
+
         insertStorageItem(item)
         
         observersContainer.notifyObserversAsync {
@@ -380,6 +388,11 @@ class BHDownloadsManager {
                     
                     self.updateStorageItem(item)
                     self.fetchStorageItems()
+                    
+                    /// Push notifications feature works  only under dev mode
+                    if UserDefaults.standard.isPushNotificationsFeatureEnabled {
+                        BHNotificationsManager.shared.removeAllDeliveredNotifications()
+                    }
 
                     self.observersContainer.notifyObserversAsync {
                         $0.downloadsManager(self, itemStateUpdated: item)
