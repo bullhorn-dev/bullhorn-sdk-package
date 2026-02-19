@@ -551,6 +551,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             self.resetUI()
             self.resetProgressUI()
             self.reloadData()
+            self.updateAfterSettingsChanged()
         }
     }
 
@@ -620,6 +621,7 @@ extension BHPlayerBaseViewController: BHLivePlayerListener {
             self.resetUI()
             self.resetProgressUI()
             self.reloadData()
+            self.updateAfterSettingsChanged()
         }
     }
     
