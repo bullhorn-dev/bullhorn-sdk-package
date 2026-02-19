@@ -60,6 +60,9 @@ struct BHPost: Codable {
         case bulletin
         case status
         case hasTranscript = "has_transcript"
+        case profilePicture = "profile_picture"
+        case profilePictureBig = "profile_picture_big"
+        case profilePictureTiny = "profile_picture_tiny"
     }
     
     enum PostType: String, Codable {
@@ -122,6 +125,9 @@ struct BHPost: Codable {
     let bulletin: BHPostBulletin?
     let status: PostStatus
     let hasTranscript: Bool
+    var profilePicture: URL?
+    var profilePictureBig: URL?
+    var profilePictureTiny: URL?
     
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)
@@ -153,6 +159,30 @@ struct BHPost: Codable {
 
     var validPublishedDate: Date {
         return startTimeDate ?? Date()
+    }
+    
+    var coverUrl: URL? {
+        if profilePicture != nil {
+            return profilePicture
+        } else if profilePictureTiny != nil {
+            return profilePictureTiny
+        } else if profilePictureBig != nil {
+            return profilePictureBig
+        } else {
+            return user.coverUrl
+        }
+    }
+
+    var coverUrlBig: URL? {
+        if profilePictureBig != nil {
+            return profilePictureBig
+        } else if profilePicture != nil {
+            return profilePicture
+        } else if profilePictureTiny != nil {
+            return profilePictureTiny
+        } else {
+            return user.coverUrlBig
+        }
     }
 
     func hasRecording() -> Bool { recording != nil }

@@ -29,4 +29,7 @@ extension PostMO {
     @NSManaged public var bulletin: PostBulletinMO?
     @NSManaged public var status: String?
     @NSManaged public var hasTranscript: Bool
+    @NSManaged public var profilePicture: String?
+    @NSManaged public var profilePictureBig: String?
+    @NSManaged public var profilePictureTiny: String?
 }

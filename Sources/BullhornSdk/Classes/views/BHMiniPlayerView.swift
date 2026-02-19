@@ -226,7 +226,7 @@ class BHMiniPlayerView: UIView {
 
         self.userLabel.text = playerItem.post.title
 
-        self.imageView.sd_setImage(with: playerItem.post.userImageUrl)
+        self.imageView.sd_setImage(with: playerItem.post.coverUrl)
         self.imageView.layoutSubviews()
 
         switch state {

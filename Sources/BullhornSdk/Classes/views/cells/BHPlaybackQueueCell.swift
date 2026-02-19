@@ -76,7 +76,7 @@ class BHPlaybackQueueCell: UITableViewCell {
         
         titleLabel.text = item?.post.title
         nameLabel.text = item?.post.user.fullName
-        userIcon.sd_setImage(with: item?.post.user.coverUrl, placeholderImage: placeholderImage)
+        userIcon.sd_setImage(with: item?.post.coverUrl, placeholderImage: placeholderImage)
         playButton.post = item?.post
         manuallyIcon.isHidden = item?.reason != .manually
 

@@ -47,7 +47,7 @@ class BHDetailsHeaderView: UITableViewHeaderFooterView {
 
         let duration: Double = Double(validPost.recording?.duration ?? 0)
 
-        userIcon.sd_setImage(with: validPost.user.coverUrl, placeholderImage: placeholderImage)
+        userIcon.sd_setImage(with: validPost.coverUrl, placeholderImage: placeholderImage)
         userLabel.text = validPost.user.fullName
         titleLabel.text = validPost.title
         durationLabel.text = duration.stringFormatted()

@@ -76,7 +76,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
         downloadButton.post = postsManager?.post
 
-        userIcon.sd_setImage(with: postsManager?.post?.user.coverUrl, placeholderImage: placeholderImage)
+        userIcon.sd_setImage(with: postsManager?.post?.coverUrl, placeholderImage: placeholderImage)
         userLabel.text = postsManager?.post?.user.fullName
         titleLabel.text = postsManager?.post?.title
         durationLabel.text = duration.stringFormatted()

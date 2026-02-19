@@ -20,7 +20,7 @@ extension BHPost {
         
         let item = CPListItem(text: title, detailText: user.fullName, image: placeholderImage, accessoryImage: accessoryImage, accessoryType: accessoryType)
         
-        SDWebImageManager.shared.loadImage(with: user.coverUrl) { _, _, _ in
+        SDWebImageManager.shared.loadImage(with: coverUrl) { _, _, _ in
             //
         } completed: { img, data, error, _, finished, _ in
             if finished && error == nil {

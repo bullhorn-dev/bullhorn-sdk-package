@@ -282,6 +282,21 @@
                 <entry key="hyper.remoteKey" value="privacy"/>
             </userInfo>
         </attribute>
+        <attribute name="profilePicture" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureBig" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_big"/>
+            </userInfo>
+        </attribute>
+        <attribute name="profilePictureTiny" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="profile_picture_tiny"/>
+            </userInfo>
+        </attribute>
         <attribute name="published" optional="YES" attributeType="Boolean" usesScalarValueType="YES">
             <userInfo>
                 <entry key="hyper.remoteKey" value="published"/>

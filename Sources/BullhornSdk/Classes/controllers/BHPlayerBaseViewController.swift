@@ -217,7 +217,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         }
         
         if let item = playerItem {
-            imageView.sd_setImage(with: item.post.userImageUrl)
+            imageView.sd_setImage(with: item.post.coverUrl)
         }
     }
     

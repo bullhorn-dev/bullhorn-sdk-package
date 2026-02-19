@@ -289,7 +289,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         
         titleLabel.text = post?.title
         descriptionLabel.text = post?.description
-        imageView.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
+        imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateControls()
         setupAccessibility()

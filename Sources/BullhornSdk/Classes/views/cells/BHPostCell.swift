@@ -130,7 +130,7 @@ class BHPostCell: UITableViewCell {
         
         titleLabel.text = post?.title
         descriptionLabel.text = post?.description
-        userIcon.sd_setImage(with: post?.user.coverUrl, placeholderImage: placeholderImage)
+        userIcon.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateTagLabel()
         updateControls()

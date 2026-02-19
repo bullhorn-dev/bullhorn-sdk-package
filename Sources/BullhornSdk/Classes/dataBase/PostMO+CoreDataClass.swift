@@ -22,7 +22,11 @@ public class PostMO: NSManagedObject {
         let pr = BHPost.PostPrivacy(rawValue: validPrivacy) ?? .public
         let st = BHPost.PostStatus(rawValue: status ?? "") ?? .finished
 
-        let post = BHPost(id: validId, title: validTitle, description: descr, postType: type, alias: alias, startTime: startTime, endTime: endTime, scheduledAt: scheduledAt, hasMeetingRoom: hasMeetingRoom, originalTime: originalTime, playbackOffset: playbackOffset, isPlaybackCompleted: isPlaybackCompleted, privacy: pr, published: published, publishedAt: publishedAt, liked: liked, shareLink: shareLinkUrl, user: validUser, recording: recording?.toRecording(), bulletin: bulletin?.toPostBulletin(), status: st, hasTranscript: hasTranscript)
+        var post = BHPost(id: validId, title: validTitle, description: descr, postType: type, alias: alias, startTime: startTime, endTime: endTime, scheduledAt: scheduledAt, hasMeetingRoom: hasMeetingRoom, originalTime: originalTime, playbackOffset: playbackOffset, isPlaybackCompleted: isPlaybackCompleted, privacy: pr, published: published, publishedAt: publishedAt, liked: liked, shareLink: shareLinkUrl, user: validUser, recording: recording?.toRecording(), bulletin: bulletin?.toPostBulletin(), status: st, hasTranscript: hasTranscript)
+
+        post.profilePicture = profilePicture != nil ? URL(string: profilePicture!) : nil
+        post.profilePictureBig = profilePictureBig != nil ? URL(string: profilePictureBig!) : nil
+        post.profilePictureTiny = profilePictureTiny != nil ? URL(string: profilePictureTiny!) : nil
                 
         return post
     }

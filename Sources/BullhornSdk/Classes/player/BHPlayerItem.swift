@@ -90,12 +90,12 @@ public struct BHPlayerItem: Codable {
         let title: String?
         let userId: String?
         let userName: String?
-        let userImageUrl: URL?
+        let coverUrl: URL?
         let url: URL?
         var file: URL?
         
         func debugDescription() {
-            BHLog.p("Post postId: \(postId), title: \(title ?? ""), userId: \(userId ?? ""), userName: \(userName ?? ""), userImageUrl: \(userImageUrl?.absoluteString ?? ""), url: \(url?.absoluteString ?? ""), file: \(file?.absoluteString ?? "")")
+            BHLog.p("Post postId: \(postId), title: \(title ?? ""), userId: \(userId ?? ""), userName: \(userName ?? ""), coverUrl: \(coverUrl?.absoluteString ?? ""), url: \(url?.absoluteString ?? ""), file: \(file?.absoluteString ?? "")")
         }
     }
     

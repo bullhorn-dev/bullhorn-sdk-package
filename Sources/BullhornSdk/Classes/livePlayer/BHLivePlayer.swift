@@ -87,7 +87,7 @@ class BHLivePlayer {
 
         if BHReachabilityManager.shared.isConnected() {
             
-            let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, userImageUrl: post.user.coverUrl, url: post.recording?.publishUrl, file: nil)
+            let p = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: nil)
             let settings: BHPlayerItem.PlaybackSettings = .initial
             let playerItem = BHPlayerItem(post: p, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: false)
             
