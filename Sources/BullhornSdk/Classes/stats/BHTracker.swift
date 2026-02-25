@@ -31,7 +31,22 @@ class BHTracker {
         BHUserSessionManager.shared.start()
     }
     
+    func trackAppFirstStartEventIfNeeded() {
+        if UserDefaults.standard.numberOfTimesLaunched < 1 {
+            BHLog.p("\(#function)")
+
+            let request = BHTrackEventRequest.createRequest(category: .initiation, action: .ui, banner: .appFirstStart)
+            let event = createEvent(request: request)
+            events.append(event)
+            track()
+
+            UserDefaults.standard.numberOfTimesLaunched = 1
+        }
+    }
+
     func trackNewUserSessionEvent() {
+        BHLog.p("\(#function)")
+
         let request = BHTrackEventRequest.createRequest(category: .initiation, action: .sessionGen)
         let event = createEvent(request: request)
         events.append(event)

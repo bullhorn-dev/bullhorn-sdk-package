@@ -24,6 +24,8 @@ enum BHTrackAction: String, Codable {
 // MARK: - Banner
 
 enum BHTrackBanner: String, Codable {
+    /// ui-initiation
+    case appFirstStart     = "app_first_start"
     /// ui-account
     case login             = "log_in"
     case logout            = "log_out"
