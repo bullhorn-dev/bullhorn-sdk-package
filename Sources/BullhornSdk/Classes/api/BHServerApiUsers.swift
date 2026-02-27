@@ -369,8 +369,6 @@ class BHServerApiUsers: BHServerApiBase {
             AF.request(fullPath, method: .post, parameters: pushToken.params(), encoding: JSONEncoding.default, headers: headers)
               .validate()
               .responseData(completionHandler: { response in
-                debugPrint(response)
-                  
                 switch response.result {
                 case .success(_):
                     completion(.success)
@@ -398,8 +396,6 @@ class BHServerApiUsers: BHServerApiBase {
             AF.request(fullPath, method: .delete, parameters: params, encoding: JSONEncoding.default, headers: headers)
               .validate()
               .responseData(completionHandler: { response in
-                  debugPrint(response)
-                  
                   switch response.result {
                   case .success(_):
                       completion(.success)
@@ -425,7 +421,6 @@ class BHServerApiUsers: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseJSONAPI(completionHandler: { (response) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let data):
                         do {
@@ -467,8 +462,6 @@ class BHServerApiUsers: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseData(completionHandler: { response in
-                    debugPrint(response)
-                    
                     switch response.result {
                     case .success(let newEpisodesCount):
                         completion(.success(count: newEpisodesCount.count))
@@ -494,8 +487,6 @@ class BHServerApiUsers: BHServerApiBase {
             AF.request(fullPath, method: .post, parameters: [:], encoding: JSONEncoding.default, headers: headers)
               .validate()
               .responseData(completionHandler: { response in
-                debugPrint(response)
-                  
                 switch response.result {
                 case .success(_):
                     completion(.success)

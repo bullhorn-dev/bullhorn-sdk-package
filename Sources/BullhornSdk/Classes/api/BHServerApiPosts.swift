@@ -295,12 +295,9 @@ class BHServerApiPosts: BHServerApiBase {
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composePostHeaders(authToken)
 
-            debugPrint(fullPath)
-
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseDecodable(of: Transcript.self, completionHandler: { response in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let transcript):
                         completion(.success(transcript: transcript.data))
@@ -326,7 +323,6 @@ class BHServerApiPosts: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let posts):
                       completion(.success(posts: posts.posts))

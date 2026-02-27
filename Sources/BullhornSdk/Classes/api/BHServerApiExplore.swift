@@ -21,7 +21,6 @@ class BHServerApiExplore: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let p):
                       completion(.success(posts: p.posts))
@@ -47,7 +46,6 @@ class BHServerApiExplore: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let p):
                       completion(.success(posts: p.posts))
@@ -73,7 +71,6 @@ class BHServerApiExplore: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let p):
                       let posts = try? p.posts.toDictionaryArray()
@@ -109,7 +106,6 @@ class BHServerApiExplore: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Users, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let u):
                       let users = try? u.users.toDictionaryArray()
@@ -144,7 +140,6 @@ class BHServerApiExplore: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseJSONAPI(completionHandler: { (response) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let data):
                         do {

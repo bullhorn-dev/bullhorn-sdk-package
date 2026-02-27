@@ -50,12 +50,9 @@ class BHServerApiNetwork: BHServerApiBase {
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
-            debugPrint(fullPath)
-            
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseJSONAPI(completionHandler: { (response) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let data):
                       do {
@@ -102,7 +99,6 @@ class BHServerApiNetwork: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseJSONAPI(completionHandler: { (response) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let data):
                       do {
@@ -145,12 +141,9 @@ class BHServerApiNetwork: BHServerApiBase {
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
-            debugPrint(fullPath)
-            
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseJSONAPI(completionHandler: { (response) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let data):
                       do {
@@ -194,12 +187,9 @@ class BHServerApiNetwork: BHServerApiBase {
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
-            debugPrint(fullPath)
-            
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseJSONAPI(completionHandler: { (response) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let data):
                       do {

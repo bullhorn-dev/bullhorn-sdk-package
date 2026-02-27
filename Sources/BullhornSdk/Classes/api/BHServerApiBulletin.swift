@@ -96,8 +96,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .get, parameters: parameters, headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: include, keyPath: "data", completionHandler: { (response: DataResponse<BHBulletinTile, AFError>) in
-              
-              debugPrint("\(response)")
 
               switch response.result {
               case .success(let tile):
@@ -118,8 +116,6 @@ class BHServerApiBulletin: BHServerApiBase {
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<BHBulletinPollVariant, AFError>) in
               
-              debugPrint("\(response)")
-              
               switch response.result {
               case .success(let variant):
                   completion(.success(variant: variant))
@@ -138,8 +134,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .get, parameters: [:], headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<[BHBulletinQuestion], AFError>) in
-              
-              debugPrint(response)
 
               switch response.result {
               case .success(let events):
@@ -164,8 +158,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<BHBulletinQuestion, AFError>) in
-              
-              debugPrint(response)
 
               switch response.result {
               case .success(let question):
@@ -186,8 +178,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .put, parameters: [:], encoding: JSONEncoding.default, headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<BHBulletinQuestion, AFError>) in
-              
-              debugPrint(response)
 
               switch response.result {
               case .success(let question):
@@ -212,8 +202,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .get, parameters: [:], headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<[BHBulletinMessage], AFError>) in
-              
-              debugPrint(response)
 
               switch response.result {
               case .success(let events):
@@ -238,8 +226,6 @@ class BHServerApiBulletin: BHServerApiBase {
         AF.request(fullPath, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
           .validate()
           .responseCodableJSONAPI(includeList: nil, keyPath: "data", completionHandler: { (response: DataResponse<BHBulletinMessage, AFError>) in
-              
-              debugPrint(response)
 
               switch response.result {
               case .success(let message):

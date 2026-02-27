@@ -22,7 +22,6 @@ class BHServerApiFeed: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
               .validate()
               .responseDecodable( completionHandler: { (response: DataResponse<Posts, AFError>) in
-                  debugPrint(response)
                   switch response.result {
                   case .success(let posts):
                       completion(.success(posts: posts.posts))

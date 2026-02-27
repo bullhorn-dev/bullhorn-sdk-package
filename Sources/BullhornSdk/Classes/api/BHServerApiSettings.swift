@@ -21,7 +21,6 @@ class BHServerApiSettings: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseDecodable( completionHandler: { (response: DataResponse<Users, AFError>) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let u):
                         completion(.success(users: u.users))
@@ -48,7 +47,6 @@ class BHServerApiSettings: BHServerApiBase {
             AF.request(fullPath, method: .post, headers: headers)
                 .validate()
                 .responseDecodable( completionHandler: { (response: DataResponse<User, AFError>) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let u):
                         completion(.success(user: u.user))
@@ -76,7 +74,6 @@ class BHServerApiSettings: BHServerApiBase {
             AF.request(fullPath, method: .get, headers: headers)
                 .validate()
                 .responseDecodable( completionHandler: { (response: DataResponse<Users, AFError>) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let u):
                         completion(.success(users: u.users))
@@ -103,7 +100,6 @@ class BHServerApiSettings: BHServerApiBase {
             AF.request(fullPath, method: .post, headers: headers)
                 .validate()
                 .responseDecodable( completionHandler: { (response: DataResponse<User, AFError>) in
-                    debugPrint(response)
                     switch response.result {
                     case .success(let u):
                         completion(.success(user: u.user))
@@ -131,8 +127,6 @@ class BHServerApiSettings: BHServerApiBase {
             AF.request(fullPath, method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers)
                 .validate()
                 .responseData(completionHandler: { response in
-                  debugPrint(response)
-                    
                   switch response.result {
                   case .success(_):
                       completion(.success)
