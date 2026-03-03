@@ -224,7 +224,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
     @objc fileprivate func openOptionsAction(_ sender: Any) {
         let optionsSheet = BHUserOptionsBottomSheet()
-        optionsSheet.user = user
+        optionsSheet.user = userManager.user
         optionsSheet.preferredSheetSizing = .fit
         optionsSheet.panToDismissEnabled = true
         present(optionsSheet, animated: true)
