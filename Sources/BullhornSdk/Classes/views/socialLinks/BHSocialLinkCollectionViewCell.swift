@@ -31,8 +31,6 @@ class BHSocialLinkCollectionViewCell: UICollectionViewCell {
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.layer.borderColor = UIColor.secondaryBackground().cgColor
-        stackView.layer.borderWidth = 1
         stackView.layer.masksToBounds = true
         stackView.backgroundColor = .secondaryBackground()
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
