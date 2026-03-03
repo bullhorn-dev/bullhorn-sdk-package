@@ -43,7 +43,6 @@ open class BHBottomSheetController: UIViewController {
 
         let buttonView = UIView(frame: .zero)
         buttonView.backgroundColor = .clear
-        buttonView.translatesAutoresizingMaskIntoConstraints = false
 
         let closeButton = UIButton(type: .roundedRect)
         closeButton.setTitle("", for: .normal)
@@ -75,8 +74,6 @@ open class BHBottomSheetController: UIViewController {
         }
             
         NSLayoutConstraint.activate([
-            buttonView.heightAnchor.constraint(equalToConstant: 10),
-
             closeButton.widthAnchor.constraint(equalToConstant: 36),
             closeButton.heightAnchor.constraint(equalToConstant: 5),
             closeButton.centerXAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerXAnchor),

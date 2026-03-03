@@ -337,7 +337,10 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             if BullhornSdk.shared.externalUser?.level == .external {
                 follow(validUser.id)
             } else {
-                NotificationCenter.default.post(name: BullhornSdk.OpenLoginNotification, object: self, userInfo: nil)
+                let vc = BHAuthBottomSheet()
+                vc.preferredSheetSizing = .fit
+                vc.panToDismissEnabled = true
+                UIApplication.topNavigationController()?.present(vc, animated: true)
             }
         }
     }
