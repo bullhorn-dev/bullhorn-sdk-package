@@ -142,37 +142,37 @@ class BHPlaybackSpeedPanel: UIView {
     // MARK: - Actions
     
     @objc private func onZeroSevenFive() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.zeroSevenFive.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.zeroSevenFive)
         unselectAll()
         zeroSevenFive.select()
     }
 
     @objc private func onNormal() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.normal.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.normal)
         unselectAll()
         normal.select()
     }
 
     @objc private func onOneTwoFive() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.oneTwoFive.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.oneTwoFive)
         unselectAll()
         oneTwoFive.select()
     }
 
     @objc private func onOneFiveZero() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.oneFiveZero.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.oneFiveZero)
         unselectAll()
         oneFiveZero.select()
     }
     
     @objc private func onOneSevenFive() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.oneSevenFive.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.oneSevenFive)
         unselectAll()
         oneSevenFive.select()
     }
 
     @objc private func onTwoZero() {
-        BHHybridPlayer.shared.updatePlaybackSpeed(BHPlayerPlaybackSpeed.twoZero.rawValue)
+        BHHybridPlayer.shared.updatePlaybackSpeed(.twoZero)
         unselectAll()
         twoZero.select()
     }

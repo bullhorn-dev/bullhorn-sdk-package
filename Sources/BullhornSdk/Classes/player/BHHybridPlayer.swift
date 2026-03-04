@@ -224,6 +224,10 @@ class BHHybridPlayer {
             if let validPlaylist = playlist, validPlaylist.count > 0 {
                 removeQueue()
             }
+            
+            if post.isRadioStream() {
+                updatePlaybackSpeed(.normal)
+            }
 
             self.isTranscriptActive = false
             self.context = context
@@ -457,13 +461,13 @@ class BHHybridPlayer {
 
     // MARK: - Settings
 
-    func updatePlaybackSpeed(_ value: Float) {
+    func updatePlaybackSpeed(_ playbackSpeed: BHPlayerPlaybackSpeed) {
         
-        playerItem?.playbackSettings.playbackSpeed = value
-        settings.playbackSpeed = value
+        playerItem?.playbackSettings.playbackSpeed = playbackSpeed.rawValue
+        settings.playbackSpeed = playbackSpeed.rawValue
         
         ///graylog tracker
-        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerSpeed, context: "\(value)", podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerSpeed, context: "\(playbackSpeed.rawValue)", podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
         BHTracker.shared.trackEvent(with: request)
 
         observersContainer.notifyObserversAsync {
@@ -1230,7 +1234,8 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
     }
     
     func onChangePlaybackRateCommand(_ playbackRate: Float) -> Bool {
-        updatePlaybackSpeed(playbackRate)
+        let playbackSpeed = BHPlayerPlaybackSpeed(rawValue: playbackRate) ?? .normal
+        updatePlaybackSpeed(playbackSpeed)
         return true
     }
 }

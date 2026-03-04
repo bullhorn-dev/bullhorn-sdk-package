@@ -20,20 +20,20 @@ public enum BHPlayerPlaybackSpeed: Float, CaseIterable {
         }
     }
     
-    func getNext() -> Float {
+    func getNext() -> BHPlayerPlaybackSpeed {
         switch self {
         case .zeroSevenFive:
-            return BHPlayerPlaybackSpeed.normal.rawValue
+            return .normal
         case .normal:
-            return BHPlayerPlaybackSpeed.oneTwoFive.rawValue
+            return .oneTwoFive
         case .oneTwoFive:
-            return BHPlayerPlaybackSpeed.oneFiveZero.rawValue
+            return .oneFiveZero
         case .oneFiveZero:
-            return BHPlayerPlaybackSpeed.oneSevenFive.rawValue
+            return .oneSevenFive
         case .oneSevenFive:
-            return BHPlayerPlaybackSpeed.twoZero.rawValue
+            return .twoZero
         case .twoZero:
-            return BHPlayerPlaybackSpeed.zeroSevenFive.rawValue
+            return .zeroSevenFive
         }
     }
 
@@ -136,8 +136,8 @@ public struct BHPlayerItem: Codable {
 
         }
         
-        func nextPlaybackSpeed() -> Float {
-            return BHPlayerPlaybackSpeed(rawValue: playbackSpeed)?.getNext() ?? Constants.defaultPlaybackRate
+        func nextPlaybackSpeed() -> BHPlayerPlaybackSpeed {
+            return BHPlayerPlaybackSpeed(rawValue: playbackSpeed)?.getNext() ?? .normal
         }
     }
 }
