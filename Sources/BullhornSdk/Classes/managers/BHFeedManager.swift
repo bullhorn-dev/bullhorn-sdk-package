@@ -121,7 +121,7 @@ class BHFeedManager {
         
         categoryPostsSearchText = text ?? ""
 
-        server.getCategoryPosts(authToken: authToken, categoryId: categoryId, text: categoryPostsSearchText, page: categoryPostsNextPage) { response in
+        server.getCategoryPosts(authToken: authToken, networkId: BHAppConfiguration.shared.networkId, categoryId: categoryId, text: categoryPostsSearchText, page: categoryPostsNextPage) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(posts: let posts, page: let page, pages: let pages):

@@ -124,7 +124,7 @@ class BHServerApiFeed: BHServerApiBase {
         }
     }
     
-    func getCategoryPosts(authToken: String?, categoryId: Int, text: String?, pageSize: Int = 20, page: Int?, _ completion: @escaping (PaginatedPostsResult) -> Void) {
+    func getCategoryPosts(authToken: String?, networkId: String, categoryId: Int, text: String?, pageSize: Int = 20, page: Int?, _ completion: @escaping (PaginatedPostsResult) -> Void) {
 
         updateConfig { (configError: ServerApiError?) in
             if let error = configError {
@@ -132,7 +132,7 @@ class BHServerApiFeed: BHServerApiBase {
                 return
             }
 
-            let path = "categories/\(categoryId)/recent_episodes" + self.composePageFilter(page: page) +  self.composeTextFilter(text: text) + self.composePerPageFilter(perPage: pageSize)
+            let path = "categories/\(categoryId)/recent_episodes" + self.composePageFilter(page: page) +  self.composeTextFilter(text: text) + self.composePerPageFilter(perPage: pageSize) + self.composeNetworkId(text: networkId)
             let fullPath = self.composeFullApiURL(with: path)
             let headers = self.composeHeaders(authToken)
             
