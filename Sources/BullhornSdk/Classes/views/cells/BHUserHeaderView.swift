@@ -131,11 +131,9 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         collapseButton.configuration?.baseForegroundColor = .primary()
 
         followButton.setTitle("Follow", for: .normal)
-        followButton.configuration?.image = nil
-        followButton.configuration?.imagePadding = 0
-        followButton.backgroundColor = .navigationBackground()
+        followButton.setTitleColor(.navigationText(), for: .normal)
         followButton.tintColor = .navigationText()
-        followButton.configuration?.baseForegroundColor = .navigationText()
+        followButton.backgroundColor = .navigationBackground()
         followButton.titleLabel?.font = .primaryButton()
         followButton.titleLabel?.adjustsFontForContentSizeCategory = true
 

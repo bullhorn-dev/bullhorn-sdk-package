@@ -67,12 +67,13 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="pF7-hx-3bl">
-                                                        <rect key="frame" x="0.0" y="90" width="342" height="30"/>
+                                                        <rect key="frame" x="0.0" y="84" width="342" height="36"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WhH-mf-wRo">
-                                                                <rect key="frame" x="0.0" y="0.0" width="91" height="30"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="91" height="36"/>
+                                                                <color key="backgroundColor" name="bhColorAppBarBg"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="30" id="dfs-o3-NKI"/>
+                                                                    <constraint firstAttribute="height" constant="36" id="dfs-o3-NKI"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -81,17 +82,18 @@
                                                                     <imageReference key="image" image="arrowshape.turn.up.right" catalog="system" symbolScale="medium" variableValue="0.60000000000000009"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" title="Follow">
-                                                                    <fontDescription key="titleFontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                                                    <color key="baseForegroundColor" name="bhColorPrimary"/>
+                                                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                    <color key="baseForegroundColor" name="bhColorAppBarTitle"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="onFollowButton:" destination="wk1-wC-qQd" eventType="touchUpInside" id="EA8-Ru-Arf"/>
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggf-aF-J1o">
-                                                                <rect key="frame" x="111" y="0.0" width="161" height="30"/>
+                                                                <rect key="frame" x="111" y="0.0" width="161" height="36"/>
+                                                                <color key="backgroundColor" name="bhColorSecondaryBg"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="30" id="dXh-GE-JqS"/>
+                                                                    <constraint firstAttribute="height" constant="36" id="dXh-GE-JqS"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -100,7 +102,7 @@
                                                                     <imageReference key="image" image="arrowshape.turn.up.right" catalog="system" symbolScale="medium" variableValue="0.60000000000000009"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" title="Following">
-                                                                    <fontDescription key="titleFontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
                                                                     <color key="baseForegroundColor" name="bhColorPrimary"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
@@ -108,10 +110,11 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5uv-n8-dP3">
-                                                                <rect key="frame" x="292" y="0.0" width="50" height="30"/>
+                                                                <rect key="frame" x="292" y="0.0" width="50" height="36"/>
+                                                                <color key="backgroundColor" name="bhColorSecondaryBg"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="50" id="u1c-kk-mR9"/>
-                                                                    <constraint firstAttribute="height" constant="30" id="yxH-hL-vuY"/>
+                                                                    <constraint firstAttribute="height" constant="36" id="yxH-hL-vuY"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -131,7 +134,7 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="AjY-Pv-Oue"/>
+                                                            <constraint firstAttribute="height" constant="36" id="AjY-Pv-Oue"/>
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
@@ -250,11 +253,20 @@
         <image name="arrowshape.turn.up.right" catalog="system" width="128" height="104"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
+        <namedColor name="bhColorAppBarBg">
+            <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="bhColorAppBarTitle">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="bhColorPrimary">
             <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="bhColorSecondary">
             <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="bhColorSecondaryBg">
+            <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemCyanColor">
             <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
