@@ -9,21 +9,15 @@ public enum BHAppConfigType: String {
 public class BHAppConfiguration {
 
     private static let KeyWebConfigURL = "web_config_url"
-    private static let KeyWebSiteURL1 = "web_site_url_1"
-    private static let KeyWebSiteURL2 = "web_site_url_2"
     private static let KeyCustomScheme = "custom_scheme"
 
     private static let prodDefaults = [
-        BHAppConfiguration.KeyWebConfigURL:     "https://bullhorn.fm/bullhorn_app_config.json",
-        BHAppConfiguration.KeyWebSiteURL1:      "https://l.bullhorn.fm",
-        BHAppConfiguration.KeyWebSiteURL2:      "https://www.l.bullhorn.fm",
-        BHAppConfiguration.KeyCustomScheme:     "app.foxpodcasts"]
+        BHAppConfiguration.KeyWebConfigURL: "https://bullhorn.fm/bullhorn_app_config.json",
+        BHAppConfiguration.KeyCustomScheme: "app.foxpodcasts"]
 
     private static let qaDefaults = [
-        BHAppConfiguration.KeyWebConfigURL:     "https://qa-www.bullhorn.fm/bullhorn_app_config.json",
-        BHAppConfiguration.KeyWebSiteURL1:      "https://qa-www.bullhorn.fm",
-        BHAppConfiguration.KeyWebSiteURL2:      "https://qa-www.bullhorn.fm",
-        BHAppConfiguration.KeyCustomScheme:     "app.foxpodcasts"]
+        BHAppConfiguration.KeyWebConfigURL: "https://qa-www.bullhorn.fm/bullhorn_app_config.json",
+        BHAppConfiguration.KeyCustomScheme: "app.foxpodcasts"]
 
     static let shared: BHAppConfiguration = BHAppConfiguration()
     
@@ -43,14 +37,6 @@ public class BHAppConfiguration {
 
     var webConfigURLString: String {
         return configDictionary[BHAppConfiguration.KeyWebConfigURL] as? String ?? ""
-    }
-
-    var webSiteURL1String: String {
-        return configDictionary[BHAppConfiguration.KeyWebSiteURL1] as? String ?? ""
-    }
-
-    var webSiteURL2String: String {
-        return configDictionary[BHAppConfiguration.KeyWebSiteURL2] as? String ?? ""
     }
     
     var customSchemeString: String {
@@ -90,7 +76,6 @@ public class BHAppConfiguration {
     private let configDictionary: [String: Any]
     
     init() {
-
         switch BHAppConfiguration.type {
         case .prod: configDictionary = BHAppConfiguration.prodDefaults
         case .qa: configDictionary = BHAppConfiguration.qaDefaults

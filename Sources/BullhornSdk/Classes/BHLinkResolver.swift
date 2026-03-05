@@ -40,18 +40,8 @@ class BHLinkResolver {
 
     func validateLink(_ url: URL) -> UniversalLinkInfo {
 
-        guard let webSiteURL1 = URL.init(string: BHAppConfiguration.shared.webSiteURL1String) else { return .unknown }
-        guard let webSiteURL2 = URL.init(string: BHAppConfiguration.shared.webSiteURL2String) else { return .unknown }
-        if url.host != webSiteURL2.host && url.host != webSiteURL1.host { return .unknown }
-
-        var pathComponentsWithoutDelimiters = url.pathComponentsWithoutDelimiters
+        let pathComponentsWithoutDelimiters = url.pathComponentsWithoutDelimiters
         
-        if let firstComponent = pathComponentsWithoutDelimiters.first, firstComponent == "content" {
-            pathComponentsWithoutDelimiters.removeFirst()
-        } else {
-            return .unknown
-        }
-
         if let firstComponent = pathComponentsWithoutDelimiters.first,
            firstComponent == FirstPathComponents.podcasts.rawValue {
             if pathComponentsWithoutDelimiters.count == podcastLinkDelimitersCount {

@@ -222,10 +222,7 @@ public class BullhornSdk: NSObject {
 
         if url.scheme == BHAppConfiguration.shared.customSchemeString,
            let schemeString = url.absoluteString.removingPercentEncoding {
-            let replaceFrom = BHAppConfiguration.shared.customSchemeString + "://"
-            let replaceTo = BHAppConfiguration.shared.webSiteURL1String + "/"
-            let urlString = schemeString.replacingOccurrences(of: replaceFrom, with: replaceTo)
-            guard let webURL = URL(string: urlString) else { return true }
+            guard let webURL = URL(string: schemeString) else { return true }
             
             return BHLinkResolver.shared.resolveUniversalLink(webURL)
         }
@@ -236,13 +233,8 @@ public class BullhornSdk: NSObject {
     public func shouldContinueUserActivity(_ url: URL?) -> Bool {
 
         if let webURL = url {
-            if let webURL1FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL1String), let webURL2FromConfiguration = URL.init(string: BHAppConfiguration.shared.webSiteURL2String) {
-
-                if webURL1FromConfiguration.host == webURL.host || webURL2FromConfiguration.host == webURL.host {
-                    return BHLinkResolver.shared.resolveUniversalLink(webURL)
-                } else if BHAppConfiguration.shared.customSchemeString == webURL.scheme {
-                    return shouldOpenUrl(webURL)
-                }
+            if webURL.scheme == BHAppConfiguration.shared.customSchemeString {
+                return BHLinkResolver.shared.resolveUniversalLink(webURL)
             }
         }
 
