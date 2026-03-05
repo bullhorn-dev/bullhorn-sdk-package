@@ -25,7 +25,7 @@ class BHSocialLinksView: UIView {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = .zero
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: layout
@@ -91,7 +91,7 @@ extension BHSocialLinksView: UICollectionViewDelegateFlowLayout, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let link = links[indexPath.row]
-        let width = Double(link.title.count) * 8.0 + 30 + 24
+        let width = Double(link.title.count) * 12.0 + 30 + 24
 
         return CGSize(width: width, height: frame.size.height)
     }
