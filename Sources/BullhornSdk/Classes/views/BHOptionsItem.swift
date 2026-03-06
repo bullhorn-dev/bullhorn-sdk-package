@@ -1,14 +1,14 @@
 import UIKit
 import Foundation
 
-@IBDesignable class BHOptionsItem: UIView {
+@IBDesignable open class BHOptionsItem: UIView {
     
-    enum ItemType {
+    public enum ItemType {
         case normal
         case destructive
     }
 
-    enum ItemValueType {
+    public enum ItemValueType {
         case text
         case image
         case toggle
@@ -61,7 +61,7 @@ import Foundation
     
     // MARK: - Lifecycle
     
-    init(withType type: ItemType, valueType: ItemValueType, title: String, icon: String?) {
+    public init(withType type: ItemType, valueType: ItemValueType, title: String, icon: String?) {
         super.init(frame: .zero)
                 
         self.type = type
@@ -141,17 +141,17 @@ import Foundation
         valueSwitch.accessibilityLabel = "Toggle \(title)"
     }
         
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    open override func layoutSubviews() {
         contentView.frame = self.bounds
     }
     
     // MARK: - Public
     
-    func setValueImage(_ name: String?) {
+    public func setValueImage(_ name: String?) {
         if let validName = name, !validName.isEmpty {
             let config = UIImage.SymbolConfiguration(weight: .light)
             valueImageView.image = UIImage(systemName: validName)?.withConfiguration(config)
@@ -162,12 +162,12 @@ import Foundation
         }
     }
     
-    func setToggleValue(_ value: Bool) {
+    public func setToggleValue(_ value: Bool) {
         valueSwitch.setOn(value, animated: true)
         accessibilityValue = valueSwitch.isOn ? "On" : "Off"
     }
     
-    func setValue(_ text: String?) {
+    public func setValue(_ text: String?) {
         valueLabel.text = text
         accessibilityValue = text ?? ""
     }

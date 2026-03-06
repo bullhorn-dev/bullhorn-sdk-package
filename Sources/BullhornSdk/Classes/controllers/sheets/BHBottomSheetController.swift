@@ -18,9 +18,9 @@ open class BHBottomSheetController: UIViewController {
         preferredSheetBackdropColor: preferredSheetBackdropColor
     )
     
-    var stackView = UIStackView()
+    public var stackView = UIStackView()
 
-    var sheetTitle: String?
+    public var sheetTitle: String?
     
     open override func viewDidLoad() {
         super.viewDidLoad()
