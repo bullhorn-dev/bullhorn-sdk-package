@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -100,7 +100,7 @@
                                 <rect key="frame" x="0.0" y="89" width="505" height="58"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label label label label label label Label label label label label label Label label label label label label " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQj-LH-ZLa">
-                                        <rect key="frame" x="16" y="10.333333333333329" width="473" height="37.666666666666671"/>
+                                        <rect key="frame" x="16" y="10.333333333333329" width="473" height="37.666666666666664"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                         <color key="textColor" name="bhColorPrimary"/>
@@ -218,11 +218,11 @@
                                 <rect key="frame" x="0.0" y="285" width="505" height="36"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="xSH-N1-Hx6">
-                                        <rect key="frame" x="16" y="0.0" width="132" height="36"/>
+                                        <rect key="frame" x="16" y="0.0" width="473" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jtm-l3-N9J">
                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" name="bhColorSecondaryBg"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="36" id="UPF-cb-Tfx"/>
                                                     <constraint firstAttribute="height" constant="36" id="aUc-MM-6rU"/>
@@ -239,7 +239,7 @@
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8i4-4t-l0O">
                                                 <rect key="frame" x="48" y="0.0" width="36" height="36"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" name="bhColorSecondaryBg"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="36" id="MeM-8Z-e49"/>
                                                     <constraint firstAttribute="width" constant="36" id="xSf-66-W6T"/>
@@ -256,19 +256,30 @@
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jF6-nx-3H6" customClass="BHDownloadButton" customModule="BullhornSdk">
                                                 <rect key="frame" x="96" y="0.0" width="36" height="36"/>
-                                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                                <color key="backgroundColor" name="bhColorSecondaryBg"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="36" id="3HP-Uk-ebr"/>
                                                     <constraint firstAttribute="height" constant="36" id="3Zz-Ro-onW"/>
                                                 </constraints>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGl-FK-T5n" customClass="BHSocialLinksView" customModule="BullhornSdk">
+                                                <rect key="frame" x="144" y="0.0" width="329" height="36"/>
+                                                <color key="backgroundColor" systemColor="systemTealColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="bNK-0V-irk"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="dGl-FK-T5n" secondAttribute="trailing" id="Xc3-0j-r0B"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="xSH-N1-Hx6" firstAttribute="leading" secondItem="97R-Ul-XGg" secondAttribute="leading" constant="16" id="3LE-GW-2h7"/>
                                     <constraint firstItem="xSH-N1-Hx6" firstAttribute="centerY" secondItem="97R-Ul-XGg" secondAttribute="centerY" id="821-eX-mcl"/>
+                                    <constraint firstAttribute="trailing" secondItem="xSH-N1-Hx6" secondAttribute="trailing" constant="16" id="cah-VW-4Th"/>
                                     <constraint firstAttribute="height" constant="36" id="rYL-3R-ATc"/>
                                 </constraints>
                             </view>
@@ -335,6 +346,7 @@
                 <outlet property="separatorView1" destination="P5X-12-DS4" id="LR6-8G-g8H"/>
                 <outlet property="separatorView2" destination="Nbi-8o-LqY" id="jAc-xE-BjU"/>
                 <outlet property="shareButton" destination="8i4-4t-l0O" id="neS-0V-dnz"/>
+                <outlet property="socialLinksView" destination="dGl-FK-T5n" id="JMm-1j-coD"/>
                 <outlet property="tabTitleLabel" destination="OjT-9A-PgZ" id="h2B-73-Aoa"/>
                 <outlet property="tabbedView" destination="eji-UJ-jlI" id="vFS-G0-AiM"/>
                 <outlet property="tagLabel" destination="JpM-1q-Jz9" id="Y9B-j9-bTx"/>
@@ -368,6 +380,9 @@
         <namedColor name="bhColorSecondary">
             <color red="0.41568627450980394" green="0.45490196078431372" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="bhColorSecondaryBg">
+            <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="bhColorTertiary">
             <color red="0.68235294117647061" green="0.74509803921568629" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -375,13 +390,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemTealColor">
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

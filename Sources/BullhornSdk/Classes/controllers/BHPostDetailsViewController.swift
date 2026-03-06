@@ -83,10 +83,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        refreshControl?.endRefreshing()
-        
-        postsManager.post = nil
-        postsManager.transcript = nil
+        refreshControl?.endRefreshing()        
     }
     
     // MARK: - Private
@@ -336,6 +333,10 @@ extension BHPostDetailsViewController: BHPostHeaderViewDelegate {
     func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostTabs) {
         selectedTab = item
         tableView.reloadData()
+    }
+    
+    func postHeaderView(_ view: BHPostHeaderView, didSelectSocialLink link: URL) {
+        presentSafari(link)
     }
     
     func postHeaderView(_ view: BHPostHeaderView, didGetError message: String) {

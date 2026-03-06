@@ -63,6 +63,7 @@ struct BHPost: Codable {
         case profilePicture = "profile_picture"
         case profilePictureBig = "profile_picture_big"
         case profilePictureTiny = "profile_picture_tiny"
+        case socialLinks = "social_links"
     }
     
     enum PostType: String, Codable {
@@ -128,7 +129,8 @@ struct BHPost: Codable {
     var profilePicture: URL?
     var profilePictureBig: URL?
     var profilePictureTiny: URL?
-    
+    var socialLinks: BHSocialLinks?
+
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)
     }

@@ -6,6 +6,7 @@ protocol BHPostHeaderViewDelegate: AnyObject {
     func postHeaderView(_ view: BHPostHeaderView, didSelectTabBarItem item: BHPostTabs)
     func postHeaderView(_ view: BHPostHeaderView, didSelectUser user: BHUser)
     func postHeaderView(_ view: BHPostHeaderView, didSelectShare shareLink: URL)
+    func postHeaderView(_ view: BHPostHeaderView, didSelectSocialLink link: URL)
     func postHeaderView(_ view: BHPostHeaderView, didGetError message: String)
 }
 
@@ -33,7 +34,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var separatorView1: UIView!
     @IBOutlet weak var separatorView2: UIView!
     @IBOutlet weak var playedLabel: UILabel!
-    
+    @IBOutlet weak var socialLinksView: BHSocialLinksView!
+
     @IBOutlet weak var progressView: UIView!
     @IBOutlet weak var progressBgView: UIView!
     @IBOutlet weak var progressActiveView: UIView!
@@ -44,6 +46,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     var postsManager: BHPostsManager?
     
     fileprivate var selectedTab: BHPostTabs = .details
+
+    fileprivate var links: [BHSocialLinkItem] = []
 
     fileprivate var placeholderImage: UIImage?
 
@@ -157,6 +161,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         progressActiveView.backgroundColor = .secondary()
         progressActiveView.clipsToBounds = true
         
+        setupSocialLinks()
         setupAccessibility()
         reloadData()
     }
@@ -193,6 +198,45 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
         
         BHHybridPlayer.shared.addListener(self)
+    }
+
+    fileprivate func setupSocialLinks() {
+        
+        links.removeAll()
+
+        if let socialLinks = postsManager?.post?.socialLinks {
+            
+            if socialLinks.hasWebsite() {
+                links.append(socialLinks.websiteLink)
+            }
+
+            if socialLinks.hasFacebook() {
+                links.append(socialLinks.facebookLink)
+            }
+            
+            if socialLinks.hasInstagram() {
+                links.append(socialLinks.instagramLink)
+            }
+            
+            if socialLinks.hasTwitch() {
+                links.append(socialLinks.twitchLink)
+            }
+            
+            if socialLinks.hasTwitter() {
+                links.append(socialLinks.twitterLink)
+            }
+            
+            if socialLinks.hasYouTube() {
+                links.append(socialLinks.youtubeLink)
+            }
+            
+            if socialLinks.hasLinkedIn() {
+                links.append(socialLinks.linkedinLink)
+            }
+        }
+        
+        socialLinksView.delegate = self
+        socialLinksView.links = links
     }
     
     fileprivate func setupAccessibility() {
@@ -239,6 +283,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         }
         likeButton.setImage(image, for: .normal)
         shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)
+
+        socialLinksView.isHidden = !hasSocialLinks()
 
         if validPost.isLiveStream() {
             playerView.isHidden = false
@@ -363,6 +409,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         return postsManager?.post?.hasRecording() ?? false
     }
     
+    fileprivate func hasSocialLinks() -> Bool {
+        return postsManager?.post?.socialLinks != nil
+    }
+    
     fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
 
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
@@ -476,5 +526,15 @@ extension BHPostHeaderView: BHHybridPlayerListener {
                 }
             }
         }
+    }
+}
+
+// MARK: - BHSocialLinksViewDelegate
+
+extension BHPostHeaderView: BHSocialLinksViewDelegate {
+
+    func socialLinksView(_ view: BHSocialLinksView, didSelectLink url: URL?) {
+        guard let validUrl = url else { return }
+        delegate?.postHeaderView(self, didSelectSocialLink: validUrl)
     }
 }

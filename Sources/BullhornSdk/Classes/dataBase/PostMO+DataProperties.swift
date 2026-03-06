@@ -32,4 +32,5 @@ extension PostMO {
     @NSManaged public var profilePicture: String?
     @NSManaged public var profilePictureBig: String?
     @NSManaged public var profilePictureTiny: String?
+    @NSManaged public var socialLinks: Data?
 }
