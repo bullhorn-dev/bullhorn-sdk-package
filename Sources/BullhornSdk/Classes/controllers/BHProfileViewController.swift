@@ -43,7 +43,7 @@ struct SettingsDetailsOption {
 struct SettingsAccountOption {
     let title : String
     let subtitle: String?
-    let initials : String?
+    let icon : String?
     let iconBackgroundColor : UIColor
     let handler : (() -> Void)
 }
@@ -126,7 +126,7 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 
         if BullhornSdk.shared.externalUser?.level == .external, let user = BullhornSdk.shared.externalUser {
             models.append(Section(title: "Account", options: [
-                .accountCell(model: SettingsAccountOption(title: "You're logged in as", subtitle: user.fullName ?? "Anonymous", initials: user.initials, iconBackgroundColor: .secondaryBackground(), handler: {
+                .accountCell(model: SettingsAccountOption(title: "You're logged in as", subtitle: user.fullName ?? "Anonymous", icon: user.profilePictureUri, iconBackgroundColor: .secondaryBackground(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAccountNotification, object: self, userInfo: nil)
                 })),
             ]))

@@ -7,7 +7,7 @@ class BHAccountCell: UITableViewCell {
     class var reusableIndentifer: String { return String(describing: self) }
 
     @IBOutlet weak var iconContainer: UIView!
-    @IBOutlet weak var iconLabel: UILabel!
+    @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     
@@ -37,20 +37,17 @@ class BHAccountCell: UITableViewCell {
         backgroundColor = .primaryBackground()
 
         titleLabel.text = model.title
-        titleLabel.textColor = .primary()
-        titleLabel.font = .settingsSecondaryText()
+        titleLabel.textColor = .secondary()
+        titleLabel.font = .fontWithName(.robotoMedium, size: 14)
         titleLabel.adjustsFontForContentSizeCategory = true
 
-        subtitleLabel.text = model.subtitle?.capitalized
+        subtitleLabel.text = model.subtitle
         subtitleLabel.textColor = .primary()
-        subtitleLabel.font = .settingsPrimaryText()
+        subtitleLabel.font = .fontWithName(.robotoMedium, size: 17)
         subtitleLabel.adjustsFontForContentSizeCategory = true
 
-        iconLabel.text = model.initials ?? "A"
-        iconLabel.textColor = .primary()
-        iconLabel.font = .sectionTitle()
-        iconLabel.textAlignment = .center
-        iconLabel.adjustsFontForContentSizeCategory = true
+        iconView.backgroundColor = model.iconBackgroundColor
+        iconView.tintColor = .primary()
 
         iconContainer.backgroundColor = model.iconBackgroundColor
         iconContainer.layer.borderWidth = 0.5

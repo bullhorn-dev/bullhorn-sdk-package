@@ -13,9 +13,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Roboto-Bold.ttf">
-            <string>Roboto-Bold</string>
-        </array>
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
@@ -1609,21 +1606,23 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7P-zi-GZ4">
                                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SvP-OK-OTL">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                                                            <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
-                                                                            <color key="textColor" name="bhColorAppBarTitle"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xyc-k8-WYd">
+                                                                            <rect key="frame" x="16" y="19" width="32" height="26"/>
+                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="tintColor" name="bhColorPrimary"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="32" id="TXH-79-xQW"/>
+                                                                                <constraint firstAttribute="height" constant="32" id="rgD-Jg-cGc"/>
+                                                                            </constraints>
+                                                                            <imageReference key="image" image="person" catalog="system" symbolScale="small"/>
+                                                                        </imageView>
                                                                     </subviews>
                                                                     <color key="backgroundColor" name="bhColorTertiary"/>
                                                                     <color key="tintColor" name="bhColorAppBarTitle"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="bottom" secondItem="SvP-OK-OTL" secondAttribute="bottom" id="38w-yh-uMx"/>
                                                                         <constraint firstAttribute="width" constant="64" id="9QH-PQ-tVz"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="SvP-OK-OTL" secondAttribute="trailing" id="Izs-Wk-aV2"/>
-                                                                        <constraint firstItem="SvP-OK-OTL" firstAttribute="leading" secondItem="D7P-zi-GZ4" secondAttribute="leading" id="ddo-mo-dzw"/>
-                                                                        <constraint firstItem="SvP-OK-OTL" firstAttribute="top" secondItem="D7P-zi-GZ4" secondAttribute="top" id="pQV-Ed-kQ2"/>
+                                                                        <constraint firstItem="xyc-k8-WYd" firstAttribute="centerY" secondItem="D7P-zi-GZ4" secondAttribute="centerY" id="K4n-Df-GvP"/>
+                                                                        <constraint firstItem="xyc-k8-WYd" firstAttribute="centerX" secondItem="D7P-zi-GZ4" secondAttribute="centerX" id="PlJ-EY-sNa"/>
                                                                         <constraint firstAttribute="height" constant="64" id="ukc-16-eh2"/>
                                                                     </constraints>
                                                                 </view>
@@ -1663,7 +1662,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <outlet property="iconContainer" destination="D7P-zi-GZ4" id="dPM-4E-MLg"/>
-                                                    <outlet property="iconLabel" destination="SvP-OK-OTL" id="Xon-VS-WCw"/>
+                                                    <outlet property="iconView" destination="xyc-k8-WYd" id="wfU-hj-8cJ"/>
                                                     <outlet property="subtitleLabel" destination="rJd-Fd-3GJ" id="Np8-xo-lnb"/>
                                                     <outlet property="titleLabel" destination="5F6-Zi-dYv" id="heZ-6D-Qzh"/>
                                                 </connections>
@@ -2708,6 +2707,7 @@
         <image name="goforward.15" catalog="system" width="119" height="128"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
         <image name="list.bullet.circle" catalog="system" width="128" height="123"/>
+        <image name="person" catalog="system" width="128" height="121"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
         <image name="timer" catalog="system" width="128" height="123"/>
         <namedColor name="bhColorAccent">

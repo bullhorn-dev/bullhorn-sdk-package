@@ -24,22 +24,6 @@ public struct BHSdkUser {
         self.profilePictureUri = profilePictureUri
         self.level = level
     }
-    
-    public var initials: String {
-        var finalString = String()
-        guard var words = fullName?.components(separatedBy: .whitespacesAndNewlines) else { return "A" }
-        
-        if let firstCharacter = words.first?.first {
-          finalString.append(String(firstCharacter))
-          words.removeFirst()
-        }
-        
-        if let lastCharacter = words.last?.first {
-          finalString.append(String(lastCharacter))
-        }
-        
-        return finalString.uppercased()
-    }
 }
 
 public enum SdkUserResult {
