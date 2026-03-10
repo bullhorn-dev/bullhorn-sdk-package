@@ -17,29 +17,22 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var tagView: UIView!
     @IBOutlet weak var tagLabel: BHPaddingLabel!
+    @IBOutlet weak var postIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playButton: BHPlayButton!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var downloadButton: BHDownloadButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var youtubeButton: UIButton!
     @IBOutlet weak var waitingRoomView: UIView!
     @IBOutlet weak var waitingRoomLabel: UILabel!
     @IBOutlet weak var waitingRoomButton: BHWaitingRoomButton!
     @IBOutlet weak var tabbedView: BHTabbedView!
-    @IBOutlet weak var tabTitleLabel: UILabel!
-    @IBOutlet weak var separatorView1: UIView!
-    @IBOutlet weak var separatorView2: UIView!
     @IBOutlet weak var playedLabel: UILabel!
-    @IBOutlet weak var socialLinksView: BHSocialLinksView!
-
-    @IBOutlet weak var progressView: UIView!
-    @IBOutlet weak var progressBgView: UIView!
-    @IBOutlet weak var progressActiveView: UIView!
-    @IBOutlet weak var progressViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var divider1Label: UILabel!
+    @IBOutlet weak var divider2Label: UILabel!
 
     weak var delegate: BHPostHeaderViewDelegate?
 
@@ -68,6 +61,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     override func layoutSubviews() {
         super.layoutSubviews()
         shareButton.layer.cornerRadius = shareButton.frame.size.height / 2
+        likeButton.layer.cornerRadius = likeButton.frame.size.height / 2
+        downloadButton.layer.cornerRadius = downloadButton.frame.size.height / 2
+        youtubeButton.layer.cornerRadius = youtubeButton.frame.size.height / 2
+        userIcon.layer.cornerRadius = userIcon.frame.size.height / 2
     }
     
     // MARK: - Public
@@ -80,11 +77,11 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
         downloadButton.post = postsManager?.post
 
-        userIcon.sd_setImage(with: postsManager?.post?.coverUrl, placeholderImage: placeholderImage)
+        postIcon.sd_setImage(with: postsManager?.post?.coverUrl, placeholderImage: placeholderImage)
+        userIcon.sd_setImage(with: postsManager?.post?.user.coverUrl, placeholderImage: placeholderImage)
         userLabel.text = postsManager?.post?.user.fullName
         titleLabel.text = postsManager?.post?.title
-        durationLabel.text = duration.stringFormatted()
-        tabTitleLabel.text = selectedTab == .details ? "Episode Description" : "Episode Transcription"
+        durationLabel.text = duration.prettyFormatted()
         
         updateTagLabel()
         updateControls()
@@ -92,19 +89,25 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
 
     func setup(_ tab: BHPostTabs = .details) {
         
-        contentView.backgroundColor = .primaryBackground()
+        contentView.backgroundColor = .fxPrimaryBackground()
 
         playButton.post = postsManager?.post
+        playButton.title = "Listen"
         waitingRoomButton.post = postsManager?.post
 
-        userIcon.layer.cornerRadius = 8
+        postIcon.layer.cornerRadius = 8
+        postIcon.layer.borderColor = UIColor.tertiary().cgColor
+        postIcon.layer.borderWidth = 1
+        postIcon.backgroundColor = .tertiary()
+        postIcon.clipsToBounds = true
+
         userIcon.layer.borderColor = UIColor.tertiary().cgColor
         userIcon.layer.borderWidth = 1
         userIcon.backgroundColor = .tertiary()
         userIcon.clipsToBounds = true
 
         likeButton.setTitle("", for: .normal)
-        likeButton.backgroundColor = .clear
+        likeButton.backgroundColor = .secondaryBackground()
         likeButton.configuration?.baseForegroundColor = .primary()
 
         userLabel.textColor = .primary()
@@ -112,35 +115,34 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         userLabel.adjustsFontForContentSizeCategory = true
 
         dateLabel.textColor = .secondary()
-        dateLabel.font = .secondaryText()
+        dateLabel.font = .fontWithName(.robotoMedium, size: 12)
         dateLabel.adjustsFontForContentSizeCategory = true
 
         titleLabel.textColor = .primary()
-        titleLabel.font = .primaryText()
+        titleLabel.font = .fontWithName(.robotoMedium, size: 16)
         titleLabel.adjustsFontForContentSizeCategory = true
 
-        durationLabel.textColor = .primary()
-        durationLabel.font = .secondaryText()
+        durationLabel.textColor = .secondary()
+        durationLabel.font = .fontWithName(.robotoMedium, size: 12)
         durationLabel.adjustsFontForContentSizeCategory = true
 
         waitingRoomLabel.textColor = .primary()
 
-        playedLabel.textColor = .primary()
-        playedLabel.font = .secondaryText()
+        playedLabel.textColor = .secondary()
+        playedLabel.font = .fontWithName(.robotoMedium, size: 12)
         playedLabel.adjustsFontForContentSizeCategory = true
 
-        tabTitleLabel.textColor = .primary()
-        tabTitleLabel.font = .primaryText()
-        tabTitleLabel.adjustsFontForContentSizeCategory = true
-
         shareButton.setTitle("", for: .normal)
-        shareButton.backgroundColor = .clear
+        shareButton.backgroundColor = .secondaryBackground()
         shareButton.configuration?.baseForegroundColor = .primary()
 
-        separatorView1.addBottomBorder()
-        separatorView2.addBottomBorder()
-        separatorView1.backgroundColor = .clear
-        separatorView2.backgroundColor = .clear
+        youtubeButton.setTitle("YouTube", for: .normal)
+        youtubeButton.backgroundColor = .secondaryBackground()
+        youtubeButton.configuration?.baseForegroundColor = .primary()
+        youtubeButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 14)
+        youtubeButton.setTitleColor(.primary(), for: .normal)
+
+        downloadButton.backgroundColor = .secondaryBackground()
 
         tabbedView.currentlySelectedIndex = tab.rawValue
         tabbedView.tabs = [
@@ -148,18 +150,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             BHTabItemView(title: "Transcript")
         ]
         tabbedView.delegate = self
-        
+        tabbedView.isHidden = !hasTranscript()
         selectedTab = tab
-        
-        progressBgView.layer.cornerRadius = progressBgView.frame.height / 2
-        progressBgView.layer.borderColor = UIColor.primaryBackground().cgColor
-        progressBgView.layer.borderWidth = 1
-        progressBgView.backgroundColor = .divider()
-        progressBgView.clipsToBounds = true
-            
-        progressActiveView.layer.cornerRadius = progressActiveView.frame.height / 2
-        progressActiveView.backgroundColor = .secondary()
-        progressActiveView.clipsToBounds = true
         
         setupSocialLinks()
         setupAccessibility()
@@ -167,25 +159,24 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     }
     
     func calculateHeight() -> CGFloat {
-        let spacing: CGFloat = 8
-        var totalHeight: CGFloat = 3 * Constants.paddingVertical
+        let spacing: CGFloat = 12
+        var totalHeight: CGFloat = Constants.episodeProfileIconSize + 2 * Constants.paddingVertical
         
-        totalHeight += userIcon.frame.size.height + spacing
         totalHeight += heightForView(text: titleLabel.text ?? "", font: titleLabel.font, width: frame.size.width - 2 * Constants.paddingHorizontal) + spacing
-        totalHeight += tabbedView.frame.size.height + spacing
-        totalHeight += tabTitleLabel.frame.size.height + spacing
+        totalHeight += userIcon.frame.size.height + spacing
+        totalHeight += durationLabel.frame.size.height + spacing
         totalHeight += shareButton.frame.size.height + spacing
 
         if hasRecording() {
-            totalHeight += playerView.frame.size.height + spacing
+            totalHeight += playButton.frame.size.height + spacing
         }
 
-        if hasTag() {
-            totalHeight += tagView.frame.size.height + spacing
-        }
-        
         if hasWaitingRoom() {
             totalHeight += waitingRoomView.frame.size.height + spacing
+        }
+        
+        if hasTranscript() {
+            totalHeight += tabbedView.frame.size.height + spacing
         }
         
         return totalHeight
@@ -234,9 +225,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
                 links.append(socialLinks.linkedinLink)
             }
         }
-        
-        socialLinksView.delegate = self
-        socialLinksView.links = links
     }
     
     fileprivate func setupAccessibility() {
@@ -250,6 +238,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         shareButton.isAccessibilityElement = true
         shareButton.accessibilityTraits = .button
         shareButton.accessibilityLabel = "Share episode"
+        youtubeButton.isAccessibilityElement = true
+        youtubeButton.accessibilityTraits = .button
+        youtubeButton.accessibilityLabel = "YouTube"
+        youtubeButton.accessibilityValue = "external link"
         downloadButton.isAccessibilityElement = true
         downloadButton.context = "episode"
         
@@ -284,29 +276,32 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         likeButton.setImage(image, for: .normal)
         shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)
 
-        socialLinksView.isHidden = !hasSocialLinks()
+        youtubeButton.isHidden = !hasYouTubeSocialLink()
 
         if validPost.isLiveStream() {
-            playerView.isHidden = false
             downloadButton.isHidden = true
             playButton.isHidden = false
             durationLabel.text = ""
+            divider1Label.isHidden = true
             playedLabel.isHidden = true
+            divider2Label.isHidden = true
         } else if validPost.hasRecording() {
             let duration: Double = Double(validPost.recording?.duration ?? 0)
 
-            playerView.isHidden = false
             downloadButton.isHidden = false
             playButton.isHidden = false
-            durationLabel.text = duration.stringFormatted()
+            durationLabel.text = duration.prettyFormatted()
             durationLabel.isHidden = false
+            divider1Label.isHidden = false
             playedLabel.isHidden = !validPost.isPlaybackCompleted
+            divider2Label.isHidden = !validPost.isPlaybackCompleted
         } else {
-            playerView.isHidden = true
             downloadButton.isHidden = true
             playButton.isHidden = true
             durationLabel.isHidden = true
+            divider1Label.isHidden = true
             playedLabel.isHidden = true
+            divider2Label.isHidden = true
         }
         
         if let validDate = validPost.publishedAtDate {
@@ -331,24 +326,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             }
         } else {
             waitingRoomView.isHidden = true
-        }
-        
-        if UserDefaults.standard.isEpisodeProgressViewFeatureEnabled {
-            if let duration = validPost.recording?.duration, validPost.playbackOffset > 0, duration > 0, abs(duration - Int(validPost.playbackOffset)) > 5 {
-                let fullWidth = progressBgView.frame.size.width
-                let progressWidth = validPost.playbackOffset * fullWidth / Double(duration)
-                
-                if progressWidth > 0 {
-                    progressViewWidthConstraint.constant =  progressWidth < fullWidth ? progressWidth : 0
-                    progressView.isHidden = false
-                } else {
-                    progressView.isHidden = true
-                }
-            } else {
-                progressView.isHidden = true
-            }
-        } else {
-            progressView.isHidden = true
         }
     }
 
@@ -380,7 +357,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             color = .accent()
         }
 
-        tagView.isHidden = text.isEmpty
         tagLabel.isHidden = text.isEmpty
         tagLabel.text = text
         tagLabel.textColor = color
@@ -409,8 +385,12 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         return postsManager?.post?.hasRecording() ?? false
     }
     
-    fileprivate func hasSocialLinks() -> Bool {
-        return postsManager?.post?.socialLinks != nil
+    fileprivate func hasYouTubeSocialLink() -> Bool {
+        return postsManager?.post?.socialLinks != nil && postsManager?.post?.socialLinks?.hasYouTube() == true
+    }
+    
+    fileprivate func hasTranscript() -> Bool {
+        return postsManager?.post?.hasTranscript == true
     }
     
     fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
@@ -496,6 +476,11 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             UIApplication.topNavigationController()?.present(vc, animated: true)
         }
     }
+    
+    @IBAction func onYouTubeButton(_ sender: UIButton) {
+        guard let validUrl = links.first?.url else { return }
+        delegate?.postHeaderView(self, didSelectSocialLink: validUrl)
+    }
 }
 
 // MARK: - BHTabbedViewDelegate
@@ -527,14 +512,13 @@ extension BHPostHeaderView: BHHybridPlayerListener {
             }
         }
     }
-}
-
-// MARK: - BHSocialLinksViewDelegate
-
-extension BHPostHeaderView: BHSocialLinksViewDelegate {
-
-    func socialLinksView(_ view: BHSocialLinksView, didSelectLink url: URL?) {
-        guard let validUrl = url else { return }
-        delegate?.postHeaderView(self, didSelectSocialLink: validUrl)
+    
+    func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool) {
+        if let validPost = self.postsManager?.post, validPost.id == item.post.postId {
+            DispatchQueue.main.async {
+                self.postsManager?.post?.isPlaybackCompleted = completed
+                self.playedLabel.isHidden = !completed
+            }
+        }
     }
 }

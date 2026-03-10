@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +23,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ" customClass="BHHyperlinkLabel" customModule="BullhornSdk">
-                        <rect key="frame" x="16" y="0.0" width="358" height="104"/>
+                        <rect key="frame" x="16" y="16" width="358" height="88"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <string key="text">Label label label label label label Label label label label label label Label label label label label label Label label label label label label</string>
                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
@@ -34,7 +34,7 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="WY2-Cn-8EJ" secondAttribute="trailing" constant="16" id="44O-Mj-nU9"/>
-                    <constraint firstItem="WY2-Cn-8EJ" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" id="YuQ-OR-12S"/>
+                    <constraint firstItem="WY2-Cn-8EJ" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" constant="16" id="YuQ-OR-12S"/>
                     <constraint firstItem="WY2-Cn-8EJ" firstAttribute="leading" secondItem="rdJ-JM-pVC" secondAttribute="leading" constant="16" id="b5G-jX-e9r"/>
                     <constraint firstAttribute="bottom" secondItem="WY2-Cn-8EJ" secondAttribute="bottom" constant="16" id="wBJ-fM-79t"/>
                 </constraints>

@@ -375,7 +375,7 @@ class BHPostCollectionCell: UICollectionViewCell {
             optionsButton.isHidden = false
             transcriptButton.isHidden = true
             playButton.isHidden = false
-            durationLabel.text = duration.stringFormatted()
+            durationLabel.text = duration.prettyFormatted()
             durationLabel.isHidden = false
             playedLabel.isHidden = true
 //            bottomView.isHidden = true
@@ -385,7 +385,7 @@ class BHPostCollectionCell: UICollectionViewCell {
             optionsButton.isHidden = false
             transcriptButton.isHidden = !validPost.hasTranscript
             playButton.isHidden = false
-            durationLabel.text = duration.stringFormatted()
+            durationLabel.text = duration.prettyFormatted()
             durationLabel.isHidden = false
             playedLabel.isHidden = !validPost.isPlaybackCompleted
 //            bottomView.isHidden = false

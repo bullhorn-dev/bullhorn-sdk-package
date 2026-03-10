@@ -250,7 +250,6 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
         
         switch selectedTab {
         case .details:
-            headerView?.tabTitleLabel.alpha = 1
             tableView.restore()
             return 1
         case .transcript:
@@ -262,7 +261,6 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             } else {
                 tableView.restore()
             }
-            headerView?.tabTitleLabel.alpha = postsManager.transcriptSegments.count > 0 ? 1 : 0
 
             return postsManager.transcriptSegments.count
         }

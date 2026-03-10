@@ -569,14 +569,14 @@
             <objects>
                 <viewController storyboardIdentifier="BHUserDetailsViewController" title="User Details" id="bIr-LV-sBK" customClass="BHUserDetailsViewController" customModule="BullhornSdk" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VXZ-pS-Kzd">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Mem-fg-Z6d">
-                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="740"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="7Ug-Ge-1oP">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="680"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dataSource" destination="bIr-LV-sBK" id="yYQ-Rb-e7h"/>
@@ -584,7 +584,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KVy-WU-Zhy" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
+                                        <rect key="frame" x="0.0" y="680" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemMintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="JoH-Ce-Uk2"/>
@@ -600,7 +600,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z62-Mf-z45" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
+                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="1TR-E3-mRi"/>
@@ -613,7 +613,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VSj-V3-dTO">
-                                <rect key="frame" x="0.0" y="797" width="390" height="40"/>
+                                <rect key="frame" x="0.0" y="787" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Xnq-4Y-Mny"/>
@@ -2695,7 +2695,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="Dux-9E-9ph"/>
         <segue reference="W9h-Db-Gfg"/>
-        <segue reference="maU-b5-W5G"/>
+        <segue reference="2Ut-JK-cZ6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>

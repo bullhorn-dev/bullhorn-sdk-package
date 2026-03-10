@@ -22,7 +22,8 @@ public struct Constants {
     static let dividerHeight: CGFloat = 0.5
 
     static let userProfileIconSize: CGFloat = 100
-    
+    static let episodeProfileIconSize: CGFloat = 140
+
     static let postsCarouselHeight: CGFloat = 134
     static let usersCarouselHeight: CGFloat = 140
     static let pagedCarouselHeight: CGFloat = 144
