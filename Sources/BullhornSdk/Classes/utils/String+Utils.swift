@@ -70,3 +70,32 @@ extension String {
         return emailPred.evaluate(with: self)
     }
 }
+
+extension String {
+    
+    var integer: Int {
+        return Int(self) ?? 0
+    }
+    
+    var secondFromString : Int {
+        let components: Array = self.components(separatedBy: ":")
+        var hours: Int = 0
+        var minutes: Int = 0
+        var seconds: Int = 0
+        
+        if components.count > 3 { return 0 }
+        
+        if components.count == 3 {
+            hours = components[0].integer
+            minutes = components[1].integer
+            seconds = components[2].integer
+        } else if components.count == 2 {
+            minutes = components[0].integer
+            seconds = components[1].integer
+        } else {
+            seconds = components[0].integer
+        }
+        
+        return Int((hours * 60 * 60) + (minutes * 60) + seconds)
+    }
+}

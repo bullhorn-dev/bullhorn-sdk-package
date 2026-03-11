@@ -134,6 +134,6 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         imageView.sd_setImage(with: gifUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
         titleLabel.sizeToFit()
-        descriptionLabel.text = post?.description
+        descriptionLabel.text = post?.trimmedDescription
     }
 }

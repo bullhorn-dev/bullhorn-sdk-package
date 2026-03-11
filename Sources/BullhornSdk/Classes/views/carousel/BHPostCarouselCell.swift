@@ -156,7 +156,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         playButton.post = post
         imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
-        descriptionLabel.text = post?.description
+        descriptionLabel.text = post?.trimmedDescription
         
         setupAccessibility()
     }
@@ -177,7 +177,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         titleLabel.accessibilityLabel = post?.title
 
         descriptionLabel.isAccessibilityElement = true
-        descriptionLabel.accessibilityLabel = post?.description
+        descriptionLabel.accessibilityLabel = post?.trimmedDescription
 
         self.accessibilityElements = [contentView, playButton, titleLabel, descriptionLabel]
         self.isAccessibilityElement = false

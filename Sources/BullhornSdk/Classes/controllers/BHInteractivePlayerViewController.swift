@@ -356,7 +356,7 @@ extension BHInteractivePlayerViewController: UITableViewDataSource, UITableViewD
         switch selectedTab {
         case .details:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostDescriptionCell.reusableIndentifer, for: indexPath) as! BHPostDescriptionCell
-            cell.text = post?.description
+            cell.post = post
             return cell
         case .transcript:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostTranscriptCell.reusableIndentifer, for: indexPath) as! BHPostTranscriptCell

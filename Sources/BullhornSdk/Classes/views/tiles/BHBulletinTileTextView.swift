@@ -24,24 +24,6 @@ class BHBulletinTileTextView: BHBulletinTileBaseView {
     fileprivate func setup(with tapHandler: @escaping (URL) -> Void) {
         
         let attributedString = NSMutableAttributedString(string: tile.description ?? "")
-        let terms: [(URL, NSRange)] = tile.description?.extractURLs() ?? []
-        var termsDictionary: [String : (URL, NSRange)] = [:]
-        
-        for term in terms {
-            termsDictionary[term.0.absoluteString] = (url: term.0, range: term.1)
-        }
-
-        termsDictionary.enumerated().forEach { index, value in
-            let linkAttribute: NSAttributedString.Key = .hyperlink
-            let attributes: [NSAttributedString.Key: Any] = [
-                linkAttribute: value.1
-            ]
-            let urlAttributedString = NSAttributedString(string: value.0, attributes: attributes)
-            let range = value.1.1
-            if (range.location + range.length) < attributedString.length {
-                attributedString.replaceCharacters(in: range, with: urlAttributedString)
-            }
-        }
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center

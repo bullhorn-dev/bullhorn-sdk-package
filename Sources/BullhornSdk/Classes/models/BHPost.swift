@@ -130,6 +130,10 @@ struct BHPost: Codable {
     var profilePictureBig: URL?
     var profilePictureTiny: URL?
     var socialLinks: BHSocialLinks?
+    
+    var trimmedDescription: String? {
+        return description?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)

@@ -270,7 +270,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
         switch selectedTab {
         case .details:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostDescriptionCell.reusableIndentifer, for: indexPath) as! BHPostDescriptionCell
-            cell.text = postsManager.post?.description
+            cell.post = postsManager.post
             return cell
         case .transcript:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostTranscriptCell.reusableIndentifer, for: indexPath) as! BHPostTranscriptCell
