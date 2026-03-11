@@ -24,16 +24,16 @@ extension TimeInterval {
         let hours = (interval / 3600)
 
         if hours > 0 {
-            return String(format: "%02dh %02dmin", hours, minutes)
+            return String(format: "%02dh %02dm", hours, minutes)
         } else {
             if minutes > 10 {
-                return String(format: "%02dmin", minutes)
+                return String(format: "%02dm", minutes)
             } else {
                 return String(format: "%02d:%02d", minutes, seconds)
             }
         }
     }
-    
+
     func toMs() -> Double {
         return self * 1000
     }

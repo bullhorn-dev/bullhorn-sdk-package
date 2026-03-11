@@ -244,6 +244,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         youtubeButton.accessibilityValue = "external link"
         downloadButton.isAccessibilityElement = true
         downloadButton.context = "episode"
+        divider1Label.isAccessibilityElement = false
+        divider2Label.isAccessibilityElement = false
         
         if let dateText = dateLabel.text {
             dateLabel.accessibilityLabel = "Episode published: \(dateText)"
