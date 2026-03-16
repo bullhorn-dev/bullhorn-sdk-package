@@ -165,13 +165,14 @@ final class BHHyperlinkLabel: UILabel {
 
         // urls
 
+        let urlPattern = "(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/?)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))*(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\\'\".,<>?«»“”\\\\'\\s])*)"
+
         do {
-            let types: NSTextCheckingResult.CheckingType = [.link]
-            let detector = try NSDataDetector(types: types.rawValue)
-            detector.enumerateMatches(in: string, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: range, using: { (result, _, _) in
-                
-                if let term = result?.url, let range = result?.range {
-                    let tag = BHTag(term: term.absoluteString, range: range, type: .url)
+            let urlRegex = try NSRegularExpression(pattern: urlPattern, options: [])
+            urlRegex.enumerateMatches(in: string, range: range, using: { (result, _, _) in
+                if let range = result?.range, let r = Range(range) {
+                    let term = string.substring(with: r)
+                    let tag = BHTag(term: term, range: range, type: .url)
                     terms.append(tag)
                 }
             })
