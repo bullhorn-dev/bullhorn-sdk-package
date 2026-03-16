@@ -167,9 +167,9 @@ final class BHHyperlinkLabel: UILabel {
         var terms : [BHTag] = []
         let range = NSMakeRange(0, string.count)
 
-        // urls
+        /// urls
 
-        let urlPattern = "(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/?)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))*(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\\'\".,<>?«»“”\\\\'\\s])*)"
+        let urlPattern = "(https?:\\/\\/www\\.|https?:\\/\\/|www\\.)?[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-z]{2,}(\\/[\\w?=#@_-]+)*"
 
         do {
             let urlRegex = try NSRegularExpression(pattern: urlPattern, options: [])
@@ -183,6 +183,8 @@ final class BHHyperlinkLabel: UILabel {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
+        
+        /// timestamps
 
         let timestampPattern = #"\d{1,3}(:\d{2}){1,2}"#
         

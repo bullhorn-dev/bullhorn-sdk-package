@@ -134,7 +134,7 @@ struct BHPost: Codable {
     var trimmedDescription: String? {
         let compressedString = description?.replacingOccurrences(
             of: "\n{2,}",
-            with: "\n",
+            with: "\n\n",
             options: .regularExpression
         )
         return compressedString?.trimmingCharacters(in: .whitespacesAndNewlines)
