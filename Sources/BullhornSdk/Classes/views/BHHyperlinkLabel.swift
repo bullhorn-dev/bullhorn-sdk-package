@@ -102,13 +102,7 @@ final class BHHyperlinkLabel: UILabel {
 
         if let tag = self.getTag(at: tapLocation) {
             if tag.type == .url, let url = URL(string: tag.term) {
-                if UIApplication.shared.canOpenURL(url) {
-                    if url.scheme == "http" || url.scheme == "https" {
-                        didTapOnURL(url)
-                    } else {
-                        UIApplication.topViewController()?.presentSafari(url)
-                    }
-                }
+                didTapOnURL(url)
             } else if tag.type == .timestamp {
                 didTapOnTimestamp(tag.timestampValue())
             } else {
@@ -124,13 +118,22 @@ final class BHHyperlinkLabel: UILabel {
     }
 
     private func getTag(at location: CGPoint) -> BHTag? {
-        guard attributedText?.string is NSString else { return nil }
-        guard let textStorage = preparedTextStorage() else { return nil }
+        guard let attributedText = attributedText, attributedText.length > 0 else { return nil }
 
-        let layoutManager = textStorage.layoutManagers[0]
-        let textContainer = layoutManager.textContainers[0]
-        
-        let characterIndex = layoutManager.characterIndex(for: location, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        let textContainer = NSTextContainer(size: bounds.size)
+        let layoutManager = NSLayoutManager()
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+                
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = lineBreakMode
+        textContainer.maximumNumberOfLines = numberOfLines
+
+        let characterIndex = layoutManager.characterIndex(for: location,
+                                                          in: textContainer,
+                                                          fractionOfDistanceBetweenInsertionPoints: nil)
+
         guard characterIndex >= 0, characterIndex != NSNotFound else { return nil }
         
         for tag in tags {
@@ -145,16 +148,17 @@ final class BHHyperlinkLabel: UILabel {
     private func preparedTextStorage() -> NSTextStorage? {
         guard let attributedText = attributedText, attributedText.length > 0 else { return nil }
         
-        let layoutManager = NSLayoutManager()
+        let textStorage = NSTextStorage(attributedString: attributedText)
         let textContainer = NSTextContainer(size: bounds.size)
-        textContainer.lineFragmentPadding = 0
-        let textStorage = NSTextStorage(string: "")
+        let layoutManager = NSLayoutManager()
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
-        
+                
+        textContainer.lineFragmentPadding = 0.0
         textContainer.lineBreakMode = lineBreakMode
+        textContainer.maximumNumberOfLines = numberOfLines
+        
         textContainer.size = textRect(forBounds: bounds, limitedToNumberOfLines: numberOfLines).size
-        textStorage.setAttributedString(attributedText)
         
         return textStorage
     }

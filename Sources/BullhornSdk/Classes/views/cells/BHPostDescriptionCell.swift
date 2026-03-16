@@ -30,7 +30,7 @@ class BHPostDescriptionCell: UITableViewCell {
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
         
         label.textColor = .primary()
-        label.font = .secondaryText()
+        label.font = .fontWithName(.robotoRegular, size: 14)
         label.attributedText = attributedString
         label.didTapOnURL = urlHandler
         label.didTapOnTimestamp = timestampHandler

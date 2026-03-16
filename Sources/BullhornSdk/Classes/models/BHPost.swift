@@ -132,7 +132,12 @@ struct BHPost: Codable {
     var socialLinks: BHSocialLinks?
     
     var trimmedDescription: String? {
-        return description?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let compressedString = description?.replacingOccurrences(
+            of: "\n{2,}",
+            with: "\n",
+            options: .regularExpression
+        )
+        return compressedString?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     var isDownloaded: Bool {

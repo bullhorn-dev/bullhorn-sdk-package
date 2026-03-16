@@ -39,9 +39,15 @@ extension UIViewController {
         }
     }
 
-    func presentSafari(_ withUrl: URL, configureBlock: ((SFSafariViewController) -> Void)? = nil) {
+    func presentSafari(_ url: URL, configureBlock: ((SFSafariViewController) -> Void)? = nil) {
+        
+        var webUrl: URL = url
 
-        let safariVC = SFSafariViewController.init(url: withUrl)
+        if url.scheme != "http" && url.scheme != "https" {
+            webUrl = URL(string: "https://\(url.absoluteString)") ?? url
+        }
+        
+        let safariVC = SFSafariViewController.init(url: webUrl)
         safariVC.modalPresentationStyle = .overFullScreen
         safariVC.preferredControlTintColor = .playerOnDisplayBackground()
         safariVC.preferredBarTintColor = .defaultBlue()
