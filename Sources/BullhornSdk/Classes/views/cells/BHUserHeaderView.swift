@@ -29,7 +29,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var searchBarView: BHSearchBarView!
 
     fileprivate var isCollapsed: Bool = BHUserHeaderView.shouldCollapse()
-    fileprivate var numberOfLines: Int = 4
+    fileprivate var numberOfLines: Int = 5
     fileprivate var uncollapsedWidth: Int = 300
     
     weak var delegate: BHUserHeaderViewDelegate?
@@ -105,7 +105,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             let bio = bioLabel.attributedText?.string ?? ""
             let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
 
-            return 3 * spacing + userView.frame.size.height + heightForView(text: bio, font: bioLabel.font, width: bioWidth) + linksViewHeight + searchBarView.frame.size.height
+            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + searchBarView.frame.size.height
         }
     }
 
@@ -194,18 +194,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         return hasWebsite() || userManager?.user?.socialLinks?.isEmpty() != true
     }
 
-    fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
-
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-        label.numberOfLines = numberOfLines
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.font = font
-        label.text = text
-        label.sizeToFit()
-
-        return label.frame.height
-    }
-    
     fileprivate func updateCollapseButton() {
         if isCollapsed {
             collapseButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)

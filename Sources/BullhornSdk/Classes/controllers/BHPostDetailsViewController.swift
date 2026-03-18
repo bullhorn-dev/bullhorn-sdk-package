@@ -257,7 +257,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
                 let bundle = Bundle.module
                 let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 
-                tableView.setEmptyMessage("Transcript is not available", image: image, topOffset: (headerView?.calculateHeight() ?? 120) / 2)
+                tableView.setEmptyMessage("Transcript is not available", image: image, topOffset: 400)
             } else {
                 tableView.restore()
             }
@@ -296,7 +296,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if shouldShowHeader {
-            return headerView?.calculateHeight() ?? 120
+            return UITableView.automaticDimension
         } else {
             return 0
         }

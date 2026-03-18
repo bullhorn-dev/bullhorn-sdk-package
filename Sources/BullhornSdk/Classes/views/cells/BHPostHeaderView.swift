@@ -158,32 +158,8 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         reloadData()
     }
     
-    func calculateHeight() -> CGFloat {
-        let spacing: CGFloat = 12
-        var totalHeight: CGFloat = Constants.episodeProfileIconSize + 2 * Constants.paddingVertical
-        
-        totalHeight += heightForView(text: titleLabel.text ?? "", font: titleLabel.font, width: frame.size.width - 2 * Constants.paddingHorizontal) + spacing
-        totalHeight += userIcon.frame.size.height + spacing
-        totalHeight += durationLabel.frame.size.height + spacing
-        totalHeight += shareButton.frame.size.height + spacing
-
-        if hasRecording() {
-            totalHeight += playButton.frame.size.height + spacing
-        }
-
-        if hasWaitingRoom() {
-            totalHeight += waitingRoomView.frame.size.height + spacing
-        }
-        
-        if hasTranscript() {
-            totalHeight += tabbedView.frame.size.height + spacing
-        }
-        
-        return totalHeight
-    }
-    
     // MARK: Private
-    
+        
     fileprivate func initialize() {
         let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
@@ -393,18 +369,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     
     fileprivate func hasTranscript() -> Bool {
         return postsManager?.post?.hasTranscript == true
-    }
-    
-    fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
-
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.font = font
-        label.text = text
-        label.sizeToFit()
-
-        return label.frame.height
     }
     
     // MARK: - Actions

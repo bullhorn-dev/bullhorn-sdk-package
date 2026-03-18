@@ -13,4 +13,21 @@ extension UILabel {
             attributedText = attributedString
         }
     }
+
+    /// Calculates the required height for the label given its current text, font, width, and scaling properties.
+
+    func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = numberOfLines
+        label.lineBreakMode = lineBreakMode
+        label.font = font
+        label.text = text
+        label.attributedText = attributedText
+        label.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth
+        label.minimumScaleFactor = minimumScaleFactor
+
+        label.sizeToFit()
+
+        return ceil(label.frame.height)
+    }
 }

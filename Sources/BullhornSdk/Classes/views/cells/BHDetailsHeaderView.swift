@@ -122,7 +122,7 @@ class BHDetailsHeaderView: UITableViewHeaderFooterView {
         var totalHeight: CGFloat = 2 * Constants.paddingVertical
         
         totalHeight += userIcon.frame.size.height + spacing
-        totalHeight += heightForView(text: titleLabel.text ?? "", font: titleLabel.font, width: frame.size.width - 2 * Constants.paddingHorizontal) + spacing
+        totalHeight += titleLabel.requiredHeight(frame.size.width - 2 * Constants.paddingHorizontal) + spacing
 
         if hasRecording() {
             totalHeight += durationLabel.frame.size.height + spacing
@@ -150,19 +150,7 @@ class BHDetailsHeaderView: UITableViewHeaderFooterView {
     fileprivate func hasRecording() -> Bool {
         return post?.hasRecording() ?? false
     }
-    
-    fileprivate func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
-
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.font = font
-        label.text = text
-        label.sizeToFit()
-
-        return label.frame.height
-    }
-    
+        
     // MARK: - Actions
     
     @IBAction func onRingButton() {

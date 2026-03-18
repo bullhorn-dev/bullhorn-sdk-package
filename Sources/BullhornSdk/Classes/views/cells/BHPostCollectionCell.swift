@@ -60,7 +60,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         label.font = .secondaryText()
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondary()
-        label.numberOfLines = 4
+        label.numberOfLines = 0
         return label
     }()
     
@@ -224,7 +224,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         let vStackView = UIStackView(arrangedSubviews: [hTopStackView, descriptionLabel, hButtonsStackView, hBottomStackView])
         vStackView.axis = .vertical
         vStackView.alignment = .fill
-        vStackView.distribution = .equalSpacing
+        vStackView.distribution = .fill
         vStackView.spacing = 8
 
         shadowView.addSubview(vStackView)
@@ -244,7 +244,8 @@ class BHPostCollectionCell: UICollectionViewCell {
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            vStackView.centerYAnchor.constraint(equalTo: shadowView.centerYAnchor),
+            vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
+            vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical),
             vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
             vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
 

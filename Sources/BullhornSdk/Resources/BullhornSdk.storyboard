@@ -274,12 +274,12 @@
                                                         <rect key="frame" x="8" y="60" width="374" height="64"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="A3E-kP-cft">
-                                                                <rect key="frame" x="37" y="0.0" width="300" height="64"/>
+                                                                <rect key="frame" x="22" y="0.0" width="330" height="64"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gnm-pA-0ht">
-                                                                        <rect key="frame" x="0.0" y="12" width="44" height="40"/>
+                                                                        <rect key="frame" x="0.0" y="12" width="70" height="40"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="kBO-AW-WJo"/>
+                                                                            <constraint firstAttribute="width" constant="70" id="kBO-AW-WJo"/>
                                                                             <constraint firstAttribute="height" constant="40" id="slN-mN-NRW"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -292,7 +292,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v8Q-Hi-Ynj">
-                                                                        <rect key="frame" x="64.666666666666671" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="78" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="wNc-hs-ROx"/>
                                                                             <constraint firstAttribute="width" constant="44" id="xGv-AU-CXi"/>
@@ -307,7 +307,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sip-qC-siB" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                                                        <rect key="frame" x="112.66666666666666" y="10" width="44" height="44"/>
+                                                                        <rect key="frame" x="126" y="10" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="YbU-qF-iqO"/>
@@ -320,7 +320,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Of-Un-IUE">
-                                                                        <rect key="frame" x="127" y="6.3333333333333357" width="48" height="51.666666666666671"/>
+                                                                        <rect key="frame" x="141" y="6.3333333333333357" width="48" height="51.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="56" id="meK-a4-sZQ"/>
                                                                             <constraint firstAttribute="width" constant="48" id="xDs-s5-fpB"/>
@@ -336,7 +336,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lr3-8z-Pac">
-                                                                        <rect key="frame" x="193.66666666666666" y="8.6666666666666643" width="44" height="44.666666666666671"/>
+                                                                        <rect key="frame" x="208" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="44" id="0rD-Ld-jbP"/>
                                                                             <constraint firstAttribute="height" constant="44" id="jHI-bi-tkx"/>
@@ -352,9 +352,9 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Me-0y-yNY">
-                                                                        <rect key="frame" x="260" y="12" width="40" height="40"/>
+                                                                        <rect key="frame" x="260" y="12" width="70" height="40"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="40" id="6cA-b5-j2u"/>
+                                                                            <constraint firstAttribute="width" constant="70" id="6cA-b5-j2u"/>
                                                                             <constraint firstAttribute="height" constant="40" id="ubr-JV-hG3"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
