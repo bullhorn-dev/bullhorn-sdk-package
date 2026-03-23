@@ -84,12 +84,6 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
                 UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled = !value
                 self.configure()
                 self.tableView.reloadData()
-            })),
-            .toggleCell(model: SettingsToggleOption(title: "Episode's progress view", isActive: UserDefaults.standard.isEpisodeProgressViewFeatureEnabled, handler: {
-                let value = UserDefaults.standard.isEpisodeProgressViewFeatureEnabled
-                UserDefaults.standard.isEpisodeProgressViewFeatureEnabled = !value
-                self.configure()
-                self.tableView.reloadData()
             }))
         ]))
     }

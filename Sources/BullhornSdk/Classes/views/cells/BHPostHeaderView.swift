@@ -464,21 +464,7 @@ extension BHPostHeaderView: BHTabbedViewDelegate {
 extension BHPostHeaderView: BHHybridPlayerListener {
 
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
-    
-    func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {
-        if UserDefaults.standard.isEpisodeProgressViewFeatureEnabled {
-            guard let playerPost = player.post else { return }
-            guard let validPost = postsManager?.post else { return }
-            
-            if playerPost.id == validPost.id {
-                DispatchQueue.main.async {
-                    self.postsManager?.post?.updatePlaybackOffset(position, completed: false)
-                    self.reloadData()
-                }
-            }
-        }
-    }
-    
+        
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool) {
         if let validPost = self.postsManager?.post, validPost.id == item.post.postId {
             DispatchQueue.main.async {
