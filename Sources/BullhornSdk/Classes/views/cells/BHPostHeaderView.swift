@@ -25,7 +25,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var downloadButton: BHDownloadButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var youtubeButton: UIButton!
     @IBOutlet weak var waitingRoomView: UIView!
     @IBOutlet weak var waitingRoomLabel: UILabel!
     @IBOutlet weak var waitingRoomButton: BHWaitingRoomButton!
@@ -39,8 +38,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     var postsManager: BHPostsManager?
     
     fileprivate var selectedTab: BHPostTabs = .details
-
-    fileprivate var links: [BHSocialLinkItem] = []
 
     fileprivate var placeholderImage: UIImage?
 
@@ -63,7 +60,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         shareButton.layer.cornerRadius = shareButton.frame.size.height / 2
         likeButton.layer.cornerRadius = likeButton.frame.size.height / 2
         downloadButton.layer.cornerRadius = downloadButton.frame.size.height / 2
-        youtubeButton.layer.cornerRadius = youtubeButton.frame.size.height / 2
         userIcon.layer.cornerRadius = userIcon.frame.size.height / 2
     }
     
@@ -136,12 +132,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         shareButton.backgroundColor = .secondaryBackground()
         shareButton.configuration?.baseForegroundColor = .primary()
 
-        youtubeButton.setTitle("YouTube", for: .normal)
-        youtubeButton.backgroundColor = .secondaryBackground()
-        youtubeButton.configuration?.baseForegroundColor = .primary()
-        youtubeButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 14)
-        youtubeButton.setTitleColor(.primary(), for: .normal)
-
         downloadButton.backgroundColor = .secondaryBackground()
 
         tabbedView.currentlySelectedIndex = tab.rawValue
@@ -153,7 +143,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         tabbedView.isHidden = !hasTranscript()
         selectedTab = tab
         
-        setupSocialLinks()
         setupAccessibility()
         reloadData()
     }
@@ -165,42 +154,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         placeholderImage = UIImage(named: "ic_avatar_placeholder.png", in: bundle, with: nil)
         
         BHHybridPlayer.shared.addListener(self)
-    }
-
-    fileprivate func setupSocialLinks() {
-        
-        links.removeAll()
-
-        if let socialLinks = postsManager?.post?.socialLinks {
-            
-            if socialLinks.hasWebsite() {
-                links.append(socialLinks.websiteLink)
-            }
-
-            if socialLinks.hasFacebook() {
-                links.append(socialLinks.facebookLink)
-            }
-            
-            if socialLinks.hasInstagram() {
-                links.append(socialLinks.instagramLink)
-            }
-            
-            if socialLinks.hasTwitch() {
-                links.append(socialLinks.twitchLink)
-            }
-            
-            if socialLinks.hasTwitter() {
-                links.append(socialLinks.twitterLink)
-            }
-            
-            if socialLinks.hasYouTube() {
-                links.append(socialLinks.youtubeLink)
-            }
-            
-            if socialLinks.hasLinkedIn() {
-                links.append(socialLinks.linkedinLink)
-            }
-        }
     }
     
     fileprivate func setupAccessibility() {
@@ -214,10 +167,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         shareButton.isAccessibilityElement = true
         shareButton.accessibilityTraits = .button
         shareButton.accessibilityLabel = "Share episode"
-        youtubeButton.isAccessibilityElement = true
-        youtubeButton.accessibilityTraits = .button
-        youtubeButton.accessibilityLabel = "YouTube"
-        youtubeButton.accessibilityValue = "external link"
         downloadButton.isAccessibilityElement = true
         downloadButton.context = "episode"
         divider1Label.isAccessibilityElement = false
@@ -253,8 +202,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         }
         likeButton.setImage(image, for: .normal)
         shareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right")?.withConfiguration(mediumConfig), for: .normal)
-
-        youtubeButton.isHidden = !hasYouTubeSocialLink()
 
         if validPost.isLiveStream() {
             downloadButton.isHidden = true
@@ -362,11 +309,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
     fileprivate func hasRecording() -> Bool {
         return postsManager?.post?.hasRecording() ?? false
     }
-    
-    fileprivate func hasYouTubeSocialLink() -> Bool {
-        return postsManager?.post?.socialLinks != nil && postsManager?.post?.socialLinks?.hasYouTube() == true
-    }
-    
+        
     fileprivate func hasTranscript() -> Bool {
         return postsManager?.post?.hasTranscript == true
     }
@@ -441,11 +384,6 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             vc.panToDismissEnabled = true
             UIApplication.topNavigationController()?.present(vc, animated: true)
         }
-    }
-    
-    @IBAction func onYouTubeButton(_ sender: UIButton) {
-        guard let validUrl = links.first?.url else { return }
-        delegate?.postHeaderView(self, didSelectSocialLink: validUrl)
     }
 }
 

@@ -17,6 +17,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     @IBOutlet private(set) weak var transcriptButton: UIButton!
     @IBOutlet private(set) weak var transcriptView: UIView!
     @IBOutlet private(set) weak var transcriptTableView: UITableView!
+    @IBOutlet private(set) weak var youtubeButton: UIButton!
 
     // MARK: - Lifecycle
     
@@ -37,13 +38,20 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         playbackSpeedButton.setTitleColor(.primary(), for: .normal)
         sleepTimerButton.tintColor = .primary()
         bottomView.backgroundColor = .primaryBackground()
-        
+
         nameLabel.font = .primaryButton()
         titleLabel.font = .secondaryButton()
 
         transcriptView.isHidden = BHHybridPlayer.shared.isTranscriptActive
         transcriptButton.isHidden = post?.hasTranscript == false
-        
+
+        youtubeButton.setTitle("YouTube", for: .normal)
+        youtubeButton.backgroundColor = .clear
+        youtubeButton.configuration?.baseForegroundColor = .primary()
+        youtubeButton.titleLabel?.font = .fontWithName(.robotoRegular, size: 14)
+        youtubeButton.setTitleColor(.playerOnDisplayBackground(), for: .normal)
+        youtubeButton.isHidden = !hasYouTubeSocialLink()
+
         let bundle = Bundle.module
         let transcriptCellNib = UINib(nibName: "BHPlayerTranscriptCell", bundle: bundle)
         transcriptTableView.register(transcriptCellNib, forCellReuseIdentifier: BHPlayerTranscriptCell.reusableIndentifer)
@@ -58,6 +66,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         super.viewWillAppear(animated)
         
         updateTranscriptControls()
+        youtubeButton.isHidden = !hasYouTubeSocialLink()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -144,6 +153,15 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         sleepTimerButton.tintColor = sleepTimerEnabled ? .primary() : .secondary()
     }
     
+    override func setupAccessibility() {
+        super.setupAccessibility()
+        
+        youtubeButton.isAccessibilityElement = true
+        youtubeButton.accessibilityTraits = .button
+        youtubeButton.accessibilityLabel = "YouTube"
+        youtubeButton.accessibilityValue = "external link"
+    }
+    
     // MARK: - Actions
     
     @IBAction func onTranscriptButton() {
@@ -155,7 +173,14 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         let position = BHHybridPlayer.shared.mediaPlayer?.currentTime() ?? -1
         refreshTranscriptForPosition(position)
     }
-    
+
+    @IBAction func onYouTubeButton() {
+        guard let url = post?.socialLinks?.youtube else { return }
+
+        BHHybridPlayer.shared.pause()
+        openExternalLink(url)
+    }
+
     fileprivate func updateTranscriptControls() {
         let font = UIFont.fontWithName(.robotoRegular, size: 20)
         let mediumConfig = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .medium, scale: .medium)
@@ -174,6 +199,10 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         
         transcriptButton.setTitle("", for: .normal)
         transcriptButton.backgroundColor = .clear
+    }
+    
+    fileprivate func hasYouTubeSocialLink() -> Bool {
+        return post?.socialLinks != nil && post?.socialLinks?.hasYouTube() == true
     }
 }
 

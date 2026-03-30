@@ -334,7 +334,7 @@ extension BHUserDetailsViewController: BHUserHeaderViewDelegate {
     }
     
     func userHeaderViewOnLinkButtonPressed(_ view: BHUserHeaderView, websiteLink: URL) {
-        presentSafari(websiteLink)
+        openExternalLink(websiteLink)
     }
     
     func userHeaderViewOnShareButtonPressed(_ view: BHUserHeaderView, shareLink: URL) {

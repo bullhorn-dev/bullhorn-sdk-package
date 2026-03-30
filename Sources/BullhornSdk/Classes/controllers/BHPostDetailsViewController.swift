@@ -334,7 +334,7 @@ extension BHPostDetailsViewController: BHPostHeaderViewDelegate {
     }
     
     func postHeaderView(_ view: BHPostHeaderView, didSelectSocialLink link: URL) {
-        presentSafari(link)
+        openExternalLink(link)
     }
     
     func postHeaderView(_ view: BHPostHeaderView, didGetError message: String) {

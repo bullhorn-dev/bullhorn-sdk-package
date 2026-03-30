@@ -159,7 +159,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="xSH-N1-Hx6">
-                                <rect key="frame" x="74" y="401" width="264" height="36"/>
+                                <rect key="frame" x="140" y="401" width="132" height="36"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jtm-l3-N9J">
                                         <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
@@ -203,24 +203,6 @@
                                             <constraint firstAttribute="height" constant="36" id="3Zz-Ro-onW"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7f-Ai-GEF">
-                                        <rect key="frame" x="144" y="0.0" width="120" height="36"/>
-                                        <color key="backgroundColor" name="bhColorSecondaryBg"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="36" id="JTY-pO-G7a"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="iRx-SR-QY6"/>
-                                        </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" imagePlacement="leading" title="YouTube" imagePadding="2">
-                                            <imageReference key="image" image="play.square" catalog="system" symbolScale="medium"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="thin"/>
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
-                                            <color key="baseForegroundColor" name="bhColorPrimary"/>
-                                        </buttonConfiguration>
-                                        <connections>
-                                            <action selector="onYouTubeButton:" destination="wk1-wC-qQd" eventType="touchUpInside" id="krl-ut-KzR"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eji-UJ-jlI" customClass="BHTabbedView" customModule="BullhornSdk">
@@ -272,7 +254,6 @@
                 <outlet property="waitingRoomButton" destination="1NM-qL-qza" id="prO-Aa-RiJ"/>
                 <outlet property="waitingRoomLabel" destination="xGA-od-Up8" id="1OQ-Uk-sIQ"/>
                 <outlet property="waitingRoomView" destination="nm9-vv-jyC" id="xzO-kR-K4r"/>
-                <outlet property="youtubeButton" destination="f7f-Ai-GEF" id="A5B-Ke-K5v"/>
             </connections>
             <point key="canvasLocation" x="223.07692307692307" y="21.682464454976301"/>
         </tableViewCell>
@@ -282,7 +263,6 @@
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="ic_avatar_placeholder.png" width="368.6400146484375" height="368.6400146484375"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
-        <image name="play.square" catalog="system" width="128" height="114"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -63,6 +63,21 @@ extension UIViewController {
         }
     }
     
+    func openExternalLink(_ url: URL) {
+
+        if url.absoluteString.contains("youtube") {
+            let replaced = url.absoluteString.replacingOccurrences(of: "https", with: "youtube")
+
+            if let appURL = URL(string: replaced), UIApplication.shared.canOpenURL(appURL) {
+                UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+            } else {
+                presentSafari(url)
+            }
+        } else {
+            presentSafari(url)
+        }
+    }
+    
     func presentEmailDialog(withUrl url: URL) {
         UIApplication.shared.open(url)
     }

@@ -147,23 +147,49 @@
                                                         <color key="textColor" name="bhColorOnAccent"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tXr-nE-7pI">
-                                                        <rect key="frame" x="342" y="398" width="32" height="32"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="8gq-l3-gqu">
+                                                        <rect key="frame" x="250.66666666666666" y="398" width="123.33333333333334" height="32"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIj-ux-jrX">
+                                                                <rect key="frame" x="0.0" y="0.0" width="79.333333333333329" height="32"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="32" id="FOH-RS-Dvd"/>
+                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="32" id="wg9-LN-BaX"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2" maxY="0.0"/>
+                                                                <state key="normal" title="YouTube">
+                                                                    <color key="titleColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                    <imageReference key="image" image="play.square" catalog="system" symbolScale="large"/>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="thin"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="onYouTubeButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="Lhp-CN-jyH"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tXr-nE-7pI">
+                                                                <rect key="frame" x="91.333333333333343" y="0.0" width="32" height="32"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="32" id="5dx-BL-Xza"/>
+                                                                    <constraint firstAttribute="height" constant="32" id="S5S-QW-2bu"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal">
+                                                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <imageReference key="image" image="doc.plaintext" catalog="system" symbolScale="large"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="onTranscriptButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="kWl-A6-Wk3"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="32" id="5dx-BL-Xza"/>
-                                                            <constraint firstAttribute="height" constant="32" id="S5S-QW-2bu"/>
+                                                            <constraint firstAttribute="height" constant="32" id="Dt3-qm-fgl"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                        <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <state key="normal">
-                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <imageReference key="image" image="doc.plaintext" catalog="system" symbolScale="large"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="onTranscriptButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="kWl-A6-Wk3"/>
-                                                        </connections>
-                                                    </button>
+                                                    </stackView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJx-v5-55U">
                                                         <rect key="frame" x="16" y="398" width="32" height="32"/>
                                                         <constraints>
@@ -185,12 +211,12 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="N1S-Af-jgj" firstAttribute="width" secondItem="BVl-tE-9Zl" secondAttribute="width" id="1Vb-CH-mdi"/>
+                                                    <constraint firstAttribute="trailing" secondItem="8gq-l3-gqu" secondAttribute="trailing" constant="16" id="2Ad-Ii-xvd"/>
                                                     <constraint firstItem="rch-oU-K4o" firstAttribute="centerX" secondItem="BVl-tE-9Zl" secondAttribute="centerX" id="77e-fm-eAI"/>
-                                                    <constraint firstAttribute="trailing" secondItem="tXr-nE-7pI" secondAttribute="trailing" constant="16" id="7t7-bG-X9q"/>
+                                                    <constraint firstAttribute="bottom" secondItem="8gq-l3-gqu" secondAttribute="bottom" constant="12" id="8RR-ac-EvA"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="width" secondItem="BVl-tE-9Zl" secondAttribute="width" id="Epo-9S-AcV"/>
                                                     <constraint firstAttribute="bottom" secondItem="WJx-v5-55U" secondAttribute="bottom" constant="12" id="Hv1-ML-4XX"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="height" secondItem="BVl-tE-9Zl" secondAttribute="height" priority="999" id="KbQ-0r-Pq0"/>
-                                                    <constraint firstAttribute="bottom" secondItem="tXr-nE-7pI" secondAttribute="bottom" constant="12" id="LVf-7p-TVQ"/>
                                                     <constraint firstItem="WGY-KG-0b7" firstAttribute="centerY" secondItem="BVl-tE-9Zl" secondAttribute="centerY" constant="-22" id="QRl-uk-ped"/>
                                                     <constraint firstItem="N1S-Af-jgj" firstAttribute="centerY" secondItem="BVl-tE-9Zl" secondAttribute="centerY" constant="-22" id="VYt-pg-OAJ"/>
                                                     <constraint firstItem="R0K-2c-Tik" firstAttribute="leading" secondItem="BVl-tE-9Zl" secondAttribute="leading" constant="16" id="ZlC-SJ-j7n"/>
@@ -465,6 +491,7 @@
                         <outlet property="transcriptTableView" destination="uun-ZZ-EIu" id="Jce-ms-wkQ"/>
                         <outlet property="transcriptView" destination="N1S-Af-jgj" id="YSr-4J-b2K"/>
                         <outlet property="videoView" destination="WGY-KG-0b7" id="Eff-Hg-hka"/>
+                        <outlet property="youtubeButton" destination="CIj-ux-jrX" id="nTb-mo-hEV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbF-LS-b1K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2709,6 +2736,7 @@
         <image name="list.bullet.circle" catalog="system" width="128" height="123"/>
         <image name="person" catalog="system" width="128" height="121"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
+        <image name="play.square" catalog="system" width="128" height="114"/>
         <image name="timer" catalog="system" width="128" height="123"/>
         <namedColor name="bhColorAccent">
             <color red="0.73299998044967651" green="0.125" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
