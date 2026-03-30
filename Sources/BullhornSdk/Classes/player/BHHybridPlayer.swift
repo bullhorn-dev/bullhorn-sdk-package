@@ -458,6 +458,10 @@ class BHHybridPlayer {
 
         return false
     }
+    
+    func currentPosition() -> TimeInterval {
+        return mediaPlayer?.currentTime() ?? 0
+    }
 
     // MARK: - Settings
 

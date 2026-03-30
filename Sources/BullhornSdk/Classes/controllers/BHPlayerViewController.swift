@@ -175,10 +175,25 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     }
 
     @IBAction func onYouTubeButton() {
-        guard let url = post?.socialLinks?.youtube else { return }
+        
+        /// track stats
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .openYouTube, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+        BHTracker.shared.trackEvent(with: request)
+        
+        guard let urlString = post?.socialLinks?.youtube?.absoluteString else { return }
+        let position = BHHybridPlayer.shared.currentPosition()
+        var url: URL?
+        
+        if position > 0 {
+            url = URL(string: "\(urlString)&t=\(Int(position))")
+        } else {
+            url = URL(string: urlString)
+        }
 
-        BHHybridPlayer.shared.pause()
-        openExternalLink(url)
+        if let validUrl = url {
+            BHHybridPlayer.shared.pause()
+            openExternalLink(validUrl)
+        }
     }
 
     fileprivate func updateTranscriptControls() {
