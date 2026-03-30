@@ -22,7 +22,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     fileprivate var headerView: BHUserHeaderView?
     fileprivate var footerView: BHListFooterView?
 
-    fileprivate var userManager = BHUserManager.shared
+    fileprivate var userManager = BHUserManager()
 
     fileprivate var selectedPost: BHPost?
     fileprivate var selectedTab: BHPostTabs = .details
