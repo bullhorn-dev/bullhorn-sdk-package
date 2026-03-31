@@ -148,9 +148,9 @@ class BHPostsManager {
         }
     }
     
-    func getPlaybackQueuePosts(_ postId: String, count: Int = 20, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
+    func getPlaybackQueuePosts(_ postId: String, context: String?, count: Int = 20, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
 
-        apiPosts.getPlaybackQueue(authToken: authToken, postId: postId, count: count) { response in
+        apiPosts.getPlaybackQueue(authToken: authToken, postId: postId, context: context, count: count) { response in
             DispatchQueue.main.async {
                 switch response {
                 case .success(posts: _):

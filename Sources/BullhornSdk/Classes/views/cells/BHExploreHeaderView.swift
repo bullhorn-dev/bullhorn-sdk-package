@@ -80,6 +80,7 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         featuredUsersView.delegate = self
         featuredUsersView.context = "Featured podcast"
         featuredPostsView.delegate = self
+        featuredPostsView.context = "actual"
 
         recentUsersTitleLabel.textColor = .primary()
         recentUsersTitleLabel.font = .sectionTitle()

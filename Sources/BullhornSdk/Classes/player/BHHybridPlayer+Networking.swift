@@ -224,7 +224,7 @@ extension BHHybridPlayer {
         BHLog.p("\(#function)")
 
         if BHReachabilityManager.shared.isConnected() {
-            postsManager.getPlaybackQueuePosts(validPost.id) { response in
+            postsManager.getPlaybackQueuePosts(validPost.id, context: playerItem?.autoplayContext) { response in
                 switch response {
                 case .success(posts: let posts):
                     self.addPostsToQueue(posts)

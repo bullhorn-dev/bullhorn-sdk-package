@@ -18,6 +18,7 @@ class BHPlayButton: UIView {
     }
     
     var context: String = "Episode"
+    var autoplayContext: String?
     
     private let button: UIButton = {
         let button = UIButton(type: .system)
@@ -146,7 +147,7 @@ class BHPlayButton: UIView {
             }
         }
 
-        BHHybridPlayer.shared.playRequest(with: validPost, playlist: playlist)
+        BHHybridPlayer.shared.playRequest(with: validPost, playlist: playlist, autoplayContext: autoplayContext)
     }
 }
 

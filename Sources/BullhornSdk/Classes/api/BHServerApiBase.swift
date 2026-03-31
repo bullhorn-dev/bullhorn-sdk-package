@@ -260,12 +260,12 @@ class BHServerApiBase: NSObject {
         return "&filter[text]=" + validText
     }
     
-    func composeContext(text: String?) -> String {
+    func composeContext(text: String?, isFirstParam: Bool = true) -> String {
 
         guard let validText = text else { return "" }
         guard !validText.isEmpty else { return "" }
 
-        return "?&context=" + validText
+        return isFirstParam ? "?context=" + validText : "&context=" + validText
     }
     
     func composeNetworkId(text: String?) -> String {

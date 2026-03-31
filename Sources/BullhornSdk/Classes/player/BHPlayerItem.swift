@@ -79,6 +79,7 @@ public struct BHPlayerItem: Codable {
     var duration: Double
     var shouldPlay: Bool
     let isStream: Bool
+    let autoplayContext: String?
     
     func debugDescription() {
         BHLog.p("PlayerItem post: \(post.debugDescription()), position: \(position), duration: \(duration), shouldPlay: \(shouldPlay), isStream: \(isStream)")

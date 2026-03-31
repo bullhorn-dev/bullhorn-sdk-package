@@ -245,7 +245,7 @@ extension BHPlayableContentProvider {
             if fileUrl == nil && !BHReachabilityManager.shared.isConnected() {
                 presentAlert("Failed to play episode. The Internet connection is lost.")
             } else {
-                BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay)
+                BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay, autoplayContext: nil)
             }
         }
     }

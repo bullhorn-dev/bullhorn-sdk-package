@@ -22,6 +22,7 @@ class BHPostCarouselCell: UICollectionViewCell {
     }
     
     var context: String = "Episode"
+    var autoplayContext: String?
 
     fileprivate var placeholderImage: UIImage?
 
@@ -154,6 +155,7 @@ class BHPostCarouselCell: UICollectionViewCell {
 
     private func update() {
         playButton.post = post
+        playButton.autoplayContext = autoplayContext
         imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
         descriptionLabel.text = post?.trimmedDescription
