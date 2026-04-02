@@ -328,7 +328,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
                 
                 guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
-                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].category.name
+                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers.count > 1 ? BHNetworkManager.shared.splittedUsers[indexPath.section - 1].category.name : ""
                 
                 return usersHeaderView
             }
@@ -386,7 +386,7 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 return CGSize(width: view.frame.width, height: 0.0)
             }
         } else {
-            return CGSize(width: view.frame.width, height: Constants.panelHeight)
+            return BHNetworkManager.shared.splittedUsers.count > 1 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : CGSize(width: view.frame.width, height: Constants.paddingVertical / 2)
         }
     }
 }
