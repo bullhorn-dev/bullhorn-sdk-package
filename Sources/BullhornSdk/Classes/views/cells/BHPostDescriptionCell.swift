@@ -60,7 +60,7 @@ class BHPostDescriptionCell: UITableViewCell {
             if BHHybridPlayer.shared.isPostActive(validPost.id) {
                 BHHybridPlayer.shared.seek(to: Double(timestamp), resume: true)
             } else {
-                BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: "actual", position: Double(timestamp))
+                BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: BHAutoplayContext.actual.rawValue, position: Double(timestamp))
             }
         }
     }

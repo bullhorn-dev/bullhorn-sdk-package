@@ -270,6 +270,7 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
         let post = userManager.posts[indexPath.row]
         cell.post = post
         cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: userManager.posts, order: .reversed)
+        cell.autoplayContext = BHAutoplayContext.podcast.rawValue
         cell.shareBtnTapClosure = { [weak self] url in
             self?.presentShareDialog(with: [url], configureBlock: { controller in
                 controller.popoverPresentationController?.sourceView = cell.shareButton

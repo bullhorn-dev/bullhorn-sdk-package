@@ -99,7 +99,7 @@ extension BHHybridPlayer {
         if let playedPostId = UserDefaults.standard.playerPostId, playedPostId.count > 0 {
             if let playedItem = playbackQueue.first(where: { $0.id == playedPostId }) {
                 shouldPlayAutomatically = false
-                playRequest(with: playedItem.post, playlist: [], autoplayContext: "actual", position: playedItem.post.playbackOffset)
+                playRequest(with: playedItem.post, playlist: [], autoplayContext: BHAutoplayContext.actual.rawValue, position: playedItem.post.playbackOffset)
             }
         }
     }

@@ -102,7 +102,7 @@ class BHHomeHeaderView: UICollectionReusableView {
         featuredUsersView.delegate = self
         featuredUsersView.context = "Featured podcast"
         featuredPostsView.delegate = self
-        featuredPostsView.context = "actual"
+        featuredPostsView.context = BHAutoplayContext.actual.rawValue
         livePostsView.delegate = self
         scheduledPostsView.delegate = self
         channelsView.delegate = self

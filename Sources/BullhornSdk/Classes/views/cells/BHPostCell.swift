@@ -37,6 +37,7 @@ class BHPostCell: UITableViewCell {
     }
     
     var context: String = "Episode"
+    var autoplayContext: String?
     
     var shareBtnTapClosure: ((URL)->())?
     var likeBtnTapClosure: ((Bool)->())?
@@ -125,6 +126,7 @@ class BHPostCell: UITableViewCell {
     fileprivate func update() {
         
         playButton.post = post
+        playButton.autoplayContext = autoplayContext
         downloadButton.post = post
         waitingRoomButton.post = post
         
