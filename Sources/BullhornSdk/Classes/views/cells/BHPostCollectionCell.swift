@@ -20,6 +20,7 @@ class BHPostCollectionCell: UICollectionViewCell {
     }
     
     var context: String = "Episode"
+    var autoplayContext: String?
 
     fileprivate var placeholderImage: UIImage?
 
@@ -286,6 +287,7 @@ class BHPostCollectionCell: UICollectionViewCell {
     fileprivate func update() {
         
         playButton.post = post
+        playButton.autoplayContext = autoplayContext
         downloadButton.post = post
         
         titleLabel.text = post?.title

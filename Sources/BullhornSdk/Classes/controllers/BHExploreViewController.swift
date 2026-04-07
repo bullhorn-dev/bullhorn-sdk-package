@@ -378,6 +378,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             let post = exploreManager.posts[indexPath.row]
             cell.post = post
             cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: exploreManager.posts, order: .straight)
+            cell.autoplayContext = BHAutoplayContext.search.rawValue
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
                     controller.popoverPresentationController?.sourceView = cell.shareButton
