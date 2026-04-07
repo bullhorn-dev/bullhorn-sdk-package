@@ -339,6 +339,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             switch response {
             case .success(user: let user):
                 DispatchQueue.main.async {
+                    BHUserManager.shared.updateFollowedUser(user)
                     self.userManager?.updateFollowedUser(user)
                     self.reloadData()
                     self.delegate?.userHeaderViewOnFollowButtonPressed(self, user: user)
@@ -364,6 +365,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             switch response {
             case .success(user: let user):
                 DispatchQueue.main.async {
+                    BHUserManager.shared.updateFollowedUser(user)
                     self.userManager?.updateFollowedUser(user)
                     self.reloadData()
                     self.delegate?.userHeaderViewOnFollowButtonPressed(self, user: user)
