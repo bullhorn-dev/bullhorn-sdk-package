@@ -47,7 +47,7 @@ class BHPlayerContainingViewController: UIViewController {
         guard let post = BHHybridPlayer.shared.post else {
             return false
         }
-        return post.isInteractive()
+        return post.hasTiles() || post.hasVideo()
     }
     
     private func isLiveInteractive() -> Bool {
