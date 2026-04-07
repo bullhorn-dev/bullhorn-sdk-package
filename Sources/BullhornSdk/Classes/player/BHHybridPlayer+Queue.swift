@@ -8,6 +8,7 @@ extension BHHybridPlayer {
     enum BHQueueOrder: Int {
         case straight
         case reversed
+        case straightAndReversed
     }
     
     // MARK: - Public
@@ -114,6 +115,14 @@ extension BHHybridPlayer {
         case .reversed:
             let itemsBeforeIndexSlice = unsorted.prefix(activeIndex)
             return Array(itemsBeforeIndexSlice).reversed()
+        case .straightAndReversed:
+            let itemsBeforeIndexSlice = unsorted.prefix(activeIndex)
+            let reversed: [BHPost] = Array(itemsBeforeIndexSlice).reversed()
+            if reversed.count > 0 {
+                return reversed
+            } else {
+                return Array(unsorted[activeIndex...])
+            }
         }
     }
     
