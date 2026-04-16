@@ -1,14 +1,14 @@
 import Foundation
 import CoreData
 
-@objc(UserCategoryMO)
-public class UserCategoryMO: NSManagedObject {
+@objc(CategoryMO)
+public class CategoryMO: NSManagedObject {
     
-    static let entityName = "UserCategory"
+    static let entityName = "Category"
     
     // MARK: - Public
     
-    func toUserCategory() -> BHCategory? {
+    func toCategory() -> BHCategory? {
 
         guard let validId = id else { return nil }
         

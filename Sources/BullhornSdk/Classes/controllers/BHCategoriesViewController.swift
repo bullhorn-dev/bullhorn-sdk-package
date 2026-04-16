@@ -90,12 +90,28 @@ class BHCategoriesViewController: BHPlayerContainingViewController, ActivityIndi
             self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
         }
+        
+        let networkId = BHAppConfiguration.shared.networkId
 
         if initial {
             self.defaultShowActivityIndicatorView()
+            
+            BHCategoriesManager.shared.fetchStorageCategories(networkId) { response in
+                switch response {
+                case .success:
+                    completeBlock()
+                    if BHCategoriesManager.shared.categories.count > 0 {
+                        self.defaultHideActivityIndicatorView()
+                    }
+                case .failure(error: let error):
+                    let message = "Failed to fetch categories from storage. \(error.localizedDescription)"
+                    BHLog.w(message)
+                    self.showError(message)
+                }
+            }
         }
 
-        BHCategoriesManager.shared.getCategories(BHAppConfiguration.shared.networkId) { response in
+        BHCategoriesManager.shared.getCategories(networkId) { response in
             switch response {
             case .success:
                 break

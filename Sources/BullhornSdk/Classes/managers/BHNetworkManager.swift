@@ -478,7 +478,7 @@ class BHNetworkManager {
     // MARK: - Storage Providers
     
     fileprivate func fetchStorageChannels(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchNetworkChannels(with: networkId) { response in
+        DataBaseManager.shared.fetchChannels(with: networkId) { response in
             switch response {
             case .success(channels: let channels):
                 self.channels = channels

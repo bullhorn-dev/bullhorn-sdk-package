@@ -75,10 +75,10 @@ class DataBaseManager {
     
     // MARK: - Network Channels
 
-    func fetchNetworkChannels(with id: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
+    func fetchChannels(with id: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
         
         do {
-            let channelsMO = try dataStack.fetch(id, inEntityNamed: NetworkChannelsMO.entityName) as? NetworkChannelsMO
+            let channelsMO = try dataStack.fetch(id, inEntityNamed: ChannelsMO.entityName) as? ChannelsMO
             if let channels = channelsMO?.toChannels() {
                 completion(.success(channels: channels))
             } else {
@@ -90,10 +90,10 @@ class DataBaseManager {
         }
     }
     
-    func insertOrUpdateNetworkChannels(with params: [String : Any]) -> Bool {
+    func insertOrUpdateChannels(with params: [String : Any]) -> Bool {
 
         do {
-            try dataStack.insertOrUpdate(params, inEntityNamed: NetworkChannelsMO.entityName)
+            try dataStack.insertOrUpdate(params, inEntityNamed: ChannelsMO.entityName)
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
@@ -101,10 +101,10 @@ class DataBaseManager {
         }
     }
 
-    func updateNetworkChannels(with id: String, params: [String : Any]) -> Bool {
+    func updateChannels(with id: String, params: [String : Any]) -> Bool {
 
         do {
-            try dataStack.update(id, with: params, inEntityNamed: NetworkChannelsMO.entityName)
+            try dataStack.update(id, with: params, inEntityNamed: ChannelsMO.entityName)
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")
@@ -658,6 +658,45 @@ class DataBaseManager {
 
         do {
             try dataStack.update(id, with: params, inEntityNamed: FollowedUsersMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+    
+    // MARK: - Categories
+
+    func fetchCategories(with id: String, completion: @escaping (BHServerApiCategories.CategoriesResult) -> Void) {
+        
+        do {
+            let categoriesMO = try dataStack.fetch(id, inEntityNamed: CategoriesMO.entityName) as? CategoriesMO
+            if let categories = categoriesMO?.toCategories() {
+                completion(.success(categories: categories))
+            } else {
+                completion(.success(categories: []))
+            }
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            completion(.success(categories: []))
+        }
+    }
+    
+    func insertOrUpdateCategories(with params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.insertOrUpdate(params, inEntityNamed: CategoriesMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+
+    func updateCategories(with id: String, params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.update(id, with: params, inEntityNamed: CategoriesMO.entityName)
             return true
         } catch {
             BHLog.w("\(#function) - \(error)")

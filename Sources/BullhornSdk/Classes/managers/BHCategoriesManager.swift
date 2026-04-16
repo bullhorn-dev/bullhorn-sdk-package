@@ -191,9 +191,9 @@ class BHCategoriesManager {
     }
     
     // MARK: - Storage Providers
-    /*
-    fileprivate func fetchStorageCategories(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchCategories(with: categoryId) { response in
+    
+    func fetchStorageCategories(_ networkId: String, completion: @escaping (CommonResult) -> Void) {
+        DataBaseManager.shared.fetchCategories(with: networkId) { response in
             switch response {
             case .success(categories: let categories):
                 self.categories = categories
@@ -203,7 +203,7 @@ class BHCategoriesManager {
             }
         }
     }
-
+/*
     fileprivate func fetchStorageCategoryPodcasts(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
         DataBaseManager.shared.fetchCategoryUsers(with: categoryId) { response in
             switch response {

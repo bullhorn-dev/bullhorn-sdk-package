@@ -49,9 +49,9 @@ class BHServerApiCategories: BHServerApiBase {
                             "categories": categories ?? []
                           ]
                           
-//                          if !DataBaseManager.shared.insertOrUpdateNetworkChannels(with: params) {
-//                              BHLog.w("Failed to save network channels")
-//                          }
+                          if !DataBaseManager.shared.insertOrUpdateCategories(with: params) {
+                              BHLog.w("Failed to save categories")
+                          }
 
                           completion(.success(categories: c.categories))
                       } catch let error {
