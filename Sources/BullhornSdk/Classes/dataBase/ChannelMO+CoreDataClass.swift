@@ -14,13 +14,13 @@ public class ChannelMO: NSManagedObject {
         guard let validName = name else { return nil }
         guard let validTitle = title else { return nil }
         
-        var c: [BHUserCategory] = []
+        var c: [BHCategory] = []
 
         if let validCategories = categories {
             let categoriesMO = NSKeyedUnarchiver.unarchiveObject(with: validCategories) as? [[String:Any]]
             
             categoriesMO?.forEach({ item in
-                if let category = BHUserCategory.fromDictionary(item) {
+                if let category = BHCategory.fromDictionary(item) {
                     c.append(category)
                 }
             })

@@ -17,7 +17,6 @@ class BHFeedManager {
     fileprivate var feedActual: [BHPost]?
     fileprivate var continueListening: [BHPost]?
     fileprivate var likedPosts: [BHPost]?
-    fileprivate var recentCategoryPosts: [BHPost]?
 
     var feedPosts: [BHPost] {
         return feed ?? []
@@ -49,24 +48,6 @@ class BHFeedManager {
         return min(page + 1, pages)
     }
     
-    /// Category posts
-    
-    var categoryPosts: [BHPost] {
-        return recentCategoryPosts ?? []
-    }
-    
-    var hasMoreCategoryPosts: Bool {
-        return categoryPostsPage < categoryPostsPages
-    }
-    
-    fileprivate var categoryPostsPage: Int = 0
-    fileprivate var categoryPostsPages: Int = 0
-    fileprivate var categoryPostsSearchText: String = ""
-     
-    fileprivate var categoryPostsNextPage: Int {
-        return min(categoryPostsPage + 1, categoryPostsPages)
-    }
-
     ///
 
     fileprivate var userId: String {
@@ -104,42 +85,7 @@ class BHFeedManager {
             }
         }
     }
-    
-    func removeCategoryRecentPosts() {
-        recentCategoryPosts?.removeAll()
-        categoryPostsPage = 0
-        categoryPostsPages = 0
-        categoryPostsSearchText = ""
-    }
-    
-    func getCategoryPosts(categoryId: Int, text: String?, completion: @escaping (BHServerApiFeed.PaginatedPostsResult) -> Void) {
-
-        if let validText = text, validText != categoryPostsSearchText {
-            categoryPostsPage = 0
-            categoryPostsPages = 0
-        }
-        
-        categoryPostsSearchText = text ?? ""
-
-        server.getCategoryPosts(authToken: authToken, networkId: BHAppConfiguration.shared.networkId, categoryId: categoryId, text: categoryPostsSearchText, page: categoryPostsNextPage) { response in
-            DispatchQueue.main.async {
-                switch response {
-                case .success(posts: let posts, page: let page, pages: let pages):
-                    if page > 1 {
-                        self.recentCategoryPosts?.append(contentsOf: posts)
-                    } else {
-                        self.recentCategoryPosts = posts
-                    }
-                    self.categoryPostsPage = page
-                    self.categoryPostsPages = pages
-                case .failure(error: let error):
-                    BHLog.w("Category recent posts load failed \(error.localizedDescription)")
-                }
-                completion(response)
-            }
-        }
-    }
-    
+            
     func getContinueListening(completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
 
         server.getContinueListening(authToken: authToken) { response in

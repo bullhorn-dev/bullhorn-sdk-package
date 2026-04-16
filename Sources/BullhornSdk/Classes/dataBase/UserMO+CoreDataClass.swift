@@ -32,7 +32,7 @@ public class UserMO: NSManagedObject {
         user.newEpisodesCount = newEpisodesCount?.intValue
 
         var cnls: [BHChannel] = []
-        var ctgrs: [BHUserCategory] = []
+        var ctgrs: [BHCategory] = []
         var links: BHSocialLinks?
 
         if let validChannels = channels {
@@ -47,7 +47,7 @@ public class UserMO: NSManagedObject {
         if let validCategories = categories {
             let categoriesMO = NSKeyedUnarchiver.unarchiveObject(with: validCategories) as? [[String:Any]]
             categoriesMO?.forEach({ item in
-                if let category = BHUserCategory.fromDictionary(item) {
+                if let category = BHCategory.fromDictionary(item) {
                     ctgrs.append(category)
                 }
             })

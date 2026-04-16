@@ -8,7 +8,7 @@ protocol BHNetworkManagerListener: ObserverProtocol {
 }
 
 struct UICategoryModel {
-    let category: BHUserCategory
+    let category: BHCategory
     let users: [BHUser]
 }
 

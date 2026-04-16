@@ -123,34 +123,4 @@ class BHServerApiFeed: BHServerApiBase {
                 })
         }
     }
-    
-    func getCategoryPosts(authToken: String?, networkId: String, categoryId: Int, text: String?, pageSize: Int = 20, page: Int?, _ completion: @escaping (PaginatedPostsResult) -> Void) {
-
-        updateConfig { (configError: ServerApiError?) in
-            if let error = configError {
-                completion(.failure(error: error))
-                return
-            }
-
-            let path = "categories/\(categoryId)/recent_episodes" + self.composePageFilter(page: page) +  self.composeTextFilter(text: text) + self.composePerPageFilter(perPage: pageSize) + self.composeNetworkId(text: networkId)
-            let fullPath = self.composeFullApiURL(with: path)
-            let headers = self.composeHeaders(authToken)
-            
-            AF.request(fullPath, method: .get, headers: headers)
-                .validate()
-                .responseJSONAPI(completionHandler: { (response) in
-                    switch response.result {
-                    case .success(let data):
-                        do {
-                            let pp = try JSONDecoder().decode(PaginatedPosts.self, from: JSONSerialization.data(withJSONObject: data))
-                            completion(.success(posts: pp.posts, page: pp.meta.page, pages: pp.meta.pages))
-                        } catch let error {
-                            completion(.failure(error: error))
-                        }
-                    case .failure(let error):
-                        completion(.failure(error: error))
-                    }
-                })
-        }
-    }
 }

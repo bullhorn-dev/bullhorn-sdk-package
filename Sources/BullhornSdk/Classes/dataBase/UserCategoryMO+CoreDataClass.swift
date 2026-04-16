@@ -8,11 +8,11 @@ public class UserCategoryMO: NSManagedObject {
     
     // MARK: - Public
     
-    func toUserCategory() -> BHUserCategory? {
+    func toUserCategory() -> BHCategory? {
 
         guard let validId = id else { return nil }
         
-        var userCategory = BHUserCategory(id: validId.intValue)
+        var userCategory = BHCategory(id: validId.intValue)
         
 //        userCategory.icon = URL(string: icon ?? "")
         userCategory.alias = alias

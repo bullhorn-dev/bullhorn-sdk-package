@@ -1,8 +1,8 @@
 import Foundation
 
-// MARK: - User Category
+// MARK: - Category
 
-struct BHUserCategory: Codable, Hashable {
+struct BHCategory: Codable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -36,12 +36,12 @@ struct BHUserCategory: Codable, Hashable {
         hasher.combine(id)
     }
     
-    static func fromDictionary(_ params: [String: Any]) -> BHUserCategory? {
+    static func fromDictionary(_ params: [String: Any]) -> BHCategory? {
         guard let validId = params[CodingKeys.id.rawValue] as? Int else { return nil }
         guard let validAlias = params[CodingKeys.alias.rawValue] as? String else { return nil }
         guard let validName = params[CodingKeys.name.rawValue] as? String else { return nil }
         guard let validLink = params[CodingKeys.shareLink.rawValue] as? String else { return nil }
         
-        return BHUserCategory(id: validId, alias: validAlias, shareLink: URL(string: validLink), name: validName)
+        return BHCategory(id: validId, alias: validAlias, shareLink: URL(string: validLink), name: validName)
     }
 }
