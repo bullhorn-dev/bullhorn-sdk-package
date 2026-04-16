@@ -71,7 +71,7 @@ class BHNetworkManager {
                     }
                 })
             } else {
-                if selectedChannel.groupPodcastsByCategories {
+                if selectedChannel.groupPodcastsByCategories == true {
                     selectedChannel.categories?.forEach({ category in
                         let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
                         if cusers.count > 0 {

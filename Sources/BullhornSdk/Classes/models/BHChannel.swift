@@ -17,7 +17,7 @@ struct BHChannel: Codable, Hashable {
     let name: String
     let title: String
     let categories: [BHUserCategory]?
-    let groupPodcastsByCategories: Bool
+    let groupPodcastsByCategories: Bool?
     
     func isMain() -> Bool { return id == BHChannel.mainChannelId }
     
