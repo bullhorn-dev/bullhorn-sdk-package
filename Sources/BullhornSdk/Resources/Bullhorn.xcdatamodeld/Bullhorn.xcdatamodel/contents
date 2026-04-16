@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25D125" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25D2128" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Channel" representedClassName="ChannelMO" syncable="YES">
         <attribute name="categories" optional="YES" attributeType="Binary">
             <userInfo>
                 <entry key="hyper.remoteKey" value="categories"/>
+            </userInfo>
+        </attribute>
+        <attribute name="groupPodcastsByCategories" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="group_podcasts_by_categories"/>
             </userInfo>
         </attribute>
         <attribute name="id" optional="YES" attributeType="String">

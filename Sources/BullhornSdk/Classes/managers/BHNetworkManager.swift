@@ -65,19 +65,29 @@ class BHNetworkManager {
             if selectedChannel.isMain() {
                 selectedChannel.categories?.forEach({ category in
                     let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
-                    if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
+                    if cusers.count > 0 {
                         let uimodel = UICategoryModel(category: category, users: cusers)
                         splittedUsers.append(uimodel)
                     }
                 })
             } else {
-                selectedChannel.categories?.forEach({ category in
-                    let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
-                    if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
-                        let uimodel = UICategoryModel(category: category, users: cusers)
-                        splittedUsers.append(uimodel)
+                if selectedChannel.groupPodcastsByCategories {
+                    selectedChannel.categories?.forEach({ category in
+                        let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
+                        if cusers.count > 0 {
+                            let uimodel = UICategoryModel(category: category, users: cusers)
+                            splittedUsers.append(uimodel)
+                        }
+                    })
+                } else {
+                    if let category = selectedChannel.categories?.first {
+                        let cusers = users.filter({ $0.belongsChannel(channelId) })
+                        if cusers.count > 0 {
+                            let uimodel = UICategoryModel(category: category, users: cusers)
+                            splittedUsers.append(uimodel)
+                        }
                     }
-                })
+                }
             }
         }
     }
@@ -93,7 +103,7 @@ class BHNetworkManager {
         if let selectedChannel = channels.first(where: { $0.id == BHChannel.mainChannelId }) {
             selectedChannel.categories?.forEach({ category in
                 let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
-                if let validName = category.name, let validAlias = category.alias, cusers.count > 0 {
+                if cusers.count > 0 {
                     let uimodel = UICategoryModel(category: category, users: cusers)
                     carPlaySplittedUsers.append(uimodel)
                 }

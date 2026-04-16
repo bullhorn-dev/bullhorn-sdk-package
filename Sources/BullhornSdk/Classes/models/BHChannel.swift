@@ -10,12 +10,14 @@ struct BHChannel: Codable, Hashable {
         case name
         case title
         case categories
+        case groupPodcastsByCategories = "group_podcasts_by_categories"
     }
 
     let id: String
     let name: String
     let title: String
     let categories: [BHUserCategory]?
+    let groupPodcastsByCategories: Bool
     
     func isMain() -> Bool { return id == BHChannel.mainChannelId }
     
@@ -31,6 +33,7 @@ struct BHChannel: Codable, Hashable {
         guard let validId = params[CodingKeys.id.rawValue] as? String else { return nil }
         guard let validName = params[CodingKeys.name.rawValue] as? String else { return nil }
         guard let validTitle = params[CodingKeys.title.rawValue] as? String else { return nil }
+        let groupPodcastsByCategories = params[CodingKeys.groupPodcastsByCategories.rawValue] as? Bool ?? false
         
         var validCategories: [BHUserCategory] = []
 
@@ -42,6 +45,6 @@ struct BHChannel: Codable, Hashable {
             })
         }
 
-        return BHChannel(id: validId, name: validName, title: validTitle, categories: validCategories)
+        return BHChannel(id: validId, name: validName, title: validTitle, categories: validCategories, groupPodcastsByCategories: groupPodcastsByCategories)
     }
 }

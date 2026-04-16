@@ -26,7 +26,7 @@ public class ChannelMO: NSManagedObject {
             })
         }
 
-        return BHChannel(id: validId, name: validName, title: validTitle, categories: c)
+        return BHChannel(id: validId, name: validName, title: validTitle, categories: c, groupPodcastsByCategories: groupPodcastsByCategories)
     }
 }
 

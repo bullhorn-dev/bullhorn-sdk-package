@@ -11,5 +11,6 @@ extension ChannelMO {
     @NSManaged public var name: String?
     @NSManaged public var title: String?
     @NSManaged public var categories: Data?
+    @NSManaged public var groupPodcastsByCategories: Bool
 }
 
