@@ -203,8 +203,8 @@ class BHCategoriesManager {
             }
         }
     }
-/*
-    fileprivate func fetchStorageCategoryPodcasts(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
+
+    func fetchStorageCategoryPodcasts(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
         DataBaseManager.shared.fetchCategoryUsers(with: categoryId) { response in
             switch response {
             case .success(users: let users):
@@ -215,60 +215,5 @@ class BHCategoriesManager {
             }
         }
     }
-
-    fileprivate func fetchStorageCategoryEpisodes(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
-        DataBaseManager.shared.fetchCategoryPosts(with: categoryId) { response in
-            switch response {
-            case .success(posts: let posts, page: let page, pages: let pages):
-                if page > 1 {
-                    self.posts += posts
-                } else {
-                    self.posts = posts
-                }
-                self.postsPage = page
-                self.postsPages = pages
-                completion(.success)
-            case .failure(error: let error):
-                completion(.failure(error: error))
-            }
-        }
-    }
-            
-    func fetchStorageCategory(_ categoryId: Int, completion: @escaping (CommonResult) -> Void) {
-        
-        let fetchGroup = DispatchGroup()
-        var responseError: Error?
-        
-        fetchGroup.enter()
-
-        fetchStorageCategoryPodcasts(categoryId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-
-        fetchGroup.enter()
-
-        fetchStorageCategoryEpisodes(categoryId) { response in
-            switch response {
-            case .success: break
-            case .failure(error: let error):
-                responseError = error
-            }
-            fetchGroup.leave()
-        }
-        
-        fetchGroup.notify(queue: .main) {
-            if let error = responseError {
-                completion(.failure(error: error))
-            } else {
-                completion(.success)
-            }
-        }
-    }
-     */
 }
 

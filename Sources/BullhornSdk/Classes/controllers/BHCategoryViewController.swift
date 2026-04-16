@@ -19,6 +19,9 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     fileprivate var selectedPost: BHPost?
     
     var category: BHCategory?
+    
+    fileprivate let manager = BHCategoriesManager.shared
+    fileprivate var showDots = false
 
     // MARK: - Lifecycle
     
@@ -117,10 +120,24 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         
         if initial {
             self.defaultShowActivityIndicatorView()
-            BHCategoriesManager.shared.removeCategoryData()
+            manager.removeCategoryData()
+            
+            manager.fetchStorageCategoryPodcasts(categoryId) { response in
+                switch response {
+                case .success:
+                    if self.manager.users.count > 0 {
+                        self.showDots = true
+                        completeBlock()
+                    }
+                case .failure(error: let error):
+                    let message = "Failed to fetch category podcasts from storage. \(error.localizedDescription)"
+                    BHLog.w(message)
+                    self.showError(message)
+                }
+            }
         }
             
-        BHCategoriesManager.shared.fetch(BHAppConfiguration.shared.networkId, categoryId: categoryId) { response in
+        manager.fetch(BHAppConfiguration.shared.networkId, categoryId: categoryId) { response in
             switch response {
             case .success: break
             case .failure(error: let error):
@@ -129,6 +146,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
                     BHLog.w(message)
                     self.showError(message)
                 } else {
+                    self.showDots = false
                     self.showConnectionError()
                 }
             }
@@ -139,7 +157,9 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     fileprivate func fetchPosts() {
         guard let categoryId = category?.id else { return }
 
-        BHCategoriesManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
+        showDots = false
+
+        manager.getCategoryPosts(categoryId: categoryId, text: nil) { response in
             switch response {
             case .success:
                 self.collectionView.reloadData()
@@ -207,7 +227,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
 extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if BHCategoriesManager.shared.users.count == 0 && BHCategoriesManager.shared.posts.count == 0 {
+        if manager.users.count == 0 && manager.posts.count == 0 {
             if !activityIndicator.isAnimating {
                 let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
@@ -222,9 +242,9 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
-            return BHCategoriesManager.shared.users.count
+            return manager.users.count
         } else if section == 1 {
-            return BHCategoriesManager.shared.posts.count
+            return manager.posts.count
         } else {
             return 0
         }
@@ -255,15 +275,15 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
         
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
-            cell.user = BHCategoriesManager.shared.users[indexPath.row]
+            cell.user = manager.users[indexPath.row]
             cell.showCategory = false
             cell.showBadge = false
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHPostCollectionCell.reusableIndentifer, for: indexPath) as! BHPostCollectionCell
-            let post = BHCategoriesManager.shared.posts[indexPath.row]
+            let post = manager.posts[indexPath.row]
             cell.post = post
-            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHCategoriesManager.shared.posts, order: .reversed)
+            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: manager.posts, order: .reversed)
             cell.autoplayContext = BHAutoplayContext.category.rawValue
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
@@ -277,7 +297,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
                 self?.showError(message)
             }
             
-            if BHCategoriesManager.shared.hasMore && indexPath.row == BHCategoriesManager.shared.posts.count - 1 {
+            if manager.hasMore && indexPath.row == manager.posts.count - 1 {
                 fetchPosts()
             }
             
@@ -287,10 +307,10 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let user = BHCategoriesManager.shared.users[indexPath.row]
+            let user = manager.users[indexPath.row]
             openUserDetails(user)
         } else {
-            let post = BHCategoriesManager.shared.posts[indexPath.row]
+            let post = manager.posts[indexPath.row]
             openPostDetails(post)
         }
     }
@@ -333,16 +353,16 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
-            return BHCategoriesManager.shared.users.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+            return manager.users.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
         } else if section == 1 {
-            return BHCategoriesManager.shared.posts.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+            return manager.posts.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
         }
         return .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if section == 0 { return .zero }
-        return BHCategoriesManager.shared.hasMore ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+        return (manager.hasMore || showDots) ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,  forItemAt indexPath: IndexPath) {

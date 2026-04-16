@@ -87,13 +87,13 @@ class BHServerApiCategories: BHServerApiBase {
                           let users = try? pu.users.toDictionaryArray()
                           
                           let params: [String : Any] = [
-                            "id": categoryId,
-                            "users": users ?? []
+                            "id": NSNumber(integerLiteral: categoryId),
+                            "category_users": users ?? []
                           ]
                           
-//                          if !DataBaseManager.shared.insertOrUpdateCategoryUsers(with: params) {
-//                              BHLog.w("Failed to save network users")
-//                          }
+                          if !DataBaseManager.shared.insertOrUpdateCategoryUsers(with: params) {
+                              BHLog.w("Failed to save category users")
+                          }
 
                           completion(.success(users: pu.users))
                       } catch let error {

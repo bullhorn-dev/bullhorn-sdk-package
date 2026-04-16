@@ -40,6 +40,19 @@
             <entry key="hyper.remoteKey" value="categories"/>
         </userInfo>
     </entity>
+    <entity name="CategoryUsers" representedClassName="CategoryUsersMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="categoryUsers" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" inverseName="categoryUsers" inverseEntity="User">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="category_users"/>
+            </userInfo>
+        </relationship>
+    </entity>
     <entity name="Channel" representedClassName="ChannelMO" syncable="YES">
         <attribute name="categories" optional="YES" attributeType="Binary">
             <userInfo>
@@ -656,6 +669,7 @@
                 <entry key="hyper.remoteKey" value="website"/>
             </userInfo>
         </attribute>
+        <relationship name="categoryUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CategoryUsers" inverseName="categoryUsers" inverseEntity="CategoryUsers"/>
         <relationship name="featuredUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NetworkFeaturedUsers" inverseName="featuredUsers" inverseEntity="NetworkFeaturedUsers"/>
         <relationship name="followedUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FollowedUsers" inverseName="followedUsers" inverseEntity="FollowedUsers"/>
         <relationship name="recentUsers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecentUsers" inverseName="recentUsers" inverseEntity="RecentUsers"/>

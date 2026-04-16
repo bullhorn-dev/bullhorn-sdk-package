@@ -703,6 +703,45 @@ class DataBaseManager {
             return false
         }
     }
+    
+    // MARK: - Category Users
+
+    func fetchCategoryUsers(with id: Int, completion: @escaping (BHServerApiBase.UsersResult) -> Void) {
+        
+        do {
+            let usersMO = try dataStack.fetch(NSNumber(integerLiteral: id), inEntityNamed: CategoryUsersMO.entityName) as? CategoryUsersMO
+            if let users = usersMO?.toUsers() {
+                completion(.success(users: users))
+            } else {
+                completion(.success(users: []))
+            }
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            completion(.success(users: []))
+        }
+    }
+    
+    func insertOrUpdateCategoryUsers(with params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.insertOrUpdate(params, inEntityNamed: CategoryUsersMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
+
+    func updateCategoryUsers(with id: Int, params: [String : Any]) -> Bool {
+
+        do {
+            try dataStack.update(NSNumber(integerLiteral: id), with: params, inEntityNamed: CategoryUsersMO.entityName)
+            return true
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+            return false
+        }
+    }
 
     // MARK: - Core Data stack
 
