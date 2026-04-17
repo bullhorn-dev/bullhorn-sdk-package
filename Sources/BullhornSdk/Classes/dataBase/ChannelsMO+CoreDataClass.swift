@@ -4,7 +4,7 @@ import CoreData
 @objc(ChannelsMO)
 public class ChannelsMO: NSManagedObject {
     
-    static let entityName = "NetworkChannels"
+    static let entityName = "Channels"
     
     // MARK: - Public
         

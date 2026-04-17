@@ -75,7 +75,20 @@
                 <entry key="hyper.remoteKey" value="title"/>
             </userInfo>
         </attribute>
-        <relationship name="channels" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="NetworkChannels" inverseName="channels" inverseEntity="NetworkChannels"/>
+        <relationship name="channels" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="Channels" inverseName="channels" inverseEntity="Channels"/>
+    </entity>
+    <entity name="Channels" representedClassName="ChannelsMO" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String">
+            <userInfo>
+                <entry key="hyper.isPrimaryKey" value="true"/>
+                <entry key="hyper.remoteKey" value="id"/>
+            </userInfo>
+        </attribute>
+        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Channel" inverseName="channels" inverseEntity="Channel">
+            <userInfo>
+                <entry key="hyper.remoteKey" value="network_channels"/>
+            </userInfo>
+        </relationship>
     </entity>
     <entity name="DownloadItem" representedClassName="DownloadItemMO" syncable="YES">
         <attribute name="file" optional="YES" attributeType="String"/>
@@ -158,19 +171,6 @@
         <userInfo>
             <entry key="hyper.remoteKey" value="pages"/>
         </userInfo>
-    </entity>
-    <entity name="NetworkChannels" representedClassName="NetworkChannelsMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String">
-            <userInfo>
-                <entry key="hyper.isPrimaryKey" value="true"/>
-                <entry key="hyper.remoteKey" value="id"/>
-            </userInfo>
-        </attribute>
-        <relationship name="channels" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Channel" inverseName="channels" inverseEntity="Channel">
-            <userInfo>
-                <entry key="hyper.remoteKey" value="network_channels"/>
-            </userInfo>
-        </relationship>
     </entity>
     <entity name="NetworkFeaturedPosts" representedClassName="NetworkFeaturedPostsMO" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String">
