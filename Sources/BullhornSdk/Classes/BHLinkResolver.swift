@@ -162,22 +162,21 @@ class BHLinkResolver {
                 let bundle = Bundle.module
                 let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
                 let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
-                vc.categoryModel = categoryModel
+                vc.category = categoryModel.category
                     
                 UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
             } else {
                 if BHReachabilityManager.shared.isConnected() {
                     let networkId = BHAppConfiguration.shared.networkId
-                    BHNetworkManager.shared.fetchCategories(networkId) { result in
+                    BHCategoriesManager.shared.getCategories(networkId) { result in
                         switch result {
                         case .success:
                             DispatchQueue.main.async {
-                                BHNetworkManager.shared.splitUsersForCarPlay()
-                                if let categoryModel = BHNetworkManager.shared.getCategoryModel(with: validAlias) {
+                                if let category = BHCategoriesManager.shared.getCategory(with: validAlias) {
                                     let bundle = Bundle.module
                                     let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
                                     let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
-                                    vc.categoryModel = categoryModel
+                                    vc.category = category
                                         
                                     UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
                                 }

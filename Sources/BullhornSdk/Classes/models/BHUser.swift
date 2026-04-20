@@ -52,7 +52,7 @@ struct BHUser: Codable, Hashable {
     var shareLink: URL?
     var website: URL?
     var channels: [BHChannel]?
-    var categories: [BHUserCategory]?
+    var categories: [BHCategory]?
     var outgoingStatus: String?
     var receiveNotifications: Bool = false
     var autoDownload: Bool = false

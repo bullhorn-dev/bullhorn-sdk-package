@@ -2,30 +2,35 @@
 import UIKit
 import Foundation
 
-class BHCategoryViewController: BHPlayerContainingViewController {
+class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let UserDetailsSegueIdentifier = "Category.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Category.PostDetailsSegueIdentifier"
 
+    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
 
-    fileprivate var isFetching: Bool = false
-
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
     
-    var categoryModel: UICategoryModel?
+    var category: BHCategory?
+    
+    fileprivate let manager = BHCategoriesManager.shared
+    fileprivate var showDots = false
 
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        activityIndicator.type = .circleStrokeSpin
+        activityIndicator.color = .accent()
+
         let bundle = Bundle.module
         let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
         let sectionFooterNib = UINib(nibName: "BHCollectionFooterView", bundle: bundle)
@@ -78,7 +83,7 @@ class BHCategoryViewController: BHPlayerContainingViewController {
     // MARK: - Private
     
     fileprivate func configureNavigationItems() {
-        let title = categoryModel?.category.name ?? NSLocalizedString("Category", comment: "")
+        let title = category?.name ?? NSLocalizedString("Category", comment: "")
         navigationItem.title = title
         navigationItem.largeTitleDisplayMode = .never
 
@@ -107,27 +112,41 @@ class BHCategoryViewController: BHPlayerContainingViewController {
         
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.isFetching = false
+            self.defaultHideActivityIndicatorView()
             self.collectionView.reloadData()
         }
 
-        guard let categoryId = categoryModel?.category.id else { return }
-
-        isFetching = true
-
+        guard let categoryId = category?.id else { return }
+        
         if initial {
-            BHFeedManager.shared.removeCategoryRecentPosts()
+            self.defaultShowActivityIndicatorView()
+            manager.removeCategoryData()
+            
+            manager.fetchStorageCategoryPodcasts(categoryId) { response in
+                switch response {
+                case .success:
+                    if self.manager.users.count > 0 {
+                        self.showDots = true
+                        completeBlock()
+                    }
+                case .failure(error: let error):
+                    let message = "Failed to fetch category podcasts from storage. \(error.localizedDescription)"
+                    BHLog.w(message)
+                    self.showError(message)
+                }
+            }
         }
             
-        BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
+        manager.fetch(BHAppConfiguration.shared.networkId, categoryId: categoryId) { response in
             switch response {
             case .success: break
             case .failure(error: let error):
                 if BHReachabilityManager.shared.isConnected() {
-                    let message = "Failed to fetch recent episodes. \(error.localizedDescription)"
+                    let message = "Failed to fetch category podcasts and episodes. \(error.localizedDescription)"
                     BHLog.w(message)
                     self.showError(message)
                 } else {
+                    self.showDots = false
                     self.showConnectionError()
                 }
             }
@@ -136,18 +155,17 @@ class BHCategoryViewController: BHPlayerContainingViewController {
     }
     
     fileprivate func fetchPosts() {
-        guard let categoryId = categoryModel?.category.id else { return }
+        guard let categoryId = category?.id else { return }
 
-        isFetching = true
+        showDots = false
 
-        BHFeedManager.shared.getCategoryPosts(categoryId: categoryId, text: nil) { response in
+        manager.getCategoryPosts(categoryId: categoryId, text: nil) { response in
             switch response {
             case .success:
                 self.collectionView.reloadData()
             case .failure(error: _):
                 break
             }
-            self.isFetching = false
         }
     }
 
@@ -182,7 +200,7 @@ class BHCategoryViewController: BHPlayerContainingViewController {
     
     @objc fileprivate func openOptionsAction(_ sender: Any) {
         let optionsSheet = BHCategoryOptionsBottomSheet()
-        optionsSheet.category = categoryModel?.category
+        optionsSheet.category = category
         optionsSheet.preferredSheetSizing = .fit
         optionsSheet.panToDismissEnabled = true
         present(optionsSheet, animated: true)
@@ -209,29 +227,24 @@ class BHCategoryViewController: BHPlayerContainingViewController {
 extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if categoryModel?.users.count == 0 && BHFeedManager.shared.categoryPosts.count == 0 {
-            if !isFetching {
+        if manager.users.count == 0 && manager.posts.count == 0 {
+            if !activityIndicator.isAnimating {
                 let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 collectionView.setEmptyMessage(message, image: image)
             } else {
                 collectionView.restore()
             }
+            return 1
         }
-        
-//        var sectionsCount: Int = 0
-        
-//        if let users = categoryModel?.users, users.count > 0 { sectionsCount += 1 }
-//        if BHFeedManager.shared.categoryPosts.count > 0 { sectionsCount += 1 }
-        
         return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
-            return categoryModel?.users.count ?? 0
+            return manager.users.count
         } else if section == 1 {
-            return BHFeedManager.shared.categoryPosts.count
+            return manager.posts.count
         } else {
             return 0
         }
@@ -262,15 +275,15 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
         
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserCarouselCell.reusableIndentifer, for: indexPath) as! BHUserCarouselCell
-            cell.user = categoryModel?.users[indexPath.row]
+            cell.user = manager.users[indexPath.row]
             cell.showCategory = false
             cell.showBadge = false
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHPostCollectionCell.reusableIndentifer, for: indexPath) as! BHPostCollectionCell
-            let post = BHFeedManager.shared.categoryPosts[indexPath.row]
+            let post = manager.posts[indexPath.row]
             cell.post = post
-            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: BHFeedManager.shared.categoryPosts, order: .reversed)
+            cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: manager.posts, order: .reversed)
             cell.autoplayContext = BHAutoplayContext.category.rawValue
             cell.shareBtnTapClosure = { [weak self] url in
                 self?.presentShareDialog(with: [url], configureBlock: { controller in
@@ -284,7 +297,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
                 self?.showError(message)
             }
             
-            if BHFeedManager.shared.hasMoreCategoryPosts && indexPath.row == BHFeedManager.shared.categoryPosts.count - 1 {
+            if manager.hasMore && indexPath.row == manager.posts.count - 1 {
                 fetchPosts()
             }
             
@@ -294,10 +307,10 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let user = categoryModel?.users[indexPath.row]
+            let user = manager.users[indexPath.row]
             openUserDetails(user)
         } else {
-            let post = BHFeedManager.shared.categoryPosts[indexPath.row]
+            let post = manager.posts[indexPath.row]
             openPostDetails(post)
         }
     }
@@ -339,12 +352,17 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: Constants.panelHeight)
+        if section == 0 {
+            return manager.users.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+        } else if section == 1 {
+            return manager.posts.count > 0 ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+        }
+        return .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if section == 0 { return .zero }
-        return isFetching ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
+        return (manager.hasMore || showDots) ? CGSize(width: view.frame.width, height: Constants.panelHeight) : .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,  forItemAt indexPath: IndexPath) {

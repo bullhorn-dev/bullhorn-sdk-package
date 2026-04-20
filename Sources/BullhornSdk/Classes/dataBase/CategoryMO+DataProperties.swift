@@ -1,10 +1,10 @@
 import Foundation
 import CoreData
 
-extension UserCategoryMO {
+extension CategoryMO {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<UserCategoryMO> {
-        return NSFetchRequest<UserCategoryMO>(entityName: UserCategoryMO.entityName)
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CategoryMO> {
+        return NSFetchRequest<CategoryMO>(entityName: CategoryMO.entityName)
     }
     
     @NSManaged public var id: NSNumber?

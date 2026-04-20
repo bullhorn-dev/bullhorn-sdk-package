@@ -65,7 +65,7 @@ class BHServerApiNetwork: BHServerApiBase {
                             "network_channels": channels ?? []
                           ]
                           
-                          if !DataBaseManager.shared.insertOrUpdateNetworkChannels(with: params) {
+                          if !DataBaseManager.shared.insertOrUpdateChannels(with: params) {
                               BHLog.w("Failed to save network channels")
                           }
 

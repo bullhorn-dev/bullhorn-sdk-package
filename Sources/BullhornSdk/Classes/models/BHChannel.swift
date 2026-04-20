@@ -16,7 +16,7 @@ struct BHChannel: Codable, Hashable {
     let id: String
     let name: String
     let title: String
-    let categories: [BHUserCategory]?
+    let categories: [BHCategory]?
     let groupPodcastsByCategories: Bool?
     
     func isMain() -> Bool { return id == BHChannel.mainChannelId }
@@ -35,11 +35,11 @@ struct BHChannel: Codable, Hashable {
         guard let validTitle = params[CodingKeys.title.rawValue] as? String else { return nil }
         let groupPodcastsByCategories = params[CodingKeys.groupPodcastsByCategories.rawValue] as? Bool ?? false
         
-        var validCategories: [BHUserCategory] = []
+        var validCategories: [BHCategory] = []
 
         if let ctgrs = params[CodingKeys.categories.rawValue] as? [[String:Any]] {
             ctgrs.forEach({ item in
-                if let category = BHUserCategory.fromDictionary(item) {
+                if let category = BHCategory.fromDictionary(item) {
                     validCategories.append(category)
                 }
             })

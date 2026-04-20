@@ -1,10 +1,10 @@
 import Foundation
 import CoreData
 
-@objc(NetworkChannelsMO)
-public class NetworkChannelsMO: NSManagedObject {
+@objc(ChannelsMO)
+public class ChannelsMO: NSManagedObject {
     
-    static let entityName = "NetworkChannels"
+    static let entityName = "Channels"
     
     // MARK: - Public
         

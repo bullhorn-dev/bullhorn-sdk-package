@@ -6,7 +6,7 @@ final class BHCategoryOptionsBottomSheet: BHBottomSheetController {
     private var shareItem: BHOptionsItem!
     private var reportItem: BHOptionsItem!
 
-    var category: BHUserCategory?
+    var category: BHCategory?
 
     // MARK: - Lifecycle
 
