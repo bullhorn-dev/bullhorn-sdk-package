@@ -36,6 +36,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
 
     var context: String?
+    var openedFromPostId: String?
 
     // MARK: - Lifecycle
     
@@ -205,15 +206,22 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         if segue.identifier == BHUserDetailsViewController.PostDetailsSegueIdentifier, let vc = segue.destination as? BHPostDetailsViewController {
             vc.post = selectedPost
             vc.selectedTab = selectedTab
+            vc.openedFromUserId = user?.id
         }
     }
     
     // MARK: - Private
     
     override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
-        selectedPost = post
-        selectedTab = tab
-        performSegue(withIdentifier: BHUserDetailsViewController.PostDetailsSegueIdentifier, sender: self)
+        guard let validPost = post else { return }
+        
+        if let validOpenedFromPostId = openedFromPostId, validOpenedFromPostId == validPost.id {
+            UIApplication.topNavigationController()?.popViewController(animated: true)
+        } else {
+            selectedPost = post
+            selectedTab = tab
+            performSegue(withIdentifier: BHUserDetailsViewController.PostDetailsSegueIdentifier, sender: self)
+        }
     }
 
     // MARK: - Action handlers

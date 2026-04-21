@@ -33,6 +33,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     var post: BHPost?
     var selectedTab: BHPostTabs = .details
     var context: String?
+    var openedFromUserId: String?
 
     // MARK: - Lifecycle
     
@@ -191,6 +192,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == BHPostDetailsViewController.UserDetailsSegueIdentifier, let vc = segue.destination as? BHUserDetailsViewController {
             vc.user = selectedUser
+            vc.openedFromPostId = post?.id
         }
     }
     
@@ -207,8 +209,14 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
 
     override func openUserDetails(_ user: BHUser?) {
-        selectedUser = user
-        performSegue(withIdentifier: BHPostDetailsViewController.UserDetailsSegueIdentifier, sender: self)
+        guard let validUser = user else { return }
+
+        if let validOpenedFromUserId = openedFromUserId, validOpenedFromUserId == validUser.id {
+            UIApplication.topNavigationController()?.popViewController(animated: true)
+        } else {
+            selectedUser = user
+            performSegue(withIdentifier: BHPostDetailsViewController.UserDetailsSegueIdentifier, sender: self)
+        }
     }
     
     private func openPlayer(position: Double) {

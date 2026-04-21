@@ -14,6 +14,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         
     class var reusableIndentifer: String { return String(describing: self) }
 
+    @IBOutlet weak var userStackView: UIStackView!
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -143,6 +144,9 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         tabbedView.isHidden = !hasTranscript()
         selectedTab = tab
         
+        let userTapGesture = UITapGestureRecognizer(target: self, action: #selector(onUserSelected(_:)))
+        userStackView.addGestureRecognizer(userTapGesture)
+        
         setupAccessibility()
         reloadData()
     }
@@ -171,6 +175,10 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         downloadButton.context = "episode"
         divider1Label.isAccessibilityElement = false
         divider2Label.isAccessibilityElement = false
+        
+        userStackView.isAccessibilityElement = true
+        userStackView.accessibilityTraits = .button
+        userStackView.accessibilityLabel = validPost.user.fullName
         
         if let dateText = dateLabel.text {
             dateLabel.accessibilityLabel = "Episode published: \(dateText)"
@@ -384,6 +392,12 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
             vc.panToDismissEnabled = true
             UIApplication.topNavigationController()?.present(vc, animated: true)
         }
+    }
+    
+    @objc func onUserSelected(_ sender: UITapGestureRecognizer) {
+        guard let validUser = postsManager?.post?.user else { return }
+
+        delegate?.postHeaderView(self, didSelectUser: validUser)
     }
 }
 
