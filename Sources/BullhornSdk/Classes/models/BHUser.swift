@@ -63,11 +63,11 @@ struct BHUser: Codable, Hashable {
         return categories?.first?.name ?? "News Updates"
     }
     
-    func belongsCategory(_ categoryId: Int) -> Bool {
+    func belongsToCategory(_ categoryId: Int) -> Bool {
         return categories?.contains(where: { $0.id == categoryId }) ?? false
     }
     
-    func belongsChannel(_ channelId: String) -> Bool {
+    func belongsToChannel(_ channelId: String) -> Bool {
         return channels?.contains(where: { $0.id == channelId }) ?? false
     }
     
