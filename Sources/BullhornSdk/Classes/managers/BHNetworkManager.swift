@@ -62,18 +62,9 @@ class BHNetworkManager {
         if users.count == 0 { return }
         
         if let selectedChannel = channels.first(where: { $0.id == channelId }) {
-            if selectedChannel.isMain() {
-                selectedChannel.categories?.forEach({ category in
-                    let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
-                    if cusers.count > 0 {
-                        let uimodel = UICategoryModel(category: category, users: cusers)
-                        splittedUsers.append(uimodel)
-                    }
-                })
-            } else {
                 if selectedChannel.groupPodcastsByCategories == true {
                     selectedChannel.categories?.forEach({ category in
-                        let cusers = users.filter({ $0.categoryName == category.name && $0.belongsChannel(channelId) })
+                        let cusers = users.filter({ $0.belongsCategory(category.id) && $0.belongsChannel(channelId) })
                         if cusers.count > 0 {
                             let uimodel = UICategoryModel(category: category, users: cusers)
                             splittedUsers.append(uimodel)
@@ -88,7 +79,6 @@ class BHNetworkManager {
                         }
                     }
                 }
-            }
         }
     }
 
@@ -102,7 +92,7 @@ class BHNetworkManager {
         
         if let selectedChannel = channels.first(where: { $0.id == BHChannel.mainChannelId }) {
             selectedChannel.categories?.forEach({ category in
-                let cusers = users.filter({ $0.categoryName == category.name && !$0.channels.isNilOrEmpty })
+                let cusers = users.filter({ $0.belongsCategory(category.id) && !$0.channels.isNilOrEmpty })
                 if cusers.count > 0 {
                     let uimodel = UICategoryModel(category: category, users: cusers)
                     carPlaySplittedUsers.append(uimodel)
