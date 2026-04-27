@@ -206,4 +206,8 @@ extension BHPlayButton: BHHybridPlayerListener {
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {
         DispatchQueue.main.async { self.resetState() }
     }
+    
+    func hybridPlayerDidClose(_ player: BHHybridPlayer) {
+        DispatchQueue.main.async { self.resetState() }
+    }
 }
