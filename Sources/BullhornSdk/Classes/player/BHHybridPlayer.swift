@@ -203,9 +203,9 @@ class BHHybridPlayer {
         
     // MARK: - Public
 
-    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app, autoplayContext: String?, position: Double = 0) {
+    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app, autoplayContext: BHAutoplayContext?, position: Double = 0, clearQueue: Bool = true) {
         
-        BHLog.p("\(#function) id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
+        BHLog.p("PlayRequest id: \(post.id), title: \(post.title), position: \(post.playbackOffset), autoplayContext: \(autoplayContext?.rawValue ?? "nil")")
 
         BHLivePlayer.shared.close()
                 
@@ -221,7 +221,7 @@ class BHHybridPlayer {
                 removeFromPlaybackQueue(previousPost.id)
             }
             
-            if let validPlaylist = playlist, validPlaylist.count > 0 {
+            if clearQueue {
                 removeQueue()
             }
             
@@ -310,7 +310,9 @@ class BHHybridPlayer {
         manualPosition = 0
         isTranscriptActive = false
         removeQueue()
+
         UserDefaults.standard.playerPostId = nil
+        UserDefaults.standard.playerAutoplayContext = nil
         
         observersContainer.notifyObserversAsync {
             $0.hybridPlayerDidClose(self)
@@ -565,6 +567,7 @@ class BHHybridPlayer {
         guard let validPost = post else { return }
 
         UserDefaults.standard.playerPostId = validPost.id
+        UserDefaults.standard.playerAutoplayContext = validItem.autoplayContext?.rawValue
 
         addToPlaybackQueue(validPost, reason: .auto, moveToTop: true)
         addPostsToQueue(playlist ?? [])

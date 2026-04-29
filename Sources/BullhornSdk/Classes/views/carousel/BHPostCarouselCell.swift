@@ -22,7 +22,7 @@ class BHPostCarouselCell: UICollectionViewCell {
     }
     
     var context: String = "Episode"
-    var autoplayContext: String?
+    var autoplayContext: BHAutoplayContext?
 
     fileprivate var placeholderImage: UIImage?
 

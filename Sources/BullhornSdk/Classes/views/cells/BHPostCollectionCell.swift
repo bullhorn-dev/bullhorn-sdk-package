@@ -20,7 +20,12 @@ class BHPostCollectionCell: UICollectionViewCell {
     }
     
     var context: String = "Episode"
-    var autoplayContext: String?
+
+    var autoplayContext: BHAutoplayContext? {
+        didSet {
+            self.updateContext()
+        }
+    }
 
     fileprivate var placeholderImage: UIImage?
 
@@ -296,6 +301,10 @@ class BHPostCollectionCell: UICollectionViewCell {
         
         updateControls()
         setupAccessibility()
+    }
+    
+    fileprivate func updateContext() {
+        playButton.autoplayContext = autoplayContext
     }
     
     private func setupAccessibility() {

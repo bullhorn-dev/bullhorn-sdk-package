@@ -19,7 +19,7 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
         }
     }
     
-    var context: String?
+    var autoplayContext: BHAutoplayContext?
 
     fileprivate var currentPage: Int = 0
 
@@ -99,7 +99,7 @@ class BHPagedCarouselView: UIView, BHPagerViewDelegate, BHPagerViewDataSource {
 
         cell.post = post
         cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: posts, order: .straight)
-        cell.autoplayContext = context
+        cell.autoplayContext = autoplayContext
 
         return cell
     }

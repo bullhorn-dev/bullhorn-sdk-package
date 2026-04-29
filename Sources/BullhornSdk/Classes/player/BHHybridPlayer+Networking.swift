@@ -221,10 +221,10 @@ extension BHHybridPlayer {
     func fetchPlaylist() {
         guard let validPost = post else { return }
 
-        BHLog.p("\(#function)")
+        BHLog.p("\(#function), autoplayContext: \(playerItem?.autoplayContext?.rawValue ?? "nil")")
 
         if BHReachabilityManager.shared.isConnected() {
-            postsManager.getPlaybackQueuePosts(validPost.id, context: playerItem?.autoplayContext) { response in
+            postsManager.getPlaybackQueuePosts(validPost.id, context: playerItem?.autoplayContext?.rawValue) { response in
                 switch response {
                 case .success(posts: let posts):
                     self.addPostsToQueue(posts)

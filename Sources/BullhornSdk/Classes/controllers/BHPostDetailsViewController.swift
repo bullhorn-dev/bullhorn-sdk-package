@@ -225,7 +225,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         if BHHybridPlayer.shared.isPostActive(validPost.id) {
             BHHybridPlayer.shared.seek(to: position, resume: true)
         } else {
-            BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: BHAutoplayContext.actual.rawValue, position: position)
+            BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: .podcast, position: position)
         }
         BHHybridPlayer.shared.isTranscriptActive = true
     }

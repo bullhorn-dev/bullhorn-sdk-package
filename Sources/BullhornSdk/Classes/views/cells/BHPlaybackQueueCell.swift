@@ -78,6 +78,7 @@ class BHPlaybackQueueCell: UITableViewCell {
         nameLabel.text = item?.post.user.fullName
         userIcon.sd_setImage(with: item?.post.coverUrl, placeholderImage: placeholderImage)
         playButton.post = item?.post
+        playButton.autoplayContext = BHHybridPlayer.shared.playerItem?.autoplayContext
         manuallyIcon.isHidden = item?.reason != .manually
 
         setupAccessibility()

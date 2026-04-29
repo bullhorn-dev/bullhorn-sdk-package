@@ -2,14 +2,6 @@
 import Foundation
 internal import Alamofire
 
-enum BHAutoplayContext: String {
-    case actual
-    case podcast
-    case category
-    case favorites
-    case search
-}
-
 class BHPostsManager {
         
     var dispatchQueue = DispatchQueue.global()

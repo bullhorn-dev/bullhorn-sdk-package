@@ -48,7 +48,7 @@ class BHRadioPlayableContentProvider: BHPlayableContentProvider {
     func loadItems() {
         
         let data = BHRadioStreamsManager.shared.radios.map({ $0.asPost()! })
-        self.items = self.convertEpisodes(data)
+        self.items = self.convertEpisodes(data, autoplayContext: nil)
         self.playlist = data
 
         updateSectionsForList()

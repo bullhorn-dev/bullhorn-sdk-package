@@ -79,7 +79,7 @@ public struct BHPlayerItem: Codable {
     var duration: Double
     var shouldPlay: Bool
     let isStream: Bool
-    let autoplayContext: String?
+    let autoplayContext: BHAutoplayContext?
     
     func debugDescription() {
         BHLog.p("PlayerItem post: \(post.debugDescription()), position: \(position), duration: \(duration), shouldPlay: \(shouldPlay), isStream: \(isStream)")
@@ -146,5 +146,15 @@ public struct BHPlayerItem: Codable {
 public enum BHPlayerContext: String {
     case app = "app"
     case carplay = "carplay"
+}
+
+public enum BHAutoplayContext: String, Codable {
+    case actual
+    case podcast
+    case category
+    case favorites
+    case search
+    case deepLink = "deep_link"
+    case next
 }
 

@@ -18,7 +18,7 @@ class BHPlayButton: UIView {
     }
     
     var context: String = "Episode"
-    var autoplayContext: String?
+    var autoplayContext: BHAutoplayContext?
     
     private let button: UIButton = {
         let button = UIButton(type: .system)

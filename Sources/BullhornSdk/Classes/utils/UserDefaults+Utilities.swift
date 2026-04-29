@@ -12,6 +12,7 @@ extension UserDefaults {
     fileprivate static let isAppInitialAttributesSent = "isAppInitialAttributesSent"
     fileprivate static let themeIdUserDefaultsKey = "themeIdUserDefaultsKey"
     fileprivate static let playerPostIdUserDefaultsKey = "playerPostIdUserDefaultsKey"
+    fileprivate static let playerAutoplayContextUserDefaultsKey = "playerAutoplayContextUserDefaultsKey"
     fileprivate static let playerPositionUserDefaultsKey = "playerPositionUserDefaultsKey"
     fileprivate static let playerTimestampUserDefaultsKey = "playerTimestampUserDefaultsKey"
     fileprivate static let pushTokenUserDefaultsKey = "pushTokenUserDefaultsKey"
@@ -106,6 +107,15 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.playerPostIdUserDefaultsKey)
+        }
+    }
+
+    var playerAutoplayContext: String? {
+        get {
+            return UserDefaults.standard.string(forKey: UserDefaults.playerAutoplayContextUserDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.playerAutoplayContextUserDefaultsKey)
         }
     }
 

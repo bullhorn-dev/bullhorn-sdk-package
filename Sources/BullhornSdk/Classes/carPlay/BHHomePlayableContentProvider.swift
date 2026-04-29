@@ -82,7 +82,7 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
     func loadItems() {
         
         liveEpisodes = BHNetworkManager.shared.liveNowPosts
-        items = convertEpisodes(liveEpisodes)
+        items = convertEpisodes(liveEpisodes, autoplayContext: nil)
 
         followedPodcasts = BHUserManager.shared.followedUsers
         followedPodcastsRowItem = convertPodcastsToImageRowItem("Followed Podcasts", podcasts: followedPodcasts, placeholderImage: placeholderImage)
@@ -91,11 +91,11 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
         featuredPodcastsRowItem = convertPodcastsToImageRowItem("Featured Podcasts", podcasts: featuredPodcasts, placeholderImage: placeholderImage)
 
         featuredEpisodes = BHNetworkManager.shared.featuredPosts
-        featuredEpisodesListItem = convertEpisodesToListItem("Featured Episodes", episodes: featuredEpisodes)
+        featuredEpisodesListItem = convertEpisodesToListItem("Featured Episodes", episodes: featuredEpisodes, autoplayContext: .actual)
 
         let recentTitle = "Latest Episodes"
         recentEpisodes = BHNetworkManager.shared.posts
-        recentEpisodesListItem = convertEpisodesToListItem(recentTitle, episodes: recentEpisodes, handler: false)
+        recentEpisodesListItem = convertEpisodesToListItem(recentTitle, episodes: recentEpisodes, autoplayContext: .actual, handler: false)
         recentEpisodesListItem.handler = { item, completion in
             BHLog.p("CarPlay recent episodes list item selected")
 
@@ -104,12 +104,12 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
                 BHNetworkManager.shared.fetchPosts(networkId) { result in
                     DispatchQueue.main.async {
                         self.recentEpisodes = BHNetworkManager.shared.posts
-                        self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle)
+                        self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle, autoplayContext: .actual)
                         completion()
                     }
                 }
             } else {
-                self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle)
+                self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle, autoplayContext: .actual)
                 completion()
             }
         }

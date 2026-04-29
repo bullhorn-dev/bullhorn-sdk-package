@@ -173,7 +173,7 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
         let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
         let context = BHHybridPlayer.shared.playerItem?.autoplayContext
         
-        BHHybridPlayer.shared.playRequest(with: item.post, playlist: [], autoplayContext: context)
+        BHHybridPlayer.shared.playRequest(with: item.post, playlist: [], autoplayContext: context, clearQueue: false)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

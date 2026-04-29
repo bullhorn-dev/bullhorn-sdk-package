@@ -70,6 +70,7 @@ class BHPostHeaderView: UITableViewHeaderFooterView {
         let duration: Double = Double(postsManager?.post?.recording?.duration ?? 0)
 
         playButton.post = postsManager?.post
+        playButton.autoplayContext = .podcast
         waitingRoomButton.post = postsManager?.post
 
         downloadButton.post = postsManager?.post

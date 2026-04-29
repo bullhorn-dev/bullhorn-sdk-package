@@ -62,7 +62,7 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
                 
                 if let post = self.playlist?[index] {
                     let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: self.playlist, order: .straight)
-                    self.play(post, playlist: playlist)
+                    self.play(post, playlist: playlist, autoplayContext: nil)
                 }
                 
                 if let listItem = item as? CPListItem {

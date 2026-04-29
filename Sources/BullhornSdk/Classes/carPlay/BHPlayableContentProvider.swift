@@ -42,7 +42,7 @@ extension BHPlayableContentProvider {
 
     // MARK: - Episodes
 
-    func convertEpisodes(_ episodes: [BHPost]) -> [CPListItem] {
+    func convertEpisodes(_ episodes: [BHPost], autoplayContext: BHAutoplayContext?) -> [CPListItem] {
         let items = episodes.map { $0.toCPListItem(with: Bundle.module) }
 
         for (index, item) in items.enumerated() {
@@ -53,7 +53,7 @@ extension BHPlayableContentProvider {
                     let post = episodes[index]
                     let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: episodes, order: .straight)
                     
-                    self.play(post, playlist: playlist)
+                    self.play(post, playlist: playlist, autoplayContext: autoplayContext)
                     
                     /// update playing item
                     if let listItem = item as? CPListItem {
@@ -71,8 +71,8 @@ extension BHPlayableContentProvider {
         return items
     }
 
-    func convertEpisodesToCPListTemplate(_ episodes: [BHPost], title: String) {
-        let items = self.convertEpisodes(episodes)
+    func convertEpisodesToCPListTemplate(_ episodes: [BHPost], title: String, autoplayContext: BHAutoplayContext?) {
+        let items = self.convertEpisodes(episodes, autoplayContext: autoplayContext)
 
         BHPlayableContentController.shared.episodes = episodes
         BHPlayableContentController.shared.episodesListItems = items
@@ -84,13 +84,13 @@ extension BHPlayableContentProvider {
         self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true, completion: nil)
     }
     
-    func convertEpisodesToListItem(_ title: String, episodes: [BHPost], handler: Bool = true) -> CPListItem {
+    func convertEpisodesToListItem(_ title: String, episodes: [BHPost], autoplayContext: BHAutoplayContext?, handler: Bool = true) -> CPListItem {
         let listItem = CPListItem(text: title, detailText: "", image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
 
         if handler {
             listItem.handler = { item, completion in
                 BHLog.p("CarPlay \(title) list item selected")
-                convertEpisodesToCPListTemplate(episodes, title: title)
+                convertEpisodesToCPListTemplate(episodes, title: title, autoplayContext: autoplayContext)
                 completion()
             }
         }
@@ -115,7 +115,7 @@ extension BHPlayableContentProvider {
                         DispatchQueue.main.async {
                             switch response {
                             case .success(posts: let posts, page: _, pages: _):
-                                convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
+                                convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes", autoplayContext: .podcast)
                             case .failure(error: let error):
                                 BHLog.w("User posts load failed \(error.localizedDescription)")
                                 
@@ -176,7 +176,7 @@ extension BHPlayableContentProvider {
                     DispatchQueue.main.async {
                         switch response {
                         case .success(posts: let posts, page: _, pages: _):
-                            convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes")
+                            convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes", autoplayContext: .podcast)
                         case .failure(error: let error):
                             BHLog.w("User posts load failed \(error.localizedDescription)")
                             
@@ -208,7 +208,7 @@ extension BHPlayableContentProvider {
     }
 
     func openSearchedEpisodes(_ searchText: String, episodes: [BHPost]) {
-        convertEpisodesToCPListTemplate(episodes, title: "Search for: \(searchText)")
+        convertEpisodesToCPListTemplate(episodes, title: "Search for: \(searchText)", autoplayContext: .search)
     }
 
     // MARK: - Categories
@@ -234,7 +234,7 @@ extension BHPlayableContentProvider {
 
     // MARK: - Utils
 
-    func play(_ episode: BHPost, playlist: [BHPost]?) {
+    func play(_ episode: BHPost, playlist: [BHPost]?, autoplayContext: BHAutoplayContext?) {
         if BHHybridPlayer.shared.isPostPlaying(episode.id) {
             if let topTemplate = self.carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
                 self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
@@ -245,7 +245,7 @@ extension BHPlayableContentProvider {
             if fileUrl == nil && !BHReachabilityManager.shared.isConnected() {
                 presentAlert("Failed to play episode. The Internet connection is lost.")
             } else {
-                BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay, autoplayContext: nil)
+                BHHybridPlayer.shared.playRequest(with: episode, playlist: playlist, context: .carplay, autoplayContext: autoplayContext)
             }
         }
     }

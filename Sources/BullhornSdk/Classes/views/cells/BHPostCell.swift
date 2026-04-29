@@ -37,7 +37,12 @@ class BHPostCell: UITableViewCell {
     }
     
     var context: String = "Episode"
-    var autoplayContext: String?
+
+    var autoplayContext: BHAutoplayContext? {
+        didSet {
+            updateContext()
+        }
+    }
     
     var shareBtnTapClosure: ((URL)->())?
     var likeBtnTapClosure: ((Bool)->())?
@@ -137,6 +142,10 @@ class BHPostCell: UITableViewCell {
         updateTagLabel()
         updateControls()
         setupAccessibility()
+    }
+    
+    fileprivate func updateContext() {
+        playButton.autoplayContext = autoplayContext
     }
     
     private func setupAccessibility() {
