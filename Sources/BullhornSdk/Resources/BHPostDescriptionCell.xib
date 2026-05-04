@@ -4,51 +4,56 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Roboto-Regular.ttf">
-            <string>Roboto-Regular</string>
-        </array>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHPostDescriptionCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHPostDescriptionCell" rowHeight="120" id="lHJ-6X-D7B" customClass="BHPostDescriptionCell" customModule="BullhornSdk">
-            <rect key="frame" x="0.0" y="0.0" width="390" height="120"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHPostDescriptionCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHPostDescriptionCell" rowHeight="286" id="lHJ-6X-D7B" customClass="BHPostDescriptionCell" customModule="BullhornSdk">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="286"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lHJ-6X-D7B" id="rdJ-JM-pVC">
-                <rect key="frame" x="0.0" y="0.0" width="390" height="120"/>
+                <rect key="frame" x="0.0" y="0.0" width="390" height="286"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ" customClass="BHHyperlinkLabel" customModule="BullhornSdk">
-                        <rect key="frame" x="16" y="16" width="358" height="88"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <string key="text">Label label label label label label Label label label label label label Label label label label label label Label label label label label label</string>
-                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
-                        <color key="textColor" name="bhColorPrimary"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAO-M3-VtO" customClass="BHRichTextView" customModule="BullhornSdk">
+                        <rect key="frame" x="12" y="0.0" width="366" height="286"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <attributedString key="attributedText">
+                            <fragment>
+                                <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <attributes>
+                                    <color key="NSColor" systemColor="labelColor"/>
+                                    <font key="NSFont" metaFont="system" size="14"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
+                        </attributedString>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="WY2-Cn-8EJ" secondAttribute="trailing" constant="16" id="44O-Mj-nU9"/>
-                    <constraint firstItem="WY2-Cn-8EJ" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" constant="16" id="YuQ-OR-12S"/>
-                    <constraint firstItem="WY2-Cn-8EJ" firstAttribute="leading" secondItem="rdJ-JM-pVC" secondAttribute="leading" constant="16" id="b5G-jX-e9r"/>
-                    <constraint firstAttribute="bottom" secondItem="WY2-Cn-8EJ" secondAttribute="bottom" constant="16" id="wBJ-fM-79t"/>
+                    <constraint firstItem="lAO-M3-VtO" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" id="6aU-A5-hVZ"/>
+                    <constraint firstItem="lAO-M3-VtO" firstAttribute="leading" secondItem="rdJ-JM-pVC" secondAttribute="leading" constant="12" id="9IE-ux-1ZA"/>
+                    <constraint firstAttribute="trailing" secondItem="lAO-M3-VtO" secondAttribute="trailing" constant="12" id="Yse-uC-C58"/>
+                    <constraint firstAttribute="bottom" secondItem="lAO-M3-VtO" secondAttribute="bottom" id="eID-7i-Ggy"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="label" destination="WY2-Cn-8EJ" id="PGV-at-0js"/>
+                <outlet property="textView" destination="lAO-M3-VtO" id="mbq-rF-DMb"/>
             </connections>
-            <point key="canvasLocation" x="92" y="15"/>
+            <point key="canvasLocation" x="90.769230769230759" y="-44.075829383886251"/>
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="bhColorPrimary">
-            <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

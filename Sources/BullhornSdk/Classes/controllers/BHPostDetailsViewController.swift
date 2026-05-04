@@ -56,6 +56,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground()
+        tableView.estimatedRowHeight = 200
 
         headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHPostHeaderView.reusableIndentifer) as? BHPostHeaderView
         headerView?.delegate = self
