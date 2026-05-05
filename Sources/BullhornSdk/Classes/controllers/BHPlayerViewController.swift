@@ -100,7 +100,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     }
     
     override func updateVideoLayer(_ isVideoAvailable: Bool) {
-        super.updateVideoLayer(false) // tmp fix
+        super.updateVideoLayer(isVideoAvailable)
     }
     
     override func updateLayers() {
@@ -209,7 +209,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
             transcriptButton.setImage(UIImage(systemName: "doc.plaintext")?.withConfiguration(mediumConfig), for: .normal)
             transcriptButton.accessibilityLabel = "Show episode transcript"
             transcriptView.isHidden = true
-            imageView.isHidden = false
+            imageView.isHidden = hasVideo || hasTile
         }
         
         transcriptButton.setTitle("", for: .normal)

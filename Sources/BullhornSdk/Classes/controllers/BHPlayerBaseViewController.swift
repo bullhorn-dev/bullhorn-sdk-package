@@ -500,9 +500,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func updateLayers() {
         if BHHybridPlayer.shared.isEnded() || BHHybridPlayer.shared.isFailed() {
-            imageLayerView.isHidden = false
+            imageView.isHidden = false
         } else {
-            imageLayerView.isHidden = hasVideo || hasTile
+            imageView.isHidden = hasVideo || hasTile
         }
     }
     
