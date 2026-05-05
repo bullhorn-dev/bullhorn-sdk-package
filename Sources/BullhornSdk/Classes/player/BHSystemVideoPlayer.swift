@@ -80,6 +80,7 @@ class BHSystemVideoPlayer: BHMediaPlayerBase {
     override func playerSeek(to time: CMTime, forceResume: Bool = false, completionHandler: @escaping (Bool) -> Void) {
         bmPlayer.seek(time.toTimeInterval()) {
             self.bmPlayer.avPlayer?.rate = self.playbackRate
+            self.bmPlayer.play()
             completionHandler(true)
         }
     }

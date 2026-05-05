@@ -1065,7 +1065,7 @@ class BHHybridPlayer {
         
         if isSeek {
             isSeek = false
-            return
+//            return
         }
 
         if isSilent { return }
