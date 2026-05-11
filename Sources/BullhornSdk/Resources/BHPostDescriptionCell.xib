@@ -4,7 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,43 +17,48 @@
                 <rect key="frame" x="0.0" y="0.0" width="390" height="286"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAO-M3-VtO" customClass="BHRichTextView" customModule="BullhornSdk">
-                        <rect key="frame" x="12" y="0.0" width="366" height="286"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <attributedString key="attributedText">
-                            <fragment>
-                                <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <attributes>
-                                    <color key="NSColor" systemColor="labelColor"/>
-                                    <font key="NSFont" metaFont="system" size="14"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    </textView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWL-30-hqB" customClass="RichLabel" customModule="BullhornSdk">
+                        <rect key="frame" x="16" y="8" width="358" height="270"/>
+                        <color key="backgroundColor" name="Demo message background"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSelectable" value="NO"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="numberOfLines">
+                                <integer key="value" value="0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isScrollEnabled" value="NO"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceVertical" value="NO"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceHorizontal" value="NO"/>
+                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                <color key="value" name="bhColorPrimary"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="lAO-M3-VtO" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" id="6aU-A5-hVZ"/>
-                    <constraint firstItem="lAO-M3-VtO" firstAttribute="leading" secondItem="rdJ-JM-pVC" secondAttribute="leading" constant="12" id="9IE-ux-1ZA"/>
-                    <constraint firstAttribute="trailing" secondItem="lAO-M3-VtO" secondAttribute="trailing" constant="12" id="Yse-uC-C58"/>
-                    <constraint firstAttribute="bottom" secondItem="lAO-M3-VtO" secondAttribute="bottom" id="eID-7i-Ggy"/>
+                    <constraint firstAttribute="bottom" secondItem="MWL-30-hqB" secondAttribute="bottom" constant="8" id="FCx-Kk-LzZ"/>
+                    <constraint firstItem="MWL-30-hqB" firstAttribute="leading" secondItem="rdJ-JM-pVC" secondAttribute="leading" constant="16" id="IPh-UN-TmA"/>
+                    <constraint firstAttribute="trailing" secondItem="MWL-30-hqB" secondAttribute="trailing" constant="16" id="IV1-MX-4Aw"/>
+                    <constraint firstItem="MWL-30-hqB" firstAttribute="top" secondItem="rdJ-JM-pVC" secondAttribute="top" constant="8" id="ig1-rx-MBM"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="textView" destination="lAO-M3-VtO" id="mbq-rF-DMb"/>
+                <outlet property="textView" destination="MWL-30-hqB" id="Xah-ma-OD6"/>
             </connections>
             <point key="canvasLocation" x="90.769230769230759" y="-44.075829383886251"/>
         </tableViewCell>
     </objects>
     <resources>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <namedColor name="Demo message background">
+            <color red="0.67450980392156867" green="0.88235294117647056" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="bhColorPrimary">
+            <color red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
