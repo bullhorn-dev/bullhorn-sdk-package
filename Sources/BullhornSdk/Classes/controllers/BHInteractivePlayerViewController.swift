@@ -19,7 +19,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     @IBOutlet weak var topInteractiveView: UIView!
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var interactiveView: BHInteractiveView!
     @IBOutlet weak var collapseButton: UIButton!
     @IBOutlet weak var tabbedView: BHTabbedView!
@@ -31,9 +30,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
 
     fileprivate var detailsHeaderView: BHDetailsHeaderView?
-
-    fileprivate let hideOverlayInterval: Double = 5.0
-    fileprivate var overlayTimer: Timer?
 
     fileprivate var selectedTab: Tabs = .details
     
@@ -52,8 +48,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         playbackSpeedButton.tintColor = .playerOnDisplayBackground()
         playbackSpeedButton.setTitleColor(.playerOnDisplayBackground(), for: .normal)
         sleepTimerButton.tintColor = .playerOnDisplayBackground()
-
-        showOverlay(true)
 
         interactiveView.type = type
         interactiveView.delegate = self
@@ -88,11 +82,8 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         detailsHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHDetailsHeaderView.reusableIndentifer) as? BHDetailsHeaderView
         detailsHeaderView?.delegate = self
 
-        let tapContentViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapContentView(_:)))
+        let tapContentViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapInteractiveView(_:)))
         contentView.addGestureRecognizer(tapContentViewGestureRecognizer)
-
-        let tapOverlayViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOverlayView(_:)))
-        overlayView.addGestureRecognizer(tapOverlayViewGestureRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,8 +96,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        showOverlay(true)
-        invalidateOverlayTimer()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -168,16 +157,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         let position = BHHybridPlayer.shared.lastSentPosition
         updateLayout(isExpanded, position: position)
     }
-
-    @objc func didTapContentView(_ sender: UITapGestureRecognizer) {
-        showOverlay(false)
-        startOverlayTimer()
-    }
-    
-    @objc func didTapOverlayView(_ sender: UITapGestureRecognizer) {
-        showOverlay(true)
-        invalidateOverlayTimer()
-    }
     
     // MARK: - Private
     
@@ -190,11 +169,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
             collapseButton.setImage(UIImage(systemName: "chevron.compact.down")?.withConfiguration(config), for: .normal)
         }
     }
-    
-    fileprivate func showOverlay(_ hidden: Bool = true) {
-        overlayView.isHidden = hidden
-    }
-        
+            
     // MARK: - Override
     
     override func onStateChanged(_ state: PlayerState, stateFlags: PlayerStateFlags) {
@@ -257,33 +232,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
             selectedIndexPaths.removeAll()
             tableView.reloadData()
         }
-    }
-    
-    // MARK: - Overlay timer
-    
-    fileprivate func startOverlayTimer() {
-
-        invalidateOverlayTimer()
-
-        let timer = Timer.init(timeInterval: hideOverlayInterval, target: self, selector: #selector(overlayTimerHandler(_:)), userInfo: nil, repeats: true)
-        timer.tolerance = hideOverlayInterval
-        RunLoop.main.add(timer, forMode: RunLoop.Mode.default)
-        overlayTimer = timer
-    }
-    
-    fileprivate func invalidateOverlayTimer() {
-
-        guard let timer = overlayTimer else { return }
-
-        timer.invalidate()
-        overlayTimer = nil
-    }
-
-    @objc fileprivate func overlayTimerHandler(_ timer: Timer) {
-
-        guard timer.isValid else { return }
-
-        overlayView.isHidden = true
     }
 }
 

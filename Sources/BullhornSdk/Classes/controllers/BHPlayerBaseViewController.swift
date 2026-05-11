@@ -37,6 +37,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var queueButton: UIButton!
     @IBOutlet weak var fullScreenButton: UIButton!
+    @IBOutlet weak var overlayView: UIView!
 
     weak var delegate: BHPlayerBaseViewControllerDelegate?
 
@@ -86,6 +87,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
     internal var selectedIndexPaths = Set<IndexPath>()
 
+    internal let hideOverlayInterval: Double = 5.0
+    internal var overlayTimer: Timer?
     
     // MARK: - Lifecycle
     
@@ -104,8 +107,10 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.imageLayerView.layer.masksToBounds = false
         
         self.liveTagLabel.isHidden = true
-        self.liveTagLabel.layer.cornerRadius = 4
+        self.liveTagLabel.layer.cornerRadius = 6
         self.liveTagLabel.layer.masksToBounds = true
+        self.liveTagLabel.layer.borderWidth = 2
+        self.liveTagLabel.layer.borderColor = UIColor.playerDisplayBackground().cgColor
         
         self.positionLabel.adjustsFontForContentSizeCategory = true
         self.positionLabel.font = .primaryText()
@@ -150,10 +155,15 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             liveTagLabel.isHidden = false
         }
         
+        showOverlay(false)
+
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
 
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
+
+        let tapOverlayViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOverlayView(_:)))
+        overlayView.addGestureRecognizer(tapOverlayViewGestureRecognizer)
 
         setupAccessibility()
                 
@@ -183,6 +193,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         super.viewWillDisappear(animated)
         
         hideTopMessageView()
+        showOverlay(false)
+        invalidateOverlayTimer()
         BHOrientationManager.shared.landscapeSupported = false
     }
     
@@ -270,6 +282,15 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     func onUserInterfaceRotated() {
         if UIDevice.current.orientation.isFlat { return }
+        
+        if isFullscreen {
+            showOverlay(true)
+            startOverlayTimer()
+        } else {
+            showOverlay(false)
+            invalidateOverlayTimer()
+        }
+        
         updateFullscreenButton()
     }
     
@@ -304,6 +325,23 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         default:
             break
         }
+    }
+
+    @objc internal func didTapRegularView(_ sender: UITapGestureRecognizer) {
+        if isFullscreen {
+            showOverlay(true)
+            startOverlayTimer()
+        }
+    }
+    
+    @objc internal func didTapInteractiveView(_ sender: UITapGestureRecognizer) {
+        showOverlay(true)
+        startOverlayTimer()
+    }
+    
+    @objc internal func didTapOverlayView(_ sender: UITapGestureRecognizer) {
+        showOverlay(false)
+        invalidateOverlayTimer()
     }
     
     // MARK: - Rotation helper
@@ -632,6 +670,37 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         } else {
             fullScreenButton.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.circle")?.withConfiguration(config), for: .normal)
         }
+    }
+    
+    // MARK: - Overlay
+    
+    internal func showOverlay(_ value: Bool = false) {
+        overlayView.isHidden = !value
+    }
+    
+    fileprivate func startOverlayTimer() {
+
+        invalidateOverlayTimer()
+
+        let timer = Timer.init(timeInterval: hideOverlayInterval, target: self, selector: #selector(overlayTimerHandler(_:)), userInfo: nil, repeats: true)
+        timer.tolerance = hideOverlayInterval
+        RunLoop.main.add(timer, forMode: RunLoop.Mode.default)
+        overlayTimer = timer
+    }
+    
+    fileprivate func invalidateOverlayTimer() {
+
+        guard let timer = overlayTimer else { return }
+
+        timer.invalidate()
+        overlayTimer = nil
+    }
+
+    @objc fileprivate func overlayTimerHandler(_ timer: Timer) {
+
+        guard timer.isValid else { return }
+
+        overlayView.isHidden = true
     }
 }
 

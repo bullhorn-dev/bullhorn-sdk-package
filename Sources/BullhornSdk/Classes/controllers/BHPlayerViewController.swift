@@ -62,6 +62,9 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         
         contentStackView.bringSubviewToFront(topNavigationView)
         contentStackView.bringSubviewToFront(bottomNavigationView)
+
+        let tapContentViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapRegularView(_:)))
+        imageLayerView.addGestureRecognizer(tapContentViewGestureRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
