@@ -19,6 +19,18 @@ final class BHPlaybackSpeedBottomSheet: BHBottomSheetController {
         super.viewWillDisappear(animated)
     }
 
+    override var shouldAutorotate: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .allButUpsideDown
+    }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+
     override func loadView() {
         super.loadView()
         

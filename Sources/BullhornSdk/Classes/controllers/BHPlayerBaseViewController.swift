@@ -36,6 +36,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBOutlet weak var playbackSpeedButton: UIButton!
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var queueButton: UIButton!
+    @IBOutlet weak var fullScreenButton: UIButton!
 
     weak var delegate: BHPlayerBaseViewControllerDelegate?
 
@@ -62,7 +63,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
 
     private var isSliding = false
-    
+        
     internal var hasTile = false {
         didSet {
             updateLayers()
@@ -81,7 +82,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         }
     }
     
-    internal var isPortrait: Bool = true
+    internal var isFullscreen: Bool = false
 
     internal var selectedIndexPaths = Set<IndexPath>()
 
@@ -99,8 +100,6 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
         setNeedsStatusBarAppearanceUpdate()
 
-        self.isPortrait = UIDevice.current.orientation.isPortrait
-        
         self.imageLayerView.clipsToBounds = false
         self.imageLayerView.layer.masksToBounds = false
         
@@ -151,12 +150,19 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             liveTagLabel.isHidden = false
         }
         
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+
         NotificationCenter.default.addObserver(self, selector: #selector(onUserInterfaceStyleChangedNotification(notification:)), name: BullhornSdk.UserInterfaceStyleChangedNotification, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
+
         setupAccessibility()
                 
         BHHybridPlayer.shared.addListener(self, withDuplicates: true)
 //        BHLivePlayer.shared.addListener(self)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -164,6 +170,9 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
         reloadData()
         updateSettingsControls()
+        
+        BHOrientationManager.shared.landscapeSupported = true
+        onDeviceOrientationChanged()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -174,6 +183,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         super.viewWillDisappear(animated)
         
         hideTopMessageView()
+        BHOrientationManager.shared.landscapeSupported = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -181,7 +191,19 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 //        BHLivePlayer.shared.removeListener(self)
         super.viewDidDisappear(animated)
     }
-    
+
+    override var shouldAutorotate: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return isFullscreen ? .landscape : .allButUpsideDown
+    }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return isFullscreen ? .landscapeRight : .portrait
+    }
+
     func setupAccessibility() {
         playButton.isAccessibilityElement = true
         playButton.accessibilityLabel = "Play"
@@ -196,7 +218,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         queueButton.accessibilityLabel = "Show playback queue"
         positionLabel.accessibilityTraits = .updatesFrequently
         durationLabel.accessibilityTraits = .updatesFrequently
-        
+                
+        fullScreenButton.isAccessibilityElement = true
+        fullScreenButton.accessibilityTraits = .button
+        fullScreenButton.accessibilityLabel = "Full Screen"
+
         updateSettingsControls()
     }
     
@@ -242,6 +268,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         sleepTimerButton.accessibilityLabel = "Sleep timer \(sleepTimerStatus)"
     }
     
+    func onUserInterfaceRotated() {
+        if UIDevice.current.orientation.isFlat { return }
+        updateFullscreenButton()
+    }
+    
     // MARK: - Notifications
     
     @objc fileprivate func onUserInterfaceStyleChangedNotification(notification: Notification) {
@@ -252,6 +283,54 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
         overrideUserInterfaceStyle = style
         setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    @objc fileprivate func onDeviceOrientationChanged() {
+        let deviceOrientation = UIDevice.current.orientation
+
+        switch deviceOrientation {
+        case .landscapeLeft:
+            isFullscreen = true
+            rotate(to: .landscapeLeft)
+
+        case .landscapeRight:
+            isFullscreen = true
+            rotate(to: .landscapeRight)
+
+        case .portrait:
+            isFullscreen = false
+            rotate(to: .portrait)
+
+        default:
+            break
+        }
+    }
+    
+    // MARK: - Rotation helper
+
+    private func rotate(to orientation: UIInterfaceOrientation) {
+
+        if #available(iOS 16.0, *) {
+
+            guard let scene = view.window?.windowScene else { return }
+
+            let preferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: UIInterfaceOrientationMask(rawValue: UInt(orientation.rawValue)))
+            
+            scene.requestGeometryUpdate(preferences)
+            setNeedsUpdateOfSupportedInterfaceOrientations()
+
+        } else {
+
+            UIDevice.current.setValue(
+                orientation.rawValue,
+                forKey: "orientation"
+            )
+
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
+        
+        onUserInterfaceRotated()
+        updateLayers()
     }
         
     // MARK: - Actions
@@ -339,6 +418,16 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         }
 
         present(queueVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func onFullScreenButton() {
+        isFullscreen.toggle()
+
+        let target: UIInterfaceOrientation = isFullscreen
+            ? .landscapeRight
+            : .portrait
+
+        rotate(to: target)
     }
 
     // MARK: - Slider actions
@@ -510,11 +599,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if post?.isLiveStream() == true {
             self.videoView.emptySpaces = BHEmptySpaces.initial()
         } else {
-            if useLayout && isPortrait {
+            if useLayout && !isFullscreen {
                 let layoutEvent = BHHybridPlayer.shared.bulletinLayout?.getLayoutEvent(position)
                 
                 if let validEvent = layoutEvent {
-                    self.videoView.emptySpaces = validEvent.getEmptySpaces(isPortrait)
+                    self.videoView.emptySpaces = validEvent.getEmptySpaces(!isFullscreen)
                 }
             } else {
                 self.videoView.emptySpaces = BHEmptySpaces.initial()
@@ -532,6 +621,17 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if type == .stream { return }
 
         delegate?.playerViewController(self, didRequestOpenPost: post)
+    }
+    
+    internal func updateFullscreenButton() {
+        let font = UIFont.fontWithName(.robotoRegular, size: 18)
+        let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .regular, scale: .large)
+        
+        if isFullscreen {
+            fullScreenButton.setImage(UIImage(systemName: "arrow.down.forward.and.arrow.up.backward.circle")?.withConfiguration(config), for: .normal)
+        } else {
+            fullScreenButton.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.circle")?.withConfiguration(config), for: .normal)
+        }
     }
 }
 

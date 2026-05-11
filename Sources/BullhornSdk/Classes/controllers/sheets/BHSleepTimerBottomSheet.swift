@@ -46,6 +46,18 @@ final class BHSleepTimerBottomSheet: BHBottomSheetController {
         updateSleepTimer()
     }
     
+    override var shouldAutorotate: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .allButUpsideDown
+    }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    
     fileprivate func updateSleepTimer() {
         let sleepTimerTime = BHHybridPlayer.shared.getSleepTimerInterval()
         let sleepTimerString = sleepTimerTime > 0 ? "+\(sleepTimerTime.stringFormatted())" : BHPlayerSleepTime.off.getTitle()

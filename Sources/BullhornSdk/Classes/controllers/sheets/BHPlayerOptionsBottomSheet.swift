@@ -100,6 +100,18 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
         updateSettings()
     }
     
+    override var shouldAutorotate: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .allButUpsideDown
+    }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    
     func updateSettings() {
         playNextItem.setValueImage(UserDefaults.standard.playNextEnabled ? "checkmark" : nil)
     }

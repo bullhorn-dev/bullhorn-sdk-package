@@ -93,19 +93,10 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
 
         let tapOverlayViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOverlayView(_:)))
         overlayView.addGestureRecognizer(tapOverlayViewGestureRecognizer)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(onRotated), name: UIDevice.orientationDidChangeNotification, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        BHOrientationManager.shared.landscapeSupported = true
-        onRotated()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -116,7 +107,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         super.viewWillDisappear(animated)
         showOverlay(true)
         invalidateOverlayTimer()
-        BHOrientationManager.shared.landscapeSupported = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -126,19 +116,7 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
-    
-    override var shouldAutorotate: Bool {
-        return true
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .allButUpsideDown
-    }
-
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
-    }
-    
+        
     override func updateAfterExpand() {
         super.updateAfterExpand()
 
@@ -146,6 +124,36 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         tabbedView.isHidden = isExpanded
         updateCollapseButton()
         updateLayers()
+    }
+    
+    override func onUserInterfaceRotated() {
+        super.onUserInterfaceRotated()
+        
+        if isFullscreen {
+            videoStackView.axis = .horizontal
+            interactiveStackView.axis = .horizontal
+            tabbedView.isHidden = true
+            topVideoView.isHidden = true
+            topInteractiveView.isHidden = true
+            collapseButton.isHidden = true
+            fakeCollapseButton.isHidden = true
+            detailsView.isHidden = true
+            view.backgroundColor = .playerDisplayBackground()
+            overlayTopOffsetConstraint.constant = 10
+            overlayBottomOffsetConstraint.constant = 10
+        } else {
+            videoStackView.axis = .vertical
+            interactiveStackView.axis = .vertical
+            tabbedView.isHidden = isExpanded
+            topVideoView.isHidden = false
+            topInteractiveView.isHidden = false
+            collapseButton.isHidden = false
+            fakeCollapseButton.isHidden = false
+            detailsView.isHidden = isExpanded
+            view.backgroundColor = .primaryBackground()
+            overlayTopOffsetConstraint.constant = 36
+            overlayBottomOffsetConstraint.constant = 4
+        }
     }
         
     // MARK: - Actions
@@ -171,40 +179,6 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         invalidateOverlayTimer()
     }
     
-    @objc func onRotated() {
-        if UIDevice.current.orientation.isFlat { return }
-        
-        if UIDevice.current.orientation.isLandscape {
-            videoStackView.axis = .horizontal
-            interactiveStackView.axis = .horizontal
-            isPortrait = false
-            tabbedView.isHidden = true
-            topVideoView.isHidden = true
-            topInteractiveView.isHidden = true
-            collapseButton.isHidden = true
-            fakeCollapseButton.isHidden = true
-            detailsView.isHidden = true
-            view.backgroundColor = .playerDisplayBackground()
-            overlayTopOffsetConstraint.constant = 10
-            overlayBottomOffsetConstraint.constant = 0
-        } else if UIDevice.current.orientation.isPortrait {
-            videoStackView.axis = .vertical
-            interactiveStackView.axis = .vertical
-            isPortrait = true
-            tabbedView.isHidden = isExpanded
-            topVideoView.isHidden = false
-            topInteractiveView.isHidden = false
-            collapseButton.isHidden = false
-            fakeCollapseButton.isHidden = false
-            detailsView.isHidden = isExpanded
-            view.backgroundColor = .primaryBackground()
-            overlayTopOffsetConstraint.constant = 36
-            overlayBottomOffsetConstraint.constant = 16
-        }
-        
-        updateLayers()
-    }
-
     // MARK: - Private
     
     fileprivate func updateCollapseButton() {
@@ -246,10 +220,10 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
             videoView.isHidden = !hasVideo
             interactiveView.isHidden = !hasTile
 
-            let showVideo = hasVideo && (isExpanded || !isPortrait || !hasTile)
+            let showVideo = hasVideo && (isExpanded || isFullscreen || !hasTile)
             fakeVideoView.isHidden = !showVideo
 
-            let showInteractive = hasTile && (isExpanded || !isPortrait || !hasVideo)
+            let showInteractive = hasTile && (isExpanded || isFullscreen || !hasVideo)
             fakeInteractiveView.isHidden = !showInteractive
         }
     }

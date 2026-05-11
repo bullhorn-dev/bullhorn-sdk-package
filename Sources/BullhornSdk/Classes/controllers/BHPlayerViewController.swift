@@ -8,6 +8,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     @IBOutlet private(set) weak var contentStackView: UIStackView!
     @IBOutlet private(set) weak var topNavigationView: UIView!
+    @IBOutlet private(set) weak var bottomNavigationView: UIView!
     @IBOutlet private(set) weak var nameView: UIView!
     @IBOutlet private(set) weak var nameLabel: UILabel!
     @IBOutlet private(set) weak var titleView: UIView!
@@ -60,13 +61,14 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         transcriptTableView.reloadData()
         
         contentStackView.bringSubviewToFront(topNavigationView)
+        contentStackView.bringSubviewToFront(bottomNavigationView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        updateTranscriptControls()
-        youtubeButton.isHidden = !hasYouTubeSocialLink()
+//        updateTranscriptControls()
+        youtubeButton.isHidden = !hasYouTubeSocialLink()        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -162,6 +164,26 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         youtubeButton.accessibilityValue = "external link"
     }
     
+    override func onUserInterfaceRotated() {
+        super.onUserInterfaceRotated()
+        
+        if isFullscreen {
+            nameView.isHidden = true
+            titleView.isHidden = true
+            controlsView.isHidden = true
+            topNavigationView.isHidden = true
+            bottomNavigationView.isHidden = true
+            bottomView.isHidden = true
+        } else {
+            nameView.isHidden = false
+            titleView.isHidden = false
+            controlsView.isHidden = false
+            topNavigationView.isHidden = false
+            bottomNavigationView.isHidden = false
+            bottomView.isHidden = false
+        }
+    }
+    
     // MARK: - Actions
     
     @IBAction func onTranscriptButton() {
@@ -220,7 +242,6 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         return post?.socialLinks != nil && post?.socialLinks?.hasYouTube() == true
     }
 }
-
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
