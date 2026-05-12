@@ -6,6 +6,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
     
+    // MARK: - Outlets
+
     @IBOutlet private(set) weak var contentStackView: UIStackView!
     @IBOutlet private(set) weak var topNavigationView: UIView!
     @IBOutlet private(set) weak var bottomNavigationView: UIView!
@@ -17,6 +19,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     @IBOutlet private(set) weak var transcriptView: UIView!
     @IBOutlet private(set) weak var transcriptTableView: UITableView!
     @IBOutlet private(set) weak var youtubeButton: UIButton!
+
+    // MARK: - Outlet collections
 
     @IBOutlet var nameLabels: [UILabel]!
     @IBOutlet var titleLabels: [UILabel]!

@@ -105,11 +105,12 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        
+        if BHHybridPlayer.shared.isFullScreen {
+            return .landscapeRight
+        }
+        
         return .allButUpsideDown
-    }
-
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
     }
     
     func updateSettings() {

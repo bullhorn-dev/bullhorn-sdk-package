@@ -66,6 +66,8 @@ class BHHybridPlayer {
     internal var transcriptSegments: [BHSegment] {
         return transcript?.segments ?? []
     }
+
+    var isFullScreen: Bool = false // UI flag for player & dialogs
     var isTranscriptActive: Bool = false // UI flag for player
 
 //    var playlist: [BHPost]?
@@ -309,6 +311,7 @@ class BHHybridPlayer {
         settings = .initial
         manualPosition = 0
         isTranscriptActive = false
+        isFullScreen = false
         removeQueue()
 
         UserDefaults.standard.playerPostId = nil

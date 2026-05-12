@@ -160,6 +160,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             liveTagLabel.isHidden = false
         }
         
+        BHHybridPlayer.shared.isFullScreen = false
         showOverlay(false)
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -330,6 +331,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         default:
             break
         }
+        
+        BHHybridPlayer.shared.isFullScreen = isFullscreen
     }
 
     @objc internal func didTapRegularView(_ sender: UITapGestureRecognizer) {
@@ -445,11 +448,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
 
     @IBAction func onOptionsButton() {
-        let optionsSheet = BHPlayerOptionsBottomSheet()
-        optionsSheet.preferredSheetSizing = .fit
-        optionsSheet.panToDismissEnabled = true
-        optionsSheet.type = type
-        present(optionsSheet, animated: true)
+        let optionsVC = BHPlayerOptionsBottomSheet()
+        optionsVC.preferredSheetSizing = .fit
+        optionsVC.panToDismissEnabled = true
+        optionsVC.type = type
+        present(optionsVC, animated: true)
     }
     
     @IBAction func onQueueButton() {
@@ -466,6 +469,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBAction func onFullScreenButton() {
         isFullscreen.toggle()
 
+        BHHybridPlayer.shared.isFullScreen = isFullscreen
+        
         let target: UIInterfaceOrientation = isFullscreen
             ? .landscapeRight
             : .portrait
