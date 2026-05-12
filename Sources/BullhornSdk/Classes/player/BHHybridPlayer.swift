@@ -247,7 +247,7 @@ class BHHybridPlayer {
             
             if fileUrl != nil {
                 let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
                              
                 start(with: playerItem, post: post, playlist: playlist)
                              
@@ -264,7 +264,7 @@ class BHHybridPlayer {
                     }
 
                     let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
+                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
 
                     self.start(with: playerItem, post: post, playlist: playlist)
 
@@ -273,7 +273,7 @@ class BHHybridPlayer {
 
             } else {
                 let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
+                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
 
                 self.start(with: playerItem, post: post, playlist: playlist)
 
@@ -289,7 +289,7 @@ class BHHybridPlayer {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
             let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
             
-            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
+            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
             
             self.playerItem = playerItem
             self.post = post
@@ -743,7 +743,7 @@ class BHHybridPlayer {
         let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
         let settings: BHPlayerItem.PlaybackSettings = settings
             
-        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: Double(post.recording?.duration ?? 0), shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
+        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
             
         start(with: playerItem, post: post, playlist: [])
             
