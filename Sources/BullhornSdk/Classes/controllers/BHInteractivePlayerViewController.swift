@@ -41,13 +41,13 @@ class BHInteractivePlayerViewController: BHPlayerBaseViewController {
         BHLog.p("\(#function) - type: \(type)")
         
         view.backgroundColor = .primaryBackground()
-
-        playButton.tintColor = .playerOnDisplayBackground()
-        backwardButton.tintColor = .playerOnDisplayBackground()
-        forwardButton.tintColor = .playerOnDisplayBackground()
-        playbackSpeedButton.tintColor = .playerOnDisplayBackground()
-        playbackSpeedButton.setTitleColor(.playerOnDisplayBackground(), for: .normal)
-        sleepTimerButton.tintColor = .playerOnDisplayBackground()
+        
+        playButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+        backwardButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+        forwardButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+        playbackSpeedButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+        playbackSpeedButtons.forEach({ $0.setTitleColor(.playerOnDisplayBackground(), for: .normal) })
+        sleepTimerButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
 
         interactiveView.type = type
         interactiveView.delegate = self

@@ -10,9 +10,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     @IBOutlet private(set) weak var topNavigationView: UIView!
     @IBOutlet private(set) weak var bottomNavigationView: UIView!
     @IBOutlet private(set) weak var nameView: UIView!
-    @IBOutlet private(set) weak var nameLabel: UILabel!
     @IBOutlet private(set) weak var titleView: UIView!
-    @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var controlsView: UIView!
     @IBOutlet private(set) weak var bottomView: UIView!
     @IBOutlet private(set) weak var transcriptButton: UIButton!
@@ -20,32 +18,35 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     @IBOutlet private(set) weak var transcriptTableView: UITableView!
     @IBOutlet private(set) weak var youtubeButton: UIButton!
 
+    @IBOutlet var nameLabels: [UILabel]!
+    @IBOutlet var titleLabels: [UILabel]!
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         BHLog.p("\(#function) - type: \(type)")
-
+        
         nameView.backgroundColor = .primaryBackground()
         titleView.backgroundColor = .primaryBackground()
         controlsView.backgroundColor = .primaryBackground()
-        titleLabel.textColor = .primary()
-        nameLabel.textColor = .primary()
-        playButton.tintColor = .primary()
-        backwardButton.tintColor = .primary()
-        forwardButton.tintColor = .primary()
-        playbackSpeedButton.tintColor = .primary()
-        playbackSpeedButton.setTitleColor(.primary(), for: .normal)
-        sleepTimerButton.tintColor = .primary()
+        titleLabels.forEach({ $0.textColor = .primary() })
+        nameLabels.forEach({ $0.textColor = .primary() })
+        playButtons.forEach({ $0.tintColor = .primary() })
+        backwardButtons.forEach({ $0.tintColor = .primary() })
+        forwardButtons.forEach({ $0.tintColor = .primary() })
+        playbackSpeedButtons.forEach({ $0.tintColor = .primary() })
+        playbackSpeedButtons.forEach({ $0.setTitleColor(.primary(), for: .normal) })
+        sleepTimerButtons.forEach({ $0.tintColor = .primary() })
         bottomView.backgroundColor = .primaryBackground()
 
-        nameLabel.font = .primaryButton()
-        titleLabel.font = .secondaryButton()
+        nameLabels.forEach({ $0.font = .primaryButton() })
+        titleLabels.forEach({ $0.font = .secondaryButton() })
 
-        transcriptView.isHidden = BHHybridPlayer.shared.isTranscriptActive
-        transcriptButton.isHidden = post?.hasTranscript == false
-
+        transcriptView.isHidden = true ///BHHybridPlayer.shared.isTranscriptActive
+        transcriptButton.isHidden = true ///post?.hasTranscript == false
+ 
         youtubeButton.setTitle("YouTube", for: .normal)
         youtubeButton.backgroundColor = .clear
         youtubeButton.configuration?.baseForegroundColor = .primary()
@@ -93,15 +94,15 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
 
-        nameLabel.text = playerItem.post.userName
-        titleLabel.text = playerItem.post.title
+        nameLabels.forEach({ $0.text = playerItem.post.userName })
+        titleLabels.forEach({ $0.text = playerItem.post.title })
     }
         
     override func resetUI() {
         super.resetUI()
 
-        nameLabel.attributedText = NSAttributedString(string: "")
-        titleLabel.attributedText = NSAttributedString(string: "")
+        nameLabels.forEach({ $0.attributedText = NSAttributedString(string: "") })
+        titleLabels.forEach({ $0.attributedText = NSAttributedString(string: "") })
     }
     
     override func updateVideoLayer(_ isVideoAvailable: Bool) {
@@ -155,7 +156,7 @@ class BHPlayerViewController: BHPlayerBaseViewController {
         super.updateSettingsControls()
         
         let sleepTimerEnabled = BHHybridPlayer.shared.getSleepTimerInterval() > 0
-        sleepTimerButton.tintColor = sleepTimerEnabled ? .primary() : .secondary()
+        sleepTimerButtons.forEach({ $0.tintColor = sleepTimerEnabled ? isFullscreen ? .playerOnDisplayBackground() : .primary() : .secondary() })
     }
     
     override func setupAccessibility() {
@@ -170,6 +171,8 @@ class BHPlayerViewController: BHPlayerBaseViewController {
     override func onUserInterfaceRotated() {
         super.onUserInterfaceRotated()
         
+        let sleepTimerEnabled = BHHybridPlayer.shared.getSleepTimerInterval() > 0
+        
         if isFullscreen {
             nameView.isHidden = true
             titleView.isHidden = true
@@ -177,6 +180,17 @@ class BHPlayerViewController: BHPlayerBaseViewController {
             topNavigationView.isHidden = true
             bottomNavigationView.isHidden = true
             bottomView.isHidden = true
+            titleLabels.forEach({ $0.textColor = .playerOnDisplayBackground() })
+            nameLabels.forEach({ $0.textColor = .playerOnDisplayBackground() })
+            playButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+            forwardButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+            backwardButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+            playbackSpeedButtons.forEach({ $0.tintColor = .playerOnDisplayBackground() })
+            playbackSpeedButtons.forEach({ $0.setTitleColor(.playerOnDisplayBackground(), for: .normal) })
+            sleepTimerButtons.forEach({ $0.tintColor = sleepTimerEnabled ? .playerOnDisplayBackground() : .secondary() })
+            positionLabels.forEach({ $0.textColor = .playerOnDisplayBackground() })
+            durationLabels.forEach({ $0.textColor = .playerOnDisplayBackground() })
+
         } else {
             nameView.isHidden = false
             titleView.isHidden = false
@@ -184,6 +198,16 @@ class BHPlayerViewController: BHPlayerBaseViewController {
             topNavigationView.isHidden = false
             bottomNavigationView.isHidden = false
             bottomView.isHidden = false
+            titleLabels.forEach({ $0.textColor = .primary() })
+            nameLabels.forEach({ $0.textColor = .primary() })
+            playButtons.forEach({ $0.tintColor = .primary() })
+            forwardButtons.forEach({ $0.tintColor = .primary() })
+            backwardButtons.forEach({ $0.tintColor = .primary() })
+            playbackSpeedButtons.forEach({ $0.tintColor = .primary() })
+            playbackSpeedButtons.forEach({ $0.setTitleColor(.primary(), for: .normal) })
+            sleepTimerButtons.forEach({ $0.tintColor = sleepTimerEnabled ? .primary() : .secondary() })
+            positionLabels.forEach({ $0.textColor = .primary() })
+            durationLabels.forEach({ $0.textColor = .primary() })
         }
     }
     

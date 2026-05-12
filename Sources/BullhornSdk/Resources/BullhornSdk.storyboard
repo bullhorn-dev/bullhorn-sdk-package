@@ -61,7 +61,7 @@
                                                                 <rect key="frame" x="44" y="0.0" width="242" height="44"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </view>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAy-dH-j2B" customClass="AVRoutePickerView">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAy-dH-j2B" customClass="BHRoutePickerView" customModule="BullhornSdk">
                                                                 <rect key="frame" x="286" y="0.0" width="44" height="44"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -500,14 +500,14 @@
                                                             <imageReference key="image" image="chevron.down" catalog="system" symbolScale="large"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="tapCloseButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="BDR-Fc-jjH"/>
+                                                            <action selector="tapCloseButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="b1o-Ku-ktc"/>
                                                         </connections>
                                                     </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12C-5y-yI7">
                                                         <rect key="frame" x="52" y="0.0" width="270" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C9L-Vw-4SR" customClass="AVRoutePickerView">
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C9L-Vw-4SR" customClass="BHRoutePickerView" customModule="BullhornSdk">
                                                         <rect key="frame" x="286" y="0.0" width="44" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -529,7 +529,7 @@
                                                             <imageReference key="image" image="ellipsis" catalog="system" symbolScale="large"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onOptionsButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="Un5-Zn-ceb"/>
+                                                            <action selector="onOptionsButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="kPP-Bq-aDr"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -595,7 +595,7 @@
                                         <color key="maximumTrackTintColor" name="bhColorPlayerOnDisplayBg"/>
                                         <color key="thumbTintColor" name="bhColorAccent"/>
                                         <connections>
-                                            <action selector="sliderValueChanged:forEvent:" destination="xTo-Xw-AD1" eventType="valueChanged" id="NgX-ba-qqx"/>
+                                            <action selector="sliderValueChanged:forEvent:" destination="H3L-AM-K5q" eventType="valueChanged" id="fv1-VU-aAO"/>
                                         </connections>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c6m-Nd-krG" userLabel="positionLabel">
@@ -629,11 +629,11 @@
                                                             <imageReference key="image" image="list.bullet.circle" catalog="system" symbolScale="large"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onQueueButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="OsI-qB-eTY"/>
+                                                            <action selector="onQueueButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="mu4-6n-yXO"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k7J-gk-s0j">
-                                                        <rect key="frame" x="55" y="0.0" width="44" height="56"/>
+                                                        <rect key="frame" x="53" y="0.0" width="44" height="56"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="44" id="Dne-bT-SPT"/>
                                                         </constraints>
@@ -642,14 +642,13 @@
                                                             <color key="titleColor" name="bhColorPlayerOnDisplayBg"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onPlaybackSpeedButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="WON-p7-vv0"/>
+                                                            <action selector="onPlaybackSpeedButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="OSv-UF-DVW"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1B5-Bi-LNj">
-                                                        <rect key="frame" x="110" y="1" width="44" height="52.666666666666671"/>
+                                                        <rect key="frame" x="106" y="1" width="50" height="52.666666666666671"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="44" id="BCD-5k-KRo"/>
-                                                            <constraint firstAttribute="width" constant="44" id="Cuu-eT-FPZ"/>
+                                                            <constraint firstAttribute="width" constant="50" id="Cuu-eT-FPZ"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -658,7 +657,7 @@
                                                             <imageReference key="backgroundImage" image="gobackward.15" catalog="system" symbolScale="small"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onBackwardButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="3dF-GF-nEq"/>
+                                                            <action selector="onBackwardButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="6aM-jH-WNr"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J06-dP-UWa">
@@ -674,14 +673,13 @@
                                                             <imageReference key="backgroundImage" image="play.fill" catalog="system" symbolScale="medium"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onPlayButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="rl0-uf-2GW"/>
+                                                            <action selector="onPlayButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="y60-p3-eu1"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6cs-e4-DBP">
-                                                        <rect key="frame" x="220" y="1" width="44" height="52.666666666666671"/>
+                                                        <rect key="frame" x="218" y="1" width="50" height="52.666666666666671"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="Ba3-Tc-0QY"/>
-                                                            <constraint firstAttribute="height" constant="44" id="bqm-Jd-GFa"/>
+                                                            <constraint firstAttribute="width" constant="50" id="Ba3-Tc-0QY"/>
                                                         </constraints>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -690,11 +688,11 @@
                                                             <imageReference key="backgroundImage" image="goforward.15" catalog="system" symbolScale="small"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onForwardButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="pYV-5L-jly"/>
+                                                            <action selector="onForwardButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="AwR-cE-9VF"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HvE-Ye-CpM">
-                                                        <rect key="frame" x="275" y="0.0" width="44" height="56"/>
+                                                        <rect key="frame" x="277" y="0.0" width="44" height="56"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="44" id="8WT-Lc-QgK"/>
                                                         </constraints>
@@ -705,7 +703,7 @@
                                                             <imageReference key="image" image="timer" catalog="system" symbolScale="large"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onSleepTimerButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="tBN-bz-pLu"/>
+                                                            <action selector="onSleepTimerButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="jFm-Ur-fim"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r9I-PH-xph">
@@ -721,7 +719,6 @@
                                                             <imageReference key="image" image="arrow.down.forward.and.arrow.up.backward.circle" catalog="system" symbolScale="large"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="onFullScreenButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="7Tb-kt-nhq"/>
                                                             <action selector="onFullScreenButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="NK3-Iy-aNY"/>
                                                         </connections>
                                                     </button>
@@ -780,30 +777,15 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="Sip-qC-siB" id="kGf-Oa-oVg"/>
-                        <outlet property="backwardButton" destination="v8Q-Hi-Ynj" id="M8O-jW-9b4"/>
                         <outlet property="bottomNavigationView" destination="uRn-HC-0nS" id="qnv-MF-spt"/>
                         <outlet property="bottomView" destination="xrJ-JW-9YI" id="5ME-Za-sf5"/>
-                        <outlet property="closeButton" destination="jlR-Pj-Vyl" id="PYm-i1-ckJ"/>
                         <outlet property="contentStackView" destination="7Gx-8g-Kfq" id="e86-Zs-HIg"/>
                         <outlet property="controlsView" destination="t9U-L8-Opr" id="vbB-Ey-3Tp"/>
-                        <outlet property="durationLabel" destination="L5I-NX-DeK" id="co8-TW-mxk"/>
-                        <outlet property="forwardButton" destination="Lr3-8z-Pac" id="7kB-CW-XYB"/>
-                        <outlet property="fullScreenButton" destination="foP-du-iXi" id="qbx-93-mOf"/>
                         <outlet property="imageLayerView" destination="BVl-tE-9Zl" id="vdV-zB-hum"/>
                         <outlet property="imageView" destination="rch-oU-K4o" id="5aZ-xU-PKo"/>
                         <outlet property="liveTagLabel" destination="R0K-2c-Tik" id="uaa-ME-9cA"/>
-                        <outlet property="nameLabel" destination="SBV-XQ-ouN" id="vIp-fa-oMy"/>
                         <outlet property="nameView" destination="XDK-m3-Q1D" id="VeD-8O-zhl"/>
-                        <outlet property="optionsButton" destination="gir-R1-i9J" id="Hqk-ef-Und"/>
                         <outlet property="overlayView" destination="Plf-ce-1We" id="IGw-Ob-MrY"/>
-                        <outlet property="playButton" destination="3Of-Un-IUE" id="loK-vW-laM"/>
-                        <outlet property="playbackSpeedButton" destination="Gnm-pA-0ht" id="UK8-H6-QAg"/>
-                        <outlet property="positionLabel" destination="lDX-nk-lFf" id="sE1-SH-Us2"/>
-                        <outlet property="queueButton" destination="WJx-v5-55U" id="RV5-bp-8aV"/>
-                        <outlet property="routePickerView" destination="zAy-dH-j2B" id="wWX-O0-NGr"/>
-                        <outlet property="sleepTimerButton" destination="8Me-0y-yNY" id="Axq-4A-SgZ"/>
-                        <outlet property="slider" destination="MaD-9f-YKA" id="8BK-b6-DvQ"/>
-                        <outlet property="titleLabel" destination="aY0-ym-zuX" id="rqd-mG-VlN"/>
                         <outlet property="titleView" destination="JsL-64-ILe" id="EMd-K4-rLe"/>
                         <outlet property="topNavigationView" destination="FUO-bW-qDU" id="Tey-QL-pha"/>
                         <outlet property="transcriptButton" destination="tXr-nE-7pI" id="Us2-Xx-tcf"/>
@@ -811,6 +793,36 @@
                         <outlet property="transcriptView" destination="N1S-Af-jgj" id="YSr-4J-b2K"/>
                         <outlet property="videoView" destination="WGY-KG-0b7" id="Eff-Hg-hka"/>
                         <outlet property="youtubeButton" destination="CIj-ux-jrX" id="nTb-mo-hEV"/>
+                        <outletCollection property="nameLabels" destination="SBV-XQ-ouN" collectionClass="NSMutableArray" id="sxu-G0-cd5"/>
+                        <outletCollection property="titleLabels" destination="aY0-ym-zuX" collectionClass="NSMutableArray" id="5Q2-2d-1OL"/>
+                        <outletCollection property="nameLabels" destination="lC9-O0-SH5" collectionClass="NSMutableArray" id="URa-cR-6YN"/>
+                        <outletCollection property="titleLabels" destination="jLP-Z2-KcE" collectionClass="NSMutableArray" id="pcQ-c1-xYW"/>
+                        <outletCollection property="closeButtons" destination="jlR-Pj-Vyl" collectionClass="NSMutableArray" id="0sU-9w-hr5"/>
+                        <outletCollection property="closeButtons" destination="OKN-WO-zOx" collectionClass="NSMutableArray" id="5Ct-GM-btp"/>
+                        <outletCollection property="optionsButtons" destination="P8O-9D-9h8" collectionClass="NSMutableArray" id="Mcr-XY-qHw"/>
+                        <outletCollection property="optionsButtons" destination="gir-R1-i9J" collectionClass="NSMutableArray" id="u0d-re-uhE"/>
+                        <outletCollection property="routePickerViews" destination="zAy-dH-j2B" collectionClass="NSMutableArray" id="QT2-VB-ajM"/>
+                        <outletCollection property="routePickerViews" destination="C9L-Vw-4SR" collectionClass="NSMutableArray" id="GY6-R3-uwE"/>
+                        <outletCollection property="queueButtons" destination="WJx-v5-55U" collectionClass="NSMutableArray" id="cwQ-Tt-OEw"/>
+                        <outletCollection property="queueButtons" destination="ewg-G5-XWF" collectionClass="NSMutableArray" id="w8L-Y1-Cei"/>
+                        <outletCollection property="fullScreenButtons" destination="foP-du-iXi" collectionClass="NSMutableArray" id="3bE-In-eJM"/>
+                        <outletCollection property="fullScreenButtons" destination="r9I-PH-xph" collectionClass="NSMutableArray" id="LiA-KN-Qpa"/>
+                        <outletCollection property="playButtons" destination="3Of-Un-IUE" collectionClass="NSMutableArray" id="4YG-s0-NM6"/>
+                        <outletCollection property="playButtons" destination="J06-dP-UWa" collectionClass="NSMutableArray" id="K1l-rV-qN2"/>
+                        <outletCollection property="forwardButtons" destination="Lr3-8z-Pac" collectionClass="NSMutableArray" id="sB5-nG-QCD"/>
+                        <outletCollection property="forwardButtons" destination="6cs-e4-DBP" collectionClass="NSMutableArray" id="ykh-eV-iLX"/>
+                        <outletCollection property="backwardButtons" destination="v8Q-Hi-Ynj" collectionClass="NSMutableArray" id="nQu-cV-KEf"/>
+                        <outletCollection property="backwardButtons" destination="1B5-Bi-LNj" collectionClass="NSMutableArray" id="GVx-SM-SMq"/>
+                        <outletCollection property="playbackSpeedButtons" destination="Gnm-pA-0ht" collectionClass="NSMutableArray" id="RPS-0N-cZA"/>
+                        <outletCollection property="playbackSpeedButtons" destination="k7J-gk-s0j" collectionClass="NSMutableArray" id="AH7-fB-5r1"/>
+                        <outletCollection property="sleepTimerButtons" destination="8Me-0y-yNY" collectionClass="NSMutableArray" id="X05-LZ-XdY"/>
+                        <outletCollection property="sleepTimerButtons" destination="HvE-Ye-CpM" collectionClass="NSMutableArray" id="MTq-yj-7AA"/>
+                        <outletCollection property="positionLabels" destination="c6m-Nd-krG" collectionClass="NSMutableArray" id="pUv-5H-NhX"/>
+                        <outletCollection property="positionLabels" destination="lDX-nk-lFf" collectionClass="NSMutableArray" id="omi-ww-VvS"/>
+                        <outletCollection property="durationLabels" destination="L5I-NX-DeK" collectionClass="NSMutableArray" id="szO-Dh-sLA"/>
+                        <outletCollection property="durationLabels" destination="MAd-Oh-y3V" collectionClass="NSMutableArray" id="caG-Jc-UAs"/>
+                        <outletCollection property="sliders" destination="MaD-9f-YKA" collectionClass="NSMutableArray" id="kIH-Pg-VEg"/>
+                        <outletCollection property="sliders" destination="IZv-vt-nsW" collectionClass="NSMutableArray" id="Y8s-h0-gYv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbF-LS-b1K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1205,11 +1217,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
+                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -1237,11 +1249,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="34"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="81" width="390" height="220"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1302,7 +1314,7 @@
                                                                         <rect key="frame" x="52" y="0.0" width="270" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </view>
-                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="AVRoutePickerView">
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="BHRoutePickerView" customModule="BullhornSdk">
                                                                         <rect key="frame" x="286" y="0.0" width="44" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1639,40 +1651,40 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="XzN-Nb-aJp" id="84q-V2-LYF"/>
-                        <outlet property="backwardButton" destination="SyG-hr-ZdY" id="IbL-es-GfC"/>
-                        <outlet property="closeButton" destination="JLd-vr-mtx" id="3Wu-Lh-G3M"/>
                         <outlet property="collapseButton" destination="Bhx-w3-8sw" id="EZv-VJ-VOA"/>
                         <outlet property="contentView" destination="Sju-uH-8lj" id="a7X-QF-Nh3"/>
                         <outlet property="contentViewHeightConstraint" destination="0Xn-88-18J" id="re8-bX-Abb"/>
                         <outlet property="detailsView" destination="cEo-BV-Rhb" id="J7c-gy-z8e"/>
-                        <outlet property="durationLabel" destination="WSv-To-yS0" id="UE9-Hi-aip"/>
                         <outlet property="fakeCollapseButton" destination="txE-EL-20w" id="yE5-CD-DRR"/>
                         <outlet property="fakeInteractiveView" destination="F9x-NY-X0e" id="1rc-Q9-4es"/>
                         <outlet property="fakeVideoView" destination="KpY-vp-3Rd" id="SLb-lC-aQ4"/>
-                        <outlet property="forwardButton" destination="pnL-VQ-BDs" id="V2O-p1-QSe"/>
-                        <outlet property="fullScreenButton" destination="IeP-og-Gvc" id="hhH-Yk-2sW"/>
                         <outlet property="imageLayerView" destination="Rgm-B9-1tl" id="B7l-KR-kb5"/>
                         <outlet property="imageView" destination="XMQ-O1-Nvh" id="qRC-Dt-JIm"/>
                         <outlet property="interactiveStackView" destination="gm0-iV-bj2" id="h9y-4j-bzX"/>
                         <outlet property="interactiveView" destination="J65-Nu-rNX" id="SLO-CZ-OXq"/>
                         <outlet property="liveTagLabel" destination="x1h-Sb-HGY" id="7b4-ja-Z5p"/>
-                        <outlet property="optionsButton" destination="3I5-VL-1T9" id="ELK-Lv-ifD"/>
                         <outlet property="overlayBottomOffsetConstraint" destination="FdL-Cu-fBq" id="qnW-X7-fQb"/>
                         <outlet property="overlayTopOffsetConstraint" destination="Vt8-p0-pcC" id="hG9-ae-aDf"/>
                         <outlet property="overlayView" destination="fVd-sW-hzf" id="rCW-iG-2HK"/>
-                        <outlet property="playButton" destination="JjD-qu-HCL" id="8Pw-La-rRH"/>
-                        <outlet property="playbackSpeedButton" destination="iCT-g5-6UY" id="QKj-Mw-nxg"/>
-                        <outlet property="positionLabel" destination="rG6-w4-xJL" id="PJM-qM-jX3"/>
-                        <outlet property="queueButton" destination="3T3-wO-uCk" id="0G6-Jm-7PQ"/>
-                        <outlet property="routePickerView" destination="m3P-Xr-jNS" id="vAw-CW-yAU"/>
-                        <outlet property="sleepTimerButton" destination="LEv-td-YwK" id="EV1-4W-Bak"/>
-                        <outlet property="slider" destination="Ctc-KZ-Oxf" id="006-3W-RB9"/>
                         <outlet property="tabbedView" destination="sio-JJ-vAg" id="iS1-pF-26r"/>
                         <outlet property="tableView" destination="dHk-Zh-HYW" id="Bav-vN-D7H"/>
                         <outlet property="topInteractiveView" destination="O9J-29-5vt" id="nPC-vM-Dex"/>
                         <outlet property="topVideoView" destination="ULM-tQ-GIm" id="Aee-ak-KVM"/>
                         <outlet property="videoStackView" destination="CpR-df-7yi" id="kWj-ah-Ssj"/>
                         <outlet property="videoView" destination="qYf-GY-7cU" id="kyf-lM-69I"/>
+                        <outletCollection property="closeButtons" destination="JLd-vr-mtx" collectionClass="NSMutableArray" id="bZw-NT-bER"/>
+                        <outletCollection property="optionsButtons" destination="3I5-VL-1T9" collectionClass="NSMutableArray" id="df5-Mg-l1U"/>
+                        <outletCollection property="routePickerViews" destination="m3P-Xr-jNS" collectionClass="NSMutableArray" id="OuE-Qh-vYd"/>
+                        <outletCollection property="queueButtons" destination="3T3-wO-uCk" collectionClass="NSMutableArray" id="2yA-PR-rrh"/>
+                        <outletCollection property="fullScreenButtons" destination="IeP-og-Gvc" collectionClass="NSMutableArray" id="0L3-py-z1s"/>
+                        <outletCollection property="playButtons" destination="JjD-qu-HCL" collectionClass="NSMutableArray" id="Bf6-UB-65G"/>
+                        <outletCollection property="backwardButtons" destination="SyG-hr-ZdY" collectionClass="NSMutableArray" id="91a-Oj-UDO"/>
+                        <outletCollection property="forwardButtons" destination="pnL-VQ-BDs" collectionClass="NSMutableArray" id="l5v-Ef-sXB"/>
+                        <outletCollection property="playbackSpeedButtons" destination="iCT-g5-6UY" collectionClass="NSMutableArray" id="M4f-Tr-VgX"/>
+                        <outletCollection property="sleepTimerButtons" destination="LEv-td-YwK" collectionClass="NSMutableArray" id="Mr7-sD-O1e"/>
+                        <outletCollection property="positionLabels" destination="rG6-w4-xJL" collectionClass="NSMutableArray" id="4db-1b-Axs"/>
+                        <outletCollection property="durationLabels" destination="WSv-To-yS0" collectionClass="NSMutableArray" id="HBZ-Me-p1w"/>
+                        <outletCollection property="sliders" destination="Ctc-KZ-Oxf" collectionClass="NSMutableArray" id="e2J-is-xaU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5bz-Hs-u9o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

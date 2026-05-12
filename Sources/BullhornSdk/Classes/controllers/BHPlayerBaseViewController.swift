@@ -17,27 +17,32 @@ protocol BHPlayerBaseViewControllerDelegate: AnyObject {
 }
 
 class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
-
+    
+    // MARK: - Outlets
+    
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var topVideoView: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var videoView: BHMediaVideoView!
     @IBOutlet weak var imageLayerView: UIView!
     @IBOutlet weak var liveTagLabel: UILabel!
-    @IBOutlet weak var closeButton: UIButton!
-    @IBOutlet weak var routePickerView: BHRoutePickerView!
-    @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var positionLabel: UILabel!
-    @IBOutlet weak var durationLabel: UILabel!
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var forwardButton: UIButton!
-    @IBOutlet weak var backwardButton: UIButton!
-    @IBOutlet weak var sleepTimerButton: UIButton!
-    @IBOutlet weak var playbackSpeedButton: UIButton!
-    @IBOutlet weak var optionsButton: UIButton!
-    @IBOutlet weak var queueButton: UIButton!
-    @IBOutlet weak var fullScreenButton: UIButton!
     @IBOutlet weak var overlayView: UIView!
+    
+    // MARK: - Outlet Collections
+    
+    @IBOutlet var closeButtons: [UIButton]!
+    @IBOutlet var optionsButtons: [UIButton]!
+    @IBOutlet var routePickerViews: [BHRoutePickerView]!
+    @IBOutlet var queueButtons: [UIButton]!
+    @IBOutlet var fullScreenButtons: [UIButton]!
+    @IBOutlet var playButtons: [UIButton]!
+    @IBOutlet var forwardButtons: [UIButton]!
+    @IBOutlet var backwardButtons: [UIButton]!
+    @IBOutlet var sleepTimerButtons: [UIButton]!
+    @IBOutlet var playbackSpeedButtons: [UIButton]!
+    @IBOutlet var positionLabels: [UILabel]!
+    @IBOutlet var durationLabels: [UILabel]!
+    @IBOutlet var sliders: [UISlider]!
 
     weak var delegate: BHPlayerBaseViewControllerDelegate?
 
@@ -112,46 +117,46 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         self.liveTagLabel.layer.borderWidth = 2
         self.liveTagLabel.layer.borderColor = UIColor.playerDisplayBackground().cgColor
         
-        self.positionLabel.adjustsFontForContentSizeCategory = true
-        self.positionLabel.font = .primaryText()
-        self.durationLabel.adjustsFontForContentSizeCategory = true
-        self.durationLabel.font = .primaryText()
+        self.positionLabels.forEach({ $0.adjustsFontForContentSizeCategory = true })
+        self.positionLabels.forEach({ $0.font = .primaryText() })
+        self.durationLabels.forEach({ $0.adjustsFontForContentSizeCategory = true })
+        self.durationLabels.forEach({ $0.font = .primaryText() })
         
         let font = UIFont.fontWithName(.robotoRegular, size: 18)
-        self.playbackSpeedButton.setTitle("1x", for: .normal)
-        self.playbackSpeedButton.titleLabel?.font = font
+        self.playbackSpeedButtons.forEach({ $0.setTitle("1x", for: .normal) })
+        self.playbackSpeedButtons.forEach({ $0.titleLabel?.font = font })
         
         let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .medium, scale: .large)
         let image = UIImage(systemName: "timer")?.withConfiguration(config)
-        self.sleepTimerButton.setImage(image, for: .normal)
+        self.sleepTimerButtons.forEach({ $0.setImage(image, for: .normal) })
 
         self.videoView.isHidden = true
         
-        self.slider.isContinuous = true
+        self.sliders.forEach({ $0.isContinuous = true })
 
-        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+        queueButtons.forEach({ $0.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton() })
 
         if type == .waitingRoom {
-            playButton.isHidden = true
-            backwardButton.isHidden = true
-            forwardButton.isHidden = true
-            playbackSpeedButton.isHidden = true
-            sleepTimerButton.isHidden = true
-            routePickerView.isHidden = true
-            slider.isHidden = true
-            positionLabel.isHidden = true
-            durationLabel.isHidden = true
+            playButtons.forEach({ $0.isHidden = true })
+            backwardButtons.forEach({ $0.isHidden = true })
+            forwardButtons.forEach({ $0.isHidden = true })
+            playbackSpeedButtons.forEach({ $0.isHidden = true })
+            sleepTimerButtons.forEach({ $0.isHidden = true })
+            routePickerViews.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isHidden = true })
+            positionLabels.forEach({ $0.isHidden = true })
+            durationLabels.forEach({ $0.isHidden = true })
         }
         
         if type == .stream || post?.isLiveStream() == true {
-            backwardButton.isHidden = true
-            forwardButton.isHidden = true
-            playbackSpeedButton.isHidden = true
-            sleepTimerButton.isHidden = true
-            optionsButton.isHidden = true
-            slider.isHidden = true
-            positionLabel.isHidden = true
-            durationLabel.isHidden = true
+            backwardButtons.forEach({ $0.isHidden = true })
+            forwardButtons.forEach({ $0.isHidden = true })
+            playbackSpeedButtons.forEach({ $0.isHidden = true })
+            sleepTimerButtons.forEach({ $0.isHidden = true })
+            optionsButtons.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isHidden = true })
+            positionLabels.forEach({ $0.isHidden = true })
+            durationLabels.forEach({ $0.isHidden = true })
             liveTagLabel.isHidden = false
         }
         
@@ -215,25 +220,25 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return isFullscreen ? .landscapeRight : .portrait
     }
-
+ 
     func setupAccessibility() {
-        playButton.isAccessibilityElement = true
-        playButton.accessibilityLabel = "Play"
-        forwardButton.isAccessibilityElement = true
-        forwardButton.accessibilityLabel = "Forward 15 seconds"
-        backwardButton.isAccessibilityElement = true
-        backwardButton.accessibilityLabel = "Backward 15 seconds"
-        optionsButton.isAccessibilityElement = true
-        optionsButton.accessibilityLabel = "More options"
-        closeButton.isAccessibilityElement = true
-        closeButton.accessibilityLabel = "Collapse Player"
-        queueButton.accessibilityLabel = "Show playback queue"
-        positionLabel.accessibilityTraits = .updatesFrequently
-        durationLabel.accessibilityTraits = .updatesFrequently
+        playButtons.forEach({ $0.isAccessibilityElement = true })
+        playButtons.forEach({ $0.accessibilityLabel = "Play" })
+        forwardButtons.forEach({ $0.isAccessibilityElement = true })
+        forwardButtons.forEach({ $0.accessibilityLabel = "Forward 15 seconds" })
+        backwardButtons.forEach({ $0.isAccessibilityElement = true })
+        backwardButtons.forEach({ $0.accessibilityLabel = "Backward 15 seconds" })
+        optionsButtons.forEach({ $0.isAccessibilityElement = true })
+        optionsButtons.forEach({ $0.accessibilityLabel = "More options" })
+        closeButtons.forEach({ $0.isAccessibilityElement = true })
+        closeButtons.forEach({ $0.accessibilityLabel = "Collapse Player" })
+        queueButtons.forEach({ $0.accessibilityLabel = "Show playback queue" })
+        positionLabels.forEach({ $0.accessibilityTraits = .updatesFrequently })
+        durationLabels.forEach({ $0.accessibilityTraits = .updatesFrequently })
                 
-        fullScreenButton.isAccessibilityElement = true
-        fullScreenButton.accessibilityTraits = .button
-        fullScreenButton.accessibilityLabel = "Full Screen"
+        fullScreenButtons.forEach({ $0.isAccessibilityElement = true })
+        fullScreenButtons.forEach({ $0.accessibilityTraits = .button })
+        fullScreenButtons.forEach({ $0.accessibilityLabel = "Full Screen" })
 
         updateSettingsControls()
     }
@@ -264,20 +269,20 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     func refreshTranscriptForPosition(_ position: Double = 0) {}
     
     func updateAfterSettingsChanged() {
-        queueButton.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton()
+        queueButtons.forEach({ $0.isHidden = !BHHybridPlayer.shared.shouldShowQueueButton() })
     }
     
     func updateSettingsControls() {
         guard let playerItem = BHHybridPlayer.shared.playerItem else { return }
 
-        playbackSpeedButton.setTitle(playerItem.playbackSettings.playbackSpeedString(), for: .normal)
-        playbackSpeedButton.isAccessibilityElement = true
-        playbackSpeedButton.accessibilityLabel = "Playback speed \(playerItem.playbackSettings.playbackSpeedString())"
+        playbackSpeedButtons.forEach({ $0.setTitle(playerItem.playbackSettings.playbackSpeedString(), for: .normal) })
+        playbackSpeedButtons.forEach({ $0.isAccessibilityElement = true })
+        playbackSpeedButtons.forEach({ $0.accessibilityLabel = "Playback speed \(playerItem.playbackSettings.playbackSpeedString())" })
 
         let sleepTimerEnabled = BHHybridPlayer.shared.getSleepTimerInterval() > 0
         let sleepTimerStatus = sleepTimerEnabled ? "On" : "Off"
-        sleepTimerButton.isAccessibilityElement = true
-        sleepTimerButton.accessibilityLabel = "Sleep timer \(sleepTimerStatus)"
+        sleepTimerButtons.forEach({ $0.isAccessibilityElement = true })
+        sleepTimerButtons.forEach({ $0.accessibilityLabel = "Sleep timer \(sleepTimerStatus)" })
     }
     
     func onUserInterfaceRotated() {
@@ -511,78 +516,78 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         case .playing:
             controlsEnabled = true
             showIndicator = stateFlags == .buffering
-            playButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
-            playButton.accessibilityLabel = "Pause"
+            playButtons.forEach({ $0.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal) })
+            playButtons.forEach({ $0.accessibilityLabel = "Pause" })
 
         case .paused:
             controlsEnabled = true
-            playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-            playButton.accessibilityLabel = "Play"
+            playButtons.forEach({ $0.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal) })
+            playButtons.forEach({ $0.accessibilityLabel = "Play" })
 
         case .ended:
             controlsEnabled = true
-            playButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+            playButtons.forEach({ $0.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal) })
 
         case .failed:
             showRefresh = true
-            playButton.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
-            playButton.accessibilityLabel = "Retry"
+            playButtons.forEach({ $0.setBackgroundImage(UIImage(systemName: "arrow.clockwise"), for: .normal) })
+            playButtons.forEach({ $0.accessibilityLabel = "Retry" })
         }
 
         if showIndicator {
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
-            playButton.isHidden = true
-            backwardButton.isHidden = true
-            forwardButton.isHidden = true
-            playbackSpeedButton.isHidden = true
-            sleepTimerButton.isHidden = true
-            routePickerView.isHidden = true
+            playButtons.forEach({ $0.isHidden = true })
+            backwardButtons.forEach({ $0.isHidden = true })
+            forwardButtons.forEach({ $0.isHidden = true })
+            playbackSpeedButtons.forEach({ $0.isHidden = true })
+            sleepTimerButtons.forEach({ $0.isHidden = true })
+            routePickerViews.forEach({ $0.isHidden = true })
         } else if showRefresh {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
-            playButton.isHidden = false
-            backwardButton.isHidden = true
-            forwardButton.isHidden = true
-            playbackSpeedButton.isHidden = true
-            sleepTimerButton.isHidden = true
-            playButton.isEnabled = true
+            playButtons.forEach({ $0.isHidden = false })
+            backwardButtons.forEach({ $0.isHidden = true })
+            forwardButtons.forEach({ $0.isHidden = true })
+            playbackSpeedButtons.forEach({ $0.isHidden = true })
+            sleepTimerButtons.forEach({ $0.isHidden = true })
+            playButtons.forEach({ $0.isEnabled = true })
         } else {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
-            playButton.isHidden = false
-            backwardButton.isHidden = false
-            forwardButton.isHidden = false
-            playbackSpeedButton.isHidden = false
-            sleepTimerButton.isHidden = false
-            playButton.isEnabled = true
-            backwardButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
-            forwardButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
-            playbackSpeedButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
-            sleepTimerButton.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive()
-            routePickerView.isHidden = !controlsEnabled
+            playButtons.forEach({ $0.isHidden = false })
+            backwardButtons.forEach({ $0.isHidden = false })
+            forwardButtons.forEach({ $0.isHidden = false })
+            playbackSpeedButtons.forEach({ $0.isHidden = false })
+            sleepTimerButtons.forEach({ $0.isHidden = false })
+            playButtons.forEach({ $0.isEnabled = true })
+            backwardButtons.forEach({ $0.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive() })
+            forwardButtons.forEach({ $0.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive() })
+            playbackSpeedButtons.forEach({ $0.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive() })
+            sleepTimerButtons.forEach({ $0.isEnabled = controlsEnabled && BHHybridPlayer.shared.isActive() })
+            routePickerViews.forEach({ $0.isHidden = !controlsEnabled })
         }
                 
         if playerItem.isStream || post.isLiveStream() || type == .waitingRoom {
-            backwardButton.isHidden = true
-            forwardButton.isHidden = true
-            optionsButton.isHidden = true
-            playbackSpeedButton.isHidden = true
-            sleepTimerButton.isHidden = true
-            slider.isHidden = true
-            slider.isEnabled = false
-            positionLabel.isHidden = true
-            durationLabel.isHidden = true
+            backwardButtons.forEach({ $0.isHidden = true })
+            forwardButtons.forEach({ $0.isHidden = true })
+            optionsButtons.forEach({ $0.isHidden = true })
+            playbackSpeedButtons.forEach({ $0.isHidden = true })
+            sleepTimerButtons.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isEnabled = false })
+            positionLabels.forEach({ $0.isHidden = true })
+            durationLabels.forEach({ $0.isHidden = true })
             liveTagLabel.isHidden = false
-            optionsButton.isEnabled = controlsEnabled
+            optionsButtons.forEach({ $0.isEnabled = controlsEnabled })
         } else {
-            slider.isHidden = false
-            positionLabel.isHidden = false
-            durationLabel.isHidden = false
+            sliders.forEach({ $0.isHidden = false })
+            positionLabels.forEach({ $0.isHidden = false })
+            durationLabels.forEach({ $0.isHidden = false })
             liveTagLabel.isHidden = true
-            slider.isEnabled = controlsEnabled
-            queueButton.isEnabled = controlsEnabled
-            optionsButton.isEnabled = controlsEnabled
+            sliders.forEach({ $0.isEnabled = controlsEnabled })
+            queueButtons.forEach({ $0.isEnabled = controlsEnabled })
+            optionsButtons.forEach({ $0.isEnabled = controlsEnabled })
         }
     }
     
@@ -590,11 +595,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if  duration > 0 && !self.isSliding {
             let pos = position.stringFormatted()
             let dur = (duration-position).stringFormatted()
-            self.slider.setValue(Float(position/duration), animated: true)
-            self.positionLabel.text = pos
-            self.durationLabel.text = "-\(dur)"
-            self.positionLabel.accessibilityLabel = "Position is \(pos)"
-            self.durationLabel.accessibilityLabel = "Remain \(dur)"
+            self.sliders.forEach({ $0.setValue(Float(position/duration), animated: true) })
+            self.positionLabels.forEach({ $0.text = pos })
+            self.durationLabels.forEach({ $0.text = "-\(dur)" })
+            self.positionLabels.forEach({ $0.accessibilityLabel = "Position is \(pos)" })
+            self.durationLabels.forEach({ $0.accessibilityLabel = "Remain \(dur)" })
         }
         refreshTranscriptForPosition(position)
 //        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()
@@ -604,20 +609,21 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     func onTranscriptChanged() {}
     
     func resetUI() {
-        playButton.isEnabled = true
-        backwardButton.isEnabled = false
-        forwardButton.isEnabled = false
-        playbackSpeedButton.isEnabled = false
-        routePickerView.isHidden = true
-        slider.isEnabled = false
+        playButtons.forEach({ $0.isEnabled = true })
+        backwardButtons.forEach({ $0.isEnabled = false })
+        forwardButtons.forEach({ $0.isEnabled = false })
+        playbackSpeedButtons.forEach({ $0.isEnabled = false })
+        sleepTimerButtons.forEach({ $0.isEnabled = false })
+        routePickerViews.forEach({ $0.isHidden = true })
+        sliders.forEach({ $0.isEnabled = false })
         hasVideo = false
         videoView.reset()
     }
     
     func resetProgressUI() {
-        positionLabel.text = "00:00"
-        durationLabel.text = "00:00"
-        slider.setValue(0, animated: true)
+        positionLabels.forEach({ $0.text = "00:00" })
+        durationLabels.forEach({ $0.text = "00:00" })
+        sliders.forEach({ $0.setValue(0, animated: true) })
     }
 
     func updateVideoLayer(_ isVideoAvailable: Bool) {
@@ -666,9 +672,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .regular, scale: .large)
         
         if isFullscreen {
-            fullScreenButton.setImage(UIImage(systemName: "arrow.down.forward.and.arrow.up.backward.circle")?.withConfiguration(config), for: .normal)
+            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.down.forward.and.arrow.up.backward.circle")?.withConfiguration(config), for: .normal) })
+            fullScreenButtons.forEach({ $0.accessibilityLabel = "Disable full screen" })
         } else {
-            fullScreenButton.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.circle")?.withConfiguration(config), for: .normal)
+            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.circle")?.withConfiguration(config), for: .normal) })
+            fullScreenButtons.forEach({ $0.accessibilityLabel = "Enable full screen" })
         }
     }
     

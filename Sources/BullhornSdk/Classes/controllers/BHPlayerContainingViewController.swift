@@ -101,8 +101,8 @@ class BHPlayerContainingViewController: UIViewController {
 //            containerView.mvn.alpha.from(1.0).to(0.6),
             modal.view.mvn.cornerRadius.from(0.0).to(10.0),
             modal.view.mvn.point.from(startModalOrigin).to(endModalOrigin),
-            modal.closeButton.mvn.alpha.from(0.0).to(1.0),
-            modal.routePickerView.mvn.alpha.from(0.0).to(1.0),
+//            modal.closeButton.mvn.alpha.from(0.0).to(1.0),
+//            modal.routePickerView.mvn.alpha.from(0.0).to(1.0),
         ])
         
         let presentGesture = GestureAnimating(miniPlayerView, .top, view.frame.size)

@@ -9,15 +9,12 @@ class BHRoutePickerView: AVRoutePickerView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        self.contentMode = .scaleToFill
-        self.prioritizesVideoDevices = false
-                
         updateView()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        updateView()
     }
     
     func updateView() {
