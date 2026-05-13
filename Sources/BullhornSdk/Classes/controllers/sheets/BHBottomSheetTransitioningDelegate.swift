@@ -234,10 +234,10 @@ final class BHBottomSheetPresentationController: UIPresentationController {
         NSLayoutConstraint.activate([
             topConstraint,
             presentedView.leadingAnchor.constraint(
-                equalTo: containerView.leadingAnchor
+                equalTo: containerView.safeAreaLayoutGuide.leadingAnchor
             ),
             presentedView.trailingAnchor.constraint(
-                equalTo: containerView.trailingAnchor
+                equalTo: containerView.safeAreaLayoutGuide.trailingAnchor
             ),
             bottomConstraint,
             preferredHeightConstraint

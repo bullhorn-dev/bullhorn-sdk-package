@@ -458,9 +458,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     @IBAction func onQueueButton() {
         let queueVC = BHPlayerQueueBottomSheet()
 
-        if let sheetPresentationController = queueVC.presentationController as? UISheetPresentationController {
-            sheetPresentationController.detents = [.medium(), .large()]
-            sheetPresentationController.prefersGrabberVisible = false
+        if let sheet = queueVC.presentationController as? UISheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
         }
 
         present(queueVC, animated: true, completion: nil)
