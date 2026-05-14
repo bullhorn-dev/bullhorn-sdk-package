@@ -52,11 +52,11 @@ final class BHSleepTimerBottomSheet: BHBottomSheetController {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 
-        if BHHybridPlayer.shared.isFullScreen {
-            return .landscapeRight
+        if BHHybridPlayer.shared.isFullScreenEnabled() {
+            return BHHybridPlayer.shared.isFullScreen ? .landscapeRight : .allButUpsideDown
         }
         
-        return .allButUpsideDown
+        return .portrait
     }
     
     fileprivate func updateSleepTimer() {

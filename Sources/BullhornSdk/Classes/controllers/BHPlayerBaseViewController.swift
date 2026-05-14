@@ -211,11 +211,19 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
 
     override var shouldAutorotate: Bool {
-        return true
+        if BHHybridPlayer.shared.isFullScreenEnabled() {
+            return true
+        } else {
+            return false
+        }
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return isFullscreen ? .landscape : .allButUpsideDown
+        if BHHybridPlayer.shared.isFullScreenEnabled() {
+            return isFullscreen ? .landscape : .allButUpsideDown
+        } else {
+            return .portrait
+        }
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
@@ -313,6 +321,13 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     @objc fileprivate func onDeviceOrientationChanged() {
+
+        if !BHHybridPlayer.shared.isFullScreenEnabled() {
+            isFullscreen = false
+            rotate(to: .portrait)
+            return
+        }
+
         let deviceOrientation = UIDevice.current.orientation
 
         switch deviceOrientation {
@@ -623,6 +638,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         sleepTimerButtons.forEach({ $0.isEnabled = false })
         routePickerViews.forEach({ $0.isHidden = true })
         sliders.forEach({ $0.isEnabled = false })
+        fullScreenButtons.forEach({ $0.isHidden = true })
         hasVideo = false
         videoView.reset()
     }
@@ -636,6 +652,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     func updateVideoLayer(_ isVideoAvailable: Bool) {
         self.videoView.configureVideoLayer()
         self.hasVideo = isVideoAvailable
+        self.fullScreenButtons.forEach({ $0.isHidden = !BHHybridPlayer.shared.isFullScreenEnabled() })
     }
     
     func updateLayers() {

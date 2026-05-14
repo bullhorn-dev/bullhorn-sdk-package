@@ -94,6 +94,12 @@ extension BHHybridPlayer {
         return UserDefaults.standard.playNextEnabled && validPost.hasRecording() && !validPost.isRadioStream() && !validPost.isLiveStream()
     }
     
+    func isFullScreenEnabled() -> Bool {
+        guard let validPost = post else { return false }
+
+        return !validPost.isRadioStream()
+    }
+    
     func restorePlayer() {
         BHLog.p("\(#function)")
         

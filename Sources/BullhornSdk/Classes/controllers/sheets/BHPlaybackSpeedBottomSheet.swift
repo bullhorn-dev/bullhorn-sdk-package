@@ -25,11 +25,11 @@ final class BHPlaybackSpeedBottomSheet: BHBottomSheetController {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         
-        if BHHybridPlayer.shared.isFullScreen {
-            return .landscapeRight
+        if BHHybridPlayer.shared.isFullScreenEnabled() {
+            return BHHybridPlayer.shared.isFullScreen ? .landscapeRight : .allButUpsideDown
         }
-
-        return .allButUpsideDown
+        
+        return .portrait
     }
 
     override func loadView() {
