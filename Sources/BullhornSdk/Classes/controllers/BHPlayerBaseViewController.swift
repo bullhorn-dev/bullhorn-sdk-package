@@ -696,10 +696,10 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         let config = UIImage.SymbolConfiguration(pointSize: font.pointSize, weight: .regular, scale: .large)
         
         if isFullscreen {
-            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.down.forward.and.arrow.up.backward.circle")?.withConfiguration(config), for: .normal) })
+            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.down.right.and.arrow.up.left")?.withConfiguration(config), for: .normal) })
             fullScreenButtons.forEach({ $0.accessibilityLabel = "Disable full screen" })
         } else {
-            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.circle")?.withConfiguration(config), for: .normal) })
+            fullScreenButtons.forEach({ $0.setImage(UIImage(systemName: "arrow.up.left.and.arrow.down.right")?.withConfiguration(config), for: .normal) })
             fullScreenButtons.forEach({ $0.accessibilityLabel = "Enable full screen" })
         }
     }

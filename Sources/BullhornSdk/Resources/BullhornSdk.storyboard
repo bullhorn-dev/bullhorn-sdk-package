@@ -237,7 +237,7 @@
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <state key="normal">
                                                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <imageReference key="image" image="arrow.up.left.and.arrow.down.right.circle" catalog="system" symbolScale="large"/>
+                                                                    <imageReference key="image" image="arrow.up.left.and.arrow.down.right" catalog="system" symbolScale="large"/>
                                                                 </state>
                                                                 <connections>
                                                                     <action selector="onFullScreenButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="x4H-aD-shw"/>
@@ -3131,6 +3131,7 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.down.forward.and.arrow.up.backward.circle" catalog="system" width="128" height="123"/>
+        <image name="arrow.up.left.and.arrow.down.right" catalog="system" width="128" height="115"/>
         <image name="arrow.up.left.and.arrow.down.right.circle" catalog="system" width="128" height="123"/>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="chevron.compact.down" catalog="system" width="128" height="42"/>
