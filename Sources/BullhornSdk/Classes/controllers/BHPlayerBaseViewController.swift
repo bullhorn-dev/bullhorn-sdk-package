@@ -21,6 +21,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     // MARK: - Outlets
     
     @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
+    @IBOutlet weak var overlayActivityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var topVideoView: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var videoView: BHMediaVideoView!
@@ -104,6 +105,10 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
+
+        overlayActivityIndicator.type = .circleStrokeSpin
+        overlayActivityIndicator.color = .playerOnDisplayBackground()
+        overlayActivityIndicator.padding = 8
 
         overrideUserInterfaceStyle = UserDefaults.standard.userInterfaceStyle
         setNeedsStatusBarAppearanceUpdate()
@@ -562,6 +567,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if showIndicator {
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
+            overlayActivityIndicator.startAnimating()
+            overlayActivityIndicator.isHidden = false
             playButtons.forEach({ $0.isHidden = true })
             backwardButtons.forEach({ $0.isHidden = true })
             forwardButtons.forEach({ $0.isHidden = true })
@@ -571,6 +578,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         } else if showRefresh {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
+            overlayActivityIndicator.stopAnimating()
+            overlayActivityIndicator.isHidden = true
             playButtons.forEach({ $0.isHidden = false })
             backwardButtons.forEach({ $0.isHidden = true })
             forwardButtons.forEach({ $0.isHidden = true })
@@ -580,6 +589,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         } else {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
+            overlayActivityIndicator.stopAnimating()
+            overlayActivityIndicator.isHidden = true
             playButtons.forEach({ $0.isHidden = false })
             backwardButtons.forEach({ $0.isHidden = false })
             forwardButtons.forEach({ $0.isHidden = false })

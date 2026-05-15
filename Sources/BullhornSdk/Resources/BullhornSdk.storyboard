@@ -660,6 +660,19 @@
                                                             <action selector="onBackwardButton" destination="H3L-AM-K5q" eventType="touchUpInside" id="6aM-jH-WNr"/>
                                                         </connections>
                                                     </button>
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="149-fV-Foo" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                                        <rect key="frame" x="160" y="0.0" width="56" height="56"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="56" id="Qdf-gw-L9A"/>
+                                                            <constraint firstAttribute="width" constant="56" id="Rkc-Iv-Oa1"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                                                <color key="value" name="bhColorAccent"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J06-dP-UWa">
                                                         <rect key="frame" x="165" y="2.3333333333333321" width="44" height="51.666666666666671"/>
                                                         <constraints>
@@ -785,6 +798,7 @@
                         <outlet property="imageView" destination="rch-oU-K4o" id="5aZ-xU-PKo"/>
                         <outlet property="liveTagLabel" destination="R0K-2c-Tik" id="uaa-ME-9cA"/>
                         <outlet property="nameView" destination="XDK-m3-Q1D" id="VeD-8O-zhl"/>
+                        <outlet property="overlayActivityIndicator" destination="149-fV-Foo" id="HuR-Ih-bSG"/>
                         <outlet property="overlayView" destination="Plf-ce-1We" id="IGw-Ob-MrY"/>
                         <outlet property="titleView" destination="JsL-64-ILe" id="EMd-K4-rLe"/>
                         <outlet property="topNavigationView" destination="FUO-bW-qDU" id="Tey-QL-pha"/>
@@ -1217,11 +1231,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-GY-7cU" customClass="BHMediaVideoView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="16"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="50"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9x-NY-X0e" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="63" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="97" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txE-EL-20w">
@@ -1249,11 +1263,11 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KpY-vp-3Rd">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="47" width="390" height="34"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Nu-rNX" customClass="BHInteractiveView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="0.0" y="47" width="390" height="254"/>
+                                                        <rect key="frame" x="0.0" y="81" width="390" height="220"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhx-w3-8sw">
@@ -1393,6 +1407,19 @@
                                                                             <action selector="onBackwardButton" destination="xTo-Xw-AD1" eventType="touchUpInside" id="EWd-38-0bw"/>
                                                                         </connections>
                                                                     </button>
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3I-bS-TZ8" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                                                        <rect key="frame" x="118" y="4" width="56" height="56"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="56" id="e5T-82-D0X"/>
+                                                                            <constraint firstAttribute="height" constant="56" id="zWb-Ph-Z6Y"/>
+                                                                        </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                                                                <color key="value" name="bhColorAccent"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </view>
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JjD-qu-HCL">
                                                                         <rect key="frame" x="128" y="6.3333333333333357" width="44" height="51.666666666666671"/>
                                                                         <constraints>
@@ -1663,6 +1690,7 @@
                         <outlet property="interactiveStackView" destination="gm0-iV-bj2" id="h9y-4j-bzX"/>
                         <outlet property="interactiveView" destination="J65-Nu-rNX" id="SLO-CZ-OXq"/>
                         <outlet property="liveTagLabel" destination="x1h-Sb-HGY" id="7b4-ja-Z5p"/>
+                        <outlet property="overlayActivityIndicator" destination="x3I-bS-TZ8" id="1dt-iY-sgw"/>
                         <outlet property="overlayBottomOffsetConstraint" destination="FdL-Cu-fBq" id="qnW-X7-fQb"/>
                         <outlet property="overlayTopOffsetConstraint" destination="Vt8-p0-pcC" id="hG9-ae-aDf"/>
                         <outlet property="overlayView" destination="fVd-sW-hzf" id="rCW-iG-2HK"/>
