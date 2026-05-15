@@ -829,7 +829,7 @@ class BHHybridPlayer {
         let position = player.currentTime()
         playerItem?.position = position
 
-        guard lastSentPosition.rounded() != position.rounded() else { return }
+//        guard lastSentPosition.rounded() != position.rounded() else { return }
 
         let duration = max(totalDuration(), player.currentTime())
 
@@ -1025,6 +1025,7 @@ class BHHybridPlayer {
                 startTrackTimer()
                 startSleepTimerIfNeeded()
             }
+            playerPositionChanged(true)
 
         case .paused:
             playerState = .paused

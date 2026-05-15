@@ -130,6 +130,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         let image = UIImage(systemName: "timer")?.withConfiguration(config)
         self.sleepTimerButtons.forEach({ $0.setImage(image, for: .normal) })
 
+        self.imageView.isHidden = false
         self.videoView.isHidden = true
         
         self.sliders.forEach({ $0.isContinuous = true })
@@ -531,6 +532,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         switch state {
         case .idle:
             showIndicator = true
+            imageView.isHidden = false
+            videoView.isHidden = true
 
         case .initializing:
             showIndicator = true
@@ -596,16 +599,16 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             optionsButtons.forEach({ $0.isHidden = true })
             playbackSpeedButtons.forEach({ $0.isHidden = true })
             sleepTimerButtons.forEach({ $0.isHidden = true })
-            sliders.forEach({ $0.isHidden = true })
-            sliders.forEach({ $0.isEnabled = false })
-            positionLabels.forEach({ $0.isHidden = true })
-            durationLabels.forEach({ $0.isHidden = true })
             liveTagLabel.isHidden = false
             optionsButtons.forEach({ $0.isEnabled = controlsEnabled })
+            positionLabels.forEach({ $0.isHidden = true })
+            durationLabels.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isHidden = true })
+            sliders.forEach({ $0.isEnabled = false })
         } else {
-            sliders.forEach({ $0.isHidden = false })
-            positionLabels.forEach({ $0.isHidden = false })
-            durationLabels.forEach({ $0.isHidden = false })
+            sliders.forEach({ $0.isHidden = !controlsEnabled })
+            positionLabels.forEach({ $0.isHidden = !controlsEnabled })
+            durationLabels.forEach({ $0.isHidden = !controlsEnabled })
             liveTagLabel.isHidden = true
             sliders.forEach({ $0.isEnabled = controlsEnabled })
             queueButtons.forEach({ $0.isEnabled = controlsEnabled })
@@ -644,8 +647,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     func resetProgressUI() {
-        positionLabels.forEach({ $0.text = "00:00" })
-        durationLabels.forEach({ $0.text = "00:00" })
+        positionLabels.forEach({ $0.text = "--:--" })
+        durationLabels.forEach({ $0.text = "--:--" })
         sliders.forEach({ $0.setValue(0, animated: true) })
     }
 
@@ -656,11 +659,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     func updateLayers() {
-        if BHHybridPlayer.shared.isEnded() || BHHybridPlayer.shared.isFailed() {
-            imageView.isHidden = false
-        } else {
-            imageView.isHidden = hasVideo || hasTile
-        }
+        imageView.isHidden = hasVideo || hasTile
+        videoView.isHidden = !hasVideo
     }
     
     func updateLayout(_ useLayout: Bool, position: Double) {

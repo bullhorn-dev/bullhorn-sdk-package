@@ -79,12 +79,12 @@ class BHVideoPlayerControlView: UIView {
     }
             
     func showLoader() {
-        loadingIndicator.isHidden = false
-        loadingIndicator.startAnimating()
+//        loadingIndicator.isHidden = false
+//        loadingIndicator.startAnimating()
     }
     
     func hideLoader() {
-        loadingIndicator.isHidden = true
+//        loadingIndicator.isHidden = true
     }
     
     func hideSeekToView() {}
@@ -153,10 +153,10 @@ class BHVideoPlayerControlView: UIView {
             mainMaskView.rightAnchor.constraint(equalTo: rightAnchor),
             mainMaskView.topAnchor.constraint(equalTo: topAnchor),
             mainMaskView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            maskImageView.heightAnchor.constraint(equalToConstant: 270),
-            maskImageView.widthAnchor.constraint(equalToConstant: 270),
-            maskImageView.centerXAnchor.constraint(equalTo: mainMaskView.centerXAnchor),
-            maskImageView.centerYAnchor.constraint(equalTo: mainMaskView.centerYAnchor),
+            maskImageView.leftAnchor.constraint(equalTo: mainMaskView.leftAnchor),
+            maskImageView.rightAnchor.constraint(equalTo: mainMaskView.rightAnchor),
+            maskImageView.topAnchor.constraint(equalTo: mainMaskView.topAnchor),
+            maskImageView.bottomAnchor.constraint(equalTo: mainMaskView.bottomAnchor),
             loadingIndicator.centerXAnchor.constraint(equalTo: mainMaskView.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: mainMaskView.centerYAnchor)
         ])

@@ -139,7 +139,6 @@ class BHVideoPlayer: UIView {
     deinit {
         playerLayer?.pause()
         playerLayer?.prepareToDeinit()
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
     }
 
     // MARK: - Public initializers

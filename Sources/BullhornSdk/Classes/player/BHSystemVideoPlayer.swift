@@ -109,8 +109,13 @@ class BHSystemVideoPlayer: BHMediaPlayerBase {
                 newState = bmPlayer.isPlaying ? .playing : .paused
                 readyToPlayFlag = true
             case .buffering:
-                newState = bmPlayer.isPlaying ? .playing : .paused
+            if BHReachabilityManager.shared.isConnected() {
+                newState = bmPosition > 0 ? (bmPlayer.isPlaying ? .playing : .paused) : .waiting
                 readyToPlayFlag = true
+            } else {
+                newState = .failed(e: NSError.error(with: NSError.LocalCodes.common, description: "The Internet connection is lost."))
+                readyToPlayFlag = false
+            }
             case .bufferFinished:
                 newState = bmPlayer.isPlaying ? .playing : .paused
                 readyToPlayFlag = true
