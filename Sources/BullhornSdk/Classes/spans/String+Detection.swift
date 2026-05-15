@@ -20,11 +20,11 @@ public extension String {
     }
 
     func detectHashtags() -> [Range<String.Index>] {
-        return detect(regex: "#[^\\p{Pd}\\p{Ps}\\p{Pe}\\p{Pi}\\p{Pf}\\p{Po}\\p{Z}\\p{C}\\p{S}]+")
+        return detect(regex: TagPattern.hashtags)
     }
 
     func detectMentions() -> [Range<String.Index>] {
-        return detect(regex: "@[^\\p{Pd}\\p{Ps}\\p{Pe}\\p{Pi}\\p{Pf}\\p{Po}\\p{Z}\\p{C}\\p{S}]+")
+        return detect(regex: TagPattern.mentions)
     }
 
     func detect(textCheckingTypes: NSTextCheckingResult.CheckingType) -> [Range<String.Index>] {
@@ -47,10 +47,10 @@ public extension String {
     }
 
     func detectLinks() -> [Range<String.Index>] {
-        return detect(textCheckingTypes: [.link])
+        return detect(regex: TagPattern.links)
     }
     
     func detectTimestamps() -> [Range<String.Index>] {
-        return detect(regex: "\\b(?:\\d{1,2}:)?\\d{1,2}:\\d{2}\\b")
+        return detect(regex: TagPattern.timestamps)
     }
 }

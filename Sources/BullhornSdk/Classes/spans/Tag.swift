@@ -81,6 +81,14 @@ public struct TagTuner: TagTuning {
     }
 }
 
+public struct TagPattern {
+
+    static let links: String = "(https?:\\/\\/www\\.|https?:\\/\\/|www\\.)?[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-z]{2,}(\\/[\\w?=#@_-]+)*"
+    static let timestamps: String = "\\b(?:\\d{1,2}:)?\\d{1,2}:\\d{2}\\b"
+    static let hashtags: String = "#[^\\p{Pd}\\p{Ps}\\p{Pe}\\p{Pi}\\p{Pf}\\p{Po}\\p{Z}\\p{C}\\p{S}]+"
+    static let mentions: String = "@[^\\p{Pd}\\p{Ps}\\p{Pe}\\p{Pi}\\p{Pf}\\p{Po}\\p{Z}\\p{C}\\p{S}]+"
+}
+
 extension Attrs: TagTuning {
 
     public func style(context _: TagContext) -> AttributesProvider {

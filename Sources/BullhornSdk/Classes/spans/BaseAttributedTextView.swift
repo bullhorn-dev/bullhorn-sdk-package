@@ -117,9 +117,8 @@ open class BaseAttributedTextView: UIView {
 
         var newLinkFramesCache: [RangeRects] = []
 
-        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        
-        let matches = detector?.matches(in: text, range: NSRange(text.startIndex..., in: text)) ?? []
+        let regex = try! NSRegularExpression(pattern: TagPattern.links)
+        let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
         
         for match in matches {
             let rects = _backend.enclosingRects(forGlyphRange: match.range)
@@ -203,9 +202,7 @@ open class BaseAttributedTextView: UIView {
 
         var newTimestampFramesCache: [RangeRects] = []
 
-        let pattern = "\\b(?:\\d{1,2}:)?\\d{1,2}:\\d{2}\\b"
-        let regex = try! NSRegularExpression(pattern: pattern)
-
+        let regex = try! NSRegularExpression(pattern: TagPattern.timestamps)
         let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
         
         for match in matches {
