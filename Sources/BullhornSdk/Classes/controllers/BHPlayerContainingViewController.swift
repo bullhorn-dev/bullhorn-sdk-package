@@ -235,7 +235,9 @@ extension BHPlayerContainingViewController: BHHybridPlayerListener {
             } else {
                 message += "The Internet connection is lost."
             }
-            self.showError(message)
+            if !BHHybridPlayer.shared.isFullScreen {
+                self.showError(message)
+            }
             self.onPlayerPlaybackCompleted()
         }
     }

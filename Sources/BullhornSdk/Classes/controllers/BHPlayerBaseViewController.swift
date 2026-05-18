@@ -637,7 +637,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
             self.positionLabels.forEach({ $0.accessibilityLabel = "Position is \(pos)" })
             self.durationLabels.forEach({ $0.accessibilityLabel = "Remain \(dur)" })
         }
-        refreshTranscriptForPosition(position)
+//        refreshTranscriptForPosition(position)
 //        nextButton.isEnabled = BHHybridPlayer.shared.hasNext()
 //        previousButton.isEnabled = position > 30 || BHHybridPlayer.shared.hasPrevious()
     }
@@ -778,8 +778,11 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             } else {
                 message += "The Internet connection is lost."
             }
-            self.showError(message)
-            self.refreshTranscriptForPosition(-1)
+ 
+            if !self.isFullscreen {
+                self.showError(message)
+            }
+//            self.refreshTranscriptForPosition(-1)
         }
     }
     
@@ -805,7 +808,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             self.hasTile = false
             self.hasVideo = false
             self.videoView.reset()
-            self.refreshTranscriptForPosition(-1)
+//            self.refreshTranscriptForPosition(-1)
             self.resetUI()
         }
     }
@@ -863,7 +866,9 @@ extension BHPlayerBaseViewController: BHLivePlayerListener {
             } else {
                 message += "The Internet connection is lost."
             }
-            self.showError(message)
+            if !self.isFullscreen {
+                self.showError(message)
+            }
         }
     }
 }
