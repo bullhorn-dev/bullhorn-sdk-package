@@ -4,6 +4,7 @@ import Foundation
 protocol BHCategoriesManagerListener: ObserverProtocol {
     func categoriesManagerDidFetch(_ manager: BHCategoriesManager)
     func categoriesManagerDidUpdateUsers(_ manager: BHCategoriesManager)
+    func categoriesManagerDidUpdatePosts(_ manager: BHCategoriesManager)
 }
 
 class BHCategoriesManager {
@@ -131,6 +132,29 @@ class BHCategoriesManager {
                     BHLog.w("Category recent posts load failed \(error.localizedDescription)")
                 }
                 completion(response)
+            }
+        }
+    }
+    
+    func updatePost(_ post: BHPost) {
+        if let row = posts.firstIndex(where: {$0.id == post.id}) {
+            self.posts[row] = post
+            
+            self.observersContainer.notifyObserversAsync {
+                $0.categoriesManagerDidUpdatePosts(self)
+            }
+        }
+    }
+    
+    func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
+        var post = posts.first(where: { $0.id == postId })
+        post?.updatePlaybackOffset(offset, completed: completed)
+        
+        if let validPost = post, let row = posts.firstIndex(where: {$0.id == postId}) {
+            posts[row] = validPost
+
+            self.observersContainer.notifyObserversAsync {
+                $0.categoriesManagerDidUpdatePosts(self)
             }
         }
     }

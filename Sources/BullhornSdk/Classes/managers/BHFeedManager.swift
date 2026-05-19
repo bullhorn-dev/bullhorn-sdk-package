@@ -125,7 +125,7 @@ class BHFeedManager {
         }
     }
     
-    func remoeLikedPost(_ post: BHPost) {
+    func removeLikedPost(_ post: BHPost) {
         likedPosts?.removeAll(where: {$0.id == post.id})
     }
     

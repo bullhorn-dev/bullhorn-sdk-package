@@ -3,7 +3,23 @@ import Foundation
 internal import Alamofire
 
 class BHPostsManager {
+    
+    static let PostChangedNotification = Notification.Name(rawValue: "BHPostsManager.PostChangedNotification")
+    static let NotificationInfoKey = "BHPostsManager.NotificationInfoKey"
+    
+    struct PostChangedNotificationInfo {
         
+        enum Reason: String {
+            case like
+            case unlike
+            case download
+            case timestamp
+        }
+        
+        let reason: Reason
+        let post: BHPost?
+    }
+
     var dispatchQueue = DispatchQueue.global()
 
     static let shared = BHPostsManager()
@@ -63,6 +79,8 @@ class BHPostsManager {
                     BHExploreManager.shared.updatePost(post)
                     BHUserManager.shared.updatePost(post)
                     BHDownloadsManager.shared.updatePost(post)
+                    BHCategoriesManager.shared.updatePost(post)
+                    self.notifyPostChanged(with: .like, post: post)
                 case .failure(error: let error):
                     BHLog.w("Post like failed \(error.localizedDescription)")
                 }
@@ -85,7 +103,9 @@ class BHPostsManager {
                     BHExploreManager.shared.updatePost(post)
                     BHUserManager.shared.updatePost(post)
                     BHDownloadsManager.shared.updatePost(post)
-                    BHFeedManager.shared.remoeLikedPost(post)
+                    BHFeedManager.shared.removeLikedPost(post)
+                    BHCategoriesManager.shared.updatePost(post)
+                    self.notifyPostChanged(with: .unlike, post: post)
                 case .failure(error: let error):
                     BHLog.w("Post unlike failed \(error.localizedDescription)")
                 }
@@ -231,4 +251,16 @@ class BHPostsManager {
             }
         }
     }
+    
+    // MARK: - Private
+    
+    fileprivate func notifyPostChanged(with reason: PostChangedNotificationInfo.Reason, post: BHPost) {
+        BHLog.p("\(#function), reason: \(reason.rawValue)")
+
+        let infoObject = PostChangedNotificationInfo.init(reason: reason, post: post)
+        let info = [BHPostsManager.NotificationInfoKey: infoObject]
+
+        NotificationCenter.default.post(name: BHPostsManager.PostChangedNotification, object: self, userInfo: info)
+    }
+
 }

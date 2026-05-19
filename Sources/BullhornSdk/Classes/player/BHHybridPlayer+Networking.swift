@@ -186,6 +186,7 @@ extension BHHybridPlayer {
         BHDownloadsManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
         BHFeedManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
         BHUserManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
+        BHCategoriesManager.shared.updatePostPlayback(validPost.id, offset: localPosition, completed: isCompleted)
 
         do {
             validPost.playbackOffset = localPosition

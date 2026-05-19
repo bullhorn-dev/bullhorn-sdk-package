@@ -25,9 +25,15 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
 
     // MARK: - Lifecycle
     
+    deinit {
+        BHCategoriesManager.shared.removeListener(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        BHCategoriesManager.shared.addListener(self)
+
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
@@ -367,5 +373,24 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,  forItemAt indexPath: IndexPath) {
         cell.layoutSubviews()
+    }
+}
+
+// MARK: - BHCategoriesManagerListener
+
+extension BHCategoryViewController: BHCategoriesManagerListener {
+
+    func categoriesManagerDidFetch(_ manager: BHCategoriesManager) {}
+    
+    func categoriesManagerDidUpdateUsers(_ manager: BHCategoriesManager) {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func categoriesManagerDidUpdatePosts(_ manager: BHCategoriesManager) {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
 }

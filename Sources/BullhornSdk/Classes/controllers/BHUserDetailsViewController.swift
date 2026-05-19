@@ -75,7 +75,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         fetch(initial: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(onPostChangedNotification(notification:)), name: BHPostsManager.PostChangedNotification, object: nil)
+
         /// track event
         let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .openPodcast, context: context, podcastId: user?.id, podcastTitle: user?.fullName)
         BHTracker.shared.trackEvent(with: request)
@@ -248,6 +249,21 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         case .connected, .connectedExpensive:
             tableView.restore()
             fetch(initial: true)
+        default:
+            break
+        }
+    }
+    
+    @objc fileprivate func onPostChangedNotification(notification: Notification) {
+
+        guard let notificationInfo = notification.userInfo as? [String : BHPostsManager.PostChangedNotificationInfo] else { return }
+        guard let info = notificationInfo[BHPostsManager.NotificationInfoKey] else { return }
+        guard let post = info.post else { return }
+
+        switch info.reason {
+        case .like, .unlike:
+            userManager.updatePost(post)
+            tableView.reloadData()
         default:
             break
         }
