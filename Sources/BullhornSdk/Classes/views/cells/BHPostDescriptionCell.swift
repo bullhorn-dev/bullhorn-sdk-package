@@ -29,6 +29,7 @@ class BHPostDescriptionCell: UITableViewCell {
         let links = Attrs().font(font).foregroundColor(.accent())
         let timestamps = Attrs().font(font).foregroundColor(.accent())
         let a = Attrs().font(font).foregroundColor(.primary())
+        let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
         let u = Attrs().underlineStyle(.single)
         let i = TagTuner { info in
             var set = Set<String>()
@@ -47,7 +48,7 @@ class BHPostDescriptionCell: UITableViewCell {
         }
 
         let attributedText = validText
-            .style(tags: ["a": a, "u": u, "i": i])
+            .style(tags: ["a": a, "u": u, "i": i, "b": b])
             .styleBase(base)
             .styleLinks(links)
             .styleTimestamps(timestamps)
