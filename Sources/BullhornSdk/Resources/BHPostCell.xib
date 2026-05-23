@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -64,36 +64,49 @@
                                             <constraint firstAttribute="trailing" secondItem="57e-ml-0Hv" secondAttribute="trailing" id="OI1-Ul-E4v"/>
                                         </constraints>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="interactive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg5-jn-KFC" customClass="BHPaddingLabel" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="74" width="37.666666666666664" height="9.6666666666666714"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="interactive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg5-jn-KFC" customClass="BHPaddingLabel" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="68" width="37.666666666666664" height="9.6666666666666714"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="8"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ">
-                                        <rect key="frame" x="0.0" y="97.333333333333329" width="293.33333333333331" height="49.333333333333329"/>
-                                        <string key="text">Description description description description description description description description description description description</string>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSN-5g-LkU" customClass="RichLabel" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="85.666666666666686" width="240" height="93.333333333333314"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSelectable" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isScrollEnabled" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceVertical" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceHorizontal" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="adjustsFontForContentSizeCategory" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" name="bhColorSecondary"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="text">
+                                                <string key="value">Description description description description description description description description description description description</string>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="numberOfLines">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Going live " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXt-5z-eR0">
+                                        <rect key="frame" x="0.0" y="187" width="64.333333333333329" height="8"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" name="bhColorPrimary"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going live " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXt-5z-eR0">
-                                        <rect key="frame" x="0.0" y="160.66666666666666" width="64.333333333333329" height="16.666666666666657"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                        <color key="textColor" name="bhColorPrimary"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P04-Pc-Ybq" customClass="BHWaitingRoomButton" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="191.33333333333334" width="140" height="32"/>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P04-Pc-Ybq" customClass="BHWaitingRoomButton" customModule="BullhornSdk">
+                                        <rect key="frame" x="0.0" y="203" width="140" height="32"/>
                                         <color key="backgroundColor" name="bhColorSecondary"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="jvz-Wd-kZE"/>
                                             <constraint firstAttribute="height" constant="32" id="rww-GO-TVu"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cVH-hZ-ZeZ">
-                                        <rect key="frame" x="0.0" y="237" width="212" height="36"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cVH-hZ-ZeZ">
+                                        <rect key="frame" x="0.0" y="243" width="212" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vvi-N8-31O">
                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
@@ -231,7 +244,7 @@
             <connections>
                 <outlet property="bottomView" destination="6dC-AS-zZr" id="B5l-AX-bKR"/>
                 <outlet property="dateLabel" destination="nqg-cq-Xl0" id="hKl-9T-TPK"/>
-                <outlet property="descriptionLabel" destination="WY2-Cn-8EJ" id="Jq4-sp-fLp"/>
+                <outlet property="descriptionLabel" destination="WSN-5g-LkU" id="Mt5-as-8Bq"/>
                 <outlet property="downloadButton" destination="0zv-LK-Zb3" id="gRE-Mf-AG2"/>
                 <outlet property="durationLabel" destination="nDr-W3-Wq8" id="tKx-m9-niL"/>
                 <outlet property="likeButton" destination="Vvi-N8-31O" id="uFa-vG-d18"/>

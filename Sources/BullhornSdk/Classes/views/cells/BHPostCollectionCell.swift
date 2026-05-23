@@ -61,12 +61,12 @@ class BHPostCollectionCell: UICollectionViewCell {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
+    private let descriptionLabel: RichLabel = {
+        let label = RichLabel()
         label.font = .secondaryText()
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondary()
-        label.numberOfLines = 0
+        label.numberOfLines = 5
         return label
     }()
     
@@ -296,7 +296,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         downloadButton.post = post
         
         titleLabel.text = post?.title
-        descriptionLabel.text = post?.trimmedDescription
+        descriptionLabel.attributedText = post?.attributedDescription()
         imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateControls()
@@ -315,7 +315,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         titleLabel.accessibilityLabel = "\(context) title: \(title)"
-        if let validDescription = post?.trimmedDescription {
+        if let validDescription = post?.attributedDescription().string {
             descriptionLabel.accessibilityLabel = "\(context) details: \(validDescription)"
         }
         if let dateText = dateLabel.text {

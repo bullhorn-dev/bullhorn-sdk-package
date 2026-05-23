@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 // MARK: - Recording
 
@@ -131,13 +132,40 @@ struct BHPost: Codable {
     var profilePictureTiny: URL?
     var socialLinks: BHSocialLinks?
     
-    var trimmedDescription: String? {
-        let compressedString = description?.replacingOccurrences(
-            of: "\n{2,}",
-            with: "\n\n",
-            options: .regularExpression
-        )
-        return compressedString?.trimmingCharacters(in: .whitespacesAndNewlines)
+    func attributedDescription(isActive: Bool = false, baseColor: UIColor = UIColor.secondary()) -> NSAttributedString {
+        guard let validText = description else { return NSAttributedString() }
+        
+        let font: UIFont = isActive ? .settingsSecondaryText() : .secondaryText()
+        let base = Attrs().font(font).foregroundColor(baseColor)
+        let links = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
+        let timestamps = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
+        let a = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
+        let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
+        let u = Attrs().underlineStyle(.single)
+        let i = TagTuner { info in
+            var set = Set<String>()
+            set.insert(info.tag.name)
+            info.outerTags.forEach { set.insert($0.name) }
+
+            let attrs = Attrs()
+            if set.contains("b") && set.contains("i") {
+                attrs.font(UIFont(name: "HelveticaNeue-BoldItalic", size: 14)!)
+            } else if set.contains("i") {
+                attrs.font(UIFont(name: "HelveticaNeue-Italic", size: 14)!)
+            } else if set.contains("b") {
+                attrs.font(UIFont(name: "HelveticaNeue-Bold", size: 14)!)
+            }
+            return attrs
+        }
+
+        let attributedText = validText
+            .style(tags: ["a": a, "u": u, "i": i, "b": b])
+            .styleBase(base)
+            .styleLinks(links)
+            .styleTimestamps(timestamps)
+            .attributedString
+
+        return attributedText
     }
 
     var isDownloaded: Bool {

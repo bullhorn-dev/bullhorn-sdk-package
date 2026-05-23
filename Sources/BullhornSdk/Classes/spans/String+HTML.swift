@@ -215,7 +215,7 @@ extension String {
                                      part: .opening(selfClosing: selfClosing))
         {
             resultString.append(str)
-        } else if tagName == "br" || tagName == "p" {
+        } else if tagName == "br" {
             resultString.append("\n")
         }
 

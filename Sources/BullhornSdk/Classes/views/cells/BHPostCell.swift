@@ -11,7 +11,7 @@ class BHPostCell: UITableViewCell {
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var tagLabel: BHPaddingLabel!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: RichLabel!
     @IBOutlet weak var playButton: BHPlayButton!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var playedLabel: UILabel!
@@ -136,7 +136,7 @@ class BHPostCell: UITableViewCell {
         waitingRoomButton.post = post
         
         titleLabel.text = post?.title
-        descriptionLabel.text = post?.trimmedDescription
+        descriptionLabel.attributedText = post?.attributedDescription()
         userIcon.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateTagLabel()
@@ -156,7 +156,7 @@ class BHPostCell: UITableViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         titleLabel.accessibilityLabel = "\(context) title: \(title)"
-        if let validDescription = post?.trimmedDescription {
+        if let validDescription = post?.attributedDescription().string {
             descriptionLabel.accessibilityLabel = "\(context) details: \(validDescription)"
         }
         if let dateText = dateLabel.text {

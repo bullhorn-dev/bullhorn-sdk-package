@@ -20,42 +20,6 @@ class BHPostDescriptionCell: UITableViewCell {
     }
 
     // MARK: - Private
-    
-    func stringWithAttributes() -> NSAttributedString {
-        guard let validText = post?.description else { return NSAttributedString() }
-        
-        let font = UIFont.fontWithName(.robotoRegular, size: 14)
-        let base = Attrs().font(font).foregroundColor(.primary())
-        let links = Attrs().font(font).foregroundColor(.accent())
-        let timestamps = Attrs().font(font).foregroundColor(.accent())
-        let a = Attrs().font(font).foregroundColor(.primary())
-        let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
-        let u = Attrs().underlineStyle(.single)
-        let i = TagTuner { info in
-            var set = Set<String>()
-            set.insert(info.tag.name)
-            info.outerTags.forEach { set.insert($0.name) }
-
-            let attrs = Attrs()
-            if set.contains("b") && set.contains("i") {
-                attrs.font(UIFont(name: "HelveticaNeue-BoldItalic", size: 14)!)
-            } else if set.contains("i") {
-                attrs.font(UIFont(name: "HelveticaNeue-Italic", size: 14)!)
-            } else if set.contains("b") {
-                attrs.font(UIFont(name: "HelveticaNeue-Bold", size: 14)!)
-            }
-            return attrs
-        }
-
-        let attributedText = validText
-            .style(tags: ["a": a, "u": u, "i": i, "b": b])
-            .styleBase(base)
-            .styleLinks(links)
-            .styleTimestamps(timestamps)
-            .attributedString
-
-        return attributedText
-    }
 
     fileprivate func setup() {
         textView.backgroundColor = .clear
@@ -89,10 +53,10 @@ class BHPostDescriptionCell: UITableViewCell {
                 }
             }
         }
-        textView.attributedText = stringWithAttributes()
+        textView.attributedText = post?.attributedDescription(isActive: true, baseColor: .primary())
         
         /// accessibility
         self.isAccessibilityElement = true
-        self.accessibilityLabel = post?.description
+        self.accessibilityLabel = post?.attributedDescription().string
     }
 }

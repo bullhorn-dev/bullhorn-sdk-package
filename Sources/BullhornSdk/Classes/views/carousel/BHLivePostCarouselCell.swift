@@ -54,8 +54,8 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
+    private let descriptionLabel: RichLabel = {
+        let label = RichLabel()
         label.font = .secondaryText()
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
@@ -134,6 +134,6 @@ class BHLivePostCarouselCell: UICollectionViewCell {
         imageView.sd_setImage(with: gifUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
         titleLabel.sizeToFit()
-        descriptionLabel.text = post?.trimmedDescription
+        descriptionLabel.attributedText = post?.attributedDescription(isActive: false, baseColor: .primary())
     }
 }

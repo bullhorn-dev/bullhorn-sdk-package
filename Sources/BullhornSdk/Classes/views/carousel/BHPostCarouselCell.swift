@@ -60,8 +60,8 @@ class BHPostCarouselCell: UICollectionViewCell {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
+    private let descriptionLabel: RichLabel = {
+        let label = RichLabel()
         label.font = .secondaryText()
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .primary()
@@ -158,7 +158,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         playButton.autoplayContext = autoplayContext
         imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         titleLabel.text = post?.title
-        descriptionLabel.text = post?.trimmedDescription
+        descriptionLabel.attributedText = post?.attributedDescription(isActive: false, baseColor: .primary())
         
         setupAccessibility()
     }
@@ -179,7 +179,7 @@ class BHPostCarouselCell: UICollectionViewCell {
         titleLabel.accessibilityLabel = post?.title
 
         descriptionLabel.isAccessibilityElement = true
-        descriptionLabel.accessibilityLabel = post?.trimmedDescription
+        descriptionLabel.accessibilityLabel = post?.attributedDescription().string
 
         self.accessibilityElements = [contentView, playButton, titleLabel, descriptionLabel]
         self.isAccessibilityElement = false
