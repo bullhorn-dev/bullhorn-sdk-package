@@ -262,17 +262,19 @@ class BHVideoPlayerLayerView: UIView {
         }
     }
     
-    fileprivate func configPlayer(){
+    fileprivate func configPlayer() {
+
         player?.removeObserver(self, forKeyPath: "rate")
+
         playerItem = AVPlayerItem(asset: urlAsset!)
-        player     = AVPlayer(playerItem: playerItem!)
-        player!.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
-        self.connectPlayerLayer()
+        player = AVPlayer(playerItem: playerItem!)
+
+        player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
+        
+        connectPlayerLayer()
+        
         setNeedsLayout()
         layoutIfNeeded()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.connectPlayerLayer), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.disconnectPlayerLayer), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     func setupTimer() {
@@ -280,8 +282,22 @@ class BHVideoPlayerLayerView: UIView {
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(playerTimerAction), userInfo: nil, repeats: true)
         timer?.fireDate = Date()
     }
+    
+    func connectPlayerLayer() {
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer?.videoGravity = videoGravity
+        
+        layer.addSublayer(playerLayer!)
+    }
+    
+    func disconnectPlayerLayer() {
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+    }
   
-    // MARK: - 计时器事件
+    // MARK: - Private
+
     @objc fileprivate func playerTimerAction() {
         guard let playerItem = playerItem else { return }
         
@@ -290,39 +306,42 @@ class BHVideoPlayerLayerView: UIView {
             let totalTime   = TimeInterval(playerItem.duration.value) / TimeInterval(playerItem.duration.timescale)
             delegate?.bhVideoPlayer(player: self, playTimeDidChange: currentTime, totalTime: totalTime)
         }
+
         updateStatus(includeLoading: true)
     }
     
     fileprivate func updateStatus(includeLoading: Bool = false) {
-        if let player = player {
-            if let playerItem = playerItem, includeLoading {
-                if playerItem.isPlaybackLikelyToKeepUp || playerItem.isPlaybackBufferFull {
-                    self.state = .bufferFinished
-                } else if playerItem.status == .failed {
-                    self.state = .error
-                } else {
-                    self.state = .buffering
-                }
+        guard let player = player else { return }
+
+        if let playerItem = playerItem, includeLoading {
+            if playerItem.isPlaybackLikelyToKeepUp || playerItem.isPlaybackBufferFull {
+                self.state = .bufferFinished
+            } else if playerItem.status == .failed {
+                self.state = .error
+            } else {
+                self.state = .buffering
             }
-            if player.rate == 0.0 {
-                if player.error != nil {
-                    self.state = .error
+        }
+
+        if player.rate == 0.0 {
+            if player.error != nil {
+                self.state = .error
+                return
+            }
+            if let currentItem = player.currentItem {
+                if player.currentTime() >= currentItem.duration {
+                    moviePlayDidEnd()
                     return
                 }
-                if let currentItem = player.currentItem {
-                    if player.currentTime() >= currentItem.duration {
-                        moviePlayDidEnd()
-                        return
-                    }
-                    if currentItem.isPlaybackLikelyToKeepUp || currentItem.isPlaybackBufferFull {
-                        
-                    }
+                if currentItem.isPlaybackLikelyToKeepUp || currentItem.isPlaybackBufferFull {
+                    
                 }
             }
         }
     }
     
     // MARK: - Notification Event
+
     @objc fileprivate func moviePlayDidEnd() {
         if state != .playedToTheEnd {
             if let playerItem = playerItem {
@@ -426,19 +445,6 @@ class BHVideoPlayerLayerView: UIView {
                 }
             }
         }
-    }
-    
-    @objc fileprivate func connectPlayerLayer() {
-        playerLayer?.removeFromSuperlayer()
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer!.videoGravity = videoGravity
-        
-        layer.addSublayer(playerLayer!)
-    }
-    
-    @objc fileprivate func disconnectPlayerLayer() {
-        playerLayer?.removeFromSuperlayer()
-        playerLayer = nil
     }
 }
 

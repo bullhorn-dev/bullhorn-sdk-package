@@ -51,7 +51,6 @@ class BHSystemVideoPlayer: BHMediaPlayerBase {
         configurePlayerNotifications()
 
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnteredBackgound), name: UIApplication.didEnterBackgroundNotification, object: nil)
-
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnteredForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
@@ -181,7 +180,7 @@ extension BHSystemVideoPlayer {
     }
 }
 
-// MARK: - BMPlayerDelegate
+// MARK: - BHVideoPlayerDelegate
 
 extension BHSystemVideoPlayer: BHVideoPlayerDelegate {
 

@@ -112,10 +112,16 @@ class BHVideoPlayer: UIView {
     }
 
     func disableVideoTracks() {
+        BHLog.p("\(#function)")
+
         playerLayer?.disableVideoTracks()
+        playerLayer?.disconnectPlayerLayer()
     }
 
     func enableVideoTracks() {
+        BHLog.p("\(#function)")
+
+        playerLayer?.connectPlayerLayer()
         playerLayer?.enableVideoTracks()
     }
 
