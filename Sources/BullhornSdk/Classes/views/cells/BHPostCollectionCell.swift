@@ -296,7 +296,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         downloadButton.post = post
         
         titleLabel.text = post?.title
-        descriptionLabel.attributedText = post?.attributedDescription()
+        descriptionLabel.text = post?.trimmedDescription()
         imageView.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateControls()
@@ -315,7 +315,7 @@ class BHPostCollectionCell: UICollectionViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         titleLabel.accessibilityLabel = "\(context) title: \(title)"
-        if let validDescription = post?.attributedDescription().string {
+        if let validDescription = post?.trimmedDescription() {
             descriptionLabel.accessibilityLabel = "\(context) details: \(validDescription)"
         }
         if let dateText = dateLabel.text {

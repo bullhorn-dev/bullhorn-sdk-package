@@ -167,6 +167,14 @@ struct BHPost: Codable {
 
         return attributedText
     }
+    
+    func trimmedDescription() -> String {
+        let parsed = attributedDescription().string
+        let result = parsed.replacingOccurrences(of: "[^\\S\n]*\n[^\\S\n]*",
+                                                  with: "\n",
+                                                  options: .regularExpression)
+        return result.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 
     var isDownloaded: Bool {
         return BHDownloadsManager.shared.isPostDownloaded(id)

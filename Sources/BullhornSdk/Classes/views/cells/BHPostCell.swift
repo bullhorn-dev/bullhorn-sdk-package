@@ -136,7 +136,7 @@ class BHPostCell: UITableViewCell {
         waitingRoomButton.post = post
         
         titleLabel.text = post?.title
-        descriptionLabel.attributedText = post?.attributedDescription()
+        descriptionLabel.text = post?.trimmedDescription()
         userIcon.sd_setImage(with: post?.coverUrl, placeholderImage: placeholderImage)
         
         updateTagLabel()
@@ -156,7 +156,7 @@ class BHPostCell: UITableViewCell {
         contentView.accessibilityLabel = "\(context) \(title)"
         
         titleLabel.accessibilityLabel = "\(context) title: \(title)"
-        if let validDescription = post?.attributedDescription().string {
+        if let validDescription = post?.trimmedDescription() {
             descriptionLabel.accessibilityLabel = "\(context) details: \(validDescription)"
         }
         if let dateText = dateLabel.text {
