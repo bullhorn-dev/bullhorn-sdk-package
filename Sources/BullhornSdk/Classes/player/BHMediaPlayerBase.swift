@@ -1,4 +1,3 @@
-
 import Foundation
 import AVFoundation
 import MediaPlayer
@@ -15,6 +14,8 @@ protocol BHMediaPlayerDelegate: AnyObject {
 
 class BHMediaPlayerBase: NSObject {
 
+    // MARK: - External State (delegate-facing, unchanged API)
+
     enum State: Equatable {
         case idle
         case waiting
@@ -26,64 +27,60 @@ class BHMediaPlayerBase: NSObject {
 
         static func == (lhs: State, rhs: State) -> Bool {
             switch (lhs, rhs) {
-            case (.idle, .idle): return true
-            case (.waiting, .waiting): return true
-            case (.ready, .ready): return true
-            case (.playing, .playing): return true
-            case (.paused, .paused): return true
-            case (.ended, .ended): return true
-            case (.failed(_), .failed(_)): return true
+            case (.idle, .idle), (.waiting, .waiting), (.ready, .ready),
+                 (.playing, .playing), (.paused, .paused), (.ended, .ended),
+                 (.failed, .failed): return true
             default: return false
             }
         }
     }
 
+    // MARK: - Internal State Machine
+
+    /// Single source of truth. Replaces readyToPlayFlag + commandToPlayFlag + lastSeekPosition.
+    internal var playbackState: BHPlaybackState = .idle {
+        didSet {
+            let newExternal = playbackState.asExternalState
+            guard oldValue.asExternalState != newExternal else { return }
+            delegate?.mediaPlayer(self, stateUpdated: newExternal)
+            updateNowPlayingItemInfo()
+        }
+    }
+
+    /// External state derived from internal — used by NowPlaying extension.
+    internal var state: State { playbackState.asExternalState }
+
+    // MARK: - Public properties
+
     weak var delegate: BHMediaPlayerDelegate? {
-        didSet {
-            delegate?.mediaPlayer(self, stateUpdated: state)
-        }
+        didSet { delegate?.mediaPlayer(self, stateUpdated: state) }
     }
 
-    var startTime: TimeInterval = 0
-
-    var rate = Constants.defaultPlaybackRate
-    
-    internal var state = State.idle {
-        didSet {
-            if !(oldValue == state) {
-                delegate?.mediaPlayer(self, stateUpdated: state)
-                updateNowPlayingItemInfo()
-            }
-        }
+    var rate: Float {
+        get { playbackRate }
+        set { playbackRate = newValue }
     }
-    
-    internal var nowPlayingItemInfo = BHNowPlayingItemInfo.invalid
 
-    lazy internal var nowPlayingItemPlaybackState = MPNowPlayingPlaybackState.unknown
+    // MARK: - Internal properties
 
-    fileprivate let timeScale = TimeInterval(USEC_PER_SEC)
+    internal let timeScale = TimeInterval(USEC_PER_SEC)
     internal var playbackRate = Constants.defaultPlaybackRate
-    internal var lastSeekPosition = CMTime.invalid
+    internal var nowPlayingItemInfo = BHNowPlayingItemInfo.invalid
+    internal lazy var nowPlayingItemPlaybackState = MPNowPlayingPlaybackState.unknown
 
-    internal var readyToPlayFlag: Bool = false
-    internal var commandToPlayFlag: Bool = true
+    // MARK: - Init
 
-    // MARK: - Initialization
-    
     override init() {
         super.init()
-
         configureAudioSession()
     }
-    
+
     init(withUrl url: URL, coverUrl: URL? = nil, autoPlay: Bool = true) {
         super.init()
-
         configureAudioSession()
     }
-    
-    deinit {
 
+    deinit {
         delegate = nil
         _ = stop()
         clearNowPlayingInfo()
@@ -91,268 +88,205 @@ class BHMediaPlayerBase: NSObject {
         removePlayerNotifications()
         stopAudioSession()
     }
-    
-    // MARK: - methods to override
-    
+
+    // MARK: - Overridable engine hooks
+
     internal func configurePlayerNotifications() {
-
-        NotificationCenter.default.addObserver(self, selector: #selector(onInterruptionNotification(_:)), name: AVAudioSession.interruptionNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereLostNotification(_:)), name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereResetNotification(_:)), name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onRouteChangeNotification(_:)),name: AVAudioSession.routeChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onInterruptionNotification(_:)),
+            name: AVAudioSession.interruptionNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereLostNotification(_:)),
+            name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereResetNotification(_:)),
+            name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onRouteChangeNotification(_:)),
+            name: AVAudioSession.routeChangeNotification, object: nil)
     }
 
-    internal func removePlayerNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-
+    internal func removePlayerNotifications()     { NotificationCenter.default.removeObserver(self) }
     internal func configurePlayerItemNotifications() {}
-    
-    internal func removePlayerItemNotifications() {}
-    
-    internal func playerResume() {}
+    internal func removePlayerItemNotifications()    {}
 
-    internal func playerRestartPlaying() {}
-
-    internal func playerSeek(to timeInterval: TimeInterval, forceResume: Bool) {}
+    internal func playerResume()          {}
+    internal func playerRestartPlaying()  {}
+    internal func playerPause()           {}
+    internal func playerCurrentTime() -> TimeInterval { return 0 }
+    internal func playerDuration()    -> TimeInterval { return 0 }
+    internal func playerBaseRate()    -> Float        { return rate }
 
     internal func playerSeek(to time: CMTime, forceResume: Bool) {}
-
     internal func playerSeek(to time: CMTime, forceResume: Bool, completionHandler: @escaping (Bool) -> Void) {}
-    
-    internal func playerPause() {}
-    
-    internal func playerCurrentTime() -> TimeInterval { return 0 }
-    
-    internal func playerDuration() -> TimeInterval { return 0 }
 
-    internal func playerBaseRate() -> Float { return rate }
+    // MARK: - Public API
 
-    internal func updateState() {
-
-        if case(.failed(_)) = state {
-            return
-        }
-    }
-    
-    // MARK: - Public
-    
-    func resume() -> Bool {
-        
-        BHLog.p("\(#function)")
-        
-        commandToPlayFlag = true
-        startTime = playerCurrentTime()
-
-        playerResume()
-        
-        updateState()
-        
-        return true
-    }
-
+    /// Normal launch: seek to `time`, then start playing.
     func play(at time: TimeInterval, forceResume: Bool = false) -> Bool {
+        BHLog.p("\(#function) time=\(time)")
 
-        BHLog.p("\(#function) - time = \(time)")
-
-        commandToPlayFlag = true
-        startTime = time
-        
-        if readyToPlayFlag {
-            lastSeekPosition = CMTime.init(value: CMTimeValue(time * timeScale), timescale: CMTimeScale(timeScale))
-            playerSeek(to: lastSeekPosition, forceResume: forceResume) { finished in
-                if finished {
-                    self.lastSeekPosition = .invalid
-                }
-                self.updateState()
-            }
-
-            if playbackRate.isZero {
-                playbackRate = 1
-            }
-            rate = playbackRate
+        if playbackState.isEngineReady {
+            // Engine already ready (e.g. play(at:) called after item loaded) — seek & play.
+            seekAndPlay(to: time, resume: true)
+        } else {
+            // Engine still loading — record intent; executeIntent() will pick it up.
+            playbackState = .loading(intent: .play(from: time))
         }
-
         return true
     }
-    
-    func stop() -> Bool {
-        
+
+    /// Session restore: seek to `time`, then stay paused.
+    func restore(at time: TimeInterval) -> Bool {
+        BHLog.p("\(#function) time=\(time)")
+
+        if playbackState.isEngineReady {
+            seekAndPlay(to: time, resume: false)
+        } else {
+            playbackState = .loading(intent: .restore(at: time))
+        }
+        return true
+    }
+
+    func resume() -> Bool {
         BHLog.p("\(#function)")
-
-        playerPause()
-        commandToPlayFlag = false
-
-        lastSeekPosition = .negativeInfinity
-
-        updateState()
-
+        switch playbackState {
+        case .paused, .ready:
+            playerResume()
+            playbackState = .playing
+        case .ended:
+            seekAndPlay(to: 0, resume: true)
+        default:
+            break
+        }
         return true
     }
-    
+
     func pause() -> Bool {
-        
         BHLog.p("\(#function)")
-
         playerPause()
-        commandToPlayFlag = false
-
-        updateState()
-
+        switch playbackState {
+        case .seeking(let to, _): playbackState = .seeking(to: to, resume: false)
+        default:                  playbackState = .paused
+        }
         return true
     }
-    
+
+    func stop() -> Bool {
+        BHLog.p("\(#function)")
+        playerPause()
+        playbackState = .ended
+        return true
+    }
+
+    // MARK: - Queries
+
     func currentTime() -> TimeInterval {
-
-        let time: TimeInterval
-        if !readyToPlayFlag {
-            time = startTime
-        }
-        else if lastSeekPosition.isValid && !lastSeekPosition.isNegativeInfinity {
-            time = lastSeekPosition.toTimeInterval()
-        }
-        else {
-            time = playerCurrentTime()
-        }
-        
-        return time.isNaN ? 0 : time.rounded()
+        if let pending = playbackState.pendingPosition { return pending }
+        let t = playerCurrentTime()
+        return t.isNaN ? 0 : t.rounded()
     }
 
-    func duration() -> TimeInterval {
-        return playerDuration()
-    }
+    func duration() -> TimeInterval { playerDuration() }
 
-    func isReady() -> Bool {
-        
-        if case .ready = state {
-            return true
-        }
-        return false
-    }
+    func isReady()   -> Bool { if case .ready   = playbackState { return true }; return false }
+    func isPlaying() -> Bool { if case .playing = playbackState { return true }; return false }
+    func isEnded()   -> Bool { if case .ended   = playbackState { return true }; return false }
 
-    func isPlaying() -> Bool {
-
-        if case .playing = state {
-            return true
-        }
-        return false
-    }
-    
-    func isEnded() -> Bool {
-
-        if case .ended = state {
-            return true
-        }
-        return false
-    }
-    
-    
     // MARK: - Video
 
-    func hasVideo() -> Bool { return false }
+    func hasVideo()      -> Bool    { false }
+    func getVideoLayer() -> UIView? { nil   }
 
-    func getVideoLayer() -> UIView? { return nil }
+    // MARK: - Internal helpers
+
+    /// Seek to `time` then play or pause depending on `resume`.
+    /// Only call when isEngineReady == true.
+    internal func seekAndPlay(to time: TimeInterval, resume: Bool) {
+        if time > 0 {
+            let cmTime = CMTime(value: CMTimeValue(time * timeScale),
+                                timescale: CMTimeScale(timeScale))
+            playbackState = .seeking(to: time, resume: resume)
+            playerSeek(to: cmTime, forceResume: false) { [weak self] finished in
+                guard let self, finished else { return }
+                if resume {
+                    self.playerResume()
+                    self.playbackState = .playing
+                } else {
+                    self.playbackState = .paused
+                }
+            }
+        } else {
+            if resume {
+                playerResume()
+                playbackState = .playing
+            } else {
+                playbackState = .paused
+            }
+        }
+    }
 }
 
-// MARK: - Notifications
+// MARK: - Audio Session
 
 extension BHMediaPlayerBase {
-    
+
+    fileprivate func configureAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        do { try session.setCategory(.playback) }
+        catch { BHLog.w("\(#function) setCategory: \(error)") }
+        do { try session.setActive(true, options: .notifyOthersOnDeactivation) }
+        catch { BHLog.w("\(#function) setActive: \(error)") }
+    }
+
+    fileprivate func stopAudioSession() {
+        do { try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation) }
+        catch { BHLog.w("\(#function): \(error)") }
+    }
+}
+
+// MARK: - System Notifications
+
+extension BHMediaPlayerBase {
+
     @objc fileprivate func onInterruptionNotification(_ notification: Notification) {
-        BHLog.p("\(#function)")
-        
-        guard let interruptionTypeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt else { return }
-        guard let interruptionType = AVAudioSession.InterruptionType.init(rawValue: interruptionTypeValue) else { return }
+        guard let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
 
-        let shouldResume: Bool
-        if let interruptionOptionsValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
-            let interruptionOptions = AVAudioSession.InterruptionOptions.init(rawValue: interruptionOptionsValue)
-            shouldResume = interruptionOptions.contains(.shouldResume)
-        }
-        else {
-            shouldResume = false
-        }
+        let shouldResume = {
+            guard let optValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt else { return false }
+            return AVAudioSession.InterruptionOptions(rawValue: optValue).contains(.shouldResume)
+        }()
+        let wasSuspended = (notification.userInfo?[AVAudioSessionInterruptionWasSuspendedKey] as? NSNumber)?.boolValue ?? false
 
-        let wasSuspended: Bool
-        let wasSuspendedNumber = notification.userInfo?[AVAudioSessionInterruptionWasSuspendedKey] as? NSNumber
-        wasSuspended = wasSuspendedNumber?.boolValue ?? false
-
-        let isInterrupted: Bool
-        switch interruptionType {
-        case .began: isInterrupted = !wasSuspended
-        case .ended: isInterrupted = false
-        @unknown default:
-            isInterrupted = false
-        }
-
-        updateNowPlayingItemState(isInterrupted: isInterrupted)
-        updateNowPlayingItemInfo()
-
-        if isInterrupted {
+        switch type {
+        case .began where !wasSuspended:
+            updateNowPlayingItemState(isInterrupted: true)
+            updateNowPlayingItemInfo()
             _ = pause()
-        }
-        else if shouldResume {
+        case .ended where shouldResume:
+            updateNowPlayingItemState(isInterrupted: false)
+            updateNowPlayingItemInfo()
             _ = resume()
+        default:
+            break
         }
     }
 
     @objc fileprivate func onMediaServicesWereLostNotification(_ notification: Notification) {
-        BHLog.p("\(#function)")
         delegate?.mediaPlayerServicesWereLost(self)
     }
 
     @objc fileprivate func onMediaServicesWereResetNotification(_ notification: Notification) {
-        BHLog.p("\(#function)")
         delegate?.mediaPlayerServicesWereReset(self)
     }
 
     @objc fileprivate func onRouteChangeNotification(_ notification: NSNotification) {
-
-        guard let routeChangeReasonValue = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt else { return }
-        guard let routeChangeReason = AVAudioSession.RouteChangeReason.init(rawValue: routeChangeReasonValue) else { return }
-
-        switch routeChangeReason {
-        case .oldDeviceUnavailable: _ = pause()
-        case .newDeviceAvailable:
-            if isPlaying() {
-                DispatchQueue.main.async {
-                    self.playerRestartPlaying()
-                }
-            }
-        default: break
-        }
-    }
-}
-
-extension BHMediaPlayerBase {
-    
-    fileprivate func configureAudioSession() {
-        BHLog.p("\(#function)")
-
-        let session = AVAudioSession.sharedInstance()
-
-        do {
-            try session.setCategory(.playback)
-        } catch let error as NSError {
-            BHLog.w("\(#function) - Unable to set category:  \(error.localizedDescription)")
-        }
-
-        do {
-            try session.setActive(true, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
-        } catch let error as NSError {
-            BHLog.w("\(#function) - Unable to activate:  \(error.localizedDescription)")
-        }
-    }
-    
-    fileprivate func stopAudioSession() {
-        BHLog.p("\(#function)")
-        
-        let session = AVAudioSession.sharedInstance()
-
-        do {
-            try session.setActive(false, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
-        } catch let error as NSError {
-            BHLog.w("\(#function) - Unable to stop:  \(error.localizedDescription)")
+        guard let reasonValue = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else { return }
+        switch reason {
+        case .oldDeviceUnavailable:
+            _ = pause()
+        case .newDeviceAvailable where isPlaying():
+            DispatchQueue.main.async { self.playerRestartPlaying() }
+        default:
+            break
         }
     }
 }

@@ -617,33 +617,24 @@ class BHHybridPlayer {
         }
 
         BHID3Parser.isGoodForStream(validPlayerItem.post.url!) { isID3, isGoodForStream, isVideo in
-            if isVideo || validPost.hasVideo() {
-                self.createMediaPlayer(.systemVideo, url: urlToPlay, position: position)
+            
+            guard self.playerItem != nil else { return }
+
+            self.isVideoAvailable = isVideo || validPost.hasVideo()
+
+            let player: BHMediaPlayerBase = BHSystemMediaPlayer(withUrl: urlToPlay, coverUrl: self.playerItem?.post.coverUrl, isVideo: self.isVideoAvailable)
+
+            player.delegate = self
+            player.rate = self.settings.playbackSpeed
+            
+            self.mediaPlayer = player
+            
+            if self.shouldPlayAutomatically {
+                _ = self.mediaPlayer?.play(at: position)
             } else {
-                self.createMediaPlayer(.systemAudio, url: urlToPlay, position: position)
+                _ = self.mediaPlayer?.restore(at: position)
             }
         }
-    }
-    
-    fileprivate func createMediaPlayer(_ type: PlayerType, url: URL, position: Double = 0) {
-
-        guard playerItem != nil else { return }
-
-        var player: BHMediaPlayerBase
-        
-        switch type {
-        case .systemAudio:
-            player = BHSystemAudioPlayer(withUrl: url)
-        case .systemVideo:
-            player = BHSystemVideoPlayer(withUrl: url, coverUrl: playerItem?.post.coverUrl)
-        }
-
-        player.delegate = self
-        player.startTime = position
-        player.rate = settings.playbackSpeed
-        
-        mediaPlayer = player
-        isVideoAvailable = player.hasVideo()
     }
     
     fileprivate func destroyMediaPlayer() {
