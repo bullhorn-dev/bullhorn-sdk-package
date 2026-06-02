@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import Combine
 import UIKit
 
 final class BHSystemMediaPlayer: BHMediaPlayerBase {
@@ -22,16 +23,20 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     private let isVideoContent: Bool
     private var layerView: BHPlayerLayerView?
     private let mediaURL: URL
+
     private var isIntentionalPause = false
+
+    /// Subscriptions tied to the current AVPlayer (survive item replacement).
+    private var playerCancellables = Set<AnyCancellable>()
+    /// Subscriptions tied to the current AVPlayerItem (recreated on item replacement).
+    private var itemCancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
     init(withUrl url: URL, coverUrl: URL? = nil, isVideo: Bool = false) {
-        
-        mediaURL = url
-
-        playerItem = AVPlayerItem(url: url)
-        player = AVPlayer(playerItem: playerItem)
+        mediaURL    = url
+        playerItem  = AVPlayerItem(url: url)
+        player      = AVPlayer(playerItem: playerItem)
         player.volume = 1.0
         isVideoContent = isVideo
 
@@ -39,51 +44,21 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
         BHLog.p("Init SystemMediaPlayer url:\(url.absoluteString) isVideo:\(isVideo)")
 
-        configurePlayerItemNotifications()
-        configurePlayerNotifications()
+        subscribeToPlayer()
+        subscribeToPlayerItem()
+        configurePlayerNotifications()   // AVAudioSession notifications from base class
 
         layerView = BHPlayerLayerView(isVideo: isVideo)
         layerView?.setCover(url: coverUrl)
+
         if isVideo {
             layerView?.connect(to: player)
-            addBackgroundObservers()
+            subscribeToAppLifecycle()
         }
     }
 
     override convenience init(withUrl url: URL, coverUrl: URL? = nil, autoPlay: Bool = true) {
         self.init(withUrl: url, coverUrl: coverUrl, isVideo: false)
-    }
-
-    deinit { removeBackgroundObservers() }
-
-    // MARK: - Notification setup
-
-    override func configurePlayerNotifications() {
-        super.configurePlayerNotifications()
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.timeControlStatus),
-                           options: [.old, .new], context: nil)
-    }
-
-    override func removePlayerNotifications() {
-        super.removePlayerNotifications()
-        player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.timeControlStatus))
-    }
-
-    override func configurePlayerItemNotifications() {
-        super.configurePlayerItemNotifications()
-        playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status),
-                               options: [.old, .new], context: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onItemDidPlayToEnd(_:)),
-            name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(onItemFailedToPlayToEnd(_:)),
-            name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
-    }
-
-    override func removePlayerItemNotifications() {
-        super.removePlayerItemNotifications()
-        playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime,      object: playerItem)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
     }
 
     // MARK: - Engine hooks
@@ -127,7 +102,7 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         let d = TimeInterval(CMTimeGetSeconds(item.duration))
         return d > 0 ? d : 0
     }
-    
+
     override func retryConnection() -> Bool {
         guard case .failed = playbackState else { return false }
 
@@ -140,13 +115,13 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
         let position = playerCurrentTime()
 
-        removePlayerItemNotifications()
+        // Cancel item subscriptions, replace item, resubscribe.
+        itemCancellables.removeAll()
         playerItem = AVPlayerItem(url: mediaURL)
         player.replaceCurrentItem(with: playerItem)
-        configurePlayerItemNotifications()
-        
-        layerView?.reset()
+        subscribeToPlayerItem()
 
+        layerView?.reset()
         playbackState = .loading(intent: .play(from: position))
 
         return true
@@ -158,23 +133,65 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     override func getVideoLayer() -> UIView? { layerView }
 }
 
-// MARK: - KVO
+// MARK: - Combine Subscriptions
 
 extension BHSystemMediaPlayer {
 
-    override func observeValue(forKeyPath keyPath: String?,
-                               of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?,
-                               context: UnsafeMutableRawPointer?) {
-        switch keyPath {
-        case #keyPath(AVPlayerItem.status) where object is AVPlayerItem:
-            DispatchQueue.main.async { self.onItemStatusChanged() }
-        case #keyPath(AVPlayer.timeControlStatus) where object is AVPlayer:
-            DispatchQueue.main.async { self.onTimeControlStatusChanged() }
-        default:
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+    /// Subscribe to AVPlayer-level publishers (survive item replacement).
+    private func subscribeToPlayer() {
+        player.publisher(for: \.timeControlStatus)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.onTimeControlStatusChanged() }
+            .store(in: &playerCancellables)
     }
+
+    /// Subscribe to the current AVPlayerItem publishers.
+    /// Call again after replacing the item.
+    private func subscribeToPlayerItem() {
+        // Item status
+        playerItem.publisher(for: \.status)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.onItemStatusChanged() }
+            .store(in: &itemCancellables)
+
+        // Played to end
+        NotificationCenter.default
+            .publisher(for: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.onItemDidPlayToEnd() }
+            .store(in: &itemCancellables)
+
+        // Failed to play to end
+        NotificationCenter.default
+            .publisher(for: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.onItemFailedToPlayToEnd() }
+            .store(in: &itemCancellables)
+    }
+
+    /// Subscribe to app lifecycle for video layer management.
+    private func subscribeToAppLifecycle() {
+        NotificationCenter.default
+            .publisher(for: UIApplication.didEnterBackgroundNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.layerView?.disconnect() }
+            .store(in: &playerCancellables)
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.willEnterForegroundNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.layerView?.connect(to: self.player)
+                self.layerView?.setNeedsDisplay()
+            }
+            .store(in: &playerCancellables)
+    }
+}
+
+// MARK: - State Handlers
+
+extension BHSystemMediaPlayer {
 
     private func onItemStatusChanged() {
         switch playerItem.status {
@@ -183,7 +200,6 @@ extension BHSystemMediaPlayer {
             switch playbackState {
             case .loading(let intent):
                 seekAndPlay(to: intent.startPosition, resume: intent.shouldAutoPlay)
-
             default:
                 playbackState = .ready
             }
@@ -206,6 +222,7 @@ extension BHSystemMediaPlayer {
         guard playbackState.isEngineReady else { return }
         guard case .seeking = playbackState else {
             switch player.timeControlStatus {
+
             case .playing:
                 playbackState = .playing
 
@@ -214,15 +231,16 @@ extension BHSystemMediaPlayer {
                     isIntentionalPause = false
                     if case .playing = playbackState { playbackState = .paused }
                 } else if case .playing = playbackState {
+                    // Not our pause — restore playback (e.g. layer left hierarchy).
                     player.play()
                     player.rate = playbackRate
                 }
 
             case .waitingToPlayAtSpecifiedRate:
+                // Guard against re-entering from .failed state.
                 if case .failed = playbackState { return }
-                
                 guard case .playing = playbackState else { return }
-                
+
                 if BHReachabilityManager.shared.isConnected() {
                     playbackState = .stalled(reason: .buffering)
                 } else {
@@ -232,52 +250,24 @@ extension BHSystemMediaPlayer {
                         description: "The Internet connection is lost."))
                 }
 
-            @unknown default: break
+            @unknown default:
+                break
             }
             return
         }
+        // Seeking in flight — completion handler owns the transition.
     }
-}
 
-// MARK: - Item Notifications
-
-extension BHSystemMediaPlayer {
-
-    @objc private func onItemDidPlayToEnd(_ notification: Notification) {
+    private func onItemDidPlayToEnd() {
         BHLog.p("\(#function)")
         playbackState = .ended
         delegate?.mediaPlayerDidPlayToEndTime(self)
     }
 
-    @objc private func onItemFailedToPlayToEnd(_ notification: Notification) {
+    private func onItemFailedToPlayToEnd() {
         BHLog.p("\(#function)")
         playbackState = .ended
         delegate?.mediaPlayerFailedToPlayToEndTime(self)
     }
 }
 
-// MARK: - Background / Foreground
-
-extension BHSystemMediaPlayer {
-
-    private func addBackgroundObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,  object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground),
-            name: UIApplication.willEnterForegroundNotification, object: nil)
-    }
-
-    private func removeBackgroundObservers() {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification,  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
-    }
-
-    @objc private func appDidEnterBackground() {
-        layerView?.disconnect()
-    }
-
-    @objc private func appWillEnterForeground() {
-        layerView?.connect(to: player)
-        layerView?.setNeedsDisplay()
-    }
-}
