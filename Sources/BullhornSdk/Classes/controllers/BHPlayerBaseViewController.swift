@@ -70,6 +70,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
 
     private var isSliding = false
+    private var hasShownConnectionError = false
         
     internal var hasTile = false {
         didSet {
@@ -760,6 +761,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
         
     func hybridPlayer(_ player: BHHybridPlayer, initializedWith playerItem: BHPlayerItem) {
         DispatchQueue.main.async {
+            self.hasShownConnectionError = false
             self.resetUI()
             self.resetProgressUI()
             self.reloadData()
@@ -769,6 +771,9 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
 
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {
         DispatchQueue.main.async {
+            // Prevent showing the same error multiple times
+            guard !self.hasShownConnectionError else { return }
+            
             var message = "Failed to play episode. "
 
             if BHReachabilityManager.shared.isConnected() {
@@ -780,6 +785,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             }
  
             if !self.isFullscreen {
+                self.hasShownConnectionError = true
                 self.showError(message)
             }
 //            self.refreshTranscriptForPosition(-1)
@@ -788,6 +794,11 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
     
     func hybridPlayer(_ player: BHHybridPlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {
         DispatchQueue.main.async {
+            // Reset error flag when transitioning from failed to playing state
+            if state == .playing && self.hasShownConnectionError {
+                self.hasShownConnectionError = false
+            }
+            
             self.onStateChanged(state, stateFlags: stateFlags)
             self.updateVideoLayer(player.isVideoAvailable)
         }

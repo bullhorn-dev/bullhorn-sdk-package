@@ -5,7 +5,7 @@ import MediaPlayer
 protocol BHMediaPlayerDelegate: AnyObject {
     func mediaPlayer(_ player: BHMediaPlayerBase, stateUpdated state: BHMediaPlayerBase.State)
     func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase)
-    func mediaPlayerPlaybackStalled(_ player: BHMediaPlayerBase)
+    func mediaPlayerDidStall(_ player: BHMediaPlayerBase, reason: BHPlaybackState.StalledReason)
     func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase)
     func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase)
     func mediaPlayerServicesWereReset(_ player: BHMediaPlayerBase)
@@ -37,13 +37,18 @@ class BHMediaPlayerBase: NSObject {
 
     // MARK: - Internal State Machine
 
-    /// Single source of truth. Replaces readyToPlayFlag + commandToPlayFlag + lastSeekPosition.
+    /// Single source of truth.
     internal var playbackState: BHPlaybackState = .idle {
         didSet {
             let newExternal = playbackState.asExternalState
-            guard oldValue.asExternalState != newExternal else { return }
-            delegate?.mediaPlayer(self, stateUpdated: newExternal)
-            updateNowPlayingItemInfo()
+            let externalChanged = oldValue.asExternalState != newExternal
+
+            if case .stalled = playbackState {
+                updateNowPlayingItemInfo()
+            } else if externalChanged {
+                delegate?.mediaPlayer(self, stateUpdated: newExternal)
+                updateNowPlayingItemInfo()
+            }
         }
     }
 
@@ -175,6 +180,13 @@ class BHMediaPlayerBase: NSObject {
         return true
     }
 
+    func retryConnection() -> Bool {
+        BHLog.p("\(#function)")
+        guard case .stalled = playbackState else { return false }
+        playbackState = .paused
+        return true
+    }
+
     // MARK: - Queries
 
     func currentTime() -> TimeInterval {
@@ -196,8 +208,6 @@ class BHMediaPlayerBase: NSObject {
 
     // MARK: - Internal helpers
 
-    /// Seek to `time` then play or pause depending on `resume`.
-    /// Only call when isEngineReady == true.
     internal func seekAndPlay(to time: TimeInterval, resume: Bool) {
         if time > 0 {
             let cmTime = CMTime(value: CMTimeValue(time * timeScale),

@@ -93,6 +93,13 @@ final class BHPlayerLayerView: UIView {
             showCover(animated: false)
         }
     }
+    
+    func reset() {
+        guard isVideo else { return }
+        removeLayerObserver()
+        showCover(animated: false)
+        addLayerObserver()
+    }
 
     // MARK: - Private setup
 
@@ -107,8 +114,6 @@ final class BHPlayerLayerView: UIView {
             coverView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
-        // Audio: cover is always on top; video layer stays invisible.
-        // Video: cover starts visible; fades out when first frame arrives.
         coverView.alpha = 1
     }
 
@@ -126,6 +131,7 @@ final class BHPlayerLayerView: UIView {
 
     private func hideCover(animated: Bool) {
         guard isVideo else { return }   // never hide cover for audio
+
         if animated {
             UIView.animate(withDuration: transitionDuration) {
                 self.coverView.alpha = 0

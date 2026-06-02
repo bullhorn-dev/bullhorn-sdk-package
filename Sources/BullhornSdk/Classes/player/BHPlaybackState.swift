@@ -28,6 +28,9 @@ enum BHPlaybackState {
 
     /// Paused — either by user command or restored from a previous session.
     case paused
+    
+    /// Stalled — buffer is empty, waiting for network
+    case stalled(reason: StalledReason)
 
     /// Played to the end.
     case ended
@@ -56,13 +59,22 @@ enum BHPlaybackState {
             return false
         }
     }
+    
+    // MARK: - Stalled Reason
+    
+    enum StalledReason {
+        /// regular buferization, network connection is available
+        case buffering
+        /// no internet connection
+        case noConnection
+    }
 
     // MARK: - Helpers
 
     /// True once AVPlayer has loaded and we can issue seeks or play/pause immediately.
     var isEngineReady: Bool {
         switch self {
-        case .ready, .playing, .paused, .seeking: return true
+        case .ready, .playing, .paused, .seeking, .stalled: return true
         default: return false
         }
     }
@@ -87,6 +99,11 @@ enum BHPlaybackState {
         case .seeking(_, let resume):        return resume ? .playing : .paused
         case .playing:                       return .playing
         case .paused:                        return .paused
+        case .stalled(let reason):
+            switch reason {
+            case .buffering:                 return .playing
+            case .noConnection:              return .paused
+            }
         case .ended:                         return .ended
         case .failed(let e):                 return .failed(e: e)
         }

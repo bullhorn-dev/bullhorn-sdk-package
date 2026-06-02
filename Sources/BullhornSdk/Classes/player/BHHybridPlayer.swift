@@ -347,6 +347,12 @@ class BHHybridPlayer {
         
     @discardableResult func resume() -> Bool {
         
+        if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
+            if mediaPlayer?.retryConnection() == true {
+                return true
+            }
+        }
+
         if self.state == .failed {
             if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
                 destroyMediaPlayer()
@@ -373,7 +379,7 @@ class BHHybridPlayer {
         
         return true
     }
-
+    
     func pause() {
         performPause()
         
@@ -1041,6 +1047,9 @@ class BHHybridPlayer {
 
             playerState = .failed
             playerStateFlags = .error
+            stopTrackTimer()
+            stopPlayback(send: false)
+            setSleepTimer(0)
             
             /// track stats
             let request = BHTrackEventRequest.createRequest(category: .player, action: .error, banner: .playerFailed, context: error.debugDescription, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
@@ -1126,7 +1135,7 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
         
         if validPlayerItem.isStream {
-            mediaPlayerPlaybackStalled(player)
+            mediaPlayerDidStall(player, reason: .noConnection)
         } else if lastSentDuration - lastSentPosition > 10 {
             BHLog.p("\(#function)- Failed to play. Stop.")
             mediaPlayerFailedToPlayToEndTime(player)
@@ -1138,14 +1147,20 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
             }
         }
     }
-    
-    func mediaPlayerPlaybackStalled(_ player: BHMediaPlayerBase) {
-        BHLog.p("\(#function)")
 
-        let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
-        handlePlayerState(.failed(e: error))
+    func mediaPlayerDidStall(_ player: BHMediaPlayerBase, reason: BHPlaybackState.StalledReason) {
+        BHLog.p("\(#function) reason: \(reason)")
+
+        switch reason {
+        case .buffering:
+            break
+        case .noConnection:
+            stopTrackTimer()
+            let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
+            handlePlayerState(.failed(e: error))
+        }
     }
-    
+        
     func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase) {
         BHLog.p("\(#function)")
 
@@ -1157,7 +1172,7 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         BHLog.p("\(#function)")
 
         if playerItem?.isStream == true {
-            mediaPlayerPlaybackStalled(player)
+            mediaPlayerDidStall(player, reason: .noConnection)
         } else {
             pause()
         }

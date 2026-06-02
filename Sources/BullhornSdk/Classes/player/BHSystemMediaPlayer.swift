@@ -18,13 +18,18 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     // MARK: - Private
 
     private let player: AVPlayer
-    private let playerItem: AVPlayerItem
+    private var playerItem: AVPlayerItem
     private let isVideoContent: Bool
     private var layerView: BHPlayerLayerView?
+    private let mediaURL: URL
+    private var isIntentionalPause = false
 
     // MARK: - Init
 
     init(withUrl url: URL, coverUrl: URL? = nil, isVideo: Bool = false) {
+        
+        mediaURL = url
+
         playerItem = AVPlayerItem(url: url)
         player = AVPlayer(playerItem: playerItem)
         player.volume = 1.0
@@ -70,8 +75,6 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
                                options: [.old, .new], context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onItemDidPlayToEnd(_:)),
             name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(onItemPlaybackStalled(_:)),
-            name: .AVPlayerItemPlaybackStalled, object: playerItem)
         NotificationCenter.default.addObserver(self, selector: #selector(onItemFailedToPlayToEnd(_:)),
             name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
     }
@@ -79,9 +82,8 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     override func removePlayerItemNotifications() {
         super.removePlayerItemNotifications()
         playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime,       object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled,        object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime,  object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime,      object: playerItem)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
     }
 
     // MARK: - Engine hooks
@@ -96,7 +98,10 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         player.rate = playbackRate
     }
 
-    override func playerPause() { player.pause() }
+    override func playerPause() {
+        isIntentionalPause = true
+        player.pause()
+    }
 
     override func playerSeek(to time: CMTime, forceResume: Bool = false) {
         player.seek(to: time)
@@ -122,6 +127,30 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         let d = TimeInterval(CMTimeGetSeconds(item.duration))
         return d > 0 ? d : 0
     }
+    
+    override func retryConnection() -> Bool {
+        guard case .failed = playbackState else { return false }
+
+        if !BHReachabilityManager.shared.isConnected() {
+            delegate?.mediaPlayer(self, stateUpdated: .failed(e: NSError.error(
+                with: NSError.LocalCodes.common,
+                description: "The Internet connection is lost.")))
+            return false
+        }
+
+        let position = playerCurrentTime()
+
+        removePlayerItemNotifications()
+        playerItem = AVPlayerItem(url: mediaURL)
+        player.replaceCurrentItem(with: playerItem)
+        configurePlayerItemNotifications()
+        
+        layerView?.reset()
+
+        playbackState = .loading(intent: .play(from: position))
+
+        return true
+    }
 
     // MARK: - Video
 
@@ -139,9 +168,9 @@ extension BHSystemMediaPlayer {
                                context: UnsafeMutableRawPointer?) {
         switch keyPath {
         case #keyPath(AVPlayerItem.status) where object is AVPlayerItem:
-            onItemStatusChanged()
+            DispatchQueue.main.async { self.onItemStatusChanged() }
         case #keyPath(AVPlayer.timeControlStatus) where object is AVPlayer:
-            onTimeControlStatusChanged()
+            DispatchQueue.main.async { self.onTimeControlStatusChanged() }
         default:
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -153,13 +182,9 @@ extension BHSystemMediaPlayer {
         case .readyToPlay:
             switch playbackState {
             case .loading(let intent):
-                // play(at:) / restore(at:) arrived BEFORE the engine was ready.
-                // Execute now.
                 seekAndPlay(to: intent.startPosition, resume: intent.shouldAutoPlay)
 
             default:
-                // Engine became ready BEFORE play(at:) was called (race condition).
-                // Mark as ready so that play(at:) / restore(at:) can execute immediately.
                 playbackState = .ready
             }
 
@@ -177,26 +202,40 @@ extension BHSystemMediaPlayer {
         }
     }
 
-    /// Syncs playbackState with AVPlayer's live timeControlStatus.
-    /// Only acts when the engine is running — never overrides loading/seeking transitions.
     private func onTimeControlStatusChanged() {
         guard playbackState.isEngineReady else { return }
         guard case .seeking = playbackState else {
             switch player.timeControlStatus {
             case .playing:
                 playbackState = .playing
+
             case .paused:
-                // Only demote to paused if we were actively playing;
-                // avoids clobbering .ready before a command arrives.
-                if case .playing = playbackState { playbackState = .paused }
+                if isIntentionalPause {
+                    isIntentionalPause = false
+                    if case .playing = playbackState { playbackState = .paused }
+                } else if case .playing = playbackState {
+                    player.play()
+                    player.rate = playbackRate
+                }
+
             case .waitingToPlayAtSpecifiedRate:
-                break   // transient buffer stall — keep current state
-            @unknown default:
-                break
+                if case .failed = playbackState { return }
+                
+                guard case .playing = playbackState else { return }
+                
+                if BHReachabilityManager.shared.isConnected() {
+                    playbackState = .stalled(reason: .buffering)
+                } else {
+                    player.pause()
+                    playbackState = .failed(NSError.error(
+                        with: NSError.LocalCodes.common,
+                        description: "The Internet connection is lost."))
+                }
+
+            @unknown default: break
             }
             return
         }
-        // Seeking in flight — completion handler owns the next transition.
     }
 }
 
@@ -208,12 +247,6 @@ extension BHSystemMediaPlayer {
         BHLog.p("\(#function)")
         playbackState = .ended
         delegate?.mediaPlayerDidPlayToEndTime(self)
-    }
-
-    @objc private func onItemPlaybackStalled(_ notification: Notification) {
-        BHLog.p("\(#function)")
-        playbackState = .ended
-        delegate?.mediaPlayerPlaybackStalled(self)
     }
 
     @objc private func onItemFailedToPlayToEnd(_ notification: Notification) {
@@ -245,9 +278,6 @@ extension BHSystemMediaPlayer {
 
     @objc private func appWillEnterForeground() {
         layerView?.connect(to: player)
-        if player.timeControlStatus == .playing {
-            player.pause()
-            player.play()
-        }
+        layerView?.setNeedsDisplay()
     }
 }
