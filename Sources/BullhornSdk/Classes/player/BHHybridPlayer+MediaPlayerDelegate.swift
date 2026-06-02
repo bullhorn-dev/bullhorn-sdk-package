@@ -22,13 +22,20 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
 
         if validItem.isStream {
             mediaPlayerDidStall(player, reason: .noConnection)
-        } else if lastSentDuration - lastSentPosition > 10 {
-            BHLog.p("\(#function) - Failed to play. Stop.")
-            mediaPlayerFailedToPlayToEndTime(player)
         } else {
-            BHLog.p("\(#function) - Ended. Try to play next.")
-            handlePlayerState(.ended)
-            if hasNext() && UserDefaults.standard.playNextEnabled { playNext() }
+            let currentPos = mediaPlayer?.currentTime() ?? lastSentPosition
+            let duration = mediaPlayer?.duration() ?? lastSentDuration
+
+            if duration - currentPos > 10 {
+                BHLog.p("\(#function) - Failed to play. Stop.")
+                mediaPlayerFailedToPlayToEndTime(player)
+            } else {
+                BHLog.p("\(#function) - Ended. Try to play next.")
+                handlePlayerState(.ended)
+                if hasNext() && UserDefaults.standard.playNextEnabled {
+                    playNext()
+                }
+            }
         }
     }
 
