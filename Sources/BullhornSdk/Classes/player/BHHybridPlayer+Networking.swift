@@ -155,8 +155,8 @@ extension BHHybridPlayer {
         guard let item = playerItem else { return }
         guard var validPost = post else { return }
         
-        let position = player.playerCurrentTime()
-        let duration = player.playerDuration()
+        let position = player.currentTime()
+        let duration = player.duration()
         let localPosition = ((duration - position) < 5) ? 0 : position
         let isCompleted = validPost.isPlaybackCompleted || ((duration - position) < 5)
         let timestamp = Date().timeIntervalSince1970

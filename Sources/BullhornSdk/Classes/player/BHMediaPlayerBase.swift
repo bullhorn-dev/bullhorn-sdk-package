@@ -2,19 +2,28 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
+// MARK: - Delegate
+// All methods use `any BHPlaybackEngine` so BHHybridPlayer doesn't need to
+// know about the concrete player class.
+
 protocol BHMediaPlayerDelegate: AnyObject {
-    func mediaPlayer(_ player: BHMediaPlayerBase, stateUpdated state: BHMediaPlayerBase.State)
-    func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase)
-    func mediaPlayerDidStall(_ player: BHMediaPlayerBase, reason: BHPlaybackState.StalledReason)
-    func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase)
-    func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase)
-    func mediaPlayerServicesWereReset(_ player: BHMediaPlayerBase)
-    func mediaPlayerDidRequestNowPlayingItemInfo(_ player: BHMediaPlayerBase) -> BHNowPlayingItemInfo
+    func mediaPlayer(_ player: any BHPlaybackEngine, stateUpdated state: BHMediaPlayerBase.State)
+    func mediaPlayerDidPlayToEndTime(_ player: any BHPlaybackEngine)
+    func mediaPlayerDidStall(_ player: any BHPlaybackEngine, reason: BHPlaybackState.StalledReason)
+    func mediaPlayerFailedToPlayToEndTime(_ player: any BHPlaybackEngine)
+    func mediaPlayerServicesWereLost(_ player: any BHPlaybackEngine)
+    func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine)
+    func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo
 }
 
-class BHMediaPlayerBase: NSObject {
+// MARK: - BHMediaPlayerBase
 
-    // MARK: - External State (delegate-facing, unchanged API)
+class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
+                         BHAudioSessionManaging,
+                         BHNowPlayingManaging,
+                         BHSystemNotificationHandling {
+
+    // MARK: - External State (delegate-facing)
 
     enum State: Equatable {
         case idle
@@ -37,7 +46,6 @@ class BHMediaPlayerBase: NSObject {
 
     // MARK: - Internal State Machine
 
-    /// Single source of truth.
     internal var playbackState: BHPlaybackState = .idle {
         didSet {
             let newExternal = playbackState.asExternalState
@@ -52,10 +60,9 @@ class BHMediaPlayerBase: NSObject {
         }
     }
 
-    /// External state derived from internal — used by NowPlaying extension.
     internal var state: State { playbackState.asExternalState }
 
-    // MARK: - Public properties
+    // MARK: - BHPlaybackEngine
 
     weak var delegate: BHMediaPlayerDelegate? {
         didSet { delegate?.mediaPlayer(self, stateUpdated: state) }
@@ -66,81 +73,64 @@ class BHMediaPlayerBase: NSObject {
         set { playbackRate = newValue }
     }
 
-    // MARK: - Internal properties
+    // MARK: - Shared internal state
 
-    internal let timeScale = TimeInterval(USEC_PER_SEC)
+    internal let timeScale    = TimeInterval(USEC_PER_SEC)
     internal var playbackRate = Constants.defaultPlaybackRate
-    internal var nowPlayingItemInfo = BHNowPlayingItemInfo.invalid
+
+    // Exposed via BHPlaybackEngine so BHHybridPlayer can read cover image.
+    var nowPlayingItemInfo: BHNowPlayingItemInfo = .invalid
+
     internal lazy var nowPlayingItemPlaybackState = MPNowPlayingPlaybackState.unknown
 
     // MARK: - Init
 
     override init() {
         super.init()
-        configureAudioSession()
+        startAudioSession()
     }
 
     init(withUrl url: URL, coverUrl: URL? = nil, autoPlay: Bool = true) {
         super.init()
-        configureAudioSession()
+        startAudioSession()
     }
 
     deinit {
         delegate = nil
         _ = stop()
         clearNowPlayingInfo()
-        removePlayerItemNotifications()
         removePlayerNotifications()
         stopAudioSession()
     }
 
-    // MARK: - Overridable engine hooks
+    // MARK: - Engine hooks (override in subclasses)
 
-    internal func configurePlayerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onInterruptionNotification(_:)),
-            name: AVAudioSession.interruptionNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereLostNotification(_:)),
-            name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onMediaServicesWereResetNotification(_:)),
-            name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onRouteChangeNotification(_:)),
-            name: AVAudioSession.routeChangeNotification, object: nil)
-    }
-
-    internal func removePlayerNotifications()     { NotificationCenter.default.removeObserver(self) }
-    internal func configurePlayerItemNotifications() {}
-    internal func removePlayerItemNotifications()    {}
-
-    internal func playerResume()          {}
-    internal func playerRestartPlaying()  {}
-    internal func playerPause()           {}
-    internal func playerCurrentTime() -> TimeInterval { return 0 }
-    internal func playerDuration()    -> TimeInterval { return 0 }
-    internal func playerBaseRate()    -> Float        { return rate }
+    internal func playerResume()         {}
+    internal func playerRestartPlaying() {}
+    internal func playerPause()          {}
+    internal func playerCurrentTime() -> TimeInterval { 0 }
+    internal func playerDuration()    -> TimeInterval { 0 }
 
     internal func playerSeek(to time: CMTime, forceResume: Bool) {}
-    internal func playerSeek(to time: CMTime, forceResume: Bool, completionHandler: @escaping (Bool) -> Void) {}
+    internal func playerSeek(to time: CMTime, forceResume: Bool,
+                             completionHandler: @escaping (Bool) -> Void) {}
 
-    // MARK: - Public API
+    // MARK: - BHPlaybackEngine — Playback Control
 
-    /// Normal launch: seek to `time`, then start playing.
+    @discardableResult
     func play(at time: TimeInterval, forceResume: Bool = false) -> Bool {
         BHLog.p("\(#function) time=\(time)")
-
         if playbackState.isEngineReady {
-            // Engine already ready (e.g. play(at:) called after item loaded) — seek & play.
             seekAndPlay(to: time, resume: true)
         } else {
-            // Engine still loading — record intent; executeIntent() will pick it up.
             playbackState = .loading(intent: .play(from: time))
         }
         return true
     }
 
-    /// Session restore: seek to `time`, then stay paused.
+    @discardableResult
     func restore(at time: TimeInterval) -> Bool {
         BHLog.p("\(#function) time=\(time)")
-
         if playbackState.isEngineReady {
             seekAndPlay(to: time, resume: false)
         } else {
@@ -149,6 +139,7 @@ class BHMediaPlayerBase: NSObject {
         return true
     }
 
+    @discardableResult
     func resume() -> Bool {
         BHLog.p("\(#function)")
         switch playbackState {
@@ -163,6 +154,7 @@ class BHMediaPlayerBase: NSObject {
         return true
     }
 
+    @discardableResult
     func pause() -> Bool {
         BHLog.p("\(#function)")
         playerPause()
@@ -173,6 +165,7 @@ class BHMediaPlayerBase: NSObject {
         return true
     }
 
+    @discardableResult
     func stop() -> Bool {
         BHLog.p("\(#function)")
         playerPause()
@@ -180,14 +173,20 @@ class BHMediaPlayerBase: NSObject {
         return true
     }
 
+    @discardableResult
     func retryConnection() -> Bool {
         BHLog.p("\(#function)")
-        guard case .stalled = playbackState else { return false }
-        playbackState = .paused
-        return true
+        return false
     }
 
-    // MARK: - Queries
+    // MARK: - BHPlaybackEngine — Seeking
+
+    func seek(to time: TimeInterval) {
+        guard playbackState.isEngineReady else { return }
+        seekAndPlay(to: time, resume: isPlaying())
+    }
+
+    // MARK: - BHPlaybackEngine — Queries
 
     func currentTime() -> TimeInterval {
         if let pending = playbackState.pendingPosition { return pending }
@@ -201,7 +200,7 @@ class BHMediaPlayerBase: NSObject {
     func isPlaying() -> Bool { if case .playing = playbackState { return true }; return false }
     func isEnded()   -> Bool { if case .ended   = playbackState { return true }; return false }
 
-    // MARK: - Video
+    // MARK: - BHPlaybackEngine — Video
 
     func hasVideo()      -> Bool    { false }
     func getVideoLayer() -> UIView? { nil   }
@@ -233,37 +232,67 @@ class BHMediaPlayerBase: NSObject {
     }
 }
 
-// MARK: - Audio Session
+// MARK: - BHAudioSessionManaging
 
 extension BHMediaPlayerBase {
 
-    fileprivate func configureAudioSession() {
+    func startAudioSession() {
         let session = AVAudioSession.sharedInstance()
-        do { try session.setCategory(.playback) }
-        catch { BHLog.w("\(#function) setCategory: \(error)") }
-        do { try session.setActive(true, options: .notifyOthersOnDeactivation) }
-        catch { BHLog.w("\(#function) setActive: \(error)") }
+        
+        do {
+            try session.setCategory(.playback)
+        } catch {
+            BHLog.w("\(#function) setCategory: \(error)")
+        }
+        
+        do {
+            try session.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            BHLog.w("\(#function) setActive: \(error)")
+        }
     }
 
-    fileprivate func stopAudioSession() {
-        do { try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation) }
-        catch { BHLog.w("\(#function): \(error)") }
+    func stopAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance()
+                .setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            BHLog.w("\(#function): \(error)")
+        }
     }
 }
 
-// MARK: - System Notifications
+// MARK: - BHSystemNotificationHandling
 
 extension BHMediaPlayerBase {
 
-    @objc fileprivate func onInterruptionNotification(_ notification: Notification) {
+    func configurePlayerNotifications() {
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(onInterruptionNotification(_:)),
+            name: AVAudioSession.interruptionNotification, object: nil)
+        nc.addObserver(self, selector: #selector(onMediaServicesWereLostNotification(_:)),
+            name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
+        nc.addObserver(self, selector: #selector(onMediaServicesWereResetNotification(_:)),
+            name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
+        nc.addObserver(self, selector: #selector(onRouteChangeNotification(_:)),
+            name: AVAudioSession.routeChangeNotification, object: nil)
+    }
+
+    func removePlayerNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func onInterruptionNotification(_ notification: Notification) {
         guard let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
 
-        let shouldResume = {
-            guard let optValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt else { return false }
-            return AVAudioSession.InterruptionOptions(rawValue: optValue).contains(.shouldResume)
+        let shouldResume: Bool = {
+            guard let v = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            else { return false }
+            return AVAudioSession.InterruptionOptions(rawValue: v).contains(.shouldResume)
         }()
-        let wasSuspended = (notification.userInfo?[AVAudioSessionInterruptionWasSuspendedKey] as? NSNumber)?.boolValue ?? false
+        let wasSuspended = (notification.userInfo?[AVAudioSessionInterruptionWasSuspendedKey]
+            as? NSNumber)?.boolValue ?? false
 
         switch type {
         case .began where !wasSuspended:
@@ -279,17 +308,17 @@ extension BHMediaPlayerBase {
         }
     }
 
-    @objc fileprivate func onMediaServicesWereLostNotification(_ notification: Notification) {
+    @objc private func onMediaServicesWereLostNotification(_ notification: Notification) {
         delegate?.mediaPlayerServicesWereLost(self)
     }
 
-    @objc fileprivate func onMediaServicesWereResetNotification(_ notification: Notification) {
+    @objc private func onMediaServicesWereResetNotification(_ notification: Notification) {
         delegate?.mediaPlayerServicesWereReset(self)
     }
 
-    @objc fileprivate func onRouteChangeNotification(_ notification: NSNotification) {
-        guard let reasonValue = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
-              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else { return }
+    @objc private func onRouteChangeNotification(_ notification: NSNotification) {
+        guard let v = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: v) else { return }
         switch reason {
         case .oldDeviceUnavailable:
             _ = pause()
@@ -300,3 +329,4 @@ extension BHMediaPlayerBase {
         }
     }
 }
+

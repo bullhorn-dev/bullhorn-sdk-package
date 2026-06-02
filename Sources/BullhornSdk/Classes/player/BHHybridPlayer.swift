@@ -94,7 +94,8 @@ class BHHybridPlayer {
     
     fileprivate var prevPlayerState: BHPlayerState?
 
-    internal var mediaPlayer: BHMediaPlayerBase?
+    internal var mediaPlayer: (any BHPlaybackEngine)?
+
     fileprivate var trackTimer: Timer?
     fileprivate var sleepTimer: Timer?
 
@@ -359,7 +360,6 @@ class BHHybridPlayer {
             } else {
                 let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
                 handlePlayerState(.failed(e: error))
-                mediaPlayer?.updateNowPlayingItemState()
                 return false
             }
         }
@@ -628,12 +628,10 @@ class BHHybridPlayer {
 
             self.isVideoAvailable = isVideo || validPost.hasVideo()
 
-            let player: BHMediaPlayerBase = BHSystemMediaPlayer(withUrl: urlToPlay, coverUrl: self.playerItem?.post.coverUrl, isVideo: self.isVideoAvailable)
+            self.mediaPlayer = BHSystemMediaPlayer(withUrl: urlToPlay, coverUrl: self.playerItem?.post.coverUrl, isVideo: self.isVideoAvailable)
 
-            player.delegate = self
-            player.rate = self.settings.playbackSpeed
-            
-            self.mediaPlayer = player
+            self.mediaPlayer?.delegate = self
+            self.mediaPlayer?.rate = self.settings.playbackSpeed
             
             if self.shouldPlayAutomatically {
                 _ = self.mediaPlayer?.play(at: position)
@@ -647,9 +645,8 @@ class BHHybridPlayer {
         
         guard let player = mediaPlayer else { return }
 
-        switch player.state {
-        case .playing, .paused: _ = player.stop()
-        default: break
+        if player.isPlaying() || player.isReady() {
+            _ = player.stop()
         }
         
         lastSentPosition = 0
@@ -1114,7 +1111,7 @@ class BHHybridPlayer {
 
 extension BHHybridPlayer: BHMediaPlayerDelegate {
     
-    func mediaPlayer(_ player: BHMediaPlayerBase, stateUpdated state: BHMediaPlayerBase.State) {
+    func mediaPlayer(_ player: any BHPlaybackEngine, stateUpdated state: BHMediaPlayerBase.State) {
 
         handlePlayerState(state)
 
@@ -1126,7 +1123,7 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
     
-    func mediaPlayerDidPlayToEndTime(_ player: BHMediaPlayerBase) {
+    func mediaPlayerDidPlayToEndTime(_ player: any BHPlaybackEngine) {
         BHLog.p("\(#function)")
 
         guard let validPlayerItem = playerItem else {
@@ -1148,7 +1145,7 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
 
-    func mediaPlayerDidStall(_ player: BHMediaPlayerBase, reason: BHPlaybackState.StalledReason) {
+    func mediaPlayerDidStall(_ player: any BHPlaybackEngine, reason: BHPlaybackState.StalledReason) {
         BHLog.p("\(#function) reason: \(reason)")
 
         switch reason {
@@ -1161,14 +1158,14 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
         
-    func mediaPlayerFailedToPlayToEndTime(_ player: BHMediaPlayerBase) {
+    func mediaPlayerFailedToPlayToEndTime(_ player: any BHPlaybackEngine) {
         BHLog.p("\(#function)")
 
         let error = NSError.error(with: NSError.LocalCodes.common, description: "Failed to play because of bad network connection.")
         handlePlayerState(.failed(e: error))
     }
 
-    func mediaPlayerServicesWereLost(_ player: BHMediaPlayerBase) {
+    func mediaPlayerServicesWereLost(_ player: any BHPlaybackEngine) {
         BHLog.p("\(#function)")
 
         if playerItem?.isStream == true {
@@ -1178,11 +1175,11 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
     
-    func mediaPlayerServicesWereReset(_ player: BHMediaPlayerBase) {
+    func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine) {
         BHLog.p("\(#function)")
     }
 
-    func mediaPlayerDidRequestNowPlayingItemInfo(_ player: BHMediaPlayerBase) -> BHNowPlayingItemInfo {
+    func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo {
 
         guard player === self.mediaPlayer else { return .invalid }
 
