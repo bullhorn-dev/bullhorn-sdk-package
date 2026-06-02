@@ -1,6 +1,7 @@
-
 import Foundation
 import SDWebImage
+
+// MARK: - Listener Protocol
 
 protocol BHHybridPlayerListener: ObserverProtocol {
 
@@ -12,14 +13,12 @@ protocol BHHybridPlayerListener: ObserverProtocol {
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?)
     func hybridPlayerDidClose(_ player: BHHybridPlayer)
     func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript)
-
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings)
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double)
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool)
 }
 
 extension BHHybridPlayerListener {
-
     func hybridPlayer(_ player: BHHybridPlayer, initializedWith playerItem: BHPlayerItem) {}
     func hybridPlayer(_ player: BHHybridPlayer, positionChanged position: Double, duration: Double) {}
     func hybridPlayerDidChangeBulletin(_ player: BHHybridPlayer) {}
@@ -27,32 +26,37 @@ extension BHHybridPlayerListener {
     func hybridPlayerDidFailedToPlay(_ player: BHHybridPlayer, error: Error?) {}
     func hybridPlayerDidClose(_ player: BHHybridPlayer) {}
     func hybridPlayerDidChangeTranscript(_ player: BHHybridPlayer, transcript: BHTranscript) {}
-
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {}
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double) {}
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool) {}
 }
 
-class BHHybridPlayer {
-    
-    static let shared: BHHybridPlayer = BHHybridPlayer.init()
-    
-    let trackTimerInterval: Double = 0.9
-    let playbackRecreateInterval: Double = 10.0
-    let nowPlayingInfoUpdateInterval: Double = 5.0
+// MARK: - BHHybridPlayer
 
-    enum PlayerType: Int {
-        case systemAudio = 0
-        case systemVideo
-    }
-    
-    enum SkipDirection: Int {
-        case backward = 0
-        case forward
-    }
-        
+/// Public facade for all player interaction.
+/// All other parts of the app communicate with the player only through this class.
+class BHHybridPlayer {
+
+    static let shared = BHHybridPlayer()
+
+    // MARK: - Internal infrastructure
+
     internal let observersContainer: ObserversContainerNotifyingOnQueue<BHHybridPlayerListener>
-    internal let workingQueue = DispatchQueue.init(label: "BHHybridPlayer.Working", target: .global())
+    internal let workingQueue = DispatchQueue(label: "BHHybridPlayer.Working", target: .global())
+
+    // MARK: - Public state
+
+    var state: PlayerState = .idle
+    var stateFlags: PlayerStateFlags = .initial
+
+    var isVideoAvailable = false {
+        didSet {
+            guard oldValue != isVideoAvailable else { return }
+            onStateUpdated()
+        }
+    }
+
+    // MARK: - Content
 
     var post: BHPost? {
         didSet {
@@ -62,98 +66,79 @@ class BHHybridPlayer {
         }
     }
 
-    internal var transcript: BHTranscript?
-    internal var transcriptSegments: [BHSegment] {
-        return transcript?.segments ?? []
-    }
-
-    var isFullScreen: Bool = false // UI flag for player & dialogs
-    var isTranscriptActive: Bool = false // UI flag for player
-
-//    var playlist: [BHPost]?
-        
     var playerItem: BHPlayerItem?
 
-    var bulletin: BHBulletin? {
-        return bulletinManager.bulletin
-    }
-    
-    var bulletinLayout: BHBulletinLayout? {
-        return bulletinManager.layout
-    }
+    var bulletin: BHBulletin?       { bulletinManager.bulletin }
+    var bulletinLayout: BHBulletinLayout? { bulletinManager.layout }
 
-    var state: PlayerState = .idle
-    var stateFlags: PlayerStateFlags = .initial
-
-    var isVideoAvailable = false {
-        didSet {
-            if oldValue == isVideoAvailable { return }
-            onStateUpdated()
-        }
-    }
-    
-    fileprivate var prevPlayerState: BHPlayerState?
-
-    internal var mediaPlayer: (any BHPlaybackEngine)?
-
-    fileprivate var trackTimer: Timer?
-    fileprivate var sleepTimer: Timer?
-
-    var sleepTimerInterval: TimeInterval = 0
-
-    fileprivate var context: BHPlayerContext = .app
-    fileprivate var currentPlayback: BHPostPlayback?
-    fileprivate var playbackRecreateCounter: Double = 0.0
-
-    fileprivate var nowPlayingInfoUpdateCounter: Double = 0.0
-    
-    internal var manualPosition: Double = 0
-
-    var lastSentPosition: TimeInterval = 0
-    var lastSentDuration: TimeInterval = 0
-
-    fileprivate var isSilent = false
-    fileprivate var isSeek = false
-    
-    var isSliding: Bool = false
-    
-    var shouldPlayAutomatically: Bool = true
-    
-    internal var bulletinManager = BHBulletinManager.shared
-    internal var postsManager = BHPostsManager()
-
-    fileprivate var settings = BHPlayerItem.PlaybackSettings.initial {
-        didSet {
-            
-            settings.debugDescription()
-            
-            mediaPlayer?.rate = settings.playbackSpeed
-
-            BHRemoteCommandCenterManager.shared.updateTimeIntervals(withPrefferedBackwardIntervals: [settings.backwardLength], prefferedForwardIntervals: [settings.forwardLength])
-            BHRemoteCommandCenterManager.shared.updatePlaybackRates(withSupportedPlaybackRates: settings.supportedPlaybackRates())
-        }
-    }
+    internal var transcript: BHTranscript?
+    internal var transcriptSegments: [BHSegment] { transcript?.segments ?? [] }
     
     internal var playbackQueue: [BHQueueItem] = []
 
-    // MARK: - Lifecycle
+    // MARK: - UI flags
+
+    var isFullScreen: Bool = false
+    var isTranscriptActive: Bool = false
+    var isSliding: Bool = false
+
+    // MARK: - Internal state
+
+    internal var mediaPlayer: (any BHPlaybackEngine)?
+    internal var manualPosition: Double = 0
+    internal var shouldPlayAutomatically: Bool = true
+    internal var context: BHPlayerContext = .app
+
+    // Position tracking
+    var lastSentPosition: TimeInterval = 0
+    var lastSentDuration: TimeInterval = 0
+
+    // Deduplication
+    internal var prevPlayerState: BHPlayerState?
+    internal var isSilent = false
+    internal var isSeek = false
+
+    // MARK: - Managers
+
+    internal var bulletinManager = BHBulletinManager.shared
+    internal var postsManager = BHPostsManager()
+
+    // MARK: - Settings
+
+    internal var settings = BHPlayerItem.PlaybackSettings.initial {
+        didSet {
+            settings.debugDescription()
+            mediaPlayer?.rate = settings.playbackSpeed
+            BHRemoteCommandCenterManager.shared.updateTimeIntervals(
+                withPrefferedBackwardIntervals: [settings.backwardLength],
+                prefferedForwardIntervals: [settings.forwardLength])
+            BHRemoteCommandCenterManager.shared.updatePlaybackRates(
+                withSupportedPlaybackRates: settings.supportedPlaybackRates())
+        }
+    }
+
+    // MARK: - Init
 
     init() {
         observersContainer = .init(notifyQueue: workingQueue)
-        
+
         UserDefaults.standard.register(defaults: [
-            UserDefaults.playNextEnabledDefaultsKey : true,
+            UserDefaults.playNextEnabledDefaultsKey: true
         ])
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationWillTerminate(_:)), name: UIApplication.willTerminateNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(_:)), name: BHAccountManager.AccountChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onApplicationWillTerminate(_:)),
+            name: UIApplication.willTerminateNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onAccountChangedNotification(_:)),
+            name: BHAccountManager.AccountChangedNotification, object: nil)
     }
 
     deinit {
         stop()
     }
-    
-    // MARK: - Public listener
+
+    // MARK: - Listeners
 
     func addListener(_ listener: BHHybridPlayerListener, withDuplicates: Bool = false) {
         workingQueue.async { self.observersContainer.addObserver(listener, withDuplicates: withDuplicates) }
@@ -163,147 +148,91 @@ class BHHybridPlayer {
         workingQueue.async { self.observersContainer.removeObserver(listener) }
     }
 
-    // MARK: - SDK Public
-    
-    func hasActivePlaying() -> Bool {
-        return isActive()
-    }
-    
-    func getTimelineEvent() -> BHBulletinEvent? {
-        guard let validBulletin = bulletinManager.bulletin else { return nil }
-        guard let player = mediaPlayer else { return nil }
+    // MARK: - Public API
 
-        return validBulletin.getTimelineEvent(player.currentTime())
-    }
-    
-    func getBulletinTiles() -> [BHBulletinTile] {
-        guard let validBulletin = bulletinManager.bulletin else { return [] }
-        guard let player = mediaPlayer else { return [] }
+    func playRequest(with post: BHPost,
+                     playlist: [BHPost]?,
+                     context: BHPlayerContext = .app,
+                     autoplayContext: BHAutoplayContext?,
+                     position: Double = 0,
+                     clearQueue: Bool = true) {
 
-        var tiles: [BHBulletinTile] = []
-
-        if let event = validBulletin.getTimelineEvent(player.currentTime()) {
-            tiles.append(event.bulletinTile)
-        }
-        
-        return tiles
-    }
-    
-    func hasInteractive() -> Bool {
-        if isActive() {
-            return getBulletinTiles().count > 0
-        }
-        return false
-    }
-    
-    func getLayoutEvent() -> BHBulletinLayoutEvent? {
-        guard post != nil else { return nil }
-        guard let validLayout = bulletinManager.layout else { return nil }
-        guard let player = mediaPlayer else { return nil }
-
-        return validLayout.getLayoutEvent(player.currentTime())
-    }
-        
-    // MARK: - Public
-
-    func playRequest(with post: BHPost, playlist: [BHPost]?, context: BHPlayerContext = .app, autoplayContext: BHAutoplayContext?, position: Double = 0, clearQueue: Bool = true) {
-        
-        BHLog.p("PlayRequest id: \(post.id), title: \(post.title), position: \(post.playbackOffset), autoplayContext: \(autoplayContext?.rawValue ?? "nil")")
+        BHLog.p("PlayRequest id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
 
         BHLivePlayer.shared.close()
-                
+
         if isPostActive(post.id) {
             if isPlaying() {
                 pause()
             } else {
                 resume()
             }
-        } else {
-            
-            if let previousPost = self.post {
-                removeFromPlaybackQueue(previousPost.id)
-            }
-            
-            if clearQueue {
-                removeQueue()
-            }
-            
-            if post.isRadioStream() {
-                updatePlaybackSpeed(.normal)
-            }
+            return
+        }
 
-            self.isTranscriptActive = false
-            self.context = context
-            self.manualPosition = position
+        if let previousPost = self.post { removeFromPlaybackQueue(previousPost.id) }
+        if clearQueue { removeQueue() }
+        if post.isRadioStream() { updatePlaybackSpeed(.normal) }
 
-            let localOffset = BHOffsetsManager.shared.offset(for: post.id)
-            let startPosition = position > 0 ? position : localOffset?.offset ?? 0
+        self.isTranscriptActive = false
+        self.context = context
+        self.manualPosition = position
 
-            /// track event
-            let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen, context: context.rawValue, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title, episodeType: type)
-            BHTracker.shared.trackEvent(with: request)
+        let localOffset = BHOffsetsManager.shared.offset(for: post.id)
+        let startPosition = position > 0 ? position : localOffset?.offset ?? 0
 
-            let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
-            
-            if fileUrl != nil {
-                let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
-                             
-                start(with: playerItem, post: post, playlist: playlist)
-                             
-                BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
-            } else if BHReachabilityManager.shared.isConnected() {
+        let type = post.isLiveStream() ? "live-stream" : post.isRadioStream() ? "radio" : "pre-recorded"
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerOpen,
+            context: context.rawValue, podcastId: post.user.id, podcastTitle: post.user.fullName,
+            episodeId: post.id, episodeTitle: post.title, episodeType: type)
+        BHTracker.shared.trackEvent(with: request)
 
-                BHPostsManager.shared.getPost(post.id, context: nil) { result in
-                    switch result {
-                    case .success(post: let post):
-                        self.post = post
-                    case .failure(error: _):
-                        self.post = post
-                        break
-                    }
+        let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
 
-                    let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                    let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
+        if fileUrl != nil {
+            let item = makePlayerItem(post: post, fileUrl: fileUrl, position: startPosition, autoplayContext: autoplayContext)
+            start(with: item, post: post, playlist: playlist)
+            BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
 
-                    self.start(with: playerItem, post: post, playlist: playlist)
-
-                    BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
+        } else if BHReachabilityManager.shared.isConnected() {
+            BHPostsManager.shared.getPost(post.id, context: nil) { result in
+                let resolvedPost: BHPost
+                switch result {
+                case .success(post: let p): resolvedPost = p
+                case .failure: resolvedPost = post
                 }
-
-            } else {
-                let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-                let playerItem = BHPlayerItem(post: postItem, playbackSettings: self.settings, position: startPosition, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: autoplayContext)
-
-                self.start(with: playerItem, post: post, playlist: playlist)
-
+                self.post = resolvedPost
+                let item = self.makePlayerItem(post: resolvedPost, fileUrl: nil, position: startPosition, autoplayContext: autoplayContext)
+                self.start(with: item, post: resolvedPost, playlist: playlist)
                 BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
             }
+        } else {
+            let item = makePlayerItem(post: post, fileUrl: nil, position: startPosition, autoplayContext: autoplayContext)
+            start(with: item, post: post, playlist: playlist)
+            BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
         }
     }
-    
+
     func updatePlayingItemInfo(with post: BHPost) {
         BHLog.p("\(#function)")
-
         if isActive() {
-            let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
-            let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-            
-            let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: 0, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
-            
-            self.playerItem = playerItem
+            let fileUrl = BHDownloadsManager.shared.getFileUrl(post.id)
+            let postItem = BHPlayerItem.Post(postId: post.id, title: post.title,
+                userId: post.user.id, userName: post.user.fullName,
+                coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+            playerItem = BHPlayerItem(post: postItem, playbackSettings: settings,
+                position: 0, duration: 0, shouldPlay: true,
+                isStream: post.isRadioStream() || post.isLiveStream(),
+                autoplayContext: playerItem?.autoplayContext)
             self.post = post
-            self.mediaPlayer?.updateNowPlayingItemInfo()
-
+            mediaPlayer?.updateNowPlayingItemInfo(with: nil)
         } else {
-            playRequest(with: post, playlist: [], autoplayContext: self.playerItem?.autoplayContext)
+            playRequest(with: post, playlist: [], autoplayContext: playerItem?.autoplayContext)
         }
     }
-    
+
     func close() {
         BHLog.p("\(#function)")
-
         performStop()
         playerItem = nil
         post = nil
@@ -314,24 +243,15 @@ class BHHybridPlayer {
         isTranscriptActive = false
         isFullScreen = false
         removeQueue()
-
         UserDefaults.standard.playerPostId = nil
         UserDefaults.standard.playerAutoplayContext = nil
-        
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayerDidClose(self)
-        }
+        observersContainer.notifyObserversAsync { $0.hybridPlayerDidClose(self) }
     }
 
-    func play() {
-        play(at: 0.0)
-    }
-    
+    func play() { play(at: 0.0) }
+
     func play(at position: Double) {
-        
-        if isEnded() {
-            destroyMediaPlayer()
-        }
+        if isEnded() { destroyMediaPlayer() }
 
         if mediaPlayer == nil {
             state = .idle
@@ -342,914 +262,187 @@ class BHHybridPlayer {
             performSeek(to: position)
             mediaPlayer?.rate = settings.playbackSpeed
         }
-        
         BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
     }
-        
+
     @discardableResult func resume() -> Bool {
-        
         if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
-            if mediaPlayer?.retryConnection() == true {
-                return true
-            }
+            if mediaPlayer?.retryConnection() == true { return true }
         }
 
-        if self.state == .failed {
+        if state == .failed {
             if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
                 destroyMediaPlayer()
             } else {
-                let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
+                let error = NSError.error(with: NSError.LocalCodes.common,
+                    description: "Playback stalled because of bad network connection.")
                 handlePlayerState(.failed(e: error))
                 return false
             }
         }
-        
+
         if !isActive() {
             play(at: playerItem?.position ?? 0)
         } else {
             performResume()
             mediaPlayer?.rate = settings.playbackSpeed
-            
             BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
         }
-        
-        /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlay, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPlay,
+            podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName,
+            episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
         BHTracker.shared.trackEvent(with: request)
-        
+
         return true
     }
-    
+
     func pause() {
         performPause()
-        
-        /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPause, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
+        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerPause,
+            podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName,
+            episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
         BHTracker.shared.trackEvent(with: request)
     }
-    
-    func stop() {
-        performStop()
-    }
-    
+
+    func stop() { performStop() }
+
     func seek(to position: Double, resume: Bool = true) {
         isSeek = true
         performSeek(to: position, forceResume: resume)
     }
-    
-    func seekForward() {
-        performForward()
-    }
-    
-    func seekBackward() {
-        performBackward()
-    }
-    
+
+    func seekForward()  { performForward() }
+    func seekBackward() { performBackward() }
+
     func playNext() {
         BHLog.p("\(#function)")
-        
-        if let validPlayerItem = playerItem,
-           let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-            if index < playbackQueue.count - 1 {
-                let indexAfter = playbackQueue.index(after: index)
-                let nextItem = playbackQueue[indexAfter]
-                
-                playRequest(with: nextItem.post, playlist: [], autoplayContext: self.playerItem?.autoplayContext)
-            } else {
-                BHLog.w("\(#function) - it is the last episode in playlist")
-            }
+        if let validItem = playerItem,
+           let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }),
+           index < playbackQueue.count - 1 {
+            playRequest(with: playbackQueue[playbackQueue.index(after: index)].post,
+                playlist: [], autoplayContext: playerItem?.autoplayContext)
         } else if let nextItem = playbackQueue.first {
-            playRequest(with: nextItem.post, playlist: [], autoplayContext: self.playerItem?.autoplayContext)
+            playRequest(with: nextItem.post, playlist: [], autoplayContext: playerItem?.autoplayContext)
         }
     }
-    
+
     func playPrevious() {
         BHLog.p("\(#function)")
+        guard let validItem = playerItem, let player = mediaPlayer else { return }
 
-        guard let validPlayerItem = playerItem else { return }
-        guard let validPlayer = mediaPlayer else { return }
-        
-        if validPlayer.currentTime() > 30 {
+        if player.currentTime() > 30 {
             performSeek(to: 0)
+        } else if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }), index > 0 {
+            _ = performStart(with: playbackQueue[playbackQueue.index(before: index)].post)
         } else {
-            if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-                if index > 0 {
-                    let indexBefore = playbackQueue.index(before: index)
-                    let previousItem = playbackQueue[indexBefore]
-                    
-                    if !performStart(with: previousItem.post) {
-                        BHLog.w("Failed to play previous episode")
-                    }
-                } else {
-                    performSeek(to: 0)
-                }
-            }
+            performSeek(to: 0)
         }
     }
-    
+
+    // MARK: - Queries
+
+    func hasActivePlaying() -> Bool { isActive() }
+
     func hasPrevious() -> Bool {
-
-        guard let validPlayerItem = playerItem else { return false }
-        guard let validPlayer = mediaPlayer else { return false }
-
-        if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-            return (index > 0 || validPlayer.currentTime() > 30) && isActive()
+        guard let validItem = playerItem, let player = mediaPlayer else { return false }
+        if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }) {
+            return (index > 0 || player.currentTime() > 30) && isActive()
         }
-        
-        return (validPlayer.currentTime() > 30) && isActive()
+        return player.currentTime() > 30 && isActive()
     }
-    
+
     func hasNext() -> Bool {
-        
-        guard let validPlayerItem = playerItem else { return false }
-
-        if let index = playbackQueue.firstIndex(where: { $0.id == validPlayerItem.post.postId }) {
-            return index < playbackQueue.count - 1 ///&& isActive()
+        guard let validItem = playerItem else { return false }
+        if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }) {
+            return index < playbackQueue.count - 1
         }
-
         return false
     }
-    
-    func currentPosition() -> TimeInterval {
-        return mediaPlayer?.currentTime() ?? 0
+
+    func currentPosition() -> TimeInterval { mediaPlayer?.currentTime() ?? 0 }
+    func totalDuration()   -> TimeInterval { mediaPlayer?.duration() ?? max(TimeInterval(playerItem?.duration ?? 0), 0) }
+
+    func getVideoLayer() -> UIView? { mediaPlayer?.getVideoLayer() }
+
+    func getTimelineEvent() -> BHBulletinEvent? {
+        guard let bulletin = bulletinManager.bulletin, let player = mediaPlayer else { return nil }
+        return bulletin.getTimelineEvent(player.currentTime())
     }
 
-    // MARK: - Settings
-
-    func updatePlaybackSpeed(_ playbackSpeed: BHPlayerPlaybackSpeed) {
-        
-        playerItem?.playbackSettings.playbackSpeed = playbackSpeed.rawValue
-        settings.playbackSpeed = playbackSpeed.rawValue
-        
-        ///graylog tracker
-        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerSpeed, context: "\(playbackSpeed.rawValue)", podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
-        BHTracker.shared.trackEvent(with: request)
-
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, playbackSettingsUpdated: self.settings)
+    func getBulletinTiles() -> [BHBulletinTile] {
+        guard let bulletin = bulletinManager.bulletin, let player = mediaPlayer else { return [] }
+        if let event = bulletin.getTimelineEvent(player.currentTime()) {
+            return [event.bulletinTile]
         }
+        return []
     }
-    
-    func updateNextPlaybackSpeed() {
-        guard let playerItem = playerItem else { return }
-        if playerItem.isStream { return }
-        if state != .playing { return }
 
-        let nextPlaybackRate = settings.nextPlaybackSpeed()
-        updatePlaybackSpeed(nextPlaybackRate)
-    }
-    
-    func updateSleepTimer(_ value: Double) {
+    func hasInteractive() -> Bool { isActive() && getBulletinTiles().count > 0 }
 
-        if isPaused() {
-            resume()
-        }
-        
-        setSleepTimer(value)
- 
-        ///graylog tracker
-        let request = BHTrackEventRequest.createRequest(category: .player, action: .ui, banner: .playerSleepTimer, context: "\(value)", podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
-        BHTracker.shared.trackEvent(with: request)
+    func getLayoutEvent() -> BHBulletinLayoutEvent? {
+        guard post != nil, let layout = bulletinManager.layout, let player = mediaPlayer else { return nil }
+        return layout.getLayoutEvent(player.currentTime())
+    }
 
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, sleepTimerUpdated: value)
-        }
-    }
-    
-    func updatePlayNextSetting(_ value: Bool) {
-        UserDefaults.standard.playNextEnabled = value
-
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, playbackSettingsUpdated: self.settings)
-        }
-    }
-        
-    // MARK: - Video View
-    
-    func getVideoLayer() -> UIView? {
-        return mediaPlayer?.getVideoLayer()
-    }
-    
-    // MARK: - Player states
+    // MARK: - Player state helpers
 
     @discardableResult func isPostPlaying(_ id: String) -> Bool {
-        guard let p = post else { return false }
-
-        return p.id == id && state.isPlaying()
+        post?.id == id && state.isPlaying()
     }
-
     @discardableResult func isPostActive(_ id: String) -> Bool {
-        guard let p = post else { return false }
-
-        return p.id == id && isActive()
+        post?.id == id && isActive()
     }
-    
     @discardableResult func isInPlayer(_ id: String) -> Bool {
-        guard let p = post else { return false }
+        post?.id == id
+    }
+    @discardableResult func isPlaying()     -> Bool { state.isPlaying() }
+    @discardableResult func isPaused()      -> Bool { state.isPaused() }
+    @discardableResult func isEnded()       -> Bool { state.isEnded() }
+    @discardableResult func isFailed()      -> Bool { state.isFailed() }
+    @discardableResult func isInitializing()-> Bool { state.isInitializing() }
+    @discardableResult func isActive()      -> Bool { state.isActive() }
 
-        return p.id == id
+    // MARK: - Session stored properties (used by BHHybridPlayer+Session)
+    internal var trackTimer: Timer?
+    internal var sleepTimer: Timer?
+    var sleepTimerInterval: TimeInterval = 0
+    internal var currentPlayback: BHPostPlayback?
+    internal var playbackRecreateCounter: Double = 0.0
+    internal var nowPlayingInfoUpdateCounter: Double = 0.0
+
+    // MARK: - App lifecycle
+
+    @objc private func onApplicationWillTerminate(_ notification: Notification) {
+        if isActive() { stop() }
     }
 
-    @discardableResult func isPlaying() -> Bool { state.isPlaying() }
-
-    @discardableResult func isPaused() -> Bool { state.isPaused() }
-
-    @discardableResult func isEnded() -> Bool { state.isEnded() }
-
-    @discardableResult func isFailed() -> Bool { state.isFailed() }
-
-    @discardableResult func isInitializing() -> Bool { state.isInitializing() }
-    
-    @discardableResult func isActive() -> Bool { state.isActive() }
-
-    // MARK: - Private methods
-    
-    fileprivate func start(with item: BHPlayerItem?, post: BHPost?, playlist: [BHPost]?) {
-        
-        stop()
-        
-        guard let validItem = item else {
-            BHLog.w("\(#function) - empty player item")
-            return
-        }
-
-        guard let validPost = post else { return }
-
-        UserDefaults.standard.playerPostId = validPost.id
-        UserDefaults.standard.playerAutoplayContext = validItem.autoplayContext?.rawValue
-
-        addToPlaybackQueue(validPost, reason: .auto, moveToTop: true)
-        addPostsToQueue(playlist ?? [])
-
-        lastSentPosition = validItem.position
-        lastSentDuration = validItem.duration
-
-        settings = validItem.playbackSettings
-        playerItem = validItem
-        self.post = post
-        
-        if !hasNext() && !validItem.isStream  {
-            fetchPlaylist()
-        }
-        
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, initializedWith: validItem)
-        }
-
-        BHRemoteCommandCenterManager.shared.delegate = self
-        BHRemoteCommandCenterManager.shared.enablePlaybackControls()
-
-        play(at: validItem.position)
-    }
-
-    fileprivate func composeMediaPlayer(with position: Double = 0) {
-        
-        BHLog.p("\(#function) - \(position)")
-        
-        guard let validPlayerItem = playerItem else { return }
-        guard var urlToPlay = validPlayerItem.post.url else { return }
-        guard let validPost = post else { return }
-
-        if let cachedUrl = validPlayerItem.post.file {
-
-            let fileName = cachedUrl.lastPathComponent
-            
-            if let fileURL = FileManager.default.documentsDirectory()?.appendingPathComponent(fileName) {
-
-                if FileManager.default.fileExists(atPath: fileURL.path) {
-                    urlToPlay = fileURL
-                }
-            }
-        }
-
-        BHID3Parser.isGoodForStream(validPlayerItem.post.url!) { isID3, isGoodForStream, isVideo in
-            
-            guard self.playerItem != nil else { return }
-
-            self.isVideoAvailable = isVideo || validPost.hasVideo()
-
-            self.mediaPlayer = BHSystemMediaPlayer(withUrl: urlToPlay, coverUrl: self.playerItem?.post.coverUrl, isVideo: self.isVideoAvailable)
-
-            self.mediaPlayer?.delegate = self
-            self.mediaPlayer?.rate = self.settings.playbackSpeed
-            
-            if self.shouldPlayAutomatically {
-                _ = self.mediaPlayer?.play(at: position)
-            } else {
-                _ = self.mediaPlayer?.restore(at: position)
-            }
-        }
-    }
-    
-    fileprivate func destroyMediaPlayer() {
-        
-        guard let player = mediaPlayer else { return }
-
-        if player.isPlaying() || player.isReady() {
-            _ = player.stop()
-        }
-        
-        lastSentPosition = 0
-        lastSentDuration = 0
-
-        mediaPlayer = nil
-    }
-    
-    @discardableResult fileprivate func performPlay() -> Bool {
-        
-        guard let player = mediaPlayer else { return false }
-        guard let validPlayerItem = playerItem else { return false }
-        
-        return player.play(at: validPlayerItem.position)
-    }
-    
-    @discardableResult fileprivate func performStop() -> Bool {
-        
-        destroyMediaPlayer()
-
-        return true
-    }
-    
-    @discardableResult fileprivate func performResume() -> Bool {
-        
-        guard let player = mediaPlayer else { return false }
-        
-        return player.resume()
-    }
-
-    @discardableResult fileprivate func performPause() -> Bool {
-
-        guard let player = mediaPlayer else { return false }
-
-        return player.pause()
-    }
-    
-    @discardableResult fileprivate func performForward() -> Bool {
-
-        guard let player = mediaPlayer else { return false }
-
-        let position = player.currentTime()
-        let duration = max(totalDuration(), player.currentTime())
-        let resultPosition = min(duration, position + settings.forwardLength)
-
-        return performSeek(to: resultPosition)
-    }
-    
-    @discardableResult fileprivate func performBackward() -> Bool {
-
-        guard let player = mediaPlayer else { return false }
-        
-        let position = player.currentTime()
-        let resultPosition = max(0, position - settings.backwardLength)
-        
-        return performSeek(to: resultPosition)
-    }
-    
-    @discardableResult fileprivate func performPrevious() -> Bool {
-        
-        guard mediaPlayer != nil else { return false }
-        guard playerItem != nil else { return false }
-        
-        if hasPrevious() {
-            playPrevious()
-            return true
-        }
-        
-        return false
-    }
-
-    @discardableResult fileprivate func performNext() -> Bool {
-        
-        guard mediaPlayer != nil else { return false }
-        guard playerItem != nil else { return false }
-
-        if hasNext() {
-            playNext()
-            return true
-        }
-        
-        return false
-    }
-    
-    @discardableResult fileprivate func performStart(with post: BHPost) -> Bool {
-        
-        let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(post.id)
-        let postItem = BHPlayerItem.Post(postId: post.id, title: post.title, userId: post.user.id, userName: post.user.fullName, coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
-        let settings: BHPlayerItem.PlaybackSettings = settings
-            
-        let playerItem = BHPlayerItem(post: postItem, playbackSettings: settings, position: post.playbackOffset, duration: 0, shouldPlay: true, isStream: post.isRadioStream() || post.isLiveStream(), autoplayContext: self.playerItem?.autoplayContext)
-            
-        start(with: playerItem, post: post, playlist: [])
-            
-        return true
-    }
-
-    @discardableResult fileprivate func performSeek(to position: Double, forceResume: Bool = false) -> Bool {
-
-        BHLog.p("\(#function) - \(position)")
-
-        guard let player = mediaPlayer else { return false }
-        
-        var resultPosition = position
-
-        if position < 0 { resultPosition = 0 }
-//        if position > totalDuration() { resultPosition = totalDuration() }
-
-        if isEnded() {
-            play(at: resultPosition)
-            return true
-        }
-
-        let result = player.play(at: resultPosition, forceResume: forceResume)
-
-        if result {
-            mediaPlayer?.updateNowPlayingInfo()
-        }
-        
-        BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
-        
-        return result
-    }
-        
-    fileprivate func setSleepTimer(_ value: Double) {
-                
-        BHLog.p("\(#function) - value: \(value)")
-        
-        sleepTimerInterval = TimeInterval(value)
-        if sleepTimerInterval.isZero {
-            stopSleepTimer()
-        }
-        else {
-            startSleepTimerIfNeeded()
-        }
-    }
-    
-    func totalDuration() -> TimeInterval {
-        if let validPlayerDuration = mediaPlayer?.duration() {
-            return validPlayerDuration
-        } else {
-            return max(TimeInterval(playerItem?.duration ?? 0), mediaPlayer?.duration() ?? 0)
-        }
-    }
-    
-    fileprivate func onStateUpdated() {
-
-        guard playerItem != nil else { return }
-
-        let position = state == .failed ? lastSentDuration : lastSentPosition
-
-        let playerState = BHPlayerState.init(state: state, stateFlags: stateFlags, position: position, duration: lastSentDuration, isVideoAvailable: isVideoAvailable)
-        
-        if let validPrevPlayerState = prevPlayerState {
-            if validPrevPlayerState == playerState {
-                return
-            }
-        }
-        
-        prevPlayerState = playerState
-
-        playerState.debugDescription()
-        
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, stateUpdated: self.state, stateFlags: self.stateFlags)
-        }
-    }
-    
-    fileprivate func playerPositionChanged(_ force: Bool = false) {
-
-        if UIApplication.shared.applicationState != .active && !force { return }
-        guard let player = mediaPlayer else { return }
-
-        let position = player.currentTime()
-        playerItem?.position = position
-
-//        guard lastSentPosition.rounded() != position.rounded() else { return }
-
-        let duration = max(totalDuration(), player.currentTime())
-
-        lastSentPosition = position
-        lastSentDuration = duration
-        
-        if isSliding {
-            return
-        }
-        
-        if isSeek {
-            isSeek = false
-            return
-        }
-
-        observersContainer.notifyObserversAsync {
-            $0.hybridPlayer(self, positionChanged: position, duration: duration)
-        }
-    }
-
-    fileprivate func composeNowPlayingItemInfo(with image: UIImage? = nil) -> BHNowPlayingItemInfo {
-
-        let playbackRate = isPlaying() ? mediaPlayer?.rate : 0
-        let currentItemImage = image ?? mediaPlayer?.nowPlayingItemInfo.itemImage
-        let nowPlayingItemInfo = BHNowPlayingItemInfo(title: playerItem?.post.title, audioTitle: playerItem?.post.userName, authorName: playerItem?.post.userName, duration: totalDuration(), elapsedTime: playerItem?.position, itemImage: currentItemImage, isLiveStream: playerItem?.isStream, rate: playbackRate)
-
-        return nowPlayingItemInfo
-    }
-
-    fileprivate func updateNowPlayingItemInfoImage() {
-
-        if let profilePictureUrl = playerItem?.post.coverUrl {
-            SDWebImageDownloader.shared.downloadImage(with: profilePictureUrl, options: .useNSURLCache, progress: nil) { (image, _, error, finished) in
-                guard finished else { return }
-
-                if let validError = error {
-                    BHLog.w("\(#function) - Failed to load image: \(validError)")
-                }
-                else if let validImage = image, profilePictureUrl == self.playerItem?.post.coverUrl, let validPlayer = self.mediaPlayer {
-                    validPlayer.updateNowPlayingItemInfo(with: self.composeNowPlayingItemInfo(with: validImage))
-                }
-            }
-        }
-    }
-        
-    // MARK: - Track timer
-    
-    fileprivate func startTrackTimer() {
-
-        if let currentTrackTimer = trackTimer, currentTrackTimer.isValid {
-            return
-        }
-
-        let timer = Timer.init(timeInterval: trackTimerInterval, target: self, selector: #selector(trackTimerHandler(_:)), userInfo: nil, repeats: true)
-        timer.tolerance = trackTimerInterval
-        RunLoop.main.add(timer, forMode: RunLoop.Mode.default)
-        trackTimer = timer
-    }
-    
-    fileprivate func stopTrackTimer() {
-
-        guard let timer = trackTimer else { return }
-
-        timer.invalidate()
-        trackTimer = nil
-    }
-
-    @objc fileprivate func trackTimerHandler(_ timer: Timer) {
-
-        guard timer.isValid else { return }
-
-        playerPositionChanged()
-
-        playbackRecreateCounter += trackTimerInterval
-        nowPlayingInfoUpdateCounter += trackTimerInterval
-
-        if playbackRecreateCounter >= playbackRecreateInterval {
-            stopPlayback(send: false)
-            startPlayback()
-        }
-        
-        if nowPlayingInfoUpdateCounter >= nowPlayingInfoUpdateInterval {
-            nowPlayingInfoUpdateCounter = 0
-            mediaPlayer?.updateNowPlayingItemInfo()
-        }
-    }
-    
-    // MARK: - Sleep timer
-    
-    fileprivate func startSleepTimerIfNeeded() {
-
-        guard !sleepTimerInterval.isZero else { return }
-
-        if let timer = sleepTimer, timer.isValid {
-            stopSleepTimer()
-        }
-
-        let timer = Timer.init(timeInterval: sleepTimerInterval, target: self, selector: #selector(sleepTimerHandler(_:)), userInfo: nil, repeats: false)
-        timer.tolerance = sleepTimerInterval * 0.1
-        RunLoop.main.add(timer, forMode: RunLoop.Mode.default)
-        sleepTimer = timer
-    }
-    
-    fileprivate func stopSleepTimer() {
-        
-        guard let timer = sleepTimer else {
-            return
-        }
-
-        timer.invalidate()
-        sleepTimer = nil
-    }
-    
-    func getSleepTimerInterval() -> Double {
-
-        guard let timer = sleepTimer else {
-            return 0
-        }
-
-        if timer.isValid {
-            return timer.fireDate.timeIntervalSinceNow
-        }
-        
-        return 0
-    }
-
-    @objc fileprivate func sleepTimerHandler(_ timer: Timer) {
-        pause()
-        sleepTimerInterval = 0
-    }
-    
-    // MARK: - Playback CDRs
-    
-    fileprivate func startPlayback() {
-        guard let validPost = post else { return }
-        guard let item = playerItem else { return }
-
-        let uuid = UUID.init()
-        let timeNow = Date().timeIntervalSince1970
-        let type = validPost.isLiveStream() ? "live-stream" : validPost.isRadioStream() ? "radio" : "pre-recorded"
-        currentPlayback = BHPostPlayback.init(identifier: uuid.uuidString, episodeId: item.post.postId, episodeTitle: item.post.title ?? "", episodeType: type, podcastId: item.post.userId ?? "", podcastTitle: item.post.userName ?? "", startTime: timeNow, endTime: timeNow, context: context.rawValue)
-
-        playbackRecreateCounter = 0
-    }
-    
-    fileprivate func stopPlayback(send: Bool) {
-
-        guard let player = mediaPlayer else { return }
-
-        let position = player.currentTime()
-        if position > 0 {
-            if let validPlayback = currentPlayback {
-                validPlayback.finishedAt = Date().timeIntervalSince1970
-
-                BHPlaybacksManager.shared.add(playback: validPlayback, shouldSend: send)
-                currentPlayback = nil
-            }
-            else if send {
-                BHPlaybacksManager.shared.send()
-            }
-        }
-    }
-    
-    // MARK: - Handle player state
-    
-    fileprivate func handlePlayerState(_ state: BHMediaPlayerBase.State) {
-
-        let playerState: PlayerState
-        var playerStateFlags: PlayerStateFlags = .initial
-        var needUpdatePosition = false
-
-        switch state {
-        case .idle:
-            playerState = .idle
-
-        case .waiting:
-            playerState = .initializing
-            if prevPlayerState?.state == .initializing && post?.isRadioStream() != true {
-                getPlaybackOffset()
-            }
-
-        case .ready:
-            playerState = .initializing
-
-        case .playing:
-            if !shouldPlayAutomatically {
-                performPause()
-                playerState = .paused
-                shouldPlayAutomatically = true
-            } else {
-                playerState = .playing
-                startPlayback()
-                startTrackTimer()
-                startSleepTimerIfNeeded()
-            }
-            playerPositionChanged(true)
-
-        case .paused:
-            playerState = .paused
-            stopTrackTimer()
-            stopPlayback(send: false)
-            setSleepTimer(0)
-            playerPositionChanged(true)
-            needUpdatePosition = self.state.isPlaying()
-
-        case .ended:
-            playerState = .ended
-            playerStateFlags = .complete
-            stopTrackTimer()
-            setSleepTimer(0)
-            stopPlayback(send: true)
-            observersContainer.notifyObserversAsync {
-                $0.hybridPlayerDidFinishPlaying(self)
-            }
-
-        case .failed(let error):
-            BHLog.w("\(#function) - Audio player error: \(String(describing: error))")
-
-            playerState = .failed
-            playerStateFlags = .error
-            stopTrackTimer()
-            stopPlayback(send: false)
-            setSleepTimer(0)
-            
-            /// track stats
-            let request = BHTrackEventRequest.createRequest(category: .player, action: .error, banner: .playerFailed, context: error.debugDescription, podcastId: playerItem?.post.userId, podcastTitle: playerItem?.post.userName, episodeId: playerItem?.post.postId, episodeTitle: playerItem?.post.title)
-            BHTracker.shared.trackEvent(with: request)
-
-            observersContainer.notifyObserversAsync {
-                $0.hybridPlayerDidFailedToPlay(self, error: error)
-            }
-        }
-        
-        self.stateFlags = playerStateFlags
-        self.state = playerState
-        
-        if needUpdatePosition && post?.isRadioStream() != true {
-            postPlaybackOffset()
-        }
-        
-        if isSeek {
-            isSeek = false
-//            return
-        }
-
-        if isSilent { return }
-        
-        onStateUpdated()
-    }
-    
-    // MARK: - Notifications
-    
-    @objc fileprivate func onApplicationWillTerminate(_ notification: Notification) {
-        if isActive() {
-            stop()
-        }
-    }
-    
-    @objc fileprivate func onAccountChangedNotification(_ notification: Notification) {
-
-        guard let notificationInfo = notification.userInfo as? [String : BHAccountManager.AccountChangedNotificationInfo] else { return }
-        guard let info = notificationInfo[BHAccountManager.NotificationInfoKey] else { return }
-
+    @objc private func onAccountChangedNotification(_ notification: Notification) {
+        guard let info = (notification.userInfo as? [String: BHAccountManager.AccountChangedNotificationInfo])?[BHAccountManager.NotificationInfoKey] else { return }
         switch info.reason {
         case .update:
             fetchInteractive() { result in
-                switch result {
-                case .success:
-                    if self.hasInteractive() && self.isPaused() {
-                        self.resume()
-                    }
-
-                case .failure(error: _):
-                    break
+                if case .success = result, self.hasInteractive(), self.isPaused() {
+                    self.resume()
                 }
             }
-
         default:
             break
         }
     }
-}
 
-// MARK: - MediaPlayerDelegate implementation
+    // MARK: - Private helpers
 
-extension BHHybridPlayer: BHMediaPlayerDelegate {
-    
-    func mediaPlayer(_ player: any BHPlaybackEngine, stateUpdated state: BHMediaPlayerBase.State) {
-
-        handlePlayerState(state)
-
-        guard let validPlayerItem = playerItem else { return }
-
-        if isPlaying() && !validPlayerItem.shouldPlay {
-            performPause()
-            playerItem?.shouldPlay = true
-        }
-    }
-    
-    func mediaPlayerDidPlayToEndTime(_ player: any BHPlaybackEngine) {
-        BHLog.p("\(#function)")
-
-        guard let validPlayerItem = playerItem else {
-            stop()
-            return
-        }
-        
-        if validPlayerItem.isStream {
-            mediaPlayerDidStall(player, reason: .noConnection)
-        } else if lastSentDuration - lastSentPosition > 10 {
-            BHLog.p("\(#function)- Failed to play. Stop.")
-            mediaPlayerFailedToPlayToEndTime(player)
-        } else {
-            BHLog.p("\(#function) - Ended to play. Try to play next.")
-            handlePlayerState(.ended)
-            if hasNext() && UserDefaults.standard.playNextEnabled {
-                playNext()
-            }
-        }
-    }
-
-    func mediaPlayerDidStall(_ player: any BHPlaybackEngine, reason: BHPlaybackState.StalledReason) {
-        BHLog.p("\(#function) reason: \(reason)")
-
-        switch reason {
-        case .buffering:
-            break
-        case .noConnection:
-            stopTrackTimer()
-            let error = NSError.error(with: NSError.LocalCodes.common, description: "Playback stalled because of bad network connection.")
-            handlePlayerState(.failed(e: error))
-        }
-    }
-        
-    func mediaPlayerFailedToPlayToEndTime(_ player: any BHPlaybackEngine) {
-        BHLog.p("\(#function)")
-
-        let error = NSError.error(with: NSError.LocalCodes.common, description: "Failed to play because of bad network connection.")
-        handlePlayerState(.failed(e: error))
-    }
-
-    func mediaPlayerServicesWereLost(_ player: any BHPlaybackEngine) {
-        BHLog.p("\(#function)")
-
-        if playerItem?.isStream == true {
-            mediaPlayerDidStall(player, reason: .noConnection)
-        } else {
-            pause()
-        }
-    }
-    
-    func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine) {
-        BHLog.p("\(#function)")
-    }
-
-    func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo {
-
-        guard player === self.mediaPlayer else { return .invalid }
-
-        let nowPlayingItemInfo = composeNowPlayingItemInfo()
-        if nowPlayingItemInfo.itemImage == nil {
-            updateNowPlayingItemInfoImage()
-        }
-
-        return nowPlayingItemInfo
+    /// Builds a BHPlayerItem from a post.
+    private func makePlayerItem(post: BHPost, fileUrl: URL?, position: Double, autoplayContext: BHAutoplayContext?) -> BHPlayerItem {
+        let postItem = BHPlayerItem.Post(
+            postId: post.id, title: post.title,
+            userId: post.user.id, userName: post.user.fullName,
+            coverUrl: post.coverUrl, url: post.recording?.publishUrl, file: fileUrl)
+        return BHPlayerItem(post: postItem, playbackSettings: settings,
+            position: position, duration: 0, shouldPlay: true,
+            isStream: post.isRadioStream() || post.isLiveStream(),
+            autoplayContext: autoplayContext)
     }
 }
 
-// MARK: - RemoteCommandCenterDelegate
-
-extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
-    
-    func configureRemoteCommandCenter(_ configureBlock: (BHRemoteCommandCenterManager.Mode) -> Void) {
-        if let validItem = playerItem, validItem.isStream {
-            configureBlock(.liveRadioStream)
-        } else if playbackQueue.count > 1 {
-            configureBlock(.trackList(backwardTimeIntervals: [self.settings.backwardLength], forwardTimeIntervals: [self.settings.forwardLength], supportedPlaybackRates: self.settings.supportedPlaybackRates()))
-        } else {
-            configureBlock(.singleTrack(backwardTimeIntervals: [self.settings.backwardLength], forwardTimeIntervals: [self.settings.forwardLength], supportedPlaybackRates: self.settings.supportedPlaybackRates()))
-        }
-    }
-    
-    func onRemoteCommandPlay() -> Bool {
-        guard mediaPlayer != nil else {
-            BHLog.w("\(#function) - play the last played episode")
-            return true
-        }
-        
-        return resume()
-    }
-
-    func onRemoteCommandPause() -> Bool {
-        return performPause()
-    }
-
-    func onRemoteCommandTogglePlayPause() -> Bool {
-        if isPlaying() {
-            return performPause()
-        } else {
-            return resume()
-        }
-    }
-
-    func onRemoteCommandSkipBackward() -> Bool {
-        return performBackward()
-    }
-
-    func onRemoteCommandSkipForward() -> Bool {
-        return performForward()
-    }
-    
-    func onRemoteCommandChangePlaybackPosition(_ position: TimeInterval) -> Bool {
-        return performSeek(to: position)
-    }
-
-    func onRemoteCommandPreviousTrack() -> Bool {
-        return performPrevious()
-    }
-
-    func onRemoteCommandNextTrack() -> Bool {
-        return performNext()
-    }
-    
-    func onChangePlaybackRateCommand(_ playbackRate: Float) -> Bool {
-        let playbackSpeed = BHPlayerPlaybackSpeed(rawValue: playbackRate) ?? .normal
-        updatePlaybackSpeed(playbackSpeed)
-        return true
-    }
-}
