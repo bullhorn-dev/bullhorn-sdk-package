@@ -80,14 +80,18 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     override func playerSeek(to time: CMTime, forceResume: Bool = false) {
         player.seek(to: time)
-        player.rate = playbackRate
+        if forceResume {
+            player.rate = playbackRate
+        }
     }
 
     override func playerSeek(to time: CMTime, forceResume: Bool = false,
                              completionHandler: @escaping (Bool) -> Void) {
         player.seek(to: time) { [weak self] finished in
             guard let self else { return }
-            self.player.rate = self.playbackRate
+            if forceResume {
+                self.player.rate = self.playbackRate
+            }
             completionHandler(finished)
         }
     }
@@ -200,6 +204,8 @@ extension BHSystemMediaPlayer {
             switch playbackState {
             case .loading(let intent):
                 seekAndPlay(to: intent.startPosition, resume: intent.shouldAutoPlay)
+            case .playing, .stalled:
+                break
             default:
                 playbackState = .ready
             }
