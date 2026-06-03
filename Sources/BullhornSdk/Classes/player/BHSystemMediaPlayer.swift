@@ -246,8 +246,15 @@ extension BHSystemMediaPlayer {
     private func onCurrentItemChanged(_ newItem: AVPlayerItem?) {
         guard let newItem, newItem === nextPlayerItem else { return }
 
+        
         guard case .failed = playbackState else {
             BHLog.p("\(#function) — seamless advance")
+
+            let finishedItem = playerItem
+            let finishedDuration = TimeInterval(CMTimeGetSeconds(finishedItem.duration))
+            let completedPosition = (finishedDuration.isFinite && finishedDuration > 0)
+                ? finishedDuration
+                : lastKnownPosition
 
             if let url = nextItemURL {
                 currentMediaURL = url
@@ -259,7 +266,7 @@ extension BHSystemMediaPlayer {
             nextItemURL       = nil
             lastKnownPosition = 0
             subscribeToPlayerItem()
-            delegate?.mediaPlayerDidAdvanceToNextItem(self)
+            delegate?.mediaPlayerDidAdvanceToNextItem(self, completedItemPosition: completedPosition)
             return
         }
 

@@ -74,10 +74,11 @@ extension BHHybridPlayer {
             playbackQueue.removeAll(where: { $0.reason == .auto })
         }
     }
-    
+
     func updateQueueItems() {
-        fetchStorageItems()
-        restorePlayer()
+        fetchStorageItems { [weak self] in
+            DispatchQueue.main.async { self?.restorePlayer() }
+        }
     }
     
     func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
@@ -146,10 +147,6 @@ extension BHHybridPlayer {
     
     // MARK: - Private
         
-    internal func currenItemIndex() -> Int {
-        return post == nil ? -1 : 0
-    }
-    
     internal func addPostsToQueue(_ playlist: [BHPost]) {
         BHLog.p("\(#function)")
 
@@ -169,9 +166,10 @@ extension BHHybridPlayer {
     
     // MARK: - Storage Providers
     
-    fileprivate func fetchStorageItems() {
+    fileprivate func fetchStorageItems(_ completion: (() -> Void)? = nil) {
         DataBaseManager.shared.fetchQueue() { items in
             self.playbackQueue = items
+            completion?()
         }
     }
 

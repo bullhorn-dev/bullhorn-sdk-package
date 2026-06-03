@@ -266,9 +266,6 @@ class BHHybridPlayer {
     }
 
     @discardableResult func resume() -> Bool {
-        if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {
-            if mediaPlayer?.retryConnection() == true { return true }
-        }
 
         if state == .failed {
             if BHReachabilityManager.shared.isConnected() || playerItem?.post.file != nil {

@@ -147,16 +147,17 @@ extension BHHybridPlayer {
             }
         }
     }
-    
-    func postPlaybackOffset() {
+
+    func postPlaybackOffset(overridePosition: Double? = nil, overrideDuration: Double? = nil) {
         BHLog.p("\(#function)")
-        
+
         guard let player = mediaPlayer else { return }
         guard let item = playerItem else { return }
         guard var validPost = post else { return }
-        
-        let position = player.currentTime()
-        let duration = player.duration()
+
+        let position = overridePosition ?? player.currentTime()
+        let duration = overrideDuration ?? player.duration()
+
         let localPosition = ((duration - position) < 5) ? 0 : position
         let isCompleted = validPost.isPlaybackCompleted || ((duration - position) < 5)
         let timestamp = Date().timeIntervalSince1970

@@ -127,21 +127,15 @@ extension BHHybridPlayer {
             return
         }
 
-        guard let postURL = nextPost.recording?.publishUrl else {
+        guard var urlToPlay = nextPost.recording?.publishUrl else {
             mediaPlayer?.clearNextItem()
             return
         }
 
         let expectedNextId = nextPost.id
-        var urlToPlay: URL
         
         if let fileUrl = BHDownloadsManager.shared.getFileUrl(expectedNextId) {
             urlToPlay = fileUrl
-        } else if let remoteUrl = nextPost.recording?.publishUrl {
-            urlToPlay = remoteUrl
-        } else {
-            mediaPlayer?.clearNextItem()
-            return
         }
 
         BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
@@ -163,13 +157,14 @@ extension BHHybridPlayer {
         }
     }
 
-    internal func handleSeamlessAdvance() {
-        BHLog.p("\(#function)")
+    internal func handleSeamlessAdvance(completedItemPosition: TimeInterval) {
+        BHLog.p("\(#function) completedItemPosition: \(completedItemPosition)")
+
+        postPlaybackOffset(overridePosition: completedItemPosition,
+                           overrideDuration: completedItemPosition)
+        stopPlayback(send: true, position: completedItemPosition)
 
         guard let nextPost = nextQueuePost() else { return }
-
-        postPlaybackOffset()
-        stopPlayback(send: true)
 
         if let completedPostId = post?.id {
             removeFromPlaybackQueue(completedPostId)

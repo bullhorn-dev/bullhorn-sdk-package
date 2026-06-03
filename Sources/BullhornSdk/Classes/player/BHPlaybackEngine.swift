@@ -15,7 +15,6 @@ protocol BHPlaybackEngine: AnyObject {
     @discardableResult func resume() -> Bool
     @discardableResult func pause()  -> Bool
     @discardableResult func stop()   -> Bool
-    @discardableResult func retryConnection() -> Bool
 
     // MARK: Seeking
     func seek(to time: TimeInterval)

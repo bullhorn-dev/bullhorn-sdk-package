@@ -102,10 +102,8 @@ extension BHHybridPlayer {
         playbackRecreateCounter = 0
     }
 
-    internal func stopPlayback(send: Bool) {
-        guard let player = mediaPlayer else { return }
-
-        let position = player.currentTime()
+    internal func stopPlayback(send: Bool, position overridePosition: TimeInterval? = nil) {
+        let position = overridePosition ?? (mediaPlayer?.currentTime() ?? 0)
 
         guard position > 0 else { return }
 

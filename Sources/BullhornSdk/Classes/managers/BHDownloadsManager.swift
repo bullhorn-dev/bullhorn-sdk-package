@@ -43,6 +43,8 @@ class BHDownloadsManager {
  
     static let shared = BHDownloadsManager()
 
+    private(set) var isLoaded = false
+
     private let autoDownloadsMaxCount: Int = 10
 
     private let observersContainer: ObserversContainerNotifyingOnQueue<BHDownloadsManagerListener>
@@ -140,8 +142,8 @@ class BHDownloadsManager {
         return downloadsQueue.first(where: { $0.post.id == postId })
     }
 
-    func updateItems() {
-        fetchStorageItems()
+    func updateItems(completion: (() -> Void)? = nil) {
+        fetchStorageItems(completion: completion)
     }
     
     func updatePost(_ post: BHPost) {
@@ -432,10 +434,12 @@ class BHDownloadsManager {
     
     // MARK: - Storage Providers
     
-    fileprivate func fetchStorageItems() {
+    fileprivate func fetchStorageItems(completion: (() -> Void)? = nil) {
         DataBaseManager.shared.fetchDownloads() { items in
             self.downloadsQueue = items
             self.groupItems()
+            self.isLoaded = true
+            completion?()
         }
     }
 

@@ -14,7 +14,7 @@ protocol BHMediaPlayerDelegate: AnyObject {
     func mediaPlayerServicesWereLost(_ player: any BHPlaybackEngine)
     func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine)
     func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo
-    func mediaPlayerDidAdvanceToNextItem(_ player: any BHPlaybackEngine)
+    func mediaPlayerDidAdvanceToNextItem(_ player: any BHPlaybackEngine, completedItemPosition: TimeInterval)
 }
 
 // MARK: - BHMediaPlayerBase
@@ -176,12 +176,6 @@ class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
         playerPause()
         playbackState = .ended
         return true
-    }
-
-    @discardableResult
-    func retryConnection() -> Bool {
-        BHLog.p("\(#function)")
-        return false
     }
 
     // MARK: - BHPlaybackEngine — Seeking
