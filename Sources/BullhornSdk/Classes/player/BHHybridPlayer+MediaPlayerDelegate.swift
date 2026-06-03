@@ -39,6 +39,11 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
     }
 
+    func mediaPlayerDidAdvanceToNextItem(_ player: any BHPlaybackEngine) {
+        BHLog.p("\(#function)")
+        handleSeamlessAdvance()
+    }
+
     func mediaPlayerDidStall(_ player: any BHPlaybackEngine, reason: BHPlaybackState.StalledReason) {
         BHLog.p("\(#function) reason: \(reason)")
 

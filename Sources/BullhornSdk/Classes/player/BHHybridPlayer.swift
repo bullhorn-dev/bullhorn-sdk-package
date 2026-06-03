@@ -227,7 +227,7 @@ class BHHybridPlayer {
             self.post = post
             mediaPlayer?.updateNowPlayingItemInfo(with: nil)
         } else {
-            playRequest(with: post, playlist: [], autoplayContext: playerItem?.autoplayContext)
+            playRequest(with: post, playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
         }
     }
 
@@ -317,13 +317,22 @@ class BHHybridPlayer {
 
     func playNext() {
         BHLog.p("\(#function)")
+
+        // If next item is already preloaded in AVQueuePlayer, use seamless transition.
+        // handleSeamlessAdvance() is called from the delegate when advance completes.
+        if mediaPlayer?.skipToNextItem() == true {
+            BHLog.p("\(#function) — seamless skip")
+            return
+        }
+
+        // No preloaded item — regular transition (destroys and recreates player).
         if let validItem = playerItem,
            let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }),
            index < playbackQueue.count - 1 {
             playRequest(with: playbackQueue[playbackQueue.index(after: index)].post,
-                playlist: [], autoplayContext: playerItem?.autoplayContext)
+                playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
         } else if let nextItem = playbackQueue.first {
-            playRequest(with: nextItem.post, playlist: [], autoplayContext: playerItem?.autoplayContext)
+            playRequest(with: nextItem.post, playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
         }
     }
 

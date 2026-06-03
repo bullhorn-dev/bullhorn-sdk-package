@@ -4,9 +4,9 @@ import SDWebImage
 /// Composes NowPlaying metadata and updates the media player.
 extension BHHybridPlayer {
 
-    internal func composeNowPlayingItemInfo(with image: UIImage? = nil) -> BHNowPlayingItemInfo {
+    internal func composeNowPlayingItemInfo(with image: UIImage? = nil, skipCachedImage: Bool = false) -> BHNowPlayingItemInfo {
         let playbackRate = isPlaying() ? mediaPlayer?.rate : 0
-        let currentItemImage = image ?? mediaPlayer?.nowPlayingItemInfo.itemImage
+        let currentItemImage = image ?? (skipCachedImage ? nil : mediaPlayer?.nowPlayingItemInfo.itemImage)
 
         return BHNowPlayingItemInfo(
             title: playerItem?.post.title,

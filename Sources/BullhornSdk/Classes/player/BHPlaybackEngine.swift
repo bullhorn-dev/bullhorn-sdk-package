@@ -3,22 +3,10 @@ import UIKit
 
 // MARK: - Main Protocol
 
-/// The contract BHHybridPlayer uses to talk to any player implementation.
-///
-/// Concrete players can either:
-///   A) Subclass BHMediaPlayerBase — gets audio session, NowPlaying,
-///      system notifications and the state machine for free.
-///   B) Implement BHPlaybackEngine directly and adopt the supporting
-///      mixin protocols as needed.
 protocol BHPlaybackEngine: AnyObject {
 
-    // MARK: Delegate
     var delegate: BHMediaPlayerDelegate? { get set }
-
-    // MARK: Rate
     var rate: Float { get set }
-
-    // MARK: NowPlaying state (read by BHHybridPlayer to build cover image info)
     var nowPlayingItemInfo: BHNowPlayingItemInfo { get }
 
     // MARK: Playback control
@@ -46,18 +34,21 @@ protocol BHPlaybackEngine: AnyObject {
     // MARK: NowPlaying updates
     func updateNowPlayingItemInfo(with itemInfo: BHNowPlayingItemInfo?)
     func updateNowPlayingInfo()
+
+    // MARK: - Seamless queue preloading
+    func preloadNextItem(url: URL?)
+    func clearNextItem()
+    @discardableResult func skipToNextItem() -> Bool
 }
 
 // MARK: - Default implementations
 
 extension BHPlaybackEngine {
 
-    /// Convenience — refresh NowPlaying without providing new item info.
     func updateNowPlayingItemInfo() {
         updateNowPlayingItemInfo(with: nil)
     }
 
-    /// Convenience — play(at:) without the forceResume label.
     @discardableResult
     func play(at time: TimeInterval) -> Bool {
         return play(at: time, forceResume: false)
@@ -66,20 +57,17 @@ extension BHPlaybackEngine {
 
 // MARK: - Supporting mixin protocols
 
-/// Manages AVAudioSession lifecycle.
 protocol BHAudioSessionManaging: AnyObject {
     func startAudioSession()
     func stopAudioSession()
 }
 
-/// Writes to MPNowPlayingInfoCenter.
 protocol BHNowPlayingManaging: AnyObject {
     func updateNowPlayingItemInfo(with itemInfo: BHNowPlayingItemInfo?)
     func updateNowPlayingItemState(isInterrupted: Bool?)
     func clearNowPlayingInfo()
 }
 
-/// Handles AVAudioSession interruptions, route changes and media-service events.
 protocol BHSystemNotificationHandling: AnyObject {
     func configurePlayerNotifications()
     func removePlayerNotifications()

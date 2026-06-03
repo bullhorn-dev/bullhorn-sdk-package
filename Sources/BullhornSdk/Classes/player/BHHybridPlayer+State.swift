@@ -33,6 +33,10 @@ extension BHHybridPlayer {
                 startPlayback()
                 startTrackTimer()
                 startSleepTimerIfNeeded()
+
+                if prevPlayerState?.state != .playing {
+                    preloadNextQueueItem()
+                }
             }
             playerPositionChanged(true)
 

@@ -18,35 +18,46 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     // MARK: - Private
 
-    private let player: AVPlayer
+    /// var so retryConnection can recreate it when AVQueuePlayer is in failed state.
+    private var player: AVQueuePlayer
     private var playerItem: AVPlayerItem
     private let isVideoContent: Bool
     private var layerView: BHPlayerLayerView?
     private let mediaURL: URL
 
     private var isIntentionalPause = false
+    private var lastKnownPosition: TimeInterval = 0
 
-    /// Subscriptions tied to the current AVPlayer (survive item replacement).
+    // Seamless queue support
+    private var nextPlayerItem: AVPlayerItem?
+    private var nextItemURL: URL?
+
+    private var currentMediaURL: URL
+
+    /// Subscriptions tied to AVPlayer (recreated when player is recreated).
     private var playerCancellables = Set<AnyCancellable>()
-    /// Subscriptions tied to the current AVPlayerItem (recreated on item replacement).
-    private var itemCancellables = Set<AnyCancellable>()
+    /// Subscriptions tied to AVPlayerItem (recreated on item replacement).
+    private var itemCancellables   = Set<AnyCancellable>()
 
     // MARK: - Init
 
     init(withUrl url: URL, coverUrl: URL? = nil, isVideo: Bool = false) {
-        mediaURL    = url
-        playerItem  = AVPlayerItem(url: url)
-        player      = AVPlayer(playerItem: playerItem)
-        player.volume = 1.0
-        isVideoContent = isVideo
+        mediaURL        = url
+        currentMediaURL = url
+        playerItem      = AVPlayerItem(url: url)
+        player          = BHSystemMediaPlayer.makePlayer(with: AVPlayerItem(url: url))
+        isVideoContent  = isVideo
 
         super.init()
 
         BHLog.p("Init SystemMediaPlayer url:\(url.absoluteString) isVideo:\(isVideo)")
 
+        // Replace the player item reference with the one inside the player
+        playerItem = player.currentItem ?? playerItem
+
         subscribeToPlayer()
         subscribeToPlayerItem()
-        configurePlayerNotifications()   // AVAudioSession notifications from base class
+        configurePlayerNotifications()
 
         layerView = BHPlayerLayerView(isVideo: isVideo)
         layerView?.setCover(url: coverUrl)
@@ -80,25 +91,23 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     override func playerSeek(to time: CMTime, forceResume: Bool = false) {
         player.seek(to: time)
-        if forceResume {
-            player.rate = playbackRate
-        }
+        if forceResume { player.rate = playbackRate }
     }
 
     override func playerSeek(to time: CMTime, forceResume: Bool = false,
                              completionHandler: @escaping (Bool) -> Void) {
         player.seek(to: time) { [weak self] finished in
             guard let self else { return }
-            if forceResume {
-                self.player.rate = self.playbackRate
-            }
+            if forceResume { self.player.rate = self.playbackRate }
             completionHandler(finished)
         }
     }
 
     override func playerCurrentTime() -> TimeInterval {
         let t = player.currentTime().toTimeInterval()
-        return t.isNaN ? 0 : t
+        let result = t.isNaN ? 0 : t
+        if result > 0 { lastKnownPosition = result }
+        return result
     }
 
     override func playerDuration() -> TimeInterval {
@@ -107,65 +116,80 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         return d > 0 ? d : 0
     }
 
-    override func retryConnection() -> Bool {
-        guard case .failed = playbackState else { return false }
-
-        if !BHReachabilityManager.shared.isConnected() {
-            delegate?.mediaPlayer(self, stateUpdated: .failed(e: NSError.error(
-                with: NSError.LocalCodes.common,
-                description: "The Internet connection is lost.")))
-            return false
-        }
-
-        let position = playerCurrentTime()
-
-        // Cancel item subscriptions, replace item, resubscribe.
-        itemCancellables.removeAll()
-        playerItem = AVPlayerItem(url: mediaURL)
-        player.replaceCurrentItem(with: playerItem)
-        subscribeToPlayerItem()
-
-        layerView?.reset()
-        playbackState = .loading(intent: .play(from: position))
-
-        return true
-    }
-
     // MARK: - Video
 
     override func hasVideo()      -> Bool    { isVideoContent }
     override func getVideoLayer() -> UIView? { layerView }
+
+    // MARK: - Seamless Queue
+
+    override func preloadNextItem(url: URL?) {
+        guard let url else {
+            clearNextItem()
+            return
+        }
+        
+        if nextItemURL == url { return }
+        clearNextItem()
+        let item = AVPlayerItem(url: url)
+        nextPlayerItem = item
+        nextItemURL    = url
+        player.insert(item, after: nil)
+        BHLog.p("Preloaded next item: \(url.lastPathComponent)")
+    }
+
+    override func clearNextItem() {
+        if let item = nextPlayerItem { player.remove(item) }
+        nextPlayerItem = nil
+        nextItemURL    = nil
+    }
+
+    @discardableResult
+    override func skipToNextItem() -> Bool {
+        guard nextPlayerItem != nil else { return false }
+        player.advanceToNextItem()
+        return true
+    }
+
+    // MARK: - Private factory
+
+    private static func makePlayer(with item: AVPlayerItem) -> AVQueuePlayer {
+        let p = AVQueuePlayer(playerItem: item)
+        p.volume = 1.0
+        p.actionAtItemEnd = .advance
+        return p
+    }
 }
 
 // MARK: - Combine Subscriptions
 
 extension BHSystemMediaPlayer {
 
-    /// Subscribe to AVPlayer-level publishers (survive item replacement).
     private func subscribeToPlayer() {
         player.publisher(for: \.timeControlStatus)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.onTimeControlStatusChanged() }
             .store(in: &playerCancellables)
+
+        player.publisher(for: \.currentItem)
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] item in self?.onCurrentItemChanged(item) }
+            .store(in: &playerCancellables)
     }
 
-    /// Subscribe to the current AVPlayerItem publishers.
-    /// Call again after replacing the item.
     private func subscribeToPlayerItem() {
-        // Item status
         playerItem.publisher(for: \.status)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.onItemStatusChanged() }
             .store(in: &itemCancellables)
 
-        // Played to end
         NotificationCenter.default
             .publisher(for: .AVPlayerItemDidPlayToEndTime, object: playerItem)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.onItemDidPlayToEnd() }
             .store(in: &itemCancellables)
 
-        // Failed to play to end
         NotificationCenter.default
             .publisher(for: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
             .receive(on: DispatchQueue.main)
@@ -173,7 +197,6 @@ extension BHSystemMediaPlayer {
             .store(in: &itemCancellables)
     }
 
-    /// Subscribe to app lifecycle for video layer management.
     private func subscribeToAppLifecycle() {
         NotificationCenter.default
             .publisher(for: UIApplication.didEnterBackgroundNotification)
@@ -199,7 +222,6 @@ extension BHSystemMediaPlayer {
 
     private func onItemStatusChanged() {
         switch playerItem.status {
-
         case .readyToPlay:
             switch playbackState {
             case .loading(let intent):
@@ -209,69 +231,88 @@ extension BHSystemMediaPlayer {
             default:
                 playbackState = .ready
             }
-
         case .failed:
             let error: Error = BHReachabilityManager.shared.isConnected()
                 ? NSError.error(with: NSError.LocalCodes.common, description: "Media failed to play.")
                 : NSError.error(with: NSError.LocalCodes.common, description: "The Internet connection is lost.")
             playbackState = .failed(error)
-
         case .unknown:
             break
-
         @unknown default:
             break
         }
+    }
+    
+    private func onCurrentItemChanged(_ newItem: AVPlayerItem?) {
+        guard let newItem, newItem === nextPlayerItem else { return }
+
+        guard case .failed = playbackState else {
+            BHLog.p("\(#function) — seamless advance")
+
+            if let url = nextItemURL {
+                currentMediaURL = url
+            }
+
+            itemCancellables.removeAll()
+            playerItem        = newItem
+            nextPlayerItem    = nil
+            nextItemURL       = nil
+            lastKnownPosition = 0
+            subscribeToPlayerItem()
+            delegate?.mediaPlayerDidAdvanceToNextItem(self)
+            return
+        }
+
+        nextPlayerItem = nil
+        nextItemURL    = nil
     }
 
     private func onTimeControlStatusChanged() {
         guard playbackState.isEngineReady else { return }
         guard case .seeking = playbackState else {
             switch player.timeControlStatus {
-
             case .playing:
                 playbackState = .playing
-
             case .paused:
                 if isIntentionalPause {
                     isIntentionalPause = false
                     if case .playing = playbackState { playbackState = .paused }
                 } else if case .playing = playbackState {
-                    // Not our pause — restore playback (e.g. layer left hierarchy).
                     player.play()
                     player.rate = playbackRate
                 }
-
             case .waitingToPlayAtSpecifiedRate:
-                // Guard against re-entering from .failed state.
                 if case .failed = playbackState { return }
                 guard case .playing = playbackState else { return }
-
                 if BHReachabilityManager.shared.isConnected() {
                     playbackState = .stalled(reason: .buffering)
                 } else {
                     player.pause()
+                    clearNextItem()
                     playbackState = .failed(NSError.error(
                         with: NSError.LocalCodes.common,
                         description: "The Internet connection is lost."))
                 }
-
             @unknown default:
                 break
             }
             return
         }
-        // Seeking in flight — completion handler owns the transition.
     }
 
     private func onItemDidPlayToEnd() {
         BHLog.p("\(#function)")
+
+        if case .failed = playbackState { return }
+        if nextPlayerItem != nil { return }
+
         playbackState = .ended
         delegate?.mediaPlayerDidPlayToEndTime(self)
     }
 
     private func onItemFailedToPlayToEnd() {
         BHLog.p("\(#function)")
+
         playbackState = .ended
         delegate?.mediaPlayerFailedToPlayToEndTime(self)
     }

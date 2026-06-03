@@ -14,6 +14,7 @@ protocol BHMediaPlayerDelegate: AnyObject {
     func mediaPlayerServicesWereLost(_ player: any BHPlaybackEngine)
     func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine)
     func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo
+    func mediaPlayerDidAdvanceToNextItem(_ player: any BHPlaybackEngine)
 }
 
 // MARK: - BHMediaPlayerBase
@@ -78,9 +79,9 @@ class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
     internal let timeScale    = TimeInterval(USEC_PER_SEC)
     internal var playbackRate = Constants.defaultPlaybackRate
 
-    // Exposed via BHPlaybackEngine so BHHybridPlayer can read cover image.
+    // MARK: - Now Playing Item Info
+    
     var nowPlayingItemInfo: BHNowPlayingItemInfo = .invalid
-
     internal lazy var nowPlayingItemPlaybackState = MPNowPlayingPlaybackState.unknown
 
     // MARK: - Init
@@ -114,6 +115,10 @@ class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
     internal func playerSeek(to time: CMTime, forceResume: Bool) {}
     internal func playerSeek(to time: CMTime, forceResume: Bool,
                              completionHandler: @escaping (Bool) -> Void) {}
+    
+    func preloadNextItem(url: URL?)          {}
+    func clearNextItem()                     {}
+    @discardableResult func skipToNextItem() -> Bool { return false }
 
     // MARK: - BHPlaybackEngine — Playback Control
 

@@ -43,10 +43,9 @@ extension BHHybridPlayer {
         guard let validItem = playerItem else { return }
         guard var urlToPlay = validItem.post.url else { return }
         guard let validPost = post else { return }
-        
+
         let expectedPostId = validItem.post.postId
 
-        // Prefer cached local file if available
         if let cachedUrl = validItem.post.file {
             let fileName = cachedUrl.lastPathComponent
             if let fileURL = FileManager.default.documentsDirectory()?.appendingPathComponent(fileName),
@@ -57,8 +56,6 @@ extension BHHybridPlayer {
 
         BHID3Parser.isGoodForStream(validItem.post.url!) { [weak self] _, _, isVideo in
             guard let self else { return }
-
-            // check that episode wasn't changed while url parsed
             guard self.playerItem?.post.postId == expectedPostId else {
                 BHLog.p("\(#function) skipping stale callback for \(expectedPostId)")
                 return
@@ -86,10 +83,100 @@ extension BHHybridPlayer {
 
     internal func destroyMediaPlayer() {
         guard let player = mediaPlayer else { return }
+        player.clearNextItem()
         if player.isPlaying() || player.isReady() { _ = player.stop() }
         lastSentPosition = 0
         lastSentDuration = 0
         mediaPlayer = nil
+    }
+
+    // MARK: - Seamless Queue Preloading
+
+    internal func nextQueuePost() -> BHPost? {
+        guard let validItem = playerItem else { return nil }
+        guard let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }),
+              index < playbackQueue.count - 1 else { return nil }
+
+        return playbackQueue[playbackQueue.index(after: index)].post
+    }
+
+    internal func preloadNextQueueItem() {
+        guard let nextPost = nextQueuePost() else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
+
+        // Only preload audio, non-stream episodes
+        guard !nextPost.isRadioStream(),
+              !nextPost.isLiveStream(),
+              !nextPost.hasVideo() else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
+
+        // Skip if significant offset — gapless transition impossible after seek
+        let offset = BHOffsetsManager.shared.offset(for: nextPost.id)?.offset ?? 0
+        guard offset < 10 else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
+
+        // Prefer cached local file
+        var urlToPlay: URL?
+        if let fileURL = BHDownloadsManager.shared.getFileUrl(nextPost.id) {
+            urlToPlay = fileURL
+        } else {
+            urlToPlay = nextPost.recording?.publishUrl
+        }
+
+        mediaPlayer?.preloadNextItem(url: urlToPlay)
+
+        BHLog.p("Queued seamless preload for: \(nextPost.title)")
+    }
+
+    internal func handleSeamlessAdvance() {
+        BHLog.p("\(#function)")
+
+        guard let nextPost = nextQueuePost() else { return }
+
+        postPlaybackOffset()
+        stopPlayback(send: true)
+
+        if let completedPostId = post?.id {
+            removeFromPlaybackQueue(completedPostId)
+        }
+
+        let fileUrl = BHDownloadsManager.shared.getFileUrl(nextPost.id)
+        let postItem = BHPlayerItem.Post(
+            postId: nextPost.id, title: nextPost.title,
+            userId: nextPost.user.id, userName: nextPost.user.fullName,
+            coverUrl: nextPost.coverUrl, url: nextPost.recording?.publishUrl, file: fileUrl)
+        let newPlayerItem = BHPlayerItem(
+            post: postItem, playbackSettings: settings,
+            position: 0, duration: 0, shouldPlay: true,
+            isStream: false, autoplayContext: playerItem?.autoplayContext)
+
+        // Transition state
+        UserDefaults.standard.playerPostId = nextPost.id
+        lastSentPosition = 0
+        lastSentDuration = 0
+        manualPosition = 0
+
+        playerItem = newPlayerItem
+        post = nextPost        // triggers bulletin + transcript fetch via didSet
+
+        // Start CDR for new episode
+        startPlayback()
+
+        // Preload the episode after next
+        preloadNextQueueItem()
+
+        // Notify listeners — UI updates title, artwork etc.
+        observersContainer.notifyObserversAsync { $0.hybridPlayer(self, initializedWith: newPlayerItem) }
+
+        // Refresh NowPlaying with new episode metadata
+        mediaPlayer?.updateNowPlayingItemInfo(with: composeNowPlayingItemInfo(skipCachedImage: true))
+        updateNowPlayingItemInfoImage()
     }
 
     // MARK: - Perform methods
@@ -157,7 +244,6 @@ extension BHHybridPlayer {
         guard let player = mediaPlayer else { return false }
 
         let resultPosition = max(0, position)
-
         if isEnded() { play(at: resultPosition); return true }
 
         let result = player.play(at: resultPosition, forceResume: forceResume)
@@ -166,3 +252,4 @@ extension BHHybridPlayer {
         return result
     }
 }
+
