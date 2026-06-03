@@ -70,6 +70,7 @@ extension BHHybridPlayer {
 
             player.delegate = self
             player.rate = self.settings.playbackSpeed
+
             self.mediaPlayer = player
 
             if self.shouldPlayAutomatically {
@@ -101,12 +102,16 @@ extension BHHybridPlayer {
     }
 
     internal func preloadNextQueueItem() {
+        guard !isVideoAvailable else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
+
         guard let nextPost = nextQueuePost() else {
             mediaPlayer?.clearNextItem()
             return
         }
 
-        // Only preload audio, non-stream episodes
         guard !nextPost.isRadioStream(),
               !nextPost.isLiveStream(),
               !nextPost.hasVideo() else {
@@ -114,24 +119,41 @@ extension BHHybridPlayer {
             return
         }
 
-        // Skip if significant offset — gapless transition impossible after seek
         let offset = BHOffsetsManager.shared.offset(for: nextPost.id)?.offset ?? 0
         guard offset < 10 else {
             mediaPlayer?.clearNextItem()
             return
         }
 
-        // Prefer cached local file
-        var urlToPlay: URL?
-        if let fileURL = BHDownloadsManager.shared.getFileUrl(nextPost.id) {
-            urlToPlay = fileURL
-        } else {
-            urlToPlay = nextPost.recording?.publishUrl
+        guard let postURL = nextPost.recording?.publishUrl else {
+            mediaPlayer?.clearNextItem()
+            return
         }
 
-        mediaPlayer?.preloadNextItem(url: urlToPlay)
+        let expectedNextId = nextPost.id
 
-        BHLog.p("Queued seamless preload for: \(nextPost.title)")
+        BHID3Parser.isGoodForStream(postURL) { [weak self] _, _, isVideo in
+            guard let self else { return }
+
+            guard self.nextQueuePost()?.id == expectedNextId else {
+                self.mediaPlayer?.clearNextItem()
+                return
+            }
+
+            guard !isVideo else {
+                BHLog.p("preloadNextQueueItem: \(nextPost.title) is video — skipping preload")
+                self.mediaPlayer?.clearNextItem()
+                return
+            }
+
+            var urlToPlay: URL = postURL
+            if let fileURL = BHDownloadsManager.shared.getFileUrl(nextPost.id) {
+                urlToPlay = fileURL
+            }
+
+            self.mediaPlayer?.preloadNextItem(url: urlToPlay)
+            BHLog.p("Queued seamless preload for: \(nextPost.title)")
+        }
     }
 
     internal func handleSeamlessAdvance() {
@@ -170,6 +192,10 @@ extension BHHybridPlayer {
 
         // Preload the episode after next
         preloadNextQueueItem()
+        
+        if !hasNext() && !(playerItem?.isStream ?? false) {
+            fetchPlaylist()
+        }
 
         // Notify listeners — UI updates title, artwork etc.
         observersContainer.notifyObserversAsync { $0.hybridPlayer(self, initializedWith: newPlayerItem) }
@@ -235,20 +261,32 @@ extension BHHybridPlayer {
             position: post.playbackOffset, duration: 0, shouldPlay: true,
             isStream: post.isRadioStream() || post.isLiveStream(),
             autoplayContext: playerItem?.autoplayContext)
+
         start(with: item, post: post, playlist: [])
+
         return true
     }
 
     @discardableResult internal func performSeek(to position: Double, forceResume: Bool = false) -> Bool {
         BHLog.p("\(#function) - \(position)")
+
         guard let player = mediaPlayer else { return false }
 
         let resultPosition = max(0, position)
-        if isEnded() { play(at: resultPosition); return true }
+
+        if isEnded() {
+            play(at: resultPosition)
+            return true
+        }
 
         let result = player.play(at: resultPosition, forceResume: forceResume)
-        if result { mediaPlayer?.updateNowPlayingInfo() }
+        
+        if result {
+            mediaPlayer?.updateNowPlayingInfo()
+        }
+        
         BullhornSdk.shared.delegate?.bullhornSdkDidStartPlaying()
+        
         return result
     }
 }

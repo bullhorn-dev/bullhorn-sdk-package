@@ -23,10 +23,7 @@ final class BHPlayerLayerView: UIView {
         set { avPlayerLayer.videoGravity = newValue }
     }
 
-    /// Set once at init time; drives cover-vs-video logic.
     let isVideo: Bool
-
-    /// Duration of the crossfade from cover to first video frame.
     var transitionDuration: TimeInterval = 0.25
 
     // MARK: - Private
@@ -44,8 +41,7 @@ final class BHPlayerLayerView: UIView {
 
     // MARK: - Init
 
-    init(isVideo: Bool = false,
-         videoGravity: AVLayerVideoGravity = .resizeAspect) {
+    init(isVideo: Bool = false, videoGravity: AVLayerVideoGravity = .resizeAspect) {
         self.isVideo = isVideo
         super.init(frame: .zero)
         avPlayerLayer.videoGravity = videoGravity
@@ -72,28 +68,22 @@ final class BHPlayerLayerView: UIView {
         coverView.image = image
     }
 
-    /// Attach an AVPlayer so video frames start rendering.
     func connect(to player: AVPlayer) {
         avPlayerLayer.player = player
-
         if isVideo {
-            // Reset: show cover while waiting for first frame.
             showCover(animated: false)
             addLayerObserver()
         }
     }
 
-    /// Detach the player (e.g. before going to background).
     func disconnect() {
         removeLayerObserver()
         avPlayerLayer.player = nil
-
         if isVideo {
-            // Show cover immediately — video surface is gone.
             showCover(animated: false)
         }
     }
-    
+
     func reset() {
         guard isVideo else { return }
         removeLayerObserver()
@@ -101,11 +91,20 @@ final class BHPlayerLayerView: UIView {
         addLayerObserver()
     }
 
-    // MARK: - Private setup
+    // MARK: - Hierarchy
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        guard isVideo, superview != nil else { return }
+        if avPlayerLayer.isReadyForDisplay {
+            hideCover(animated: true)
+        }
+    }
+
+    // MARK: - Setup
 
     private func setup() {
         backgroundColor = .clear
-
         addSubview(coverView)
         NSLayoutConstraint.activate([
             coverView.topAnchor.constraint(equalTo: topAnchor),
@@ -121,21 +120,18 @@ final class BHPlayerLayerView: UIView {
 
     private func showCover(animated: Bool) {
         if animated {
-            UIView.animate(withDuration: transitionDuration) {
-                self.coverView.alpha = 1
-            }
+            UIView.animate(withDuration: transitionDuration) { self.coverView.alpha = 1 }
         } else {
             coverView.alpha = 1
         }
     }
 
     private func hideCover(animated: Bool) {
-        guard isVideo else { return }   // never hide cover for audio
+        guard isVideo else { return }
+        guard superview != nil else { return }
 
         if animated {
-            UIView.animate(withDuration: transitionDuration) {
-                self.coverView.alpha = 0
-            }
+            UIView.animate(withDuration: transitionDuration) { self.coverView.alpha = 0 }
         } else {
             coverView.alpha = 0
         }
@@ -146,15 +142,15 @@ final class BHPlayerLayerView: UIView {
     private func addLayerObserver() {
         guard !isObservingLayer else { return }
         avPlayerLayer.addObserver(self,
-                                  forKeyPath: #keyPath(AVPlayerLayer.isReadyForDisplay),
-            options: [.new], context: nil)
+            forKeyPath: #keyPath(AVPlayerLayer.isReadyForDisplay),
+            options: [.initial, .new], context: nil)
         isObservingLayer = true
     }
 
     private func removeLayerObserver() {
         guard isObservingLayer else { return }
         avPlayerLayer.removeObserver(self,
-                                     forKeyPath: #keyPath(AVPlayerLayer.isReadyForDisplay))
+            forKeyPath: #keyPath(AVPlayerLayer.isReadyForDisplay))
         isObservingLayer = false
     }
 
@@ -166,8 +162,16 @@ final class BHPlayerLayerView: UIView {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             return
         }
-        if avPlayerLayer.isReadyForDisplay {
-            DispatchQueue.main.async { self.hideCover(animated: true) }
+
+        // Use change[.newKey] — avoids reading AVFoundation property off main thread.
+        let isReady = (change?[.newKey] as? Bool) ?? false
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if isReady {
+                self.hideCover(animated: true)
+            }
         }
     }
 }
+

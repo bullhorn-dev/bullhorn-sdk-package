@@ -43,7 +43,10 @@ extension BHHybridPlayer {
         }
         insertStorageItem(item)
 
-        if isActive() { preloadNextQueueItem() }
+        if isActive() {
+            mediaPlayer?.clearNextItem()
+            preloadNextQueueItem()
+        }
     }
     
     func removeFromPlaybackQueue(_ postId: String) {
@@ -53,7 +56,10 @@ extension BHHybridPlayer {
             playbackQueue.remove(at: currentIndex)
             removeStorageItem(postId)
             
-            if isActive() { preloadNextQueueItem() }
+            if isActive() {
+                mediaPlayer?.clearNextItem()
+                preloadNextQueueItem()
+            }
         }
     }
     
@@ -155,7 +161,10 @@ extension BHHybridPlayer {
             }
         }
         
-        if isActive() { preloadNextQueueItem() }
+        if isActive() {
+            mediaPlayer?.clearNextItem()
+            preloadNextQueueItem()
+        }
     }
     
     // MARK: - Storage Providers

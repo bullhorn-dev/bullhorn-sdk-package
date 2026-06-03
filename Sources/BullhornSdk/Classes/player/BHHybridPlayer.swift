@@ -282,7 +282,13 @@ class BHHybridPlayer {
         }
 
         if !isActive() {
-            play(at: playerItem?.position ?? 0)
+            let position: Double
+            if isEnded() {
+                position = 0
+            } else {
+                position = playerItem?.position ?? 0
+            }
+            play(at: position)
         } else {
             performResume()
             mediaPlayer?.rate = settings.playbackSpeed
