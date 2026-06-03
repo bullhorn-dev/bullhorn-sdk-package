@@ -53,8 +53,10 @@ extension BHHybridPlayer {
                 urlToPlay = fileURL
             }
         }
+        
+        let urlToParse = urlToPlay.isFileURL ? urlToPlay : validItem.post.url!
 
-        BHID3Parser.isGoodForStream(validItem.post.url!) { [weak self] _, _, isVideo in
+        BHID3Parser.isGoodForStream(urlToParse) { [weak self] _, _, isVideo in
             guard let self else { return }
             guard self.playerItem?.post.postId == expectedPostId else {
                 BHLog.p("\(#function) skipping stale callback for \(expectedPostId)")
@@ -64,7 +66,7 @@ extension BHHybridPlayer {
             self.isVideoAvailable = isVideo || validPost.hasVideo()
 
             let player = BHSystemMediaPlayer(
-                withUrl: urlToPlay,
+                withUrl: urlToParse,
                 coverUrl: self.playerItem?.post.coverUrl,
                 isVideo: self.isVideoAvailable)
 
@@ -131,8 +133,18 @@ extension BHHybridPlayer {
         }
 
         let expectedNextId = nextPost.id
+        var urlToPlay: URL
+        
+        if let fileUrl = BHDownloadsManager.shared.getFileUrl(expectedNextId) {
+            urlToPlay = fileUrl
+        } else if let remoteUrl = nextPost.recording?.publishUrl {
+            urlToPlay = remoteUrl
+        } else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
 
-        BHID3Parser.isGoodForStream(postURL) { [weak self] _, _, isVideo in
+        BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
             guard let self else { return }
 
             guard self.nextQueuePost()?.id == expectedNextId else {
@@ -144,11 +156,6 @@ extension BHHybridPlayer {
                 BHLog.p("preloadNextQueueItem: \(nextPost.title) is video — skipping preload")
                 self.mediaPlayer?.clearNextItem()
                 return
-            }
-
-            var urlToPlay: URL = postURL
-            if let fileURL = BHDownloadsManager.shared.getFileUrl(nextPost.id) {
-                urlToPlay = fileURL
             }
 
             self.mediaPlayer?.preloadNextItem(url: urlToPlay)

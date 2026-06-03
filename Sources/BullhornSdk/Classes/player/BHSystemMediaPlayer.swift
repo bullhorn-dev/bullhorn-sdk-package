@@ -284,7 +284,8 @@ extension BHSystemMediaPlayer {
             case .waitingToPlayAtSpecifiedRate:
                 if case .failed = playbackState { return }
                 guard case .playing = playbackState else { return }
-                if BHReachabilityManager.shared.isConnected() {
+                
+                if BHReachabilityManager.shared.isConnected() || currentMediaURL.isFileURL {
                     playbackState = .stalled(reason: .buffering)
                 } else {
                     player.pause()
