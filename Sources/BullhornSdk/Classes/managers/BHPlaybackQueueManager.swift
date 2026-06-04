@@ -29,21 +29,31 @@ final class BHPlaybackQueueManager {
     /// so persistence and change-notification stay in lockstep.
     private(set) var items: [BHQueueItem] = []
 
+    @inline(__always)
+    private func assertMain() {
+        #if DEBUG
+        dispatchPrecondition(condition: .onQueue(.main))
+        #endif
+    }
+
     // MARK: - Lookups
 
-    var isEmpty: Bool { items.isEmpty }
-    var count: Int { items.count }
-    var first: BHPost? { items.first?.post }
+    var isEmpty: Bool { assertMain(); return items.isEmpty }
+    var count: Int { assertMain(); return items.count }
+    var first: BHPost? { assertMain(); return items.first?.post }
 
     func contains(_ postId: String) -> Bool {
-        items.contains(where: { $0.post.id == postId })
+        assertMain()
+        return items.contains(where: { $0.post.id == postId })
     }
 
     func item(for postId: String) -> BHQueueItem? {
-        items.first(where: { $0.id == postId })
+        assertMain()
+        return items.first(where: { $0.id == postId })
     }
 
     func next(after postId: String?) -> BHPost? {
+        assertMain()
         guard let postId,
               let index = items.firstIndex(where: { $0.id == postId }),
               index < items.count - 1 else { return nil }
@@ -51,6 +61,7 @@ final class BHPlaybackQueueManager {
     }
 
     func previous(before postId: String?) -> BHPost? {
+        assertMain()
         guard let postId,
               let index = items.firstIndex(where: { $0.id == postId }),
               index > 0 else { return nil }
@@ -58,16 +69,19 @@ final class BHPlaybackQueueManager {
     }
 
     func hasNext(after postId: String?) -> Bool {
+        assertMain()
         guard let postId, let index = items.firstIndex(where: { $0.id == postId }) else { return false }
         return index < items.count - 1
     }
 
     func hasPrevious(before postId: String?) -> Bool {
+        assertMain()
         guard let postId, let index = items.firstIndex(where: { $0.id == postId }) else { return false }
         return index > 0
     }
 
     func orderedQueue(_ activePostId: String, posts: [BHPost]?, order: BHQueueOrder) -> [BHPost]? {
+        assertMain()
         guard let unsorted = posts else { return nil }
         guard let activeIndex = unsorted.firstIndex(where: { $0.id == activePostId }) else { return nil }
 
@@ -84,26 +98,23 @@ final class BHPlaybackQueueManager {
 
     // MARK: - Loading
 
-    /// Loads the persisted queue. `completion` lets the caller (restore flow)
-    /// wait for the async DB fetch instead of racing it.
     func load(completion: (() -> Void)? = nil) {
+        assertMain()
         DataBaseManager.shared.fetchQueue { [weak self] items in
-            self?.items = items
-            completion?()
+            DispatchQueue.main.async {
+                self?.items = items
+                completion?()
+            }
         }
     }
 
     // MARK: - Mutations
 
-    /// Inserts `post`, collapsing any auto-added items that precede it (the
-    /// original dedup rule), preserving a manual reason if the post was already
-    /// queued manually. `hasCurrentItem` replaces the old `self.post == nil`
-    /// check — when there is no current episode (or `moveToTop`), the new item
-    /// goes to the very front; otherwise right after the current one.
     func add(_ post: BHPost,
              reason: BHQueueReason = .auto,
              moveToTop: Bool = false,
              hasCurrentItem: Bool) {
+        assertMain()
         BHLog.p("\(#function) - postId: \(post.id), title: \(post.title)")
 
         var validReason = reason
@@ -139,6 +150,7 @@ final class BHPlaybackQueueManager {
     }
 
     func append(_ posts: [BHPost]) {
+        assertMain()
         BHLog.p("\(#function)")
 
         var changed = false
@@ -153,6 +165,7 @@ final class BHPlaybackQueueManager {
     }
 
     func remove(_ postId: String) {
+        assertMain()
         BHLog.p("\(#function) - postId: \(postId)")
 
         guard let index = items.firstIndex(where: { $0.id == postId }) else { return }
@@ -160,8 +173,9 @@ final class BHPlaybackQueueManager {
         removeStorageItem(postId)
         delegate?.playbackQueueDidChange(self)
     }
-    
+
     func insert(_ item: BHQueueItem, at index: Int) {
+        assertMain()
         BHLog.p("\(#function) - postId: \(item.post.id), index: \(index)")
 
         let safeIndex = min(max(index, 0), items.count)
@@ -172,6 +186,7 @@ final class BHPlaybackQueueManager {
 
     @discardableResult
     func remove(at index: Int) -> BHQueueItem? {
+        assertMain()
         guard items.indices.contains(index) else {
             BHLog.w("\(#function) - index \(index) out of range (count \(items.count))")
             return nil
@@ -183,6 +198,7 @@ final class BHPlaybackQueueManager {
     }
 
     func clear(includingManual: Bool = false) {
+        assertMain()
         BHLog.p("\(#function)")
 
         removeStorageItems(includingManual: includingManual)
@@ -194,12 +210,8 @@ final class BHPlaybackQueueManager {
         }
     }
 
-    /// Updates the stored playback offset for a queued post. `BHQueueItem` is a
-    /// reference type, so mutating `item.post` already updates the array element;
-    /// only persistence needs an explicit call. (This intentionally drops the old
-    /// `items[row] = item` reassignment, which was a no-op that risked a stale
-    /// index when the array changed between lookup and write.)
     func updatePlayback(_ postId: String, offset: Double, completed: Bool) {
+        assertMain()
         guard let item = items.first(where: { $0.id == postId }) else { return }
         item.post.updatePlaybackOffset(offset, completed: completed)
         updateStorageItem(item)

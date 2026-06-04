@@ -134,20 +134,22 @@ extension BHHybridPlayer {
 
         BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
             guard let self else { return }
-
-            guard self.nextQueuePost()?.id == expectedNextId else {
-                self.mediaPlayer?.clearNextItem()
-                return
+            
+            DispatchQueue.main.async {
+                guard self.nextQueuePost()?.id == expectedNextId else {
+                    self.mediaPlayer?.clearNextItem()
+                    return
+                }
+                
+                guard !isVideo else {
+                    BHLog.p("preloadNextQueueItem: \(nextPost.title) is video — skipping preload")
+                    self.mediaPlayer?.clearNextItem()
+                    return
+                }
+                
+                self.mediaPlayer?.preloadNextItem(url: urlToPlay)
+                BHLog.p("Queued seamless preload for: \(nextPost.title)")
             }
-
-            guard !isVideo else {
-                BHLog.p("preloadNextQueueItem: \(nextPost.title) is video — skipping preload")
-                self.mediaPlayer?.clearNextItem()
-                return
-            }
-
-            self.mediaPlayer?.preloadNextItem(url: urlToPlay)
-            BHLog.p("Queued seamless preload for: \(nextPost.title)")
         }
     }
 
