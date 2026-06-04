@@ -207,12 +207,16 @@ class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
     // MARK: - Internal helpers
 
     internal func seekAndPlay(to time: TimeInterval, resume: Bool) {
-        if time > 0 {
-            let cmTime = CMTime(value: CMTimeValue(time * timeScale),
+        let target = max(0, time)
+        let needsSeek = abs(playerCurrentTime() - target) > 0.5
+
+        if needsSeek {
+            let cmTime = CMTime(value: CMTimeValue(target * timeScale),
                                 timescale: CMTimeScale(timeScale))
-            playbackState = .seeking(to: time, resume: resume)
+            playbackState = .seeking(to: target, resume: resume)
             playerSeek(to: cmTime, forceResume: false) { [weak self] finished in
                 guard let self, finished else { return }
+                
                 if resume {
                     self.playerResume()
                     self.playbackState = .playing
