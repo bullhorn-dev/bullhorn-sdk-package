@@ -42,6 +42,13 @@ extension BHHybridPlayer {
 
     func updatePlayNextSetting(_ value: Bool) {
         UserDefaults.standard.playNextEnabled = value
+        
+        if value {
+            if isActive() { preloadNextQueueItem() }
+        } else {
+            mediaPlayer?.clearNextItem()
+        }
+
         observersContainer.notifyObserversAsync {
             $0.hybridPlayer(self, playbackSettingsUpdated: self.settings)
         }

@@ -94,6 +94,12 @@ extension BHHybridPlayer {
     internal func nextQueuePost() -> BHPost? { queue.next(after: playerItem?.post.postId) }
 
     internal func preloadNextQueueItem() {
+        
+        guard UserDefaults.standard.playNextEnabled else {
+            mediaPlayer?.clearNextItem()
+            return
+        }
+        
         guard !isVideoAvailable else {
             mediaPlayer?.clearNextItem()
             return
