@@ -7,7 +7,7 @@ extension BHHybridPlayer: BHRemoteCommandCenterDelegate {
     func configureRemoteCommandCenter(_ configureBlock: (BHRemoteCommandCenterManager.Mode) -> Void) {
         if let validItem = playerItem, validItem.isStream {
             configureBlock(.liveRadioStream)
-        } else if playbackQueue.count > 1 {
+        } else if queue.count > 1 {
             configureBlock(.trackList(
                 backwardTimeIntervals: [settings.backwardLength],
                 forwardTimeIntervals: [settings.forwardLength],

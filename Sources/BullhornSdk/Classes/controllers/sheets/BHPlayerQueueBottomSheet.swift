@@ -71,7 +71,7 @@ class BHPlayerQueueBottomSheet: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(tableView)
         
-        let tableViewHeight = CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72)
+        let tableViewHeight = CGFloat(BHHybridPlayer.shared.queue.items.count * 72)
         heightConstraint = NSLayoutConstraint(item: tableView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: tableViewHeight)
         heightConstraint.isActive = true
 
@@ -114,7 +114,7 @@ class BHPlayerQueueBottomSheet: UIViewController {
     
     fileprivate func updateContent() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            let tableViewHeight = CGFloat(BHHybridPlayer.shared.playbackQueue.count * 72)
+            let tableViewHeight = CGFloat(BHHybridPlayer.shared.queue.items.count * 72)
             self.heightConstraint.constant = tableViewHeight
             self.tableView.reloadData()
         })
@@ -149,7 +149,7 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHHybridPlayer.shared.playbackQueue.count == 0 {
+        if BHHybridPlayer.shared.queue.items.count == 0 {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 
@@ -158,12 +158,12 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
             tableView.restore()
         }
 
-        return BHHybridPlayer.shared.playbackQueue.count
+        return BHHybridPlayer.shared.queue.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPlaybackQueueCell", for: indexPath) as! BHPlaybackQueueCell
-        let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
+        let item = BHHybridPlayer.shared.queue.items[indexPath.row]
         cell.isActive = BHHybridPlayer.shared.isInPlayer(item.post.id)
         cell.item = item
 
@@ -171,7 +171,7 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
+        let item = BHHybridPlayer.shared.queue.items[indexPath.row]
         let context = BHHybridPlayer.shared.playerItem?.autoplayContext
         
         BHHybridPlayer.shared.playRequest(with: item.post, playlist: [], autoplayContext: context, clearQueue: false)
@@ -182,7 +182,7 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
         if indexPath.row == 0 { return UISwipeActionsConfiguration(actions: []) }
         
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
-            let item = BHHybridPlayer.shared.playbackQueue[indexPath.row]
+            let item = BHHybridPlayer.shared.queue.items[indexPath.row]
             
             BHHybridPlayer.shared.removeFromPlaybackQueue(item.id)
             self.updateContent()
@@ -214,8 +214,9 @@ extension BHPlayerQueueBottomSheet: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if destinationIndexPath.row == 0 { return }
         
-        let movedItem = BHHybridPlayer.shared.playbackQueue.remove(at: sourceIndexPath.row)
-        BHHybridPlayer.shared.playbackQueue.insert(movedItem, at: destinationIndexPath.row)
+        if let movedItem = BHHybridPlayer.shared.queue.remove(at: sourceIndexPath.row) {
+            BHHybridPlayer.shared.queue.insert(movedItem, at: destinationIndexPath.row)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

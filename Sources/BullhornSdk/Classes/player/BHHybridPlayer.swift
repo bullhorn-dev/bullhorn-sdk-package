@@ -74,8 +74,6 @@ class BHHybridPlayer {
     internal var transcript: BHTranscript?
     internal var transcriptSegments: [BHSegment] { transcript?.segments ?? [] }
     
-    internal var playbackQueue: [BHQueueItem] = []
-
     // MARK: - UI flags
 
     var isFullScreen: Bool = false
@@ -103,6 +101,8 @@ class BHHybridPlayer {
     internal var bulletinManager = BHBulletinManager.shared
     internal var postsManager = BHPostsManager()
 
+    let queue = BHPlaybackQueueManager()
+
     // MARK: - Settings
 
     internal var settings = BHPlayerItem.PlaybackSettings.initial {
@@ -121,6 +121,8 @@ class BHHybridPlayer {
 
     init() {
         observersContainer = .init(notifyQueue: workingQueue)
+        
+        queue.delegate = self
 
         UserDefaults.standard.register(defaults: [
             UserDefaults.playNextEnabledDefaultsKey: true
@@ -328,14 +330,10 @@ class BHHybridPlayer {
             return
         }
 
-        // No preloaded item — regular transition (destroys and recreates player).
-        if let validItem = playerItem,
-           let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }),
-           index < playbackQueue.count - 1 {
-            playRequest(with: playbackQueue[playbackQueue.index(after: index)].post,
-                playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
-        } else if let nextItem = playbackQueue.first {
-            playRequest(with: nextItem.post, playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
+        if let validItem = playerItem, let next = queue.next(after: validItem.post.postId) {
+            playRequest(with: next, playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
+        } else if let first = queue.first {
+            playRequest(with: first, playlist: [], autoplayContext: playerItem?.autoplayContext, clearQueue: false)
         }
     }
 
@@ -345,8 +343,8 @@ class BHHybridPlayer {
 
         if player.currentTime() > 30 {
             performSeek(to: 0)
-        } else if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }), index > 0 {
-            _ = performStart(with: playbackQueue[playbackQueue.index(before: index)].post)
+        } else if let prev = queue.previous(before: validItem.post.postId) {
+            _ = performStart(with: prev)
         } else {
             performSeek(to: 0)
         }
@@ -358,21 +356,16 @@ class BHHybridPlayer {
 
     func hasPrevious() -> Bool {
         guard let validItem = playerItem, let player = mediaPlayer else { return false }
-        if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }) {
-            return (index > 0 || player.currentTime() > 30) && isActive()
-        }
-        return player.currentTime() > 30 && isActive()
+        return (queue.hasPrevious(before: validItem.post.postId) || player.currentTime() > 30) && isActive()
     }
 
     func hasNext() -> Bool {
         guard let validItem = playerItem else { return false }
-        if let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }) {
-            return index < playbackQueue.count - 1
-        }
-        return false
+        return queue.hasNext(after: validItem.post.postId)
     }
 
     func currentPosition() -> TimeInterval { mediaPlayer?.currentTime() ?? 0 }
+
     func totalDuration()   -> TimeInterval { mediaPlayer?.duration() ?? max(TimeInterval(playerItem?.duration ?? 0), 0) }
 
     func getVideoLayer() -> UIView? { mediaPlayer?.getVideoLayer() }

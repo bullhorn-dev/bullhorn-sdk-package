@@ -95,13 +95,7 @@ extension BHHybridPlayer {
 
     // MARK: - Seamless Queue Preloading
 
-    internal func nextQueuePost() -> BHPost? {
-        guard let validItem = playerItem else { return nil }
-        guard let index = playbackQueue.firstIndex(where: { $0.id == validItem.post.postId }),
-              index < playbackQueue.count - 1 else { return nil }
-
-        return playbackQueue[playbackQueue.index(after: index)].post
-    }
+    internal func nextQueuePost() -> BHPost? { queue.next(after: playerItem?.post.postId) }
 
     internal func preloadNextQueueItem() {
         guard !isVideoAvailable else {

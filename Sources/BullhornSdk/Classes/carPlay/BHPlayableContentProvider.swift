@@ -51,7 +51,7 @@ extension BHPlayableContentProvider {
                 
                 if index < episodes.count {
                     let post = episodes[index]
-                    let order: BHHybridPlayer.BHQueueOrder = autoplayContext == .podcast ? .straightAndReversed : .straight
+                    let order: BHPlaybackQueueManager.BHQueueOrder = autoplayContext == .podcast ? .straightAndReversed : .straight
                     
                     let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: episodes, order: order)
                     

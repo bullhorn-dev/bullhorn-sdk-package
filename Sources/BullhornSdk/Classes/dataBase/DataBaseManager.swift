@@ -311,7 +311,7 @@ class DataBaseManager {
     func updateQueue() -> Bool {
         
         var result: Bool = true
-        let items = BHHybridPlayer.shared.playbackQueue
+        let items = BHHybridPlayer.shared.queue.items
 
         for item in items {
             result = updateQueueItem(with: item)
