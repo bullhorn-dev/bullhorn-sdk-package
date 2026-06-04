@@ -50,9 +50,7 @@ extension BHHybridPlayer {
             urlToPlay = fileURL
         }
         
-        let urlToParse = urlToPlay.isFileURL ? urlToPlay : validItem.post.url!
-
-        BHID3Parser.isGoodForStream(urlToParse) { [weak self] _, _, isVideo in
+        BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
             guard let self else { return }
             guard self.playerItem?.post.postId == expectedPostId else {
                 BHLog.p("\(#function) skipping stale callback for \(expectedPostId)")
@@ -62,7 +60,7 @@ extension BHHybridPlayer {
             self.isVideoAvailable = isVideo || validPost.hasVideo()
 
             let player = BHSystemMediaPlayer(
-                withUrl: urlToParse,
+                withUrl: urlToPlay,
                 coverUrl: self.playerItem?.post.coverUrl,
                 isVideo: self.isVideoAvailable)
 
@@ -127,7 +125,6 @@ extension BHHybridPlayer {
         let urlToPlay: URL
 
         if let fileUrl = BHDownloadsManager.shared.getFileUrl(expectedNextId) {
-            BHLog.p("getFileUrl=\(fileUrl.path) exists=\(FileManager.default.fileExists(atPath: fileUrl.path))")
             urlToPlay = fileUrl
         } else if let remoteUrl = nextPost.recording?.publishUrl,
                   BHReachabilityManager.shared.isConnected() {
