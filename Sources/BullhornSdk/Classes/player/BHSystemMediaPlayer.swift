@@ -18,7 +18,6 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     // MARK: - Private
 
-    /// var so retryConnection can recreate it when AVQueuePlayer is in failed state.
     private var player: AVQueuePlayer
     private var playerItem: AVPlayerItem
     private let isVideoContent: Bool

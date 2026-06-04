@@ -284,6 +284,8 @@ class BHHybridPlayer {
             let position: Double
             if isEnded() {
                 position = 0
+            } else if playerItem?.isStream == true {
+                position = 0
             } else {
                 position = playerItem?.position ?? 0
             }
