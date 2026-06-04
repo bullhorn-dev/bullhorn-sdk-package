@@ -306,10 +306,14 @@ class BHDownloadsManager {
     }
 
     func getFileUrl(_ postId: String) -> URL? {
-        if let item = downloadsQueue.first(where: { $0.post.id == postId }) {
-            return item.file
+        guard let stored = item(for: postId)?.file else { return nil }
+
+        let fileName = stored.lastPathComponent
+        guard let resolved = FileManager.default.documentsDirectory()?.appendingPathComponent(fileName),
+              FileManager.default.fileExists(atPath: resolved.path) else {
+            return nil
         }
-        return nil
+        return resolved
     }
     
     func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {

@@ -46,12 +46,8 @@ extension BHHybridPlayer {
 
         let expectedPostId = validItem.post.postId
 
-        if let cachedUrl = validItem.post.file {
-            let fileName = cachedUrl.lastPathComponent
-            if let fileURL = FileManager.default.documentsDirectory()?.appendingPathComponent(fileName),
-               FileManager.default.fileExists(atPath: fileURL.path) {
-                urlToPlay = fileURL
-            }
+        if let fileURL = BHDownloadsManager.shared.getFileUrl(expectedPostId) {
+            urlToPlay = fileURL
         }
         
         let urlToParse = urlToPlay.isFileURL ? urlToPlay : validItem.post.url!
@@ -121,15 +117,18 @@ extension BHHybridPlayer {
             return
         }
 
-        guard var urlToPlay = nextPost.recording?.publishUrl else {
+        let expectedNextId = nextPost.id
+        let urlToPlay: URL
+
+        if let fileUrl = BHDownloadsManager.shared.getFileUrl(expectedNextId) {
+            BHLog.p("getFileUrl=\(fileUrl.path) exists=\(FileManager.default.fileExists(atPath: fileUrl.path))")
+            urlToPlay = fileUrl
+        } else if let remoteUrl = nextPost.recording?.publishUrl,
+                  BHReachabilityManager.shared.isConnected() {
+            urlToPlay = remoteUrl
+        } else {
             mediaPlayer?.clearNextItem()
             return
-        }
-
-        let expectedNextId = nextPost.id
-        
-        if let fileUrl = BHDownloadsManager.shared.getFileUrl(expectedNextId) {
-            urlToPlay = fileUrl
         }
 
         BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
