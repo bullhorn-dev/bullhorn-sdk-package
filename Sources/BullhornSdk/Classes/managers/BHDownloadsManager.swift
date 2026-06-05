@@ -265,18 +265,78 @@ final class BHDownloadsManager: NSObject {
         groupItems()
         notifyState(item)
 
-        requestDownloadNotificationIfNeeded(for: item.post)
+        showActiveDownloadNotification(for: item)
 
         BHLog.p("Start download \(item.id) reason:\(item.reason) cellular:\(request.allowsCellularAccess)")
         task.resume()
     }
 
-    private func requestDownloadNotificationIfNeeded(for post: BHPost) {
+    // MARK: - Active download notification
+    //
+    // One persistent local notification tracks the single active download (variant
+    // A). It's shown at 0% on start, its body is updated on each throttled progress
+    // tick (~5% steps), and it's removed when the active download finishes and no
+    // other download takes its place. A stable identifier in BHNotificationsManager
+    // makes every update replace the same notification in place.
+
+    /// Start path: request authorization once, then show the notification at 0%.
+    /// Start path: show at 0% if notifications are already allowed; if the user
+    /// hasn't decided yet, opt in *provisionally* (no system prompt, quiet
+    /// delivery) and then show. Never re-prompts and never shows when denied.
+    private func showActiveDownloadNotification(for item: BHDownloadItem) {
         guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { didAllow, error in
-            if error == nil {
-                BHNotificationsManager.shared.triggerDownloadEpisodeNotification(with: post)
+        let post = item.post
+        let itemId = item.id
+        let center = UNUserNotificationCenter.current()
+
+        // The auth check is async; by the time it returns the download may already
+        // have finished (e.g. a fast/cached file). Only show if it's still active —
+        // otherwise we'd publish a notification with nothing left to remove it.
+        let presentIfStillActive = { [weak self] in
+            DispatchQueue.main.async {
+                guard let self, self.activeDownloadIds.contains(itemId) else { return }
+                BHNotificationsManager.shared.showDownloadEpisodeNotification(for: post, progress: 0)
             }
+        }
+
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .authorized, .provisional, .ephemeral:
+                presentIfStillActive()
+            case .notDetermined:
+                center.requestAuthorization(options: [.provisional]) { granted, _ in
+                    guard granted else { return }
+                    presentIfStillActive()
+                }
+            case .denied:
+                break
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    /// Progress path: silent in-place update, no authorization round-trip.
+    private func updateActiveDownloadNotification(for item: BHDownloadItem) {
+        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
+        BHNotificationsManager.shared.showDownloadEpisodeNotification(for: item.post, progress: item.progress)
+    }
+
+    private func removeActiveDownloadNotification() {
+        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
+        BHNotificationsManager.shared.removeDownloadEpisodeNotification()
+    }
+
+    /// Removes the notification with a short guarded retry. Immediate-trigger
+    /// notifications deliver asynchronously, so a show submitted moments earlier
+    /// (e.g. the last progress tick) can land just AFTER the removal and linger.
+    /// The retry only fires if nothing became active in the meantime, so it never
+    /// clobbers a freshly started download's notification.
+    private func clearActiveDownloadNotification() {
+        removeActiveDownloadNotification()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            guard let self, self.activeDownloadIds.isEmpty else { return }
+            self.removeActiveDownloadNotification()
         }
     }
 
@@ -345,6 +405,7 @@ final class BHDownloadsManager: NSObject {
         downloadsQueue.removeAll()
         activeDownloadIds.removeAll()
         groupItems()
+        clearActiveDownloadNotification()
 
         observersContainer.notifyObserversAsync { $0.downloadsManager(self, allRemoved: true) }
     }
@@ -365,6 +426,12 @@ final class BHDownloadsManager: NSObject {
         }
         groupItems()
         pumpQueue()
+
+        // If the removed item was the active download and nothing replaced it,
+        // drop its notification (otherwise the new startDownload already replaced it).
+        if activeDownloadIds.isEmpty {
+            clearActiveDownloadNotification()
+        }
     }
 
     /// Evicts the oldest auto downloads so a new auto fits under the limit.
@@ -541,13 +608,24 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
                     totalBytesExpectedToWrite: Int64) {
         guard totalBytesExpectedToWrite > 0 else { return }
         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-        let id = downloadTask.taskDescription
+        guard let id = downloadTask.taskDescription else { return }
+
+        // Throttle on the (serial) delegate queue. didWriteData fires per chunk —
+        // dispatching each one to main floods the run loop and janks anything
+        // animating there (e.g. an options dialog). Only cross to main on a real
+        // ~5% step (or the final tick).
+        let last = lastReportedProgress[id] ?? 0
+        guard progress - last > 0.05 || progress >= 1 else { return }
+        lastReportedProgress[id] = progress
 
         DispatchQueue.main.async { [weak self] in
-            guard let self, let id, let item = self.cachedItem(id) else { return }
-            if progress - item.progress > 0.05 || progress >= 1 {
-                item.progress = progress
-                self.notifyProgress(item)
+            guard let self, let item = self.cachedItem(id) else { return }
+            item.progress = progress
+            self.notifyProgress(item)
+            // Skip the 100% tick: it would sit right before the completion
+            // removal and, delivering asynchronously, could outlive it.
+            if progress < 1 {
+                self.updateActiveDownloadNotification(for: item)
             }
         }
     }
@@ -588,6 +666,9 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
                     didCompleteWithError error: Error?) {
         let id = task.taskDescription
 
+        // Delegate-queue cleanup of the throttle state before hopping to main.
+        if let id { lastReportedProgress[id] = nil }
+
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             if let id { self.activeDownloadIds.remove(id) }
@@ -619,13 +700,16 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
                 self.updateStorageItem(item)
                 self.groupItems()
                 self.notifyState(item)
-
-                if UserDefaults.standard.isPushNotificationsFeatureEnabled {
-                    BHNotificationsManager.shared.removeAllDeliveredNotifications()
-                }
             }
 
-            self.pumpQueue()   // variant A: the next pending download starts here
+            // variant A: the next pending download starts here. If one does,
+            // startDownload re-shows the notification for the new active item (same
+            // identifier => replaced in place). If nothing is left running, drop it.
+            self.pumpQueue()
+
+            if self.activeDownloadIds.isEmpty {
+                self.clearActiveDownloadNotification()
+            }
         }
     }
 

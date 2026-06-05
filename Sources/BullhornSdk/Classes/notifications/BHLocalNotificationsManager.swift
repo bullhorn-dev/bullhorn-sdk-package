@@ -71,6 +71,30 @@ class BHLocalNotificationsManager: NSObject {
         }
 
     }
+
+    /// Adds (or, with a stable `identifier`, replaces in place) a local
+    /// notification. Pass `trigger: nil` for immediate delivery — required for a
+    /// single notification that is updated repeatedly (e.g. download progress).
+    func triggerLocalNotification(with content: UNMutableNotificationContent, identifier: String, trigger: UNNotificationTrigger? = nil) {
+
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                BHLog.p("\(#function) - Error adding notification request: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Removes a specific notification (both pending and already delivered) by its
+    /// request identifier — unlike removeAllDeliveredNotifications, which clears
+    /// everything.
+    func removeNotification(withRequestIdentifier identifier: String) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        center.removeDeliveredNotifications(withIdentifiers: [identifier])
+        updateApplicationIconBadgeNumber()
+    }
     
     // MARK: - Private
 
@@ -163,3 +187,4 @@ extension BHLocalNotificationsManager: UNUserNotificationCenterDelegate {
         }
     }
 }
+

@@ -145,28 +145,62 @@ class BHNotificationsManager: NSObject {
         localNotificationsManager.removeDeliveredNotifications(with: identifier)
     }
     
+    /// Stable identifier for the single "active download" notification, so each
+    /// progress update replaces it in place instead of stacking new ones.
+    static let activeDownloadNotificationIdentifier = "BullhornSdk.DownloadEpisode.active"
+
+    /// Backward-compatible entry point: shows the active-download notification at 0%.
     func triggerDownloadEpisodeNotification(with post: BHPost) {
-        BHLog.p("\(#function) - postID: \(post.id)")
-        
+        showDownloadEpisodeNotification(for: post, progress: 0)
+    }
+
+    /// Shows or updates the single persistent "active download" notification.
+    /// `progress` is 0...1; the body ticks "Downloading… N%". Alerts (sound) only
+    /// on the first appearance (0%); later updates are silent in-place replacements.
+    func showDownloadEpisodeNotification(for post: BHPost, progress: Double) {
+        let percent = max(0, min(100, Int((progress * 100).rounded())))
+        let message = "Downloading… \(percent)%"
+
+        BHLog.p("\(#function) - postID: \(post.id), \(percent)%")
+
         let content = UNMutableNotificationContent()
         content.title = post.title
-        content.body = "Downloading episode..."
-        content.sound = UNNotificationSound.default
+        content.body = message
+        content.sound = (percent == 0) ? UNNotificationSound.default : nil
+
+        if #available(iOS 15.0, *) {
+            // First appearance may alert once; every progress update is a silent
+            // in-place update that must not pop a banner or wake the screen while
+            // the app is backgrounded.
+            content.interruptionLevel = (percent == 0) ? .active : .passive
+        }
+
         let payload = [
             NotificationInfo.DataKey.category.rawValue: NotificationInfo.PayloadType.downloadEpisode.rawValue,
         ] as [String : Any]
         content.userInfo = [
             NotificationInfo.DataKey.aps.rawValue: payload,
             NotificationInfo.DataKey.title.rawValue: post.title,
-            NotificationInfo.DataKey.message.rawValue: "Downloading episode...",
+            NotificationInfo.DataKey.message.rawValue: message,
             NotificationInfo.DataKey.eventUuid.rawValue: post.id,
             NotificationInfo.DataKey.event.rawValue: post.title,
             NotificationInfo.DataKey.userUuid.rawValue: post.user.id,
             NotificationInfo.DataKey.user.rawValue: post.user.fullName ?? "",
             NotificationInfo.DataKey.userPicture.rawValue: post.user.profilePicture?.absoluteString ?? "",
         ] as [String : Any]
-        
-        localNotificationsManager.triggerLocalNotification(with: content)
+
+        // Stable id + nil trigger => the existing notification is replaced in place.
+        localNotificationsManager.triggerLocalNotification(
+            with: content,
+            identifier: Self.activeDownloadNotificationIdentifier,
+            trigger: nil)
+    }
+
+    /// Removes the active-download notification (used when the active download
+    /// finishes and nothing else is running).
+    func removeDownloadEpisodeNotification() {
+        BHLog.p("\(#function)")
+        localNotificationsManager.removeNotification(withRequestIdentifier: Self.activeDownloadNotificationIdentifier)
     }
 
     // MARK: - Private
@@ -329,3 +363,4 @@ extension BHNotificationsManager: BHLocalNotificationsManagerDelegate {
         performDefaultAction(for: info, completionHandler: completionHandler)
     }
 }
+
