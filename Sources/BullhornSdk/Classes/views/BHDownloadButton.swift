@@ -31,8 +31,24 @@ class BHDownloadButton: UIView {
         return progress
     }()
 
+    private let activityIndicator: BHActivityIndicatorView = {
+        let indicator = BHActivityIndicatorView(frame: .zero, type: .circleStrokeSpin, color: .tertiary())
+        return indicator
+    }()
+
     deinit {
-//        BHDownloadsManager.shared.removeListener(self)
+        // Intentionally NOT removing the listener here.
+        //
+        // This button lives in a reused UITableViewCell (BHPostCell) and is
+        // deallocated frequently. removeListener(self) dispatches async and
+        // captures the listener strongly — i.e. it retains an object whose deinit
+        // is already running, which crashed on cell reuse (use-after-free).
+        //
+        // The observers container is expected to hold listeners weakly, so a dead
+        // button drops out on its own and no explicit removal is needed. If that
+        // ever stops being true, remove from a point where the button is still
+        // alive (e.g. the cell's prepareForReuse), or via a non-retaining
+        // identifier (ObjectIdentifier) rather than the object itself.
     }
 
     override init(frame: CGRect) {
@@ -63,19 +79,25 @@ class BHDownloadButton: UIView {
         
         addSubview(button)
         addSubview(progressView)
+        addSubview(activityIndicator)
         
         button.translatesAutoresizingMaskIntoConstraints = false
         progressView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: frame.size.width),
             button.heightAnchor.constraint(equalToConstant: frame.size.height),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
             button.centerYAnchor.constraint(equalTo: centerYAnchor),
-            progressView.widthAnchor.constraint(equalToConstant: frame.size.width),
-            progressView.heightAnchor.constraint(equalToConstant: frame.size.height),
+            progressView.widthAnchor.constraint(equalToConstant: frame.size.width - 4),
+            progressView.heightAnchor.constraint(equalToConstant: frame.size.height - 4),
             progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            progressView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            progressView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: frame.size.width - 4),
+            activityIndicator.heightAnchor.constraint(equalToConstant: frame.size.height - 4),
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
         BHDownloadsManager.shared.addListener(self)
@@ -88,12 +110,14 @@ class BHDownloadButton: UIView {
         var image: UIImage? = nil
         var bgColor: UIColor = reason == .auto ? .fxPrimaryBackground() : .clear
         var hasProgress: Bool = false
+        var hasSpinner: Bool = false
             
         switch status {
         case .pending:
-            image = UIImage(systemName: "arrow.down.to.line")?.withConfiguration(mediumConfig)
-            accessibilityLabel = "Download \(context)"
-            bgColor = .defaultYellow()
+            image = UIImage(systemName: "stop")?.withConfiguration(smallConfig)
+            bgColor = .clear
+            hasSpinner = true
+            accessibilityLabel = "Waiting to download \(context)"
         case .start:
             image = UIImage(systemName: "arrow.down.to.line")?.withConfiguration(mediumConfig)
             accessibilityLabel = "Download \(context)"
@@ -113,12 +137,13 @@ class BHDownloadButton: UIView {
         button.setImage(image, for: .normal)
         button.backgroundColor = bgColor
             
-        if hasProgress {
-            progressView.setProgress(0, animated: false)
-            progressView.isHidden = false
+        progressView.setProgress(0, animated: false)
+        progressView.isHidden = !hasProgress
+
+        if hasSpinner {
+            activityIndicator.startAnimating()
         } else {
-            progressView.setProgress(0, animated: false)
-            progressView.isHidden = true
+            activityIndicator.stopAnimating()
         }
         
         /// accessability
@@ -127,27 +152,23 @@ class BHDownloadButton: UIView {
         
         button.isAccessibilityElement = false
         progressView.isAccessibilityElement = false
-
+        activityIndicator.isAccessibilityElement = false
     }
     
     // MARK: - Actions
     
     @objc private func onPress(_ sender: Any) {
         guard let validPost = post else { return }
-        
-        if !BHReachabilityManager.shared.isConnected() {
-            UIApplication.topViewController()?.showError("Failed to download episode. The Internet connection is lost.")
-        }
-        
+
         switch status {
-        case .start:
+        case .start, .failure:
+            // Hand off to the manager, which owns connectivity policy: if offline,
+            // the item stays `.pending` and resumes automatically once the
+            // connection returns (see onConnectionChangedNotification → pumpQueue).
             BHDownloadsManager.shared.download(validPost, reason: .manually)
         case .pending,
              .progress,
              .success:
-            break
-        case .failure:
-            BHDownloadsManager.shared.download(validPost, reason: .manually)
             break
         }
 
@@ -191,3 +212,4 @@ extension BHDownloadButton: BHDownloadsManagerListener {
     
     func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {}
 }
+
