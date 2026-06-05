@@ -60,11 +60,15 @@ class BHNetworkManager {
         splittedUsers.removeAll()
 
         if users.count == 0 { return }
-        
-        if let selectedChannel = channels.first(where: { $0.id == channelId }) {
+
+        let resolvedChannel = channels.first(where: { $0.id == channelId })
+            ?? channels.first(where: { $0.id == BHChannel.mainChannelId })
+        let resolvedChannelId = resolvedChannel?.id ?? channelId
+
+        if let selectedChannel = resolvedChannel {
             if selectedChannel.groupPodcastsByCategories == true {
                 selectedChannel.categories?.forEach({ category in
-                    let cusers = users.filter({ $0.belongsToCategory(category.id) && $0.belongsToChannel(channelId) })
+                    let cusers = users.filter({ $0.belongsToCategory(category.id) && $0.belongsToChannel(resolvedChannelId) })
                     if cusers.count > 0 {
                         let uimodel = UICategoryModel(category: category, users: cusers)
                         splittedUsers.append(uimodel)
@@ -72,7 +76,7 @@ class BHNetworkManager {
                 })
             } else {
                 if let category = selectedChannel.categories?.first {
-                    let cusers = users.filter({ $0.belongsToChannel(channelId) })
+                    let cusers = users.filter({ $0.belongsToChannel(resolvedChannelId) })
                     if cusers.count > 0 {
                         let uimodel = UICategoryModel(category: category, users: cusers)
                         splittedUsers.append(uimodel)

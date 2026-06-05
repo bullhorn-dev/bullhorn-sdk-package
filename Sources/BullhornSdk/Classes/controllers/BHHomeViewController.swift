@@ -153,7 +153,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                 switch response {
                 case .success:
                     completeBlock()
-                    if BHNetworkManager.shared.users.count > 0 {
+                    if BHNetworkManager.shared.splittedUsers.count > 0 {
                         self.defaultHideActivityIndicatorView()
                     }
                 case .failure(error: let error):
