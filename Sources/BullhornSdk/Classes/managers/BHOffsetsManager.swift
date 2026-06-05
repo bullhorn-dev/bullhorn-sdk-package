@@ -29,7 +29,7 @@ class BHOffsetsManager {
 
     func removeOffset(_ postId: String) {
         offsets.removeAll(where: { $0.id == postId })
-        self.removeOffset(postId)
+        self.removeStorageOffset(postId)
     }
 
     // MARK: - Storage Providers

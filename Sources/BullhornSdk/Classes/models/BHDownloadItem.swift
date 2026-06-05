@@ -1,11 +1,6 @@
 
 import Foundation
 
-enum DownloadType: Int, Codable {
-    case atOnce = 0
-    case queue
-}
-
 enum DownloadReason: Int, Codable {
     case manually = 0
     case auto

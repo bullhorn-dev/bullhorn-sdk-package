@@ -14,7 +14,9 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
 
     fileprivate var selectedPost: BHPost?
     fileprivate var selectedTab: BHPostTabs = .details
-    
+
+    private var sections: [UIDownloadsModel] = []
+
     let dateFormatter: DateFormatter = DateFormatter()
 
     // MARK: - Lifecycle
@@ -52,8 +54,11 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        BHDownloadsManager.shared.updateItems()
-        tableView.reloadData()
+        BHDownloadsManager.shared.updateItems { [weak self] in
+            DispatchQueue.main.async {
+                self?.reloadDownloads()
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,20 +77,26 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     
     // MARK: - Private
     
-    fileprivate func configureNavigationItems() {
+    private func configureNavigationItems() {
         
         navigationItem.title = NSLocalizedString("Downloaded Episodes", comment: "")
         navigationItem.largeTitleDisplayMode = .never
 
         let config = UIImage.SymbolConfiguration(weight: .light)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash")?.withConfiguration(config), style: .plain, target: self, action: #selector(removeAllButtonAction(_:)))
-        navigationItem.rightBarButtonItem?.isEnabled = BHDownloadsManager.shared.items.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = !sections.isEmpty
         navigationItem.rightBarButtonItem?.accessibilityLabel = "Remove downloads"
         
         let backButton = UIBarButtonItem()
         backButton.title = ""
         backButton.accessibilityLabel = "Back"
         navigationItem.backBarButtonItem = backButton
+    }
+    
+    private func reloadDownloads() {
+        sections = BHDownloadsManager.shared.groupedItems
+        configureNavigationItems()
+        tableView.reloadData()
     }
     
     override func openPostDetails(_ post: BHPost?, tab: BHPostTabs = .details) {
@@ -112,7 +123,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
 extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return BHDownloadsManager.shared.groupedItems[section].date.prettyString()
+        return sections[section].date.prettyString()
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -123,14 +134,14 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if BHDownloadsManager.shared.groupedItems.count == 1 {
+        if sections.count == 1 {
             return 0
         }
         return 50.0
     }
         
     func numberOfSections(in tableView: UITableView) -> Int {
-        if BHDownloadsManager.shared.groupedItems.count == 0 && !activityIndicator.isAnimating {
+        if sections.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 
@@ -139,19 +150,19 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
             tableView.restore()
         }
 
-        return BHDownloadsManager.shared.groupedItems.count
+        return sections.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return BHDownloadsManager.shared.groupedItems[section].posts.count
+        return sections[section].posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BHPostCell", for: indexPath) as! BHPostCell
-        let post = BHDownloadsManager.shared.groupedItems[indexPath.section].posts[indexPath.row]
+        let post = sections[indexPath.section].posts[indexPath.row]
         cell.post = post
         
-        let posts = BHDownloadsManager.shared.items.map({ $0.post })
+        let posts = sections.flatMap { $0.posts }
         cell.playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: posts, order: .straight)
 
         cell.shareBtnTapClosure = { [weak self] url in
@@ -170,7 +181,7 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openPostDetails(BHDownloadsManager.shared.groupedItems[indexPath.section].posts[indexPath.row])
+        openPostDetails(sections[indexPath.section].posts[indexPath.row])
     }
 }
 
@@ -178,27 +189,14 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
 
 extension BHDownloadsViewController: BHDownloadsManagerListener {
     
-    func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
-
     func downloadsManager(_ manager: BHDownloadsManager, itemStateUpdated item: BHDownloadItem) {
-        if item.status == .start {
-            DispatchQueue.main.async {
-                self.configureNavigationItems()
-                self.tableView.reloadData()
-            }
-        }
+        DispatchQueue.main.async { self.reloadDownloads() }
     }
-    
     func downloadsManager(_ manager: BHDownloadsManager, allRemoved status: Bool) {
-        DispatchQueue.main.async {
-            self.configureNavigationItems()
-            self.tableView.reloadData()
-        }
+        DispatchQueue.main.async { self.reloadDownloads() }
     }
-    
     func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        DispatchQueue.main.async { self.reloadDownloads() }
     }
+    func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
 }

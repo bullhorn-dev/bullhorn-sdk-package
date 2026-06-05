@@ -1,7 +1,7 @@
-
 import Foundation
 import UserNotifications
-internal import Alamofire
+
+// MARK: - UI grouping (unchanged)
 
 enum DownloadDate: Int, Comparable {
     case today = 0
@@ -10,7 +10,7 @@ enum DownloadDate: Int, Comparable {
     case month
     case year
     case earlier
-    
+
     func prettyString() -> String {
         switch self {
         case .today: return "Today"
@@ -21,10 +21,8 @@ enum DownloadDate: Int, Comparable {
         case .earlier: return "Earlier"
         }
     }
-    
-    static func < (lhs: DownloadDate, rhs: DownloadDate) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
+
+    static func < (lhs: DownloadDate, rhs: DownloadDate) -> Bool { lhs.rawValue < rhs.rawValue }
 }
 
 struct UIDownloadsModel {
@@ -39,88 +37,73 @@ protocol BHDownloadsManagerListener: ObserverProtocol {
     func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager)
 }
 
-class BHDownloadsManager {
- 
+// MARK: - BHDownloadsManager
+//
+// Threading: main-confined. The in-memory `downloadsQueue` is a cache for sync
+// reads (getFileUrl / isPostDownloaded / item(for:)); the source of truth is the
+// DB, because the process can be killed and relaunched mid-download. All public
+// mutations and all URLSession delegate callbacks run on main (delegate callbacks
+// hop via DispatchQueue.main.async). Debug builds assert the contract.
+//
+// Download model: ONE active background download at a time (variant A). The rest
+// stay `.pending` in the DB; the next is started from the completion callback, so
+// the sequence survives a process restart. Manual downloads take priority over
+// auto in selection but never preempt the active one. Auto downloads run on WiFi
+// only (per-request allowsCellularAccess = false + a WiFi gate in selection).
+
+final class BHDownloadsManager: NSObject {
+
     static let shared = BHDownloadsManager()
 
     private(set) var isLoaded = false
 
-    private let autoDownloadsMaxCount: Int = 10
+    private let autoDownloadsMaxCount = 10
+
+    /// Set from AppDelegate's handleEventsForBackgroundURLSession(_:completionHandler:).
+    var backgroundCompletionHandler: (() -> Void)?
 
     private let observersContainer: ObserversContainerNotifyingOnQueue<BHDownloadsManagerListener>
-    private let workingQueue = DispatchQueue.init(label: "BHDownloadsManager.Working", target: .global())
+    private let workingQueue = DispatchQueue(label: "BHDownloadsManager.Working", target: .global())
 
-    let progressQueue = DispatchQueue(label: "com.alamofire.progressQueue", qos: .utility)
-    
-    fileprivate var downloadsQueue = [BHDownloadItem]()
-    
-    var items: [BHDownloadItem] {
-        return downloadsQueue.sorted(by: { $0.time > $1.time })
-    }
-    
-    var completedItems: [BHDownloadItem] {
-        return downloadsQueue
-            .filter({ $0.status.isSuccess() })
-            .sorted(by: { $0.time > $1.time })
-    }
+    /// Main-confined cache (see class note).
+    private var downloadsQueue = [BHDownloadItem]()
 
-    // MARK: - group items for UI
+    /// ids of currently-running session tasks (0 or 1 under variant A).
+    private var activeDownloadIds = Set<String>()
 
-    let calendar = Calendar.current
-    var groupedItems: [UIDownloadsModel] = []
+    private static let sessionIdentifier = "com.bullhorn.downloads.background"
 
-    func groupItems() {
-        groupedItems.removeAll()
-        
-        let items = downloadsQueue.sorted(by: { $0.time > $1.time })
-        let now = Date()
-        var grouped: [DownloadDate: [BHDownloadItem]] = [:]
-        var models: [UIDownloadsModel] = []
+    private lazy var session: URLSession = {
+        let cfg = URLSessionConfiguration.background(withIdentifier: Self.sessionIdentifier)
+        cfg.sessionSendsLaunchEvents = true
+        cfg.isDiscretionary = false
+        cfg.allowsCellularAccess = true   // real gate is per-request (auto = false)
+        return URLSession(configuration: cfg, delegate: self, delegateQueue: nil)
+    }()
 
-        for item in items {
-            let date = Date(timeIntervalSince1970: item.time)
-            var key: DownloadDate = .earlier
+    // MARK: Init
 
-            if calendar.isDateInToday(date) {
-                key = .today
-            } else if calendar.isDateInYesterday(date) {
-                key = .yesterday
-            } else if calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear) {
-                key = .week
-            } else if calendar.isDate(date, equalTo: now, toGranularity: .month) {
-                key = .month
-            } else if calendar.isDate(date, equalTo: now, toGranularity: .year) {
-                key = .year
-            } else {
-                key = .earlier
-            }
-
-            if !grouped.keys.contains(where: { $0 == key}) { grouped[key] = [] }
-            grouped[key]?.append(item)
-        }
-        
-        for (date, values) in grouped {
-            let uiModel = UIDownloadsModel(date: date,
-                                           posts: values.map { $0.post })
-            models.append(uiModel)
-        }
-        
-        groupedItems = models.sorted(by: { $0.date < $1.date })
-    }
-    
-    // MARK: - Initialization
-    
-    init() {
+    override init() {
         observersContainer = .init(notifyQueue: workingQueue)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
+        super.init()
+
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(onConnectionChangedNotification(notification:)),
+            name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
+
+        // Touch the session so it reconnects to any tasks still running from a
+        // previous launch and begins delivering their delegate callbacks.
+        _ = session
     }
 
-    deinit {
-        cancelAll()
+    @inline(__always)
+    private func assertMain() {
+        #if DEBUG
+        dispatchPrecondition(condition: .onQueue(.main))
+        #endif
     }
 
-    // MARK: - Public listener
+    // MARK: - Listeners
 
     func addListener(_ listener: BHDownloadsManagerListener) {
         workingQueue.async { self.observersContainer.addObserver(listener) }
@@ -129,185 +112,59 @@ class BHDownloadsManager {
     func removeListener(_ listener: BHDownloadsManagerListener) {
         workingQueue.async { self.observersContainer.removeObserver(listener) }
     }
-    
-    // MARK: - Public SDK
-    
-    func hasActiveDouwnloads() -> Bool {
-        return downloadsQueue.first(where: { $0.status.isFetching() }) != nil
+
+    private func notifyState(_ item: BHDownloadItem) {
+        observersContainer.notifyObserversAsync { $0.downloadsManager(self, itemStateUpdated: item) }
     }
-    
-    // MARK: - Public
-    
+
+    private func notifyProgress(_ item: BHDownloadItem) {
+        observersContainer.notifyObserversAsync { $0.downloadsManager(self, itemProgressUpdated: item) }
+    }
+
+    private func notifyItemsUpdated() {
+        observersContainer.notifyObserversAsync { $0.downloadsManagerItemsUpdated(self) }
+    }
+
+    // MARK: - Reads (main-confined)
+
+    var items: [BHDownloadItem] {
+        assertMain()
+        return downloadsQueue.sorted { $0.time > $1.time }
+    }
+
+    var completedItems: [BHDownloadItem] {
+        assertMain()
+        return downloadsQueue.filter { $0.status.isSuccess() }.sorted { $0.time > $1.time }
+    }
+
     func item(for postId: String) -> BHDownloadItem? {
-        return downloadsQueue.first(where: { $0.post.id == postId })
+        assertMain()
+        return cachedItem(postId)
     }
 
-    func updateItems(completion: (() -> Void)? = nil) {
-        fetchStorageItems(completion: completion)
-    }
-    
-    func updatePost(_ post: BHPost) {
-        if let row = downloadsQueue.firstIndex(where: {$0.post.id == post.id}) {
-            self.downloadsQueue[row].post = post
-            self.updateStorageItem(self.downloadsQueue[row])
-            self.groupItems()
-            
-            self.observersContainer.notifyObserversAsync {
-                $0.downloadsManagerItemsUpdated(self)
-            }
-        }
-    }
-    
-    func autoDownloadNewEpisodeIfNeeded(_ post: BHPost) {
-        BHLog.p("\(#function), postId: \(post.id)")
-        
-        if !UserDefaults.standard.isAutoDownloadsFeatureEnabled { return }
-        
-        if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
-            BHLog.p("\(#function) - connection expensive. Don't download the episode.")
-            return
-        }
-        
-        if post.user.autoDownload && !post.isDownloaded {
-            self.download(post, reason: .auto)
-        }
+    func hasActiveDownloads() -> Bool {
+        assertMain()
+        return !activeDownloadIds.isEmpty
     }
 
-    func autoDownloadNewEpisodesIfNeeded() {
-        BHLog.p("\(#function)")
-
-        if !UserDefaults.standard.isAutoDownloadsFeatureEnabled { return }
-
-        if BHReachabilityManager.shared.isConnectedExpensive() || !BHReachabilityManager.shared.isConnected() {
-            BHLog.p("\(#function) - connection expensive. Stop autodownloads.")
-            return
-        }
-
-        BHFeedManager.shared.getFeedActualPosts() { response in
-            switch response {
-            case .success(posts: let posts):
-                for post in posts {
-                    if post.user.autoDownload && !post.isDownloaded {
-                        self.clearAutoudownloadsIfNeeded()
-                        self.download(post, reason: .auto)
-                    }
-                }
-            case .failure(error: let error):
-                BHLog.w("\(#function) - \(error)")
-            }
-        }
-    }
-    
-    private func clearAutoudownloadsIfNeeded() {
-        BHLog.p("\(#function)")
-        
-        let autoDownloadedQueue = self.downloadsQueue.filter({ $0.reason == .auto })
- 
-        if autoDownloadedQueue.count >= autoDownloadsMaxCount, let firstItem = autoDownloadedQueue.first {
-            removeFromDownloads(firstItem.post)
-        }
-    }
-    
-    func download(_ post: BHPost, reason: DownloadReason = .manually) {
-        
-        guard let recordingUrl = post.recording?.publishUrl else {
-            BHLog.w("Download failed: recording url is empty")
-            return
-        }
-
-        BHLog.p("Download post: \(post.id), reason: \(reason), url: \(recordingUrl)")
-        
-        let time = Date().timeIntervalSince1970
-        let downloadItem = BHDownloadItem(id: post.id, post: post, status: .start, prevStatus: .start, reason: reason, progress: 0, url: recordingUrl, file: nil, time: time)
-        
-        performDownload(downloadItem)
-        fetchStorageItems()
-        
-        /// track stats
-        let request = BHTrackEventRequest.createRequest(category: .explore, action: .ui, banner: .downloadEpisode, context: post.shareLink.absoluteString, podcastId: post.user.id, podcastTitle: post.user.fullName, episodeId: post.id, episodeTitle: post.title)
-        BHTracker.shared.trackEvent(with: request)
-    }
-    
-    func removeFromDownloads(_ post: BHPost) {
-
-        BHLog.p("Remove post from downloads: \(post.id)")
-
-        if let item = downloadsQueue.first(where: { $0.post.id == post.id }) {
-
-            performRemoveDownload(item)
-            
-            item.status = .start
-            item.file = nil
-
-            observersContainer.notifyObserversAsync {
-                $0.downloadsManager(self, itemStateUpdated: item)
-            }
-        }
-
-        fetchStorageItems()
-    }
-    
-    func removeAutoDownloads(for user: BHUser) {
-
-        BHLog.p("Remove auto downloads for user id: \(user.id)")
-
-        let items = downloadsQueue.filter({ $0.post.user.id == user.id && $0.reason == .auto })
-
-        if items.count > 0 {
-            for item in items {
-                performRemoveDownload(item)
-                    
-                item.status = .start
-                item.file = nil
-                    
-                observersContainer.notifyObserversAsync {
-                    $0.downloadsManager(self, itemStateUpdated: item)
-                }
-            }
-
-            fetchStorageItems()
-        }
-    }
-    
-    func removeAll() {
-        
-        BHLog.p("Remove all downloads")
-
-        for item in downloadsQueue {
-            performRemoveDownload(item)
-        }
-        
-        observersContainer.notifyObserversAsync {
-            $0.downloadsManager(self, allRemoved: true)
-        }
-
-        fetchStorageItems()
-    }
-    
-    func restartFailedItemsIfNeeded() {
-        BHLog.p("\(#function)")
-        
-        if BHReachabilityManager.shared.isConnectedExpensive() {
-            BHLog.p("\(#function) - expensive connection. Don't start.")
-            return
-        } else if BHReachabilityManager.shared.isConnected() {
-            
-            let failedItems = downloadsQueue.filter({ $0.status.isFailed() })
-            
-            failedItems.forEach({ item in
-                performDownload(item)
-            })
-        }
-    }
-
-        
     func isPostDownloaded(_ postId: String) -> Bool {
-        return downloadsQueue.contains(where: { $0.post.id == postId && $0.file != nil })
+        assertMain()
+        return getFileUrl(postId) != nil   // single source of truth: file must exist
     }
 
+    /// Resolves the local file by rebuilding from the *current* Documents dir,
+    /// because the sandbox container prefix changes between launches and a stored
+    /// absolute path goes stale.
     func getFileUrl(_ postId: String) -> URL? {
-        guard let stored = item(for: postId)?.file else { return nil }
+        assertMain()
+        return resolvedFileURL(for: cachedItem(postId)?.file)
+    }
 
+    /// Single place that maps a stored file URL to its current on-disk location.
+    /// Rebuilds the path against the *current* Documents dir (the sandbox prefix
+    /// changes between launches) and returns it only if the file actually exists.
+    private func resolvedFileURL(for stored: URL?) -> URL? {
+        guard let stored else { return nil }
         let fileName = stored.lastPathComponent
         guard let resolved = FileManager.default.documentsDirectory()?.appendingPathComponent(fileName),
               FileManager.default.fileExists(atPath: resolved.path) else {
@@ -315,157 +172,469 @@ class BHDownloadsManager {
         }
         return resolved
     }
-    
+
+    private func cachedItem(_ id: String) -> BHDownloadItem? {
+        downloadsQueue.first { $0.id == id }
+    }
+
+    // MARK: - Loading & reconciliation
+
+    func updateItems(completion: (() -> Void)? = nil) {
+        if isLoaded {
+            groupItems()
+            completion?()
+        } else {
+            load(completion: completion)
+        }
+    }
+
+    func load(completion: (() -> Void)? = nil) {
+        DataBaseManager.shared.fetchDownloads { [weak self] items in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.downloadsQueue = items
+                self.groupItems()
+                self.isLoaded = true
+                self.reconcileWithSession {
+                    completion?()
+                    self.pumpQueue()
+                }
+            }
+        }
+    }
+
+    /// After a relaunch, items the DB marked `.progress` whose background task is
+    /// no longer alive (process was killed before it finished) must be demoted to
+    /// `.pending` so the pump restarts them.
+    private func reconcileWithSession(_ completion: @escaping () -> Void) {
+        session.getAllTasks { [weak self] tasks in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                let liveIds = Set(tasks.compactMap { $0.taskDescription })
+                self.activeDownloadIds = liveIds
+
+                for item in self.downloadsQueue where item.status == .progress && !liveIds.contains(item.id) {
+                    item.status = .pending
+                    self.updateStorageItem(item)
+                }
+                completion()
+            }
+        }
+    }
+
+    // MARK: - Sequential queue (variant A)
+
+    private func pumpQueue() {
+        assertMain()
+        guard activeDownloadIds.isEmpty else { return }       // one at a time
+        guard let next = nextPending() else { return }
+        startDownload(next)
+    }
+
+    private func nextPending() -> BHDownloadItem? {
+        let connected = BHReachabilityManager.shared.isConnected()
+        let onWifi = connected && !BHReachabilityManager.shared.isConnectedExpensive()
+
+        let candidates = downloadsQueue.filter { item in
+            guard item.status.isPending() else { return false }
+            // auto only on WiFi; manual on any connection
+            return item.reason == .auto ? onWifi : connected
+        }
+
+        // manual before auto; within a group, oldest queued first (FIFO)
+        return candidates.sorted { lhs, rhs in
+            if lhs.reason != rhs.reason { return lhs.reason == .manually }
+            return lhs.time < rhs.time
+        }.first
+    }
+
+    private func startDownload(_ item: BHDownloadItem) {
+        assertMain()
+
+        var request = URLRequest(url: item.url)
+        request.allowsCellularAccess = (item.reason == .manually)   // auto = WiFi only
+
+        let task = session.downloadTask(with: request)
+        task.taskDescription = item.id
+
+        activeDownloadIds.insert(item.id)
+        item.status = .progress
+        item.prevStatus = .pending
+        item.progress = 0
+        updateStorageItem(item)
+        groupItems()
+        notifyState(item)
+
+        requestDownloadNotificationIfNeeded(for: item.post)
+
+        BHLog.p("Start download \(item.id) reason:\(item.reason) cellular:\(request.allowsCellularAccess)")
+        task.resume()
+    }
+
+    private func requestDownloadNotificationIfNeeded(for post: BHPost) {
+        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { didAllow, error in
+            if error == nil {
+                BHNotificationsManager.shared.triggerDownloadEpisodeNotification(with: post)
+            }
+        }
+    }
+
+    // MARK: - Public: download / remove
+
+    func download(_ post: BHPost, reason: DownloadReason = .manually) {
+        assertMain()
+
+        guard let recordingUrl = post.recording?.publishUrl else {
+            BHLog.w("Download failed: recording url is empty")
+            return
+        }
+
+        if reason == .auto { enforceAutoLimit() }
+
+        if let existing = cachedItem(post.id) {
+            // re-download (typically from .failure): reset to pending
+            existing.prevStatus = existing.status
+            existing.status = .pending
+            existing.progress = 0
+            existing.file = nil
+            updateStorageItem(existing)
+            notifyState(existing)
+        } else {
+            let item = BHDownloadItem(
+                id: post.id, post: post, status: .pending, prevStatus: .start,
+                reason: reason, progress: 0, url: recordingUrl, file: nil,
+                time: Date().timeIntervalSince1970)
+            downloadsQueue.append(item)
+            insertStorageItem(item)
+            notifyState(item)
+        }
+
+        groupItems()
+
+        let request = BHTrackEventRequest.createRequest(
+            category: .explore, action: .ui, banner: .downloadEpisode,
+            context: post.shareLink.absoluteString,
+            podcastId: post.user.id, podcastTitle: post.user.fullName,
+            episodeId: post.id, episodeTitle: post.title)
+        BHTracker.shared.trackEvent(with: request)
+
+        pumpQueue()
+    }
+
+    func removeFromDownloads(_ post: BHPost) {
+        assertMain()
+        BHLog.p("Remove post from downloads: \(post.id)")
+        guard let item = cachedItem(post.id) else { return }
+        remove(item, resetStateForListeners: true)
+    }
+
+    func removeAutoDownloads(for user: BHUser) {
+        assertMain()
+        BHLog.p("Remove auto downloads for user id: \(user.id)")
+        let toRemove = downloadsQueue.filter { $0.post.user.id == user.id && $0.reason == .auto }
+        toRemove.forEach { remove($0, resetStateForListeners: true) }
+    }
+
+    func removeAll() {
+        assertMain()
+        BHLog.p("Remove all downloads")
+
+        cancelAll()
+        for item in downloadsQueue { performRemoveDownload(item) }
+        downloadsQueue.removeAll()
+        activeDownloadIds.removeAll()
+        groupItems()
+
+        observersContainer.notifyObserversAsync { $0.downloadsManager(self, allRemoved: true) }
+    }
+
+    /// Removes a single item: cancels its task if active (fixes the "zombie"
+    /// re-appearing download), deletes the file, removes from DB and cache, then
+    /// pumps in case a slot freed.
+    private func remove(_ item: BHDownloadItem, resetStateForListeners: Bool) {
+        cancelTask(for: item.id)
+        performRemoveDownload(item)
+        downloadsQueue.removeAll { $0.id == item.id }
+        activeDownloadIds.remove(item.id)
+
+        if resetStateForListeners {
+            item.status = .start
+            item.file = nil
+            notifyState(item)
+        }
+        groupItems()
+        pumpQueue()
+    }
+
+    /// Evicts the oldest auto downloads so a new auto fits under the limit.
+    /// Counts ALL auto items (pending / in-progress / success).
+    private func enforceAutoLimit() {
+        assertMain()
+        let autos = downloadsQueue.filter { $0.reason == .auto }
+        guard autos.count >= autoDownloadsMaxCount else { return }
+
+        let overflow = autos.count - autoDownloadsMaxCount + 1   // room for the incoming one
+        let oldest = autos.sorted { $0.time < $1.time }.prefix(overflow)
+        oldest.forEach { remove($0, resetStateForListeners: true) }
+    }
+
+    // MARK: - Auto downloads
+
+    func autoDownloadNewEpisodeIfNeeded(_ post: BHPost) {
+        assertMain()
+        BHLog.p("\(#function), postId: \(post.id)")
+        guard UserDefaults.standard.isAutoDownloadsFeatureEnabled else { return }
+        guard post.user.autoDownload, !post.isDownloaded else { return }
+        // No reachability check here: auto tasks are WiFi-gated per-request and in
+        // selection, so they simply sit pending until WiFi is available.
+        download(post, reason: .auto)
+    }
+
+    func autoDownloadNewEpisodesIfNeeded() {
+        assertMain()
+        BHLog.p("\(#function)")
+        guard UserDefaults.standard.isAutoDownloadsFeatureEnabled else { return }
+
+        BHFeedManager.shared.getFeedActualPosts { [weak self] response in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch response {
+                case .success(posts: let posts):
+                    for post in posts where post.user.autoDownload && !post.isDownloaded {
+                        self.download(post, reason: .auto)   // enforceAutoLimit runs inside
+                    }
+                case .failure(error: let error):
+                    BHLog.w("\(#function) - \(error)")
+                }
+            }
+        }
+    }
+
+    func restartFailedItemsIfNeeded() {
+        assertMain()
+        BHLog.p("\(#function)")
+        guard BHReachabilityManager.shared.isConnected() else { return }
+
+        for item in downloadsQueue where item.status.isFailed() {
+            item.prevStatus = item.status
+            item.status = .pending
+            updateStorageItem(item)
+            notifyState(item)
+        }
+        pumpQueue()
+    }
+
+    // MARK: - Post updates
+
+    func updatePost(_ post: BHPost) {
+        assertMain()
+        guard let item = cachedItem(post.id) else { return }
+        item.post = post
+        updateStorageItem(item)
+        groupItems()
+        notifyItemsUpdated()
+    }
+
+    /// `BHDownloadItem` is a reference type, so mutating `item.post` already
+    /// updates the cached element; only persistence needs an explicit call.
     func updatePostPlayback(_ postId: String, offset: Double, completed: Bool) {
-        if let item = downloadsQueue.first(where: { $0.post.id == postId }) {
-            item.post.updatePlaybackOffset(offset, completed: completed)
-            
-            if let row = downloadsQueue.firstIndex(where: {$0.post.id == postId}) {
-                DispatchQueue.main.async {
-                    self.downloadsQueue[row] = item
-                    self.updateStorageItem(item)
-                }
-            }
+        assertMain()
+        guard let item = cachedItem(postId) else { return }
+        item.post.updatePlaybackOffset(offset, completed: completed)
+        updateStorageItem(item)
+    }
+
+    // MARK: - Task cancellation
+
+    private func cancelTask(for id: String) {
+        session.getAllTasks { tasks in
+            tasks.first { $0.taskDescription == id }?.cancel()
         }
     }
-        
-    fileprivate func performDownload(_ item: BHDownloadItem) {
-        var prevProgress: Double = 0
 
-        /// Push notifications feature works  only under dev mode
-        if UserDefaults.standard.isPushNotificationsFeatureEnabled {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: { didAllow, error in
-                if error == nil {
-                    BHNotificationsManager.shared.triggerDownloadEpisodeNotification(with: item.post)
-                }
-            })
-        }
-
-        insertStorageItem(item)
-        
-        observersContainer.notifyObserversAsync {
-            item.status = .progress
-            $0.downloadsManager(self, itemStateUpdated: item)
-        }
-        
-        BHID3Parser.isGoodForStream(item.url) { _, _, isVideo in
-
-            let format = isVideo ? "mp4" : "mp3"
-
-            let destination: DownloadRequest.Destination = { _, _ in
-                var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                documentsURL.appendPathComponent("\(item.post.id).\(format)")
-                return (documentsURL, [.removePreviousFile])
-            }
-            
-            AF.download(item.url, to: destination)
-                .downloadProgress(queue: self.progressQueue) { progress in
-                    if progress.fractionCompleted - prevProgress > 0.05 {
-                        prevProgress = progress.fractionCompleted
-                        item.progress = progress.fractionCompleted
-
-                        self.observersContainer.notifyObserversAsync {
-                            $0.downloadsManager(self, itemProgressUpdated: item)
-                        }
-                    }
-                }
-                .responseData { response in
-                    switch response.result {
-                    case .success(_):
-                        BHLog.p("Download success, destinationUrl: \(String(describing: response.fileURL))")
-                        
-                        item.status = .success
-                        item.prevStatus = .progress
-                        item.file = response.fileURL
-                        item.progress = 1
-
-                    case .failure(let error):
-                        BHLog.w("Download failed: \(error)")
-
-                        item.status = .failure
-                        item.prevStatus = .progress
-                        
-                        /// track stats
-                        let request = BHTrackEventRequest.createRequest(category: .explore, action: .error, banner: .downloadFailed, context: error.localizedDescription, podcastId: item.post.user.id, podcastTitle: item.post.user.fullName, episodeId: item.post.id, episodeTitle: item.post.title)
-                        BHTracker.shared.trackEvent(with: request)
-                    }
-
-                    prevProgress = 0
-                    
-                    self.updateStorageItem(item)
-                    self.fetchStorageItems()
-                    
-                    /// Push notifications feature works  only under dev mode
-                    if UserDefaults.standard.isPushNotificationsFeatureEnabled {
-                        BHNotificationsManager.shared.removeAllDeliveredNotifications()
-                    }
-
-                    self.observersContainer.notifyObserversAsync {
-                        $0.downloadsManager(self, itemStateUpdated: item)
-                    }
-                }
+    private func cancelAll() {
+        session.getAllTasks { tasks in
+            tasks.forEach { $0.cancel() }
         }
     }
-    
-    fileprivate func performRemoveDownload(_ item: BHDownloadItem) {
 
-        if let fileURL = item.file {
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                try? FileManager.default.removeItem(atPath: fileURL.path)
-            }
+    private func performRemoveDownload(_ item: BHDownloadItem) {
+        if let resolved = resolvedFileURL(for: item.file) {
+            try? FileManager.default.removeItem(at: resolved)
         }
-        
         removeStorageItem(item.id)
     }
-        
-    fileprivate func cancelAll() {
-        // TODO: - cancel all download requests
+
+    // MARK: - UI grouping
+
+    let calendar = Calendar.current
+    var groupedItems: [UIDownloadsModel] = []
+
+    func groupItems() {
+        assertMain()
+        let sorted = downloadsQueue.sorted { $0.time > $1.time }
+        let now = Date()
+        var grouped: [DownloadDate: [BHDownloadItem]] = [:]
+
+        for item in sorted {
+            let date = Date(timeIntervalSince1970: item.time)
+            let key: DownloadDate
+            if calendar.isDateInToday(date) { key = .today }
+            else if calendar.isDateInYesterday(date) { key = .yesterday }
+            else if calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear) { key = .week }
+            else if calendar.isDate(date, equalTo: now, toGranularity: .month) { key = .month }
+            else if calendar.isDate(date, equalTo: now, toGranularity: .year) { key = .year }
+            else { key = .earlier }
+            grouped[key, default: []].append(item)
+        }
+
+        groupedItems = grouped
+            .map { UIDownloadsModel(date: $0.key, posts: $0.value.map { $0.post }) }
+            .sorted { $0.date < $1.date }
     }
-            
+
     // MARK: - Notifications
-    
-    @objc fileprivate func onConnectionChangedNotification(notification: Notification) {
-        guard let notificationInfo = notification.userInfo as? [String : BHReachabilityManager.ConnectionChangedNotificationInfo] else { return }
-        guard let info = notificationInfo[BHReachabilityManager.NotificationInfoKey] else { return }
-        
+
+    @objc private func onConnectionChangedNotification(notification: Notification) {
+        guard let info = (notification.userInfo as? [String: BHReachabilityManager.ConnectionChangedNotificationInfo])?[BHReachabilityManager.NotificationInfoKey] else { return }
         switch info.type {
         case .connected:
-            restartFailedItemsIfNeeded()
+            DispatchQueue.main.async {
+                self.restartFailedItemsIfNeeded()   // demotes failures → pending, then pumps
+                self.pumpQueue()                    // also picks up auto waiting for WiFi
+            }
         default:
             break
         }
     }
-    
+
     // MARK: - Storage Providers
-    
-    fileprivate func fetchStorageItems(completion: (() -> Void)? = nil) {
-        DataBaseManager.shared.fetchDownloads() { items in
-            self.downloadsQueue = items
-            self.groupItems()
-            self.isLoaded = true
-            completion?()
-        }
-    }
 
-    fileprivate func fetchStorageItem(_ id: String) -> BHDownloadItem? {
-        return DataBaseManager.shared.fetchDownloadItem(with: id)
-    }
-
-    fileprivate func insertStorageItem(_ item: BHDownloadItem) {
+    private func insertStorageItem(_ item: BHDownloadItem) {
         if !DataBaseManager.shared.insertOrUpdateDownloadItem(with: item) {
             BHLog.w("\(#function) - failed to insert download item")
         }
     }
 
-    fileprivate func updateStorageItem(_ item: BHDownloadItem) {
+    private func updateStorageItem(_ item: BHDownloadItem) {
         if !DataBaseManager.shared.updateDownloadItem(with: item) {
             BHLog.w("\(#function) - failed to update download item")
         }
     }
 
-    fileprivate func removeStorageItem(_ id: String) {
+    private func removeStorageItem(_ id: String) {
         if !DataBaseManager.shared.removeDownloadItem(with: id) {
             BHLog.w("\(#function) - failed to remove download item")
         }
     }
 }
+
+// MARK: - URLSessionDownloadDelegate
+
+extension BHDownloadsManager: URLSessionDownloadDelegate {
+
+    func urlSession(_ session: URLSession,
+                    downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64,
+                    totalBytesWritten: Int64,
+                    totalBytesExpectedToWrite: Int64) {
+        guard totalBytesExpectedToWrite > 0 else { return }
+        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        let id = downloadTask.taskDescription
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let id, let item = self.cachedItem(id) else { return }
+            if progress - item.progress > 0.05 || progress >= 1 {
+                item.progress = progress
+                self.notifyProgress(item)
+            }
+        }
+    }
+
+    func urlSession(_ session: URLSession,
+                    downloadTask: URLSessionDownloadTask,
+                    didFinishDownloadingTo location: URL) {
+        // The temp file at `location` is deleted right after this returns, so the
+        // move MUST happen synchronously here (not on a dispatched block).
+        guard let id = downloadTask.taskDescription else { return }
+
+        let mime = downloadTask.response?.mimeType
+        let ext = (mime?.contains("video") == true) ? "mp4" : "mp3"
+        let fileName = "\(id).\(ext)"
+
+        var movedURL: URL?
+        if let docs = FileManager.default.documentsDirectory() {
+            let dest = docs.appendingPathComponent(fileName)
+            do {
+                if FileManager.default.fileExists(atPath: dest.path) {
+                    try FileManager.default.removeItem(at: dest)
+                }
+                try FileManager.default.moveItem(at: location, to: dest)
+                movedURL = dest
+            } catch {
+                BHLog.w("Failed to move downloaded file for \(id): \(error)")
+            }
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let item = self.cachedItem(id) else { return }
+            item.file = movedURL   // nil if the move failed → didComplete marks .failure
+        }
+    }
+
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    didCompleteWithError error: Error?) {
+        let id = task.taskDescription
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if let id { self.activeDownloadIds.remove(id) }
+
+            if let id, let item = self.cachedItem(id) {
+                if let error {
+                    // A cancel (manual removal) also lands here — the item is
+                    // already gone from the cache, so this branch is skipped.
+                    item.prevStatus = .progress
+                    item.status = .failure
+                    BHLog.w("Download failed \(id): \(error)")
+
+                    let request = BHTrackEventRequest.createRequest(
+                        category: .explore, action: .error, banner: .downloadFailed,
+                        context: error.localizedDescription,
+                        podcastId: item.post.user.id, podcastTitle: item.post.user.fullName,
+                        episodeId: item.post.id, episodeTitle: item.post.title)
+                    BHTracker.shared.trackEvent(with: request)
+                } else if item.file != nil {
+                    item.prevStatus = .progress
+                    item.status = .success
+                    item.progress = 1
+                } else {
+                    // completed without error but the file move failed
+                    item.prevStatus = .progress
+                    item.status = .failure
+                }
+
+                self.updateStorageItem(item)
+                self.groupItems()
+                self.notifyState(item)
+
+                if UserDefaults.standard.isPushNotificationsFeatureEnabled {
+                    BHNotificationsManager.shared.removeAllDeliveredNotifications()
+                }
+            }
+
+            self.pumpQueue()   // variant A: the next pending download starts here
+        }
+    }
+
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        DispatchQueue.main.async { [weak self] in
+            self?.backgroundCompletionHandler?()
+            self?.backgroundCompletionHandler = nil
+        }
+    }
+}
+
+

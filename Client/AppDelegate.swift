@@ -90,6 +90,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("\(#function) - \(error)")
     }
     
+    func application(_ application: UIApplication,
+                     handleEventsForBackgroundURLSession identifier: String,
+                     completionHandler: @escaping () -> Void) {
+        debugPrint("\(#function) - handle events for background URLSession")
+        BullhornSdk.shared.handleEventsForBackgroundURLSession(completionHandler: completionHandler)
+    }
+    
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         debugPrint("Unexpected memory warning!")
     }

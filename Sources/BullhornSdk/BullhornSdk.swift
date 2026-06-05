@@ -67,12 +67,8 @@ public class BullhornSdk: NSObject {
     
     public var externalUser: BHSdkUser?
     
-    fileprivate static let backgroundTaskLength: Double = 60 * 30 // 30 minutes
+    // MARK: - Public
     
-    fileprivate var backgroundTask: BHBackgroundTask!
-    fileprivate var backgroundTaskStartTime: TimeInterval?
-    fileprivate var isBackgroundTaskRequested: Bool = false
-
     public func configure(clientId: String, networkId: String, infoLinks: [BHInfoLink], configType: BHAppConfigType = .prod) {
         BHLog.p("\(#function)")
 
@@ -97,8 +93,6 @@ public class BullhornSdk: NSObject {
         
         BHHybridPlayer.shared.updateQueueItems()
         BHTracker.shared.trackAppFirstStartEventIfNeeded()
-        
-        initBackgroundTask()
     }
     
     public func terminate() {
@@ -225,6 +219,10 @@ public class BullhornSdk: NSObject {
         return false
     }
     
+    public func handleEventsForBackgroundURLSession(completionHandler: @escaping () -> Void) {
+        BHDownloadsManager.shared.backgroundCompletionHandler = completionHandler
+    }
+    
     public func didRegisterForRemoteNotifications(with token: Data) {
         BHNotificationsManager.shared.didRegisterForRemoteNotifications(with: token)
     }
@@ -251,13 +249,9 @@ public class BullhornSdk: NSObject {
 
     // MARK: - Notifications
     
-    @objc func appDidEnteredBackgound() {
-        
-    }
+    @objc func appDidEnteredBackgound() {}
 
     @objc func appWillEnteredForeground() {
-        isBackgroundTaskRequested = false
-        backgroundTaskStartTime = nil
         BHDownloadsManager.shared.restartFailedItemsIfNeeded()
     }
     
@@ -268,7 +262,6 @@ public class BullhornSdk: NSObject {
     @objc func appWillTerminate() {
         BHPlaybacksManager.shared.savePlaybacks()
     }
-
 
     // MARK: - Private
     
@@ -299,41 +292,5 @@ public class BullhornSdk: NSObject {
         UIBarButtonItem.appearance(whenContainedInInstancesOf:[UISearchBar.self]).title = NSLocalizedString("Done", comment: "")
 
         UIRefreshControl.appearance().tintColor = .accent()
-    }
-    
-    private func initBackgroundTask() {
-
-        let conditionToBeginTask: () -> Bool = { [weak self] in
-
-            guard let strongSelf = self else { return false }
-
-            let result = !BHHybridPlayer.shared.hasActivePlaying() && BHDownloadsManager.shared.hasActiveDouwnloads()
-            
-            if !strongSelf.isBackgroundTaskRequested && result {
-                strongSelf.isBackgroundTaskRequested = true
-            }
-            
-            if let timeInterval = strongSelf.backgroundTaskStartTime {
-                let taskLength = Date().timeIntervalSince1970 - timeInterval
-
-                if taskLength >= BullhornSdk.backgroundTaskLength {
-                    strongSelf.backgroundTaskStartTime = nil
-                    return false
-                }
-            } else {
-                strongSelf.backgroundTaskStartTime = Date().timeIntervalSince1970
-            }
-
-            return result
-        }
-
-        let checkInterval: TimeInterval = 10
-        let task = BHBackgroundTask.init(name: "BullhornSDK.MainBgTask",
-                                       minimumIntervalBeforeTimeout: { min(checkInterval, max(0, $0 - 2)) },
-                                       conditionToBeginTask: conditionToBeginTask)
-
-        task.condition = { $0 < 2 * checkInterval }
-
-        backgroundTask = task
     }
 }
