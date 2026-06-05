@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 
 /// Manages the lifecycle of the underlying BHPlaybackEngine and all
 /// lower-level perform* playback operations.
@@ -41,39 +42,68 @@ extension BHHybridPlayer {
         BHLog.p("\(#function) - \(position)")
 
         guard let validItem = playerItem else { return }
-        guard var urlToPlay = validItem.post.url else { return }
+        guard let remoteUrl = validItem.post.url else { return }
         guard let validPost = post else { return }
 
         let expectedPostId = validItem.post.postId
+        let localFile = BHDownloadsManager.shared.getFileUrl(expectedPostId)
+        let urlToPlay = localFile ?? remoteUrl
 
-        if let fileURL = BHDownloadsManager.shared.getFileUrl(expectedPostId) {
-            urlToPlay = fileURL
-        }
-        
-        BHID3Parser.isGoodForStream(urlToPlay) { [weak self] _, _, isVideo in
-            guard let self else { return }
-            guard self.playerItem?.post.postId == expectedPostId else {
-                BHLog.p("\(#function) skipping stale callback for \(expectedPostId)")
-                return
+        // Builds the engine once the video flag is known. Always hops to main and
+        // guards against a stale async callback (the item may have changed).
+        let build: (Bool) -> Void = { [weak self] isVideo in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                guard self.playerItem?.post.postId == expectedPostId else {
+                    BHLog.p("\(#function) skipping stale callback for \(expectedPostId)")
+                    return
+                }
+
+                self.isVideoAvailable = isVideo
+
+                let player = BHSystemMediaPlayer(
+                    withUrl: urlToPlay,
+                    coverUrl: self.playerItem?.post.coverUrl,
+                    isVideo: self.isVideoAvailable)
+
+                player.delegate = self
+                player.rate = self.settings.playbackSpeed
+
+                self.mediaPlayer = player
+
+                if self.shouldPlayAutomatically {
+                    _ = self.mediaPlayer?.play(at: position)
+                } else {
+                    _ = self.mediaPlayer?.restore(at: position)
+                    self.shouldPlayAutomatically = true
+                }
             }
+        }
 
-            self.isVideoAvailable = isVideo || validPost.hasVideo()
+        if let localFile {
+            // Downloaded file: the local asset is the ground truth and works offline,
+            // unlike an id3 probe of the remote URL.
+            Self.resolveHasVideoTrack(of: localFile, completion: build)
+        } else {
+            // Stream: keep the remote id3 probe (+ post metadata) as before.
+            BHID3Parser.isGoodForStream(remoteUrl) { _, _, isVideo in
+                build(isVideo || validPost.hasVideo())
+            }
+        }
+    }
 
-            let player = BHSystemMediaPlayer(
-                withUrl: urlToPlay,
-                coverUrl: self.playerItem?.post.coverUrl,
-                isVideo: self.isVideoAvailable)
-
-            player.delegate = self
-            player.rate = self.settings.playbackSpeed
-
-            self.mediaPlayer = player
-
-            if self.shouldPlayAutomatically {
-                _ = self.mediaPlayer?.play(at: position)
-            } else {
-                _ = self.mediaPlayer?.restore(at: position)
-                self.shouldPlayAutomatically = true
+    /// Async audio/video classification from a media URL's own tracks. Used for
+    /// downloaded files, where the local asset is the only reliable source.
+    private static func resolveHasVideoTrack(of url: URL, completion: @escaping (Bool) -> Void) {
+        let asset = AVURLAsset(url: url)
+        if #available(iOS 15.0, *) {
+            asset.loadTracks(withMediaType: .video) { tracks, _ in
+                completion(!(tracks?.isEmpty ?? true))
+            }
+        } else {
+            asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
+                let loaded = asset.statusOfValue(forKey: "tracks", error: nil) == .loaded
+                completion(loaded && !asset.tracks(withMediaType: .video).isEmpty)
             }
         }
     }
@@ -290,4 +320,5 @@ extension BHHybridPlayer {
         return result
     }
 }
+
 

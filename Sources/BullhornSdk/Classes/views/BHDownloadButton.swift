@@ -136,8 +136,13 @@ class BHDownloadButton: UIView {
 
         button.setImage(image, for: .normal)
         button.backgroundColor = bgColor
-            
-        progressView.setProgress(0, animated: false)
+
+        if hasProgress {
+            let current = post.flatMap { BHDownloadsManager.shared.item(for: $0.id)?.progress } ?? 0
+            progressView.setProgress(Float(current), animated: false)
+        } else {
+            progressView.setProgress(0, animated: false)
+        }
         progressView.isHidden = !hasProgress
 
         if hasSpinner {
@@ -162,9 +167,6 @@ class BHDownloadButton: UIView {
 
         switch status {
         case .start, .failure:
-            // Hand off to the manager, which owns connectivity policy: if offline,
-            // the item stays `.pending` and resumes automatically once the
-            // connection returns (see onConnectionChangedNotification → pumpQueue).
             BHDownloadsManager.shared.download(validPost, reason: .manually)
         case .pending,
              .progress,

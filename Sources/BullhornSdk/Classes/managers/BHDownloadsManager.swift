@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import AVFoundation
 
 // MARK: - UI grouping (unchanged)
 
@@ -70,6 +71,11 @@ final class BHDownloadsManager: NSObject {
 
     /// ids of currently-running session tasks (0 or 1 under variant A).
     private var activeDownloadIds = Set<String>()
+
+    /// Last progress value forwarded to the main thread, per task id. Confined to
+    /// the URLSession delegate queue (serial), so didWriteData can throttle BEFORE
+    /// hopping to main instead of dispatching every byte-level callback. NOT main.
+    private var lastReportedProgress = [String: Double]()
 
     private static let sessionIdentifier = "com.bullhorn.downloads.background"
 
@@ -222,7 +228,7 @@ final class BHDownloadsManager: NSObject {
         }
     }
 
-    // MARK: - Sequential queue (variant A)
+    // MARK: - Sequential queue
 
     private func pumpQueue() {
         assertMain()
@@ -633,32 +639,96 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession,
                     downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
-        // The temp file at `location` is deleted right after this returns, so the
-        // move MUST happen synchronously here (not on a dispatched block).
+        // Runs on the URLSession delegate queue (background). The temp file at
+        // `location` is deleted right after this returns, so everything here is
+        // synchronous. We:
+        //   1. move the temp file to a staging path named with a best-guess
+        //      container extension (so AVAsset can parse it),
+        //   2. inspect it for a video track (ground truth — works offline, off-main),
+        //   3. finalize the name (.mp4 for video) so the player recognizes the type.
         guard let id = downloadTask.taskDescription else { return }
+        guard let docs = FileManager.default.documentsDirectory() else { return }
 
+        let sourceExt = downloadTask.originalRequest?.url?.pathExtension
         let mime = downloadTask.response?.mimeType
-        let ext = (mime?.contains("video") == true) ? "mp4" : "mp3"
-        let fileName = "\(id).\(ext)"
 
-        var movedURL: URL?
-        if let docs = FileManager.default.documentsDirectory() {
-            let dest = docs.appendingPathComponent(fileName)
+        let guessExt = containerExtension(sourceExt: sourceExt, mime: mime)
+        let staging = docs.appendingPathComponent("\(id).\(guessExt)")
+        do {
+            if FileManager.default.fileExists(atPath: staging.path) {
+                try FileManager.default.removeItem(at: staging)
+            }
+            try FileManager.default.moveItem(at: location, to: staging)
+        } catch {
+            BHLog.w("Failed to stage downloaded file for \(id): \(error)")
+            return
+        }
+
+        // Safe to block here: this is the background delegate queue, not main.
+        let hasVideo = Self.hasVideoTrack(at: staging)
+        let videoExts = ["mp4", "m4v", "mov"]
+        let finalExt = hasVideo ? (videoExts.contains(guessExt) ? guessExt : "mp4") : guessExt
+
+        var movedURL: URL? = staging
+        if finalExt != guessExt {
+            let dest = docs.appendingPathComponent("\(id).\(finalExt)")
             do {
                 if FileManager.default.fileExists(atPath: dest.path) {
                     try FileManager.default.removeItem(at: dest)
                 }
-                try FileManager.default.moveItem(at: location, to: dest)
+                try FileManager.default.moveItem(at: staging, to: dest)
                 movedURL = dest
             } catch {
-                BHLog.w("Failed to move downloaded file for \(id): \(error)")
+                BHLog.w("Failed to finalize downloaded file for \(id): \(error)")
             }
         }
 
+        let resolved = movedURL
         DispatchQueue.main.async { [weak self] in
-            guard let self, let item = self.cachedItem(id) else { return }
-            item.file = movedURL   // nil if the move failed → didComplete marks .failure
+            guard let self, let item = self.cachedItem(id) else {
+                if let resolved { try? FileManager.default.removeItem(at: resolved) }
+                return
+            }
+            item.file = resolved   // nil never happens here; didComplete reads it
         }
+    }
+
+    /// Best-guess container extension from the source URL / MIME, used to name the
+    /// staging file so AVAsset can parse it. Audio stays as-is; the final video
+    /// decision is made by hasVideoTrack(at:).
+    private func containerExtension(sourceExt: String?, mime: String?) -> String {
+        let known = ["mp4", "m4v", "mov", "mp3", "m4a", "aac", "wav"]
+        if let src = sourceExt?.lowercased(), known.contains(src) { return src }
+        if let mime = mime?.lowercased() {
+            if mime.contains("video") { return "mp4" }
+            if mime.contains("audio") { return "mp3" }
+        }
+        return "mp4"   // permissive default: ISO container parses, audio falls back below
+    }
+
+    /// Ground-truth audio/video classification from the downloaded file itself.
+    /// Blocks until the (local) asset's tracks load — call only off the main thread.
+    private static func hasVideoTrack(at url: URL) -> Bool {
+        let asset = AVURLAsset(url: url)
+        let semaphore = DispatchSemaphore(value: 0)
+        var result = false
+
+        if #available(iOS 15.0, *) {
+            asset.loadTracks(withMediaType: .video) { tracks, _ in
+                result = !(tracks?.isEmpty ?? true)
+                semaphore.signal()
+            }
+        } else {
+            asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
+                if asset.statusOfValue(forKey: "tracks", error: nil) == .loaded {
+                    result = !asset.tracks(withMediaType: .video).isEmpty
+                }
+                semaphore.signal()
+            }
+        }
+
+        _ = semaphore.wait(timeout: .now() + 5)   // local file: returns quickly
+        return result
     }
 
     func urlSession(_ session: URLSession,
