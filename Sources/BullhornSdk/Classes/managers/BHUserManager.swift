@@ -70,7 +70,6 @@ class BHUserManager {
             DispatchQueue.main.async {
                 switch response {
                 case .success(user: let user):
-                    self.fetchStorageUser(userId)
                     self.user = user
                 case .failure(error: let error):
                     BHLog.w("User load failed \(error.localizedDescription)")
@@ -87,7 +86,6 @@ class BHUserManager {
             DispatchQueue.main.async {
                 switch response {
                 case .success(user: let user):
-                    self.fetchStorageUser(user.id)
                     self.user = user
                 case .failure(error: let error):
                     BHLog.w("User by username load failed \(error.localizedDescription)")
@@ -109,10 +107,14 @@ class BHUserManager {
         apiUsers.getUserPosts(authToken: authToken, userId: userId, text: searchText, page: nextPage) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(posts: _, page: let page, pages: let pages):
+                case .success(posts: let posts, page: let page, pages: let pages):
                     self.page = page
                     self.pages = pages
-                    self.fetchStoragePosts(userId) { _ in }
+                    if page > 1 {
+                        self.posts += posts
+                    } else {
+                        self.posts = posts
+                    }
                 case .failure(error: let error):
                     BHLog.w("User posts load failed \(error.localizedDescription)")
                 }

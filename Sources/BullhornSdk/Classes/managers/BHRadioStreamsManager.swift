@@ -84,8 +84,8 @@ class BHRadioStreamsManager {
         
         BHNetworkManager.shared.getNetworkRadios(BHAppConfiguration.shared.networkId) { response in
             switch response {
-            case .success(radios: _):
-                self.fetchStorageRadios(networkId) { _ in }
+            case .success(radios: let radios):
+                self.radios = radios
             case .failure(error: let error):
                 BHLog.w(error)
             }

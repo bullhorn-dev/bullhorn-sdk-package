@@ -113,10 +113,14 @@ class BHFeedManager {
         server.getLikedPosts(authToken: authToken, userId: userId, text: searchText, page: nextPage) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(posts: _, page: let page, pages: let pages):
+                case .success(posts: let posts, page: let page, pages: let pages):
                     self.page = page
                     self.pages = pages
-                    self.fetchStoragePosts() { _ in }
+                    if page > 1 {
+                        self.likedPosts?.append(contentsOf: posts)
+                    } else {
+                        self.likedPosts = posts
+                    }
                 case .failure(error: let error):
                     BHLog.w("Liked posts load failed \(error.localizedDescription)")
                 }

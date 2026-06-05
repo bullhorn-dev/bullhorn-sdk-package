@@ -158,10 +158,14 @@ class BHNetworkManager {
         apiNetwork.getNetworkPosts(authToken: authToken, networkId: networkId, text: nil, page: nextPostsPage, perPage: apiNetwork.defaultPageCount) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(posts: _, page: let page, pages: let pages):
+                case .success(posts: let posts, page: let page, pages: let pages):
                     self.postsPage = page
                     self.postsPages = pages
-                    self.fetchStorageEpisodes(networkId) { _ in }
+                    if page > 1 {
+                        self.posts += posts
+                    } else {
+                        self.posts = posts
+                    }
                 case .failure(error: let error):
                     BHLog.w("Network episodes load failed \(error.localizedDescription)")
                 }

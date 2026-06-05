@@ -44,8 +44,8 @@ class BHPostsManager {
         apiPosts.getPost(authToken: authToken, postId: postId, context: context) { response in
             DispatchQueue.main.async {
                 switch response {
-                case .success(post: _):
-                    self.fetchStoragePost(postId)
+                case .success(post: let post):
+                    self.post = post
                 case .failure(error: let error):
                     BHLog.w("Post load failed \(error.localizedDescription)")
                 }
@@ -60,7 +60,7 @@ class BHPostsManager {
             DispatchQueue.main.async {
                 switch response {
                 case .success(post: let post):
-                    self.fetchStoragePost(post.id)
+                    self.post = post
                 case .failure(error: let error):
                     BHLog.w("Post load failed \(error.localizedDescription)")
                 }
