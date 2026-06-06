@@ -33,17 +33,70 @@ class DataBaseManager {
         }
     }
 
+    // MARK: - Background read helpers
+
+    /// Reads a single record by `id` and runs the MO→value-type conversion (`map`) on a
+    /// background context, then delivers the value-type result on the main queue. The
+    /// relationship faulting and conversion (e.g. `toUsers()`/`toPosts()`) happen off the
+    /// main thread, so large cached lists no longer block the UI. Uses the object's
+    /// permanent ID, so it makes no entity/primary-key assumptions.
+    private func backgroundRead<Result>(
+        _ id: Any,
+        entityName: String,
+        empty: Result,
+        map: @escaping (NSManagedObject) -> Result,
+        completion: @escaping (Result) -> Void
+    ) {
+        var objectID: NSManagedObjectID?
+        do {
+            objectID = try dataStack.fetch(id, inEntityNamed: entityName)?.objectID
+        } catch {
+            BHLog.w("\(#function) - \(error)")
+        }
+        guard let oid = objectID else {
+            completion(empty)
+            return
+        }
+        dataStack.performInNewBackgroundContext { context in
+            let result: Result
+            if let mo = try? context.existingObject(with: oid) {
+                result = map(mo)
+            } else {
+                result = empty
+            }
+            DispatchQueue.main.async { completion(result) }
+        }
+    }
+
+    /// Background read that prefetches the given to-many relationships, collapsing N+1
+    /// fault storms into a couple of queries. Used for large lists. Assumes the entity's
+    /// primary-key attribute is `id` (true for the cached container entities).
+    private func backgroundReadPrefetching<Result>(
+        _ id: String,
+        entityName: String,
+        prefetch: [String],
+        empty: Result,
+        map: @escaping (NSManagedObject) -> Result,
+        completion: @escaping (Result) -> Void
+    ) {
+        dataStack.performInNewBackgroundContext { context in
+            let request = NSFetchRequest<NSManagedObject>(entityName: entityName)
+            request.predicate = NSPredicate(format: "id == %@", id)
+            request.fetchLimit = 1
+            request.relationshipKeyPathsForPrefetching = prefetch
+            let mo = (try? context.fetch(request))?.first
+            let result = mo.map(map) ?? empty
+            DispatchQueue.main.async { completion(result) }
+        }
+    }
+
     // MARK: - Network Featured Users
 
     func fetchNetworkFeaturedUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
-        do {
-            let featuredUsersMO = try dataStack.fetch(id, inEntityNamed: NetworkFeaturedUsersMO.entityName) as? NetworkFeaturedUsersMO
-            let featuredUsers = featuredUsersMO?.toUsers() ?? []
-            completion(.success(users: featuredUsers))
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: []))
-        }
+        backgroundRead(id, entityName: NetworkFeaturedUsersMO.entityName,
+                       empty: BHServerApiFeed.UsersResult.success(users: []),
+                       map: { .success(users: ($0 as? NetworkFeaturedUsersMO)?.toUsers() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -57,14 +110,10 @@ class DataBaseManager {
     // MARK: - Network Featured Posts
 
     func fetchNetworkFeaturedPosts(with id: String, completion: @escaping (BHServerApiFeed.PostsResult) -> Void) {
-        do {
-            let featuredPostsMO = try dataStack.fetch(id, inEntityNamed: NetworkFeaturedPostsMO.entityName) as? NetworkFeaturedPostsMO
-            let featuredPosts = featuredPostsMO?.toPosts() ?? []
-            completion(.success(posts: featuredPosts))
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(posts: []))
-        }
+        backgroundRead(id, entityName: NetworkFeaturedPostsMO.entityName,
+                       empty: BHServerApiFeed.PostsResult.success(posts: []),
+                       map: { .success(posts: ($0 as? NetworkFeaturedPostsMO)?.toPosts() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -78,17 +127,10 @@ class DataBaseManager {
     // MARK: - Network Channels
 
     func fetchChannels(with id: String, completion: @escaping (BHServerApiNetwork.ChannelsResult) -> Void) {
-        do {
-            let channelsMO = try dataStack.fetch(id, inEntityNamed: ChannelsMO.entityName) as? ChannelsMO
-            if let channels = channelsMO?.toChannels() {
-                completion(.success(channels: channels))
-            } else {
-                completion(.success(channels: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(channels: []))
-        }
+        backgroundRead(id, entityName: ChannelsMO.entityName,
+                       empty: BHServerApiNetwork.ChannelsResult.success(channels: []),
+                       map: { .success(channels: ($0 as? ChannelsMO)?.toChannels() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -110,17 +152,10 @@ class DataBaseManager {
     // MARK: - Network Users
 
     func fetchNetworkUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
-        do {
-            let networkUsersMO = try dataStack.fetch(id, inEntityNamed: NetworkUsersMO.entityName) as? NetworkUsersMO
-            if let users = networkUsersMO?.toNetworkUsers() {
-                completion(.success(users: users))
-            } else {
-                completion(.success(users: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: []))
-        }
+        backgroundReadPrefetching(id, entityName: NetworkUsersMO.entityName, prefetch: ["users"],
+                                  empty: BHServerApiFeed.UsersResult.success(users: []),
+                                  map: { .success(users: ($0 as? NetworkUsersMO)?.toNetworkUsers() ?? []) },
+                                  completion: completion)
     }
 
     @discardableResult
@@ -142,17 +177,15 @@ class DataBaseManager {
     // MARK: - Network Posts
 
     func fetchNetworkPosts(with id: String, completion: @escaping (BHServerApiFeed.PaginatedPostsResult) -> Void) {
-        do {
-            let networkPostsMO = try dataStack.fetch(id, inEntityNamed: NetworkPostsMO.entityName) as? NetworkPostsMO
-            if let networkPosts = networkPostsMO?.toNetworkPosts() {
-                completion(.success(posts: networkPosts.posts, page: networkPosts.page, pages: networkPosts.pages))
-            } else {
-                completion(.success(posts: [], page: 1, pages: 1))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(posts: [], page: 1, pages: 1))
-        }
+        backgroundReadPrefetching(id, entityName: NetworkPostsMO.entityName, prefetch: ["posts"],
+                                  empty: BHServerApiFeed.PaginatedPostsResult.success(posts: [], page: 1, pages: 1),
+                                  map: { mo in
+                                      if let networkPosts = (mo as? NetworkPostsMO)?.toNetworkPosts() {
+                                          return .success(posts: networkPosts.posts, page: networkPosts.page, pages: networkPosts.pages)
+                                      }
+                                      return .success(posts: [], page: 1, pages: 1)
+                                  },
+                                  completion: completion)
     }
 
     @discardableResult
@@ -301,17 +334,15 @@ class DataBaseManager {
     }
 
     func fetchUserPosts(with id: String, completion: @escaping (BHServerApiFeed.PaginatedPostsResult) -> Void) {
-        do {
-            let postsMO = try dataStack.fetch(id, inEntityNamed: UserPostsMO.entityName) as? UserPostsMO
-            if let userPosts = postsMO?.toPosts() {
-                completion(.success(posts: userPosts.posts, page: userPosts.page, pages: userPosts.pages))
-            } else {
-                completion(.success(posts: [], page: 1, pages: 1))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(posts: [], page: 1, pages: 1))
-        }
+        backgroundRead(id, entityName: UserPostsMO.entityName,
+                       empty: BHServerApiFeed.PaginatedPostsResult.success(posts: [], page: 1, pages: 1),
+                       map: { mo in
+                           if let userPosts = (mo as? UserPostsMO)?.toPosts() {
+                               return .success(posts: userPosts.posts, page: userPosts.page, pages: userPosts.pages)
+                           }
+                           return .success(posts: [], page: 1, pages: 1)
+                       },
+                       completion: completion)
     }
 
     @discardableResult
@@ -325,17 +356,15 @@ class DataBaseManager {
     // MARK: - Favorites
 
     func fetchLikedPosts(with id: String, completion: @escaping (BHServerApiFeed.PaginatedPostsResult) -> Void) {
-        do {
-            let postsMO = try dataStack.fetch(id, inEntityNamed: LikedPostsMO.entityName) as? LikedPostsMO
-            if let likedPosts = postsMO?.toPosts() {
-                completion(.success(posts: likedPosts.posts, page: likedPosts.page, pages: likedPosts.pages))
-            } else {
-                completion(.success(posts: [], page: 1, pages: 1))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(posts: [], page: 1, pages: 1))
-        }
+        backgroundRead(id, entityName: LikedPostsMO.entityName,
+                       empty: BHServerApiFeed.PaginatedPostsResult.success(posts: [], page: 1, pages: 1),
+                       map: { mo in
+                           if let likedPosts = (mo as? LikedPostsMO)?.toPosts() {
+                               return .success(posts: likedPosts.posts, page: likedPosts.page, pages: likedPosts.pages)
+                           }
+                           return .success(posts: [], page: 1, pages: 1)
+                       },
+                       completion: completion)
     }
 
     @discardableResult
@@ -349,17 +378,15 @@ class DataBaseManager {
     // MARK: - Recent Users
 
     func fetchRecentUsers(with id: String, completion: @escaping (BHServerApiBase.PaginatedUsersResult) -> Void) {
-        do {
-            let usersMO = try dataStack.fetch(id, inEntityNamed: RecentUsersMO.entityName) as? RecentUsersMO
-            if let recentUsers = usersMO?.toUsers() {
-                completion(.success(users: recentUsers.users, page: recentUsers.page, pages: recentUsers.pages))
-            } else {
-                completion(.success(users: [], page: 1, pages: 1))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: [], page: 1, pages: 1))
-        }
+        backgroundRead(id, entityName: RecentUsersMO.entityName,
+                       empty: BHServerApiBase.PaginatedUsersResult.success(users: [], page: 1, pages: 1),
+                       map: { mo in
+                           if let recentUsers = (mo as? RecentUsersMO)?.toUsers() {
+                               return .success(users: recentUsers.users, page: recentUsers.page, pages: recentUsers.pages)
+                           }
+                           return .success(users: [], page: 1, pages: 1)
+                       },
+                       completion: completion)
     }
 
     @discardableResult
@@ -400,17 +427,10 @@ class DataBaseManager {
     // MARK: - Related Users
 
     func fetchRelatedUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
-        do {
-            let usersMO = try dataStack.fetch(id, inEntityNamed: RelatedUsersMO.entityName) as? RelatedUsersMO
-            if let users = usersMO?.toUsers() {
-                completion(.success(users: users))
-            } else {
-                completion(.success(users: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: []))
-        }
+        backgroundRead(id, entityName: RelatedUsersMO.entityName,
+                       empty: BHServerApiFeed.UsersResult.success(users: []),
+                       map: { .success(users: ($0 as? RelatedUsersMO)?.toUsers() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -424,14 +444,10 @@ class DataBaseManager {
     // MARK: - Network Radios
 
     func fetchNetworkRadios(with id: String, completion: @escaping (BHServerApiNetwork.RadiosResult) -> Void) {
-        do {
-            let radiosMO = try dataStack.fetch(id, inEntityNamed: NetworkRadiosMO.entityName) as? NetworkRadiosMO
-            let radios = radiosMO?.toRadios() ?? []
-            completion(.success(radios: radios))
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.failure(error: error))
-        }
+        backgroundRead(id, entityName: NetworkRadiosMO.entityName,
+                       empty: BHServerApiNetwork.RadiosResult.success(radios: []),
+                       map: { .success(radios: ($0 as? NetworkRadiosMO)?.toRadios() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -496,17 +512,10 @@ class DataBaseManager {
     // MARK: - Followed Users
 
     func fetchFollowedUsers(with id: String, completion: @escaping (BHServerApiFeed.UsersResult) -> Void) {
-        do {
-            let usersMO = try dataStack.fetch(id, inEntityNamed: FollowedUsersMO.entityName) as? FollowedUsersMO
-            if let users = usersMO?.toUsers() {
-                completion(.success(users: users))
-            } else {
-                completion(.success(users: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: []))
-        }
+        backgroundRead(id, entityName: FollowedUsersMO.entityName,
+                       empty: BHServerApiFeed.UsersResult.success(users: []),
+                       map: { .success(users: ($0 as? FollowedUsersMO)?.toUsers() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -528,17 +537,10 @@ class DataBaseManager {
     // MARK: - Categories
 
     func fetchCategories(with id: String, completion: @escaping (BHServerApiCategories.CategoriesResult) -> Void) {
-        do {
-            let categoriesMO = try dataStack.fetch(id, inEntityNamed: CategoriesMO.entityName) as? CategoriesMO
-            if let categories = categoriesMO?.toCategories() {
-                completion(.success(categories: categories))
-            } else {
-                completion(.success(categories: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(categories: []))
-        }
+        backgroundRead(id, entityName: CategoriesMO.entityName,
+                       empty: BHServerApiCategories.CategoriesResult.success(categories: []),
+                       map: { .success(categories: ($0 as? CategoriesMO)?.toCategories() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -560,17 +562,10 @@ class DataBaseManager {
     // MARK: - Category Users
 
     func fetchCategoryUsers(with id: Int, completion: @escaping (BHServerApiBase.UsersResult) -> Void) {
-        do {
-            let usersMO = try dataStack.fetch(NSNumber(integerLiteral: id), inEntityNamed: CategoryUsersMO.entityName) as? CategoryUsersMO
-            if let users = usersMO?.toUsers() {
-                completion(.success(users: users))
-            } else {
-                completion(.success(users: []))
-            }
-        } catch {
-            BHLog.w("\(#function) - \(error)")
-            completion(.success(users: []))
-        }
+        backgroundRead(NSNumber(integerLiteral: id), entityName: CategoryUsersMO.entityName,
+                       empty: BHServerApiBase.UsersResult.success(users: []),
+                       map: { .success(users: ($0 as? CategoryUsersMO)?.toUsers() ?? []) },
+                       completion: completion)
     }
 
     @discardableResult
@@ -596,4 +591,5 @@ class DataBaseManager {
         BHTracker.shared.trackEvent(with: request)
     }
 }
+
 
