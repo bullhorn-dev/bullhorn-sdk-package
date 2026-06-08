@@ -17,6 +17,13 @@ class BHPlayerContainingViewController: UIViewController {
         
         Movin.isDebugPrintEnabled = false
         miniPlayerView.delegate = self
+
+        miniPlayerView.constraints
+            .first { ($0.firstItem as? UIView) === miniPlayerView
+                && $0.firstAttribute == .height
+                && $0.secondItem == nil
+                && $0.relation == .equal }
+            .map { $0.priority = UILayoutPriority(999) }
     }
 
     override func viewWillAppear(_ animated: Bool) {
