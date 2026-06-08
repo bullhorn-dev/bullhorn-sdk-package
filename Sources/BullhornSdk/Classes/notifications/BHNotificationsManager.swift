@@ -167,13 +167,7 @@ class BHNotificationsManager: NSObject {
         content.title = post.title
         content.body = message
         content.sound = (percent == 0) ? UNNotificationSound.default : nil
-
-        if #available(iOS 15.0, *) {
-            // First appearance may alert once; every progress update is a silent
-            // in-place update that must not pop a banner or wake the screen while
-            // the app is backgrounded.
-            content.interruptionLevel = (percent == 0) ? .active : .passive
-        }
+        content.interruptionLevel = (percent == 0) ? .active : .passive
 
         let payload = [
             NotificationInfo.DataKey.category.rawValue: NotificationInfo.PayloadType.downloadEpisode.rawValue,

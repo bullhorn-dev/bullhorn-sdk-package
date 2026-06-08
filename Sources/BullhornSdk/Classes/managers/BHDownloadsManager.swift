@@ -285,19 +285,11 @@ final class BHDownloadsManager: NSObject {
     // other download takes its place. A stable identifier in BHNotificationsManager
     // makes every update replace the same notification in place.
 
-    /// Start path: request authorization once, then show the notification at 0%.
-    /// Start path: show at 0% if notifications are already allowed; if the user
-    /// hasn't decided yet, opt in *provisionally* (no system prompt, quiet
-    /// delivery) and then show. Never re-prompts and never shows when denied.
     private func showActiveDownloadNotification(for item: BHDownloadItem) {
-        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
         let post = item.post
         let itemId = item.id
         let center = UNUserNotificationCenter.current()
 
-        // The auth check is async; by the time it returns the download may already
-        // have finished (e.g. a fast/cached file). Only show if it's still active —
-        // otherwise we'd publish a notification with nothing left to remove it.
         let presentIfStillActive = { [weak self] in
             DispatchQueue.main.async {
                 guard let self, self.activeDownloadIds.contains(itemId) else { return }
@@ -322,22 +314,14 @@ final class BHDownloadsManager: NSObject {
         }
     }
 
-    /// Progress path: silent in-place update, no authorization round-trip.
     private func updateActiveDownloadNotification(for item: BHDownloadItem) {
-        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
         BHNotificationsManager.shared.showDownloadEpisodeNotification(for: item.post, progress: item.progress)
     }
 
     private func removeActiveDownloadNotification() {
-        guard UserDefaults.standard.isPushNotificationsFeatureEnabled else { return }
         BHNotificationsManager.shared.removeDownloadEpisodeNotification()
     }
 
-    /// Removes the notification with a short guarded retry. Immediate-trigger
-    /// notifications deliver asynchronously, so a show submitted moments earlier
-    /// (e.g. the last progress tick) can land just AFTER the removal and linger.
-    /// The retry only fires if nothing became active in the meantime, so it never
-    /// clobbers a freshly started download's notification.
     private func clearActiveDownloadNotification() {
         removeActiveDownloadNotification()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
