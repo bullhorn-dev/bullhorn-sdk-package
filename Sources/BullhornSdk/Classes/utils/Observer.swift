@@ -44,12 +44,24 @@ public class ObserversContainer<T> {
     }
 
     fileprivate var observers = [ObserverWrapper<T>]()
+    private let observersLock = NSLock()
 
     // MARK: - Public
 
     public init() {}
 
+    /// Thread-safe snapshot of live observers. Taken before notifying so the array is
+    /// never read on the notify thread while add/remove mutate it on another (data race).
+    fileprivate func snapshotObservers() -> [T] {
+        observersLock.lock()
+        defer { observersLock.unlock() }
+        return observers.compactMap { $0.unwrap() }
+    }
+
     @discardableResult public func addObserver(_ observer: ObserverProtocol, withDuplicates: Bool = false) -> Bool {
+
+        observersLock.lock()
+        defer { observersLock.unlock() }
 
         if !withDuplicates {
             guard indexOfObserver(with: observer.objectIdentifier) == nil else {
@@ -61,15 +73,19 @@ public class ObserversContainer<T> {
     }
 
     public func removeObserver(_ observer: ObserverProtocol) {
+        observersLock.lock()
+        defer { observersLock.unlock() }
         removeObserver(by: observer.objectIdentifier)
     }
 
     public func removeAll() {
+        observersLock.lock()
+        defer { observersLock.unlock() }
         observers.removeAll()
     }
 
     public func notifyObservers(block: (T) -> Void) {
-        observers.compactMap { $0.unwrap() }.forEach { block($0) }
+        snapshotObservers().forEach { block($0) }
     }
 
     // MARK: - Private
@@ -98,13 +114,14 @@ public class ObserversContainerNotifyingOnQueue<T>: ObserversContainer<T>, Obser
 
     public func notifyObserversSync(block: (T) -> Void) {
 
-        let observerInstances = observers.compactMap { $0.unwrap() }
+        let observerInstances = snapshotObservers()
         notifyQueue.sync { observerInstances.forEach { block($0) } }
     }
 
     public func notifyObserversAsync(block: @escaping (T) -> Void) {
 
-        let observerInstances = observers.compactMap { $0.unwrap() }
+        let observerInstances = snapshotObservers()
         notifyQueue.async { observerInstances.forEach { block($0) } }
     }
 }
+
