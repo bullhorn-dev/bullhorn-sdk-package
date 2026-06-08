@@ -36,25 +36,29 @@ public class UserMO: NSManagedObject {
         var links: BHSocialLinks?
 
         if let validChannels = channels {
-            let channelsMO = NSKeyedUnarchiver.unarchiveObject(with: validChannels) as? [[String:Any]]
-            channelsMO?.forEach({ item in
+            let channelsMO = validChannels.legacyUnarchivedObject() as? [[String: Any]]
+
+            channelsMO?.forEach { item in
                 if let channel = BHChannel.fromDictionary(item) {
                     cnls.append(channel)
                 }
-            })
+            }
         }
 
         if let validCategories = categories {
-            let categoriesMO = NSKeyedUnarchiver.unarchiveObject(with: validCategories) as? [[String:Any]]
-            categoriesMO?.forEach({ item in
+            let categoriesMO = validCategories.legacyUnarchivedObject() as? [[String: Any]]
+
+            categoriesMO?.forEach { item in
                 if let category = BHCategory.fromDictionary(item) {
                     ctgrs.append(category)
                 }
-            })
+            }
         }
         
         if let validSocialLinks = socialLinks {
-            if let socialLinksMO = NSKeyedUnarchiver.unarchiveObject(with: validSocialLinks) as? [String: Any] {
+            let socialLinksMO = validSocialLinks.legacyUnarchivedObject() as? [String: Any]
+
+            if let socialLinksMO = socialLinksMO {
                 links = BHSocialLinks.fromDictionary(socialLinksMO)
             }
         }

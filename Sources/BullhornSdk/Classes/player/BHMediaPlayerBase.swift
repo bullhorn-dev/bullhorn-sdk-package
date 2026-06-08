@@ -294,8 +294,12 @@ extension BHMediaPlayerBase {
             else { return false }
             return AVAudioSession.InterruptionOptions(rawValue: v).contains(.shouldResume)
         }()
-        let wasSuspended = (notification.userInfo?[AVAudioSessionInterruptionWasSuspendedKey]
-            as? NSNumber)?.boolValue ?? false
+        
+        let wasSuspended: Bool = {
+            guard let v = notification.userInfo?[AVAudioSessionInterruptionReasonKey] as? UInt,
+                  let reason = AVAudioSession.InterruptionReason(rawValue: v) else { return false }
+            return reason == .appWasSuspended
+        }()
 
         switch type {
         case .began where !wasSuspended:

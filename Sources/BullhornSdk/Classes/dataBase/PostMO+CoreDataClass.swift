@@ -29,7 +29,9 @@ public class PostMO: NSManagedObject {
         post.profilePictureTiny = profilePictureTiny != nil ? URL(string: profilePictureTiny!) : nil
         
         if let validSocialLinks = socialLinks {
-            if let socialLinksMO = NSKeyedUnarchiver.unarchiveObject(with: validSocialLinks) as? [String: Any] {
+            let socialLinksMO = validSocialLinks.legacyUnarchivedObject() as? [String: Any]
+
+            if let socialLinksMO = socialLinksMO {
                 post.socialLinks = BHSocialLinks.fromDictionary(socialLinksMO)
             }
         }
