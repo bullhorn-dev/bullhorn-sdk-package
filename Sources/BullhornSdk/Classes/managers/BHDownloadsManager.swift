@@ -640,12 +640,9 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
                     downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
         // Runs on the URLSession delegate queue (background). The temp file at
-        // `location` is deleted right after this returns, so everything here is
-        // synchronous. We:
-        //   1. move the temp file to a staging path named with a best-guess
-        //      container extension (so AVAsset can parse it),
-        //   2. inspect it for a video track (ground truth — works offline, off-main),
-        //   3. finalize the name (.mp4 for video) so the player recognizes the type.
+        // `location` is deleted right after this returns, so the move to staging MUST
+        // happen synchronously here. Video classification, however, is done
+        // asynchronously (see below) so we never block this thread on AVFoundation.
         guard let id = downloadTask.taskDescription else { return }
         guard let docs = FileManager.default.documentsDirectory() else { return }
 
@@ -664,32 +661,45 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
             return
         }
 
-        // Safe to block here: this is the background delegate queue, not main.
-        let hasVideo = Self.hasVideoTrack(at: staging)
-        let videoExts = ["mp4", "m4v", "mov"]
-        let finalExt = hasVideo ? (videoExts.contains(guessExt) ? guessExt : "mp4") : guessExt
+        // Publish the staged file immediately so didCompleteWithError (which fires right
+        // after this) sees a valid file and marks the item .success. Both hops are
+        // main-queue and enqueued in delegate-callback order, so this runs first.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let item = self.cachedItem(id) else {
+                try? FileManager.default.removeItem(at: staging)
+                return
+            }
+            item.file = staging
+        }
 
-        var movedURL: URL? = staging
-        if finalExt != guessExt {
+        // Classify the video track asynchronously — NO semaphore. Blocking the
+        // delegate-queue thread (user-initiated QoS) on AVFoundation's lower-QoS track
+        // loading caused a priority inversion. The staging file persists, so if the
+        // guessed extension was wrong for a video file we rename and update item.file.
+        Self.hasVideoTrack(at: staging) { [weak self] hasVideo in
+            guard let self else { return }
+            let videoExts = ["mp4", "m4v", "mov"]
+            let finalExt = hasVideo ? (videoExts.contains(guessExt) ? guessExt : "mp4") : guessExt
+            guard finalExt != guessExt else { return }   // common case: nothing to do
+
             let dest = docs.appendingPathComponent("\(id).\(finalExt)")
             do {
                 if FileManager.default.fileExists(atPath: dest.path) {
                     try FileManager.default.removeItem(at: dest)
                 }
                 try FileManager.default.moveItem(at: staging, to: dest)
-                movedURL = dest
             } catch {
                 BHLog.w("Failed to finalize downloaded file for \(id): \(error)")
-            }
-        }
-
-        let resolved = movedURL
-        DispatchQueue.main.async { [weak self] in
-            guard let self, let item = self.cachedItem(id) else {
-                if let resolved { try? FileManager.default.removeItem(at: resolved) }
                 return
             }
-            item.file = resolved   // nil never happens here; didComplete reads it
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self, let item = self.cachedItem(id) else {
+                    try? FileManager.default.removeItem(at: dest)
+                    return
+                }
+                item.file = dest
+            }
         }
     }
 
@@ -707,28 +717,23 @@ extension BHDownloadsManager: URLSessionDownloadDelegate {
     }
 
     /// Ground-truth audio/video classification from the downloaded file itself.
-    /// Blocks until the (local) asset's tracks load — call only off the main thread.
-    private static func hasVideoTrack(at url: URL) -> Bool {
+    /// Loads the (local) asset's video tracks asynchronously and reports the result via
+    /// `completion` (called on an arbitrary background queue). No semaphore — blocking a
+    /// QoS-elevated delegate thread on this lower-QoS work caused a priority inversion.
+    private static func hasVideoTrack(at url: URL, completion: @escaping (Bool) -> Void) {
         let asset = AVURLAsset(url: url)
-        let semaphore = DispatchSemaphore(value: 0)
-        var result = false
 
         if #available(iOS 15.0, *) {
             asset.loadTracks(withMediaType: .video) { tracks, _ in
-                result = !(tracks?.isEmpty ?? true)
-                semaphore.signal()
+                completion(!(tracks?.isEmpty ?? true))
             }
         } else {
             asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
-                if asset.statusOfValue(forKey: "tracks", error: nil) == .loaded {
-                    result = !asset.tracks(withMediaType: .video).isEmpty
-                }
-                semaphore.signal()
+                let hasVideo = asset.statusOfValue(forKey: "tracks", error: nil) == .loaded
+                    && !asset.tracks(withMediaType: .video).isEmpty
+                completion(hasVideo)
             }
         }
-
-        _ = semaphore.wait(timeout: .now() + 5)   // local file: returns quickly
-        return result
     }
 
     func urlSession(_ session: URLSession,
