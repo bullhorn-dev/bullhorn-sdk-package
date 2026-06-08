@@ -51,7 +51,7 @@ class BHRadioStreamsView: UIView {
     public let laterStreamsView: BHStreamsCarouselView = {
         let view = BHStreamsCarouselView()
         
-        return view        
+        return view
     }()
     
     public let playButton: BHPlayButton = {
@@ -62,6 +62,8 @@ class BHRadioStreamsView: UIView {
     
     private var placeholderImage: UIImage?
     
+    private var laterStreamsHeightConstraint: NSLayoutConstraint?
+
     private let spacingHeight: CGFloat = 10.0
     private let imageHeight: CGFloat = Constants.radioAspectRatio * (UIScreen.main.bounds.width - 4 * Constants.paddingHorizontal)
     private let titleLblHeight: CGFloat = 24.0
@@ -115,11 +117,17 @@ class BHRadioStreamsView: UIView {
             laterStreamsView.translatesAutoresizingMaskIntoConstraints = false
             vStackView.translatesAutoresizingMaskIntoConstraints = false
             
+            let shadowBottom = shadowView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.paddingVertical)
+            shadowBottom.priority = UILayoutPriority(999)
+
+            let laterHeight = laterStreamsView.heightAnchor.constraint(equalToConstant: laterStreamsView.calculateHeight())
+            laterStreamsHeightConstraint = laterHeight
+
             NSLayoutConstraint.activate([
                 shadowView.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.paddingVertical),
                 shadowView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.paddingHorizontal),
                 shadowView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.paddingHorizontal),
-                shadowView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.paddingVertical),
+                shadowBottom,
                 vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
                 vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
                 vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
@@ -131,7 +139,7 @@ class BHRadioStreamsView: UIView {
                 playButton.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
                 playButton.heightAnchor.constraint(equalToConstant: playBtnHeight),
                 titleLabel.heightAnchor.constraint(equalToConstant: titleLblHeight),
-                laterStreamsView.heightAnchor.constraint(equalToConstant: laterStreamsView.calculateHeight())
+                laterHeight
             ])
         } else {
             let vStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, playButton])
@@ -189,6 +197,9 @@ class BHRadioStreamsView: UIView {
         playButton.isEnabled = true
         
         laterStreamsView.streams = radio.laterStreams
+        // Keep the baked height in sync with the now-populated carousel so the
+        // content height matches the header height from calculateHeight().
+        laterStreamsHeightConstraint?.constant = laterStreamsView.calculateHeight()
         
         imageView.sd_setImage(with: liveStream.coverUrl, placeholderImage: self.placeholderImage)
         titleLabel.text = liveStream.title
@@ -197,7 +208,7 @@ class BHRadioStreamsView: UIView {
         titleLabel.accessibilityLabel = liveStream.title
 
         playButton.isAccessibilityElement = true
-        playButton.context = "Live Now Radio"  
+        playButton.context = "Live Now Radio"
     }
 }
 
@@ -211,3 +222,4 @@ extension BHRadioStreamsView: BHRadioStreamsListener {
         }
     }
 }
+

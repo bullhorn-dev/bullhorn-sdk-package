@@ -104,6 +104,10 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         
         self.view.backgroundColor = .playerDisplayBackground()
 
+        routePickerViews.forEach { picker in
+            (picker.superview as? UIStackView)?.setCustomSpacing(0, after: picker)
+        }
+
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
 
@@ -417,7 +421,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         if BHHybridPlayer.shared.isPlaying() {
             BHHybridPlayer.shared.pause()
         } else {
-            BHHybridPlayer.shared.resume()            
+            BHHybridPlayer.shared.resume()
         }
     }
 
@@ -835,7 +839,7 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
             self.updateAfterSettingsChanged()
             self.updateSettingsControls()
         }
-    }    
+    }
 }
 
 // MARK: - BHLivePlayerListener
@@ -883,3 +887,4 @@ extension BHPlayerBaseViewController: BHLivePlayerListener {
         }
     }
 }
+

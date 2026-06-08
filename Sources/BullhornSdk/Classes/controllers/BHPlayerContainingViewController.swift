@@ -91,9 +91,9 @@ class BHPlayerContainingViewController: UIViewController {
         let modal = storyboard.instantiateViewController(withIdentifier: identifier) as! BHPlayerBaseViewController
         modal.type = type
         modal.delegate = self
-        modal.view.layoutIfNeeded()
+        modal.view.frame = CGRect(origin: .zero, size: UIScreen.main.bounds.size)
         
-        let startModalOrigin = CGPoint(x: 0, y: UIScreen.main.bounds.height) 
+        let startModalOrigin = CGPoint(x: 0, y: UIScreen.main.bounds.height)
         let endModalOrigin = CGPoint(x: 0, y: 0)
         
         movin!.addAnimations([
@@ -318,3 +318,4 @@ extension BHPlayerContainingViewController: BHPlayerBaseViewControllerDelegate {
         openPostDetails(post)
     }
 }
+

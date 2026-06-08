@@ -249,11 +249,16 @@ class BHPostCollectionCell: UICollectionViewCell {
         hBottomStackView.translatesAutoresizingMaskIntoConstraints = false
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        let vStackBottom = vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical)
+        vStackBottom.priority = UILayoutPriority(999)
+        let vStackRight = vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal)
+        vStackRight.priority = UILayoutPriority(999)
+
         NSLayoutConstraint.activate([
             vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
-            vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical),
+            vStackBottom,
             vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
-            vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
+            vStackRight,
 
             imageView.widthAnchor.constraint(equalToConstant: iconSize),
             imageView.heightAnchor.constraint(equalToConstant: iconSize),
@@ -524,4 +529,5 @@ extension BHPostCollectionCell: BHHybridPlayerListener {
         }
     }
 }
+
 

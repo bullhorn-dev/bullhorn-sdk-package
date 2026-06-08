@@ -225,7 +225,7 @@
                     <constraint firstAttribute="trailing" secondItem="rnA-fj-jBc" secondAttribute="trailing" id="0ea-RT-FBG"/>
                     <constraint firstItem="rnA-fj-jBc" firstAttribute="top" secondItem="mCl-FO-1hE" secondAttribute="top" id="Mf9-NQ-nbo"/>
                     <constraint firstItem="rnA-fj-jBc" firstAttribute="leading" secondItem="mCl-FO-1hE" secondAttribute="leading" id="NzU-zv-WjE"/>
-                    <constraint firstAttribute="bottom" secondItem="rnA-fj-jBc" secondAttribute="bottom" id="T0q-gP-gSy"/>
+                    <constraint firstAttribute="bottom" secondItem="rnA-fj-jBc" secondAttribute="bottom" priority="999" id="T0q-gP-gSy"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -266,10 +266,10 @@
             <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemCyanColor">
-            <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.75294117647058822" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.76470588235294112" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

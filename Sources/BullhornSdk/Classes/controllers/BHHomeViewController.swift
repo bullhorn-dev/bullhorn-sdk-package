@@ -15,6 +15,12 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
     fileprivate var headerView: BHHomeHeaderView?
 
+    fileprivate lazy var sizingHeaderView: BHHomeHeaderView? = {
+        let bundle = Bundle.module
+        let nib = UINib(nibName: "BHHomeHeaderView", bundle: bundle)
+        return nib.instantiate(withOwner: nil, options: nil).first as? BHHomeHeaderView
+    }()
+
     fileprivate var selectedChannelId: String = UserDefaults.standard.selectedChannelId
 
     fileprivate var refreshControl: UIRefreshControl?
@@ -381,7 +387,9 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
         if section == 0 {
             if shouldShowHeader {
-                return CGSize(width: view.frame.width, height: headerView?.calculateHeight() ?? 768.0)
+                let measuringView = headerView ?? sizingHeaderView
+                let height = measuringView?.calculateHeight() ?? 0.0
+                return CGSize(width: view.frame.width, height: height)
             } else {
                 return CGSize(width: view.frame.width, height: 0.0)
             }
@@ -441,3 +449,4 @@ extension BHHomeViewController: BHUserManagerListener {
     
     func userManagerDidUpdatePosts(_ manager: BHUserManager) {}
 }
+

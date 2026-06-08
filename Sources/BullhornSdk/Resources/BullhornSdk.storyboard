@@ -44,7 +44,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jlR-Pj-Vyl">
                                                                 <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="44" id="nov-s9-MS3"/>
+                                                                    <constraint firstAttribute="width" priority="999" constant="44" id="nov-s9-MS3"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                                 <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -66,13 +66,13 @@
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="44" id="4Wd-cL-oiF"/>
+                                                                    <constraint firstAttribute="width" priority="999" constant="44" id="4Wd-cL-oiF"/>
                                                                 </constraints>
                                                             </view>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gir-R1-i9J">
                                                                 <rect key="frame" x="330" y="0.0" width="44" height="44"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="44" id="03S-Vg-31i"/>
+                                                                    <constraint firstAttribute="width" priority="999" constant="44" id="03S-Vg-31i"/>
                                                                 </constraints>
                                                                 <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -349,7 +349,7 @@
                                                                         <rect key="frame" x="78" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="wNc-hs-ROx"/>
-                                                                            <constraint firstAttribute="width" constant="44" id="xGv-AU-CXi"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="xGv-AU-CXi"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPrimary"/>
                                                                         <state key="normal">
@@ -361,10 +361,10 @@
                                                                         </connections>
                                                                     </button>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sip-qC-siB" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                                                        <rect key="frame" x="126" y="10" width="44" height="44"/>
+                                                                        <rect key="frame" x="126" y="10" width="0.0" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="YbU-qF-iqO"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="YbU-qF-iqO"/>
                                                                             <constraint firstAttribute="height" constant="44" id="fnZ-Rh-8ya"/>
                                                                         </constraints>
                                                                         <userDefinedRuntimeAttributes>
@@ -392,7 +392,7 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lr3-8z-Pac">
                                                                         <rect key="frame" x="208" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="0rD-Ld-jbP"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="0rD-Ld-jbP"/>
                                                                             <constraint firstAttribute="height" constant="44" id="jHI-bi-tkx"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPrimary"/>
@@ -490,7 +490,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="oMJ-eh-lBc"/>
-                                                            <constraint firstAttribute="width" constant="44" id="sYx-hb-KWB"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="sYx-hb-KWB"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -508,18 +508,18 @@
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C9L-Vw-4SR" customClass="BHRoutePickerView" customModule="BullhornSdk">
-                                                        <rect key="frame" x="286" y="0.0" width="44" height="44"/>
+                                                        <rect key="frame" x="330" y="0.0" width="0.0" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="faN-eb-B6r"/>
-                                                            <constraint firstAttribute="width" constant="44" id="l6l-KA-kU2"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="l6l-KA-kU2"/>
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8O-9D-9h8">
                                                         <rect key="frame" x="330" y="0.0" width="44" height="44"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="EVd-tj-gXx"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="EVd-tj-gXx"/>
                                                             <constraint firstAttribute="height" constant="44" id="Kpx-nr-QaL"/>
                                                         </constraints>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -539,7 +539,6 @@
                                                     <constraint firstAttribute="height" constant="44" id="AYE-vy-bcD"/>
                                                     <constraint firstItem="P8O-9D-9h8" firstAttribute="leading" secondItem="C9L-Vw-4SR" secondAttribute="trailing" id="Bvw-CV-Zqo"/>
                                                     <constraint firstItem="OKN-WO-zOx" firstAttribute="centerY" secondItem="sxL-7W-XHq" secondAttribute="centerY" id="EjD-bI-vJf"/>
-                                                    <constraint firstItem="OKN-WO-zOx" firstAttribute="leading" secondItem="sxL-7W-XHq" secondAttribute="leading" id="Y0O-j0-pOu"/>
                                                     <constraint firstItem="C9L-Vw-4SR" firstAttribute="centerY" secondItem="sxL-7W-XHq" secondAttribute="centerY" id="fof-Da-U31"/>
                                                     <constraint firstItem="P8O-9D-9h8" firstAttribute="centerY" secondItem="sxL-7W-XHq" secondAttribute="centerY" id="r91-1U-oHs"/>
                                                 </constraints>
@@ -619,7 +618,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ewg-G5-XWF">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="56"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="jjZ-rG-WyX"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="jjZ-rG-WyX"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -635,7 +634,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k7J-gk-s0j">
                                                         <rect key="frame" x="53" y="0.0" width="44" height="56"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="Dne-bT-SPT"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="Dne-bT-SPT"/>
                                                         </constraints>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                         <state key="normal" title="1.75x">
@@ -676,7 +675,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J06-dP-UWa">
                                                         <rect key="frame" x="165" y="2.3333333333333321" width="44" height="51.666666666666671"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="VhL-T3-IFK"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="VhL-T3-IFK"/>
                                                             <constraint firstAttribute="height" constant="56" id="lMk-hv-S3s"/>
                                                         </constraints>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -707,7 +706,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HvE-Ye-CpM">
                                                         <rect key="frame" x="277" y="0.0" width="44" height="56"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="8WT-Lc-QgK"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="8WT-Lc-QgK"/>
                                                         </constraints>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -722,7 +721,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r9I-PH-xph">
                                                         <rect key="frame" x="330" y="0.0" width="44" height="56"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="HAv-L1-Lwj"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="44" id="HAv-L1-Lwj"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1311,7 +1310,7 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JLd-vr-mtx">
                                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="2Qi-B2-Ssh"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="2Qi-B2-Ssh"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1329,17 +1328,17 @@
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </view>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3P-Xr-jNS" customClass="BHRoutePickerView" customModule="BullhornSdk">
-                                                                        <rect key="frame" x="286" y="0.0" width="44" height="44"/>
+                                                                        <rect key="frame" x="330" y="0.0" width="0.0" height="44"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="nLF-xp-oAg"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="nLF-xp-oAg"/>
                                                                         </constraints>
                                                                     </view>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3I5-VL-1T9">
                                                                         <rect key="frame" x="330" y="0.0" width="44" height="44"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="SSK-zJ-Loh"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="SSK-zJ-Loh"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -1382,7 +1381,7 @@
                                                                         <rect key="frame" x="0.0" y="10" width="44" height="44"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="NOD-S1-HMe"/>
-                                                                            <constraint firstAttribute="width" constant="44" id="li3-09-bkb"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="li3-09-bkb"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                         <state key="normal" title="1.75x">
@@ -1395,7 +1394,7 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SyG-hr-ZdY">
                                                                         <rect key="frame" x="64" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="F5i-lW-2C8"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="F5i-lW-2C8"/>
                                                                             <constraint firstAttribute="height" constant="44" id="kkC-dl-41q"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1423,7 +1422,7 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JjD-qu-HCL">
                                                                         <rect key="frame" x="128" y="6.3333333333333357" width="44" height="51.666666666666671"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="2EL-a0-mfo"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="2EL-a0-mfo"/>
                                                                             <constraint firstAttribute="height" constant="56" id="p9q-lU-dhw"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1440,7 +1439,7 @@
                                                                         <rect key="frame" x="192" y="8.6666666666666643" width="44" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="44" id="fwh-1r-tpk"/>
-                                                                            <constraint firstAttribute="width" constant="44" id="sbI-Fk-qu5"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="sbI-Fk-qu5"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -1455,7 +1454,7 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEv-td-YwK">
                                                                         <rect key="frame" x="256" y="10" width="44" height="44"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="44" id="CbD-hh-Nom"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="CbD-hh-Nom"/>
                                                                             <constraint firstAttribute="height" constant="44" id="m9x-1Z-Pq4"/>
                                                                         </constraints>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -1516,7 +1515,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="32" id="cQE-au-1bd"/>
-                                                                            <constraint firstAttribute="width" constant="44" id="roi-L4-RBO"/>
+                                                                            <constraint firstAttribute="width" priority="999" constant="44" id="roi-L4-RBO"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                         <color key="tintColor" name="bhColorPlayerOnDisplayBg"/>
@@ -3095,7 +3094,6 @@
                                     <constraint firstItem="u6a-YY-Jjv" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="JDw-A5-cec"/>
                                     <constraint firstAttribute="trailing" secondItem="u6a-YY-Jjv" secondAttribute="trailing" id="NlL-lQ-oX2"/>
                                     <constraint firstAttribute="trailing" secondItem="9Hv-AC-97U" secondAttribute="trailing" id="Uwe-b1-wyU"/>
-                                    <constraint firstAttribute="bottom" secondItem="9Hv-AC-97U" secondAttribute="bottom" id="cQj-sB-yFD"/>
                                     <constraint firstItem="u6a-YY-Jjv" firstAttribute="top" secondItem="M5b-yz-4Be" secondAttribute="top" id="ldi-Aa-DEt"/>
                                     <constraint firstItem="9Hv-AC-97U" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="oQD-dN-v8w"/>
                                 </constraints>

@@ -67,7 +67,7 @@ class BHSocialLinkCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(titleLabel)
 
         stackView.axis = .horizontal
-        stackView.alignment = .fill
+        stackView.alignment = .center
         stackView.distribution = .fill
         stackView.spacing = Constants.paddingHorizontal / 3
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,10 +78,8 @@ class BHSocialLinkCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             imageView.heightAnchor.constraint(equalToConstant: 20),
             imageView.widthAnchor.constraint(equalToConstant: 20),
-            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: itemHeight),
-                
+
             stackView.leftAnchor.constraint(equalTo: leftAnchor),
             stackView.rightAnchor.constraint(equalTo: rightAnchor),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -103,4 +101,5 @@ class BHSocialLinkCollectionViewCell: UICollectionViewCell {
         self.layoutSubviews()
     }
 }
+
 

@@ -73,6 +73,7 @@ class BHPlayerQueueBottomSheet: UIViewController {
         
         let tableViewHeight = CGFloat(BHHybridPlayer.shared.queue.items.count * 72)
         heightConstraint = NSLayoutConstraint(item: tableView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: tableViewHeight)
+        heightConstraint.priority = UILayoutPriority(999)
         heightConstraint.isActive = true
 
         NSLayoutConstraint.activate([
@@ -86,7 +87,6 @@ class BHPlayerQueueBottomSheet: UIViewController {
             titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 28),
-            titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
 
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             stackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
@@ -241,4 +241,5 @@ extension BHPlayerQueueBottomSheet: BHHybridPlayerListener {
     }
 
 }
+
 

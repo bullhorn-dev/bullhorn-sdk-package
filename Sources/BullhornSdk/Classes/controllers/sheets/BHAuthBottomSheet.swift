@@ -54,7 +54,6 @@ class BHAuthBottomSheet: BHBottomSheetController {
             acceptButton.widthAnchor.constraint(equalToConstant: 240),
             acceptButton.heightAnchor.constraint(equalToConstant: 54),
             
-            verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             verticalStackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: Constants.paddingHorizontal),
             verticalStackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -Constants.paddingHorizontal),
             verticalStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
@@ -73,3 +72,4 @@ class BHAuthBottomSheet: BHBottomSheetController {
         dismiss(animated: true)
     }
 }
+

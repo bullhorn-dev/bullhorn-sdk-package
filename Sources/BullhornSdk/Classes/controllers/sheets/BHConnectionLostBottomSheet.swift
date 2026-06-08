@@ -89,7 +89,6 @@ final class BHConnectionLostBottomSheet: BHBottomSheetController {
             titleLabel.heightAnchor.constraint(equalToConstant: 30),
             descriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 70),
 
-            verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             verticalStackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: Constants.paddingHorizontal),
             verticalStackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -Constants.paddingHorizontal),
             verticalStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)

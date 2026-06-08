@@ -98,14 +98,14 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     
     func calculateHeight(_ searchActive: Bool = false) -> CGFloat {
         if searchActive {
-            return searchBarView.frame.size.height
+            return Constants.panelHeight
         } else {
             let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
             let spacing: CGFloat = 12
             let bio = bioLabel.attributedText?.string ?? ""
             let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
 
-            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + searchBarView.frame.size.height
+            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + Constants.panelHeight
         }
     }
 

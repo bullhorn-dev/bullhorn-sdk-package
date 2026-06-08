@@ -69,11 +69,12 @@ open class BHBottomSheetController: UIViewController {
                 titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
                 titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
                 titleLabel.heightAnchor.constraint(equalToConstant: 28),
-                titleLabel.topAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.bottomAnchor, constant: 10),
             ])
         }
             
         NSLayoutConstraint.activate([
+            buttonView.heightAnchor.constraint(equalToConstant: 10),
+
             closeButton.widthAnchor.constraint(equalToConstant: 36),
             closeButton.heightAnchor.constraint(equalToConstant: 5),
             closeButton.centerXAnchor.constraint(equalTo: buttonView.safeAreaLayoutGuide.centerXAnchor),
@@ -190,3 +191,4 @@ open class BHBottomSheetController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
 }
+
