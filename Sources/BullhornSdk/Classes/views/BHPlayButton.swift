@@ -101,6 +101,9 @@ class BHPlayButton: UIView {
         
         button.isAccessibilityElement = false
         loadIndicator.isAccessibilityElement = false
+        loadIndicator.stopAnimating()
+        loadIndicator.isHidden = true
+        button.isHidden = false
 
         if BHHybridPlayer.shared.isPostPlaying(post?.id ?? "") {
             button.setImage(UIImage(systemName: "pause.fill")?.withConfiguration(config), for: .normal)

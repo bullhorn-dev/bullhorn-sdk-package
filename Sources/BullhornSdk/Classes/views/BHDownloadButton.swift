@@ -64,7 +64,6 @@ class BHDownloadButton: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         button.layer.cornerRadius = frame.size.height / 2
-        updateButtonState()
     }
     
     // MARK: - Private
@@ -174,7 +173,7 @@ class BHDownloadButton: UIView {
             break
         }
 
-        layoutSubviews()
+        updateButtonState()
     }
 }
 
@@ -185,7 +184,7 @@ extension BHDownloadButton: BHDownloadsManagerListener {
     func downloadsManager(_ manager: BHDownloadsManager, allRemoved status: Bool) {
         DispatchQueue.main.async {
             self.status = .start
-            self.layoutSubviews()
+            self.updateButtonState()
         }
     }
 
