@@ -2167,18 +2167,48 @@
                                                     <outlet property="titleLabel" destination="W1v-Vm-UaZ" id="AqS-Tk-JZi"/>
                                                 </connections>
                                             </tableViewCell>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingVersionCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingVersionCell" rowHeight="55" id="BHV-Ce-ll0" customClass="BHSettingVersionCell" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="264" width="390" height="55"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BHV-Ce-ll0" id="BHV-Cv-iew">
+                                                    <rect key="frame" x="0.0" y="0.0" width="390" height="55"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-St-ack">
+                                                            <rect key="frame" x="20" y="16" width="350" height="23"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-Ti-tle">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="23"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                                    <color key="textColor" name="bhColorPrimary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="750" horizontalCompressionResistancePriority="751" verticalHuggingPriority="251" text="0.0.6 (3)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-Ve-rsn">
+                                                                    <rect key="frame" x="208" y="0.0" width="142" height="23"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                                                    <color key="textColor" name="bhColorSecondary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </stackView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="BHV-St-ack" firstAttribute="leading" secondItem="BHV-Cv-iew" secondAttribute="leading" constant="20" id="BHV-Cn-001"/>
+                                                        <constraint firstAttribute="trailing" secondItem="BHV-St-ack" secondAttribute="trailing" constant="20" id="BHV-Cn-002"/>
+                                                        <constraint firstItem="BHV-St-ack" firstAttribute="top" secondItem="BHV-Cv-iew" secondAttribute="top" constant="16" id="BHV-Cn-003"/>
+                                                        <constraint firstAttribute="bottom" secondItem="BHV-St-ack" secondAttribute="bottom" constant="16" id="BHV-Cn-004"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <outlet property="titleLabel" destination="BHV-Ti-tle" id="BHV-Ou-t01"/>
+                                                    <outlet property="versionLabel" destination="BHV-Ve-rsn" id="BHV-Ou-t02"/>
+                                                </connections>
+                                            </tableViewCell>
                                         </prototypes>
                                     </tableView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version 0.0.6 (3)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riA-or-ieg">
-                                        <rect key="frame" x="0.0" y="578" width="390" height="44"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="IJn-G1-vxT"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                        <color key="textColor" name="bhColorSecondary"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lQ-5O-eTP" customClass="BHMiniPlayerView" customModule="BullhornSdk">
                                         <rect key="frame" x="0.0" y="622" width="390" height="60"/>
                                         <color key="backgroundColor" systemColor="systemTealColor"/>
@@ -2210,7 +2240,6 @@
                         <outlet property="miniPlayerView" destination="1lQ-5O-eTP" id="geI-RT-VqG"/>
                         <outlet property="stackView" destination="wW3-Qa-U1a" id="Cke-7r-5Pi"/>
                         <outlet property="tableView" destination="eoT-Yu-FJA" id="K7Z-C7-6qN"/>
-                        <outlet property="versionLabel" destination="riA-or-ieg" id="V6R-dH-j3u"/>
                         <segue destination="ISO-h0-mfF" kind="show" identifier="Profile.FavoritesSegueIdentifier" id="mQH-fg-wpb"/>
                         <segue destination="cko-RD-0fW" kind="show" identifier="Profile.DownloadsSegueIdentifier" id="NTL-B9-tFj"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>

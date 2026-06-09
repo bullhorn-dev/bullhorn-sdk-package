@@ -14,6 +14,7 @@ enum SettingsOptionType {
     case accountCell(model: SettingsAccountOption)
     case toggleCell(model: SettingsToggleOption)
     case radioCell(model: SettingsRadioOption)
+    case versionCell(model: SettingsVersionOption)
 }
 
 struct SettingsOption {
@@ -54,6 +55,13 @@ struct SettingsRadioOption {
     let hasText: Bool
     let handler : (() -> Void)
 }
+
+struct SettingsVersionOption {
+    let title: String
+    let version: String
+    let handler: (() -> Void)
+}
+
 // MARK: - Info links
 
 public enum BHInfoLinkType {
@@ -87,7 +95,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
 
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var versionLabel: UILabel!
     
     var models = [Section]()
 
@@ -112,15 +119,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
         tableView.separatorColor = .divider().withAlphaComponent(0.5)
 
         stackView.backgroundColor = .primaryBackground()
-
-        updateVersion()
-
-        let versionTap = UITapGestureRecognizer(target: self, action: #selector(self.onVersionTapped(_:)))
-        versionTap.numberOfTapsRequired = 3
-        versionLabel.isUserInteractionEnabled = true
-        versionLabel.font = .secondaryButton()
-        versionLabel.adjustsFontForContentSizeCategory = true
-        versionLabel.addGestureRecognizer(versionTap)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onAccountChangedNotification(_:)), name: BullhornSdk.OnExternalAccountChangedNotification, object: nil)
     }
@@ -203,6 +201,11 @@ class BHProfileViewController: BHPlayerContainingViewController {
             }, disclosure: true)),
         ]))
         
+        let versionValue = BullhornSdk.shared.appConfig.appVersion(useBuildNumber: true) + (UserDefaults.standard.isDevModeEnabled ? " DEV" : "")
+        let versionCell: SettingsOptionType = .versionCell(model: SettingsVersionOption(title: "Version", version: versionValue, handler: { [weak self] in
+            self?.toggleDevMode()
+        }))
+
         if UserDefaults.standard.isDevModeEnabled {
             models.append(Section(title: "App Preferences", options: [
                 .staticCell(model: SettingsOption(title: "Settings", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
@@ -211,47 +214,28 @@ class BHProfileViewController: BHPlayerContainingViewController {
                 .staticCell(model: SettingsOption(title: "Developer mode options", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DevModeSegueIdentifier, sender: self)
                 }, disclosure: true)),
+                versionCell,
             ]))
         } else {
             models.append(Section(title: "App Preferences", options: [
                 .staticCell(model: SettingsOption(title: "Appearance", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
                 }, disclosure: true)),
+                versionCell,
             ]))
         }
     }
                 
-    fileprivate func updateVersion() {
-        
-        let baseText = "version "
-        let versionText = BullhornSdk.shared.appConfig.appVersion(useBuildNumber: true)
-        let devModeText = UserDefaults.standard.isDevModeEnabled ? " DEV" : ""
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.hyphenationFactor = 1.0
-        paragraphStyle.alignment = .center
-        paragraphStyle.lineBreakMode = .byWordWrapping
-
-        let attributedString = NSMutableAttributedString(string: baseText + versionText + devModeText, attributes: [
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.fontWithName(.robotoRegular , size: 15)
-        ])
-        
-        versionLabel.attributedText = attributedString
-        versionLabel.accessibilityLabel = "App version \(versionText)"
-    }
-    
-    @objc fileprivate func onVersionTapped(_ sender: UITapGestureRecognizer) {
+    fileprivate func toggleDevMode() {
         let isDevModeEnabled = UserDefaults.standard.isDevModeEnabled
-        
+
         UserDefaults.standard.isDevModeEnabled = !isDevModeEnabled
-        
+
         BHLog.p("Set Dev Mode enabled = \(!isDevModeEnabled)")
-        
+
         configure()
-        updateVersion()
         tableView.reloadData()
-        
+
         if !isDevModeEnabled && UserDefaults.standard.isPushNotificationsEnabled {
             UserDefaults.standard.isPushNotificationsEnabled = false
             BHNotificationsManager.shared.forgetPushToken() { _ in }
@@ -332,6 +316,12 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.configure(with: model)
             return cell
+        case .versionCell(let model):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BHSettingVersionCell.reusableIndentifer, for: indexPath) as? BHSettingVersionCell else {
+                return UITableViewCell()
+            }
+            cell.configure(with: model)
+            return cell
         }
     }
     
@@ -350,6 +340,8 @@ extension BHProfileViewController: UITableViewDelegate, UITableViewDataSource {
             model.handler()
         case .radioCell(let model):
             model.handler()
+        case .versionCell:
+            break
         }
     }
 }
