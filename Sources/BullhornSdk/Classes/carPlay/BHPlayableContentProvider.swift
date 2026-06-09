@@ -160,9 +160,8 @@ extension BHPlayableContentProvider {
 
                     /// Push the screen with "Loading…" right away, then fill it in.
                     let listTemplate = pushLoadingEpisodesTemplate(title: "Podcast Episodes")
-                    let manager =  BHUserManager()
 
-                    manager.getUserPosts(user.id, text: nil) { response in
+                    BHUserManager.shared.getUserPosts(user.id, text: "") { response in
                         DispatchQueue.main.async {
                             switch response {
                             case .success(posts: let posts, page: _, pages: _):
@@ -216,9 +215,8 @@ extension BHPlayableContentProvider {
 
                 /// Push the screen with "Loading…" right away, then fill it in.
                 let listTemplate = pushLoadingEpisodesTemplate(title: "Podcast Episodes")
-                let manager =  BHUserManager()
 
-                manager.getUserPosts(user.id, text: nil) { response in
+                BHUserManager.shared.getUserPosts(user.id, text: "") { response in
                     DispatchQueue.main.async {
                         switch response {
                         case .success(posts: let posts, page: _, pages: _):
@@ -274,8 +272,16 @@ extension BHPlayableContentProvider {
 
     func play(_ episode: BHPost, playlist: [BHPost]?, autoplayContext: BHAutoplayContext?) {
         if BHHybridPlayer.shared.isPostPlaying(episode.id) {
-            if let topTemplate = self.carplayInterfaceController?.topTemplate, !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-                self.carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
+            let nowPlaying = CPNowPlayingTemplate.shared
+            if let interfaceController = self.carplayInterfaceController,
+               interfaceController.topTemplate?.isMember(of: CPNowPlayingTemplate.self) != true {
+                /// Bring Now Playing forward. If it's already in the stack (e.g. under a
+                /// pushed list), pop to it — pushing the same instance again crashes.
+                if interfaceController.templates.contains(where: { $0 === nowPlaying }) {
+                    interfaceController.pop(to: nowPlaying, animated: true, completion: nil)
+                } else {
+                    interfaceController.pushTemplate(nowPlaying, animated: true, completion: nil)
+                }
             }
         } else {
             let fileUrl: URL? = BHDownloadsManager.shared.getFileUrl(episode.id)

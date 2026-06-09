@@ -171,6 +171,7 @@ class BHPlayableContentController: NSObject {
     /// Add observers for playback and Now Playing item.
     private func configureNowPlayingTemplate() {
         CPNowPlayingTemplate.shared.add(self)
+        updateUpNextButton()
     }
     
     private func updatePlaybackRateButton() {
@@ -181,6 +182,41 @@ class BHPlayableContentController: NSObject {
             playbackRateButton.isEnabled = true
             CPNowPlayingTemplate.shared.updateNowPlayingButtons([playbackRateButton])
         }
+    }
+
+    /// Enables the "Up Next" button only when there is an upcoming queue to show and
+    /// queueing is allowed for the current item (respects the same gate as the phone
+    /// via `shouldShowQueueButton()` — off for radio/live and when Play Next is disabled).
+    private func updateUpNextButton() {
+        let player = BHHybridPlayer.shared
+        CPNowPlayingTemplate.shared.isUpNextButtonEnabled =
+            player.shouldShowQueueButton() && !player.upNextPosts().isEmpty
+    }
+
+    /// Pushes the upcoming queue as a list on top of Now Playing (the only template
+    /// CarPlay permits above Now Playing). Tapping an item jumps playback to it and
+    /// returns to Now Playing.
+    private func pushUpNextList(_ posts: [BHPost]) {
+        guard let interfaceController = carplayInterfaceController else { return }
+
+        let items = posts.map { post -> CPListItem in
+            let item = post.toCPListItem(with: Bundle.module)
+            item.handler = { _, completion in
+                BHLog.p("CarPlay Up Next item selected")
+                /// Jump playback; returning to Now Playing is handled by the player
+                /// state listener (it pops to the existing Now Playing template), so we
+                /// don't pop here and risk a double navigation / double push.
+                BHHybridPlayer.shared.playQueuedPost(post)
+                completion()
+            }
+            return item
+        }
+
+        let listTemplate = CPListTemplate(title: NSLocalizedString("Up Next", comment: ""),
+                                          sections: [CPListSection(items: items)])
+        listTemplate.emptyViewSubtitleVariants = [NSLocalizedString("Your queue is empty", comment: "")]
+
+        interfaceController.pushTemplate(listTemplate, animated: true, completion: nil)
     }
 }
 
@@ -206,12 +242,20 @@ extension BHPlayableContentController: BHHybridPlayerListener {
             dismissAlertIfNeeded()
 
             providers.forEach({ $0.updatePlayingItemForEpisode(title) })
-                        
-            if !topTemplate.isMember(of: CPNowPlayingTemplate.self) {
-                carplayInterfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
-            } else {
+
+            let nowPlaying = CPNowPlayingTemplate.shared
+            if topTemplate.isMember(of: CPNowPlayingTemplate.self) {
                 updatePlaybackRateButton()
+            } else if carplayInterfaceController?.templates.contains(where: { $0 === nowPlaying }) == true {
+                /// Now Playing is already in the stack (e.g. beneath the Up Next list).
+                /// Return to it instead of pushing the same instance again, which raises
+                /// "Pushing the same template instance more than once".
+                carplayInterfaceController?.pop(to: nowPlaying, animated: true, completion: nil)
+            } else {
+                carplayInterfaceController?.pushTemplate(nowPlaying, animated: true, completion: nil)
             }
+
+            updateUpNextButton()
         default:
             break
         }
@@ -248,7 +292,11 @@ extension BHPlayableContentController: BHHybridPlayerListener {
 
 extension BHPlayableContentController: CPNowPlayingTemplateObserver {
 
-    func nowPlayingTemplateUpNextButtonTapped(_ nowPlayingTemplate: CPNowPlayingTemplate) {}
+    func nowPlayingTemplateUpNextButtonTapped(_ nowPlayingTemplate: CPNowPlayingTemplate) {
+        let upNext = BHHybridPlayer.shared.upNextPosts()
+        guard !upNext.isEmpty else { return }
+        pushUpNextList(upNext)
+    }
     
     func nowPlayingTemplateAlbumArtistButtonTapped(_ nowPlayingTemplate: CPNowPlayingTemplate) {}
 }
@@ -262,6 +310,7 @@ extension BHPlayableContentController: CPInterfaceControllerDelegate {
         
         if aTemplate.isMember(of: CPNowPlayingTemplate.self) {
             updatePlaybackRateButton()
+            updateUpNextButton()
         }
     }
 
