@@ -1,4 +1,3 @@
-
 import Foundation
 import CarPlay
 
@@ -18,13 +17,18 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
 
     var listTemplate: CPListTemplate!
 
+    let downloadsManager: BHDownloadsManager!
+
     // MARK: - Initialization
 
     init(with interfaceController: CPInterfaceController) {
+        downloadsManager = BHDownloadsManager.shared
+
         listTemplate = composeCPListTemplate()
         carplayInterfaceController = interfaceController
-        
-        BHDownloadsManager.shared.updateItems()
+
+        downloadsManager.addListener(self)
+        downloadsManager.updateItems()
     }
 
     // MARK: - Private
@@ -41,13 +45,13 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
     
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
+        downloadsManager.removeListener(self)
     }
 
     func loadItems() {
-
-        let data = BHDownloadsManager.shared.completedItems
+        let data = downloadsManager.completedItems
         self.items = self.convertDownloadItems(data)
-        self.playlist = BHDownloadsManager.shared.items.map({ $0.post })
+        self.playlist = data.map({ $0.post })
         
         updateSectionsForList()
     }
@@ -56,13 +60,15 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
         
         listTemplate.updateSections([CPListSection(items: items)])
         
-        for (index,item) in items.enumerated() {
-            item.handler = { item, completion in
+        for (index, item) in items.enumerated() {
+            item.handler = { [weak self] item, completion in
+                guard let self = self else { completion(); return }
                 BHLog.p("CarPlay item selected")
                 
-                if let post = self.playlist?[index] {
-                    let playlist = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: self.playlist, order: .straight)
-                    self.play(post, playlist: playlist, autoplayContext: nil)
+                if let playlist = self.playlist, index < playlist.count {
+                    let post = playlist[index]
+                    let orderedQueue = BHHybridPlayer.shared.composeOrderedQueue(post.id, posts: playlist, order: .straight)
+                    self.play(post, playlist: orderedQueue, autoplayContext: nil)
                 }
                 
                 if let listItem = item as? CPListItem {
@@ -74,3 +80,31 @@ class BHDownloadsPlayableContentProvider: BHPlayableContentProvider {
         }
     }
 }
+
+// MARK: - BHDownloadsManagerListener
+
+extension BHDownloadsPlayableContentProvider: BHDownloadsManagerListener {
+
+    func downloadsManager(_ manager: BHDownloadsManager, itemStateUpdated item: BHDownloadItem) {
+        if item.status == .success {
+            DispatchQueue.main.async {
+                self.loadItems()
+            }
+        }
+    }
+
+    func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
+
+    func downloadsManager(_ manager: BHDownloadsManager, allRemoved status: Bool) {
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+
+    func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {
+        DispatchQueue.main.async {
+            self.loadItems()
+        }
+    }
+}
+

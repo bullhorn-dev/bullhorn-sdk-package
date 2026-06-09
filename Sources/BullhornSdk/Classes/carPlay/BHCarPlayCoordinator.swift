@@ -1,4 +1,3 @@
-
 import CarPlay
 import Foundation
 
@@ -16,7 +15,6 @@ public class BHCarPlayCoordinator {
         BHLog.p("CarPlay coordinator init")
         
         downloadsManager = BHDownloadsManager.shared
-        downloadsManager.addListener(self)
     }
         
     // MARK: CPTemplateApplicationSceneDelegate
@@ -26,7 +24,10 @@ public class BHCarPlayCoordinator {
         BHLog.p("Connected to CarPlay window.")
 
         initProviders(interfaceController)
-        
+
+        downloadsManager.removeListener(self)
+        downloadsManager.addListener(self)
+
         carPlayController.connect(to: interfaceController, with: providers)
         
         /// track stats
@@ -81,3 +82,4 @@ extension BHCarPlayCoordinator: BHDownloadsManagerListener {
     
     func downloadsManagerItemsUpdated(_ manager: BHDownloadsManager) {}
 }
+

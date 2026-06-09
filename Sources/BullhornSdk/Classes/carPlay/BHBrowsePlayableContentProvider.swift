@@ -1,4 +1,3 @@
-
 import Foundation
 import CarPlay
 
@@ -11,6 +10,13 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
     fileprivate(set) var emptyListText: String = NSLocalizedString("No podcasts yet", comment: "")
 
     var carplayInterfaceController: CPInterfaceController?
+
+    /// True while the initial network fetch is in flight. Used to show a "Loading…"
+    /// placeholder only when there is nothing else to display.
+    var isLoading = false
+
+    /// Pending coalesced reload (see `scheduleReload()`).
+    private var reloadWorkItem: DispatchWorkItem?
 
     var items = [CPListItem]()
 
@@ -39,19 +45,38 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
         
         let networkId = BHAppConfiguration.shared.networkId
 
+        isLoading = true
+        updateSectionsForList()
+
         if BHReachabilityManager.shared.isConnected() {
             exploreManager.fetch(networkId) { _ in
                 DispatchQueue.main.async {
-                    self.loadItems()
+                    self.isLoading = false
+                    self.scheduleReload()
                 }
             }
         } else {
             exploreManager.fetchStorage(networkId) { _ in
                 DispatchQueue.main.async {
-                    self.loadItems()
+                    self.isLoading = false
+                    self.scheduleReload()
                 }
             }
         }
+    }
+
+    // MARK: - Private
+
+    /// Coalesces bursts of listener callbacks into a single reload. Without this each
+    /// callback rebuilds the image-row item from scratch, re-triggering cover downloads
+    /// and causing visible flicker. Assumes the main thread.
+    private func scheduleReload() {
+        reloadWorkItem?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            self?.loadItems()
+        }
+        reloadWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15, execute: work)
     }
 
     // MARK: - BHPlayableContentProvider
@@ -62,6 +87,7 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
         
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
+        reloadWorkItem?.cancel()
         networkManager.removeListener(self)
         exploreManager.removeListener(self)
     }
@@ -91,9 +117,17 @@ class BHBrowsePlayableContentProvider: BHPlayableContentProvider {
                 let recent = self.convertCategories([model])
                 sections.append(CPListSection(items: recent))
             }
-            sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
-        } else {
+            if items.count > 0 {
+                sections.append(CPListSection(items: items, header: "All Categories", sectionIndexTitle: nil))
+            }
+        } else if items.count > 0 {
             sections.append(CPListSection(items: items))
+        }
+
+        /// Show "Loading…" only when the list is otherwise empty and a fetch is in flight.
+        /// If anything (incl. offline cache) is already available, show it instead.
+        if sections.isEmpty && isLoading {
+            sections.append(CPListSection(items: [loadingListItem()]))
         }
 
         listTemplate.updateSections(sections)
@@ -108,7 +142,8 @@ extension BHBrowsePlayableContentProvider: BHNetworkManagerListener {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 
@@ -123,19 +158,23 @@ extension BHBrowsePlayableContentProvider: BHExploreManagerListener {
 
     func exploreManagerDidFetch(_ manager: BHExploreManager) {
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 
     func exploreManagerDidFetchRecent(_ manager: BHExploreManager) {
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 
     func exploreManagerDidUpdateItems(_ manager: BHExploreManager) {
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 }
+

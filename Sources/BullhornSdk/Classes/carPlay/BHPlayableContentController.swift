@@ -1,4 +1,3 @@
-
 import Foundation
 import CarPlay
 import MediaPlayer
@@ -14,12 +13,6 @@ class BHPlayableContentController: NSObject {
     
     /// The CarPlay session configuation contains information on restrictions for the specified interface.
     var sessionConfiguration: CPSessionConfiguration!
-    
-    /// The observer of the Now Playing item changes.
-    var nowPlayingItemObserver: NSObjectProtocol?
-    
-    /// The observer of the playback state changes.
-    var playbackObserver: NSObjectProtocol?
     
     /// Top pushed episodes list
     var episodes = [BHPost]()
@@ -68,12 +61,15 @@ class BHPlayableContentController: NSObject {
         
         providers.forEach({ $0.disconnect() })
         providers = []
-        nowPlayingItemObserver = nil
-        playbackObserver = nil
-        
+
+        /// Pair the `add(self)` from `configureNowPlayingTemplate()`, otherwise the
+        /// Now Playing observer accumulates across reconnects.
+        CPNowPlayingTemplate.shared.remove(self)
+
         isConnected = false
-                
-        BHHybridPlayer.shared.pause()
+
+        /// Note: we intentionally do NOT pause playback here. Disconnecting CarPlay
+        /// should leave audio playing on the phone.
         BHHybridPlayer.shared.removeListener(self)
     }
 
@@ -299,3 +295,4 @@ extension BHPlayableContentController: CPInterfaceControllerDelegate {
         BHLog.p("CarPlay \(aTemplate.tabTitle ?? "Unknown") did disappear.")
     }
 }
+

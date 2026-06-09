@@ -1,4 +1,3 @@
-
 import CarPlay
 import Foundation
 import SDWebImage
@@ -38,6 +37,16 @@ extension BHPlayableContentProvider {
         listTemplate.tabImage = UIImage.init(named: iconName, in: bundle, with: nil)
 
         return listTemplate
+    }
+
+    // MARK: - Loading
+
+    /// A non-interactive placeholder row shown as the first (and only) item while a
+    /// network list is loading and there is nothing cached to display yet.
+    func loadingListItem() -> CPListItem {
+        let item = CPListItem(text: NSLocalizedString("Loading…", comment: ""), detailText: nil)
+        /// No handler is attached, so the row is inert. CarPlay shows it as a plain row.
+        return item
     }
 
     // MARK: - Episodes
@@ -85,6 +94,43 @@ extension BHPlayableContentProvider {
 
         self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true, completion: nil)
     }
+
+    /// Pushes an episodes list immediately, showing a single "Loading…" row, and returns
+    /// the template so the caller can fill it once the network request finishes. This gives
+    /// instant UI feedback instead of a dead tap while `getUserPosts` is in flight.
+    func pushLoadingEpisodesTemplate(title: String) -> CPListTemplate {
+        let configuration = CPAssistantCellConfiguration(position: .top, visibility: .off, assistantAction: .playMedia)
+        let listTemplate = CPListTemplate(title: title, sections: [CPListSection(items: [loadingListItem()])], assistantCellConfiguration: configuration)
+        listTemplate.emptyViewSubtitleVariants = [self.emptyListText]
+
+        self.carplayInterfaceController?.pushTemplate(listTemplate, animated: true, completion: nil)
+
+        return listTemplate
+    }
+
+    /// Replaces the contents of an already-pushed list template with the loaded episodes.
+    func fillEpisodes(_ episodes: [BHPost], into listTemplate: CPListTemplate, autoplayContext: BHAutoplayContext?) {
+        let items = self.convertEpisodes(episodes, autoplayContext: autoplayContext)
+
+        BHPlayableContentController.shared.episodes = episodes
+        BHPlayableContentController.shared.episodesListItems = items
+
+        listTemplate.updateSections([CPListSection(items: items)])
+    }
+
+    /// On a failed episodes load, pop the loading screen back and surface the error.
+    func handleUserPostsFailure(_ error: Error, pushedTemplate: CPListTemplate) {
+        var message = "Failed to load podcast episodes. "
+        if BHReachabilityManager.shared.isConnected() {
+            message += " \(error.localizedDescription)"
+        } else {
+            message += "The Internet connection is lost."
+        }
+
+        self.carplayInterfaceController?.popTemplate(animated: true) { _, _ in
+            self.presentAlert(message)
+        }
+    }
     
     func convertEpisodesToListItem(_ title: String, episodes: [BHPost], autoplayContext: BHAutoplayContext?, handler: Bool = true) -> CPListItem {
         let listItem = CPListItem(text: title, detailText: "", image: nil, accessoryImage: nil, accessoryType: .disclosureIndicator)
@@ -111,24 +157,19 @@ extension BHPlayableContentProvider {
                 
                 if index < podcasts.count {
                     let user = podcasts[index]
-                    let userManager = BHUserManager()
-                    
-                    userManager.getUserPosts(user.id, text: "") { response in
+
+                    /// Push the screen with "Loading…" right away, then fill it in.
+                    let listTemplate = pushLoadingEpisodesTemplate(title: "Podcast Episodes")
+                    let manager =  BHUserManager()
+
+                    manager.getUserPosts(user.id, text: nil) { response in
                         DispatchQueue.main.async {
                             switch response {
                             case .success(posts: let posts, page: _, pages: _):
-                                convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes", autoplayContext: .podcast)
+                                fillEpisodes(posts, into: listTemplate, autoplayContext: .podcast)
                             case .failure(error: let error):
                                 BHLog.w("User posts load failed \(error.localizedDescription)")
-                                
-                                var message = "Failed to load podcast episodes. "
-                                if BHReachabilityManager.shared.isConnected() {
-                                    message += " \(error.localizedDescription)"
-                                } else {
-                                    message += "The Internet connection is lost."
-                                }
-                                
-                                presentAlert(message)
+                                handleUserPostsFailure(error, pushedTemplate: listTemplate)
                             }
                         }
                     }
@@ -172,24 +213,19 @@ extension BHPlayableContentProvider {
             
             if index < podcasts.count {
                 let user = podcasts[index]
-                let userManager = BHUserManager()
-                
-                userManager.getUserPosts(user.id, text: "") { response in
+
+                /// Push the screen with "Loading…" right away, then fill it in.
+                let listTemplate = pushLoadingEpisodesTemplate(title: "Podcast Episodes")
+                let manager =  BHUserManager()
+
+                manager.getUserPosts(user.id, text: nil) { response in
                     DispatchQueue.main.async {
                         switch response {
                         case .success(posts: let posts, page: _, pages: _):
-                            convertEpisodesToCPListTemplate(posts, title: "Podcast Episodes", autoplayContext: .podcast)
+                            fillEpisodes(posts, into: listTemplate, autoplayContext: .podcast)
                         case .failure(error: let error):
                             BHLog.w("User posts load failed \(error.localizedDescription)")
-                            
-                            var message = "Failed to load podcast episodes. "
-                            if BHReachabilityManager.shared.isConnected() {
-                                message += " \(error.localizedDescription)"
-                            } else {
-                                message += "The Internet connection is lost."
-                            }
-                            
-                            presentAlert(message)
+                            handleUserPostsFailure(error, pushedTemplate: listTemplate)
                         }
                     }
                 }
@@ -299,27 +335,34 @@ extension BHPlayableContentProvider {
     internal func fetchImages(_ urls: [URL?], placeholderImage: UIImage, completion: @escaping (ImagesResult) -> Void) {
 
         let fetchGroup = DispatchGroup()
-        var images = [UIImage]()
+        let syncQueue = DispatchQueue(label: "com.bullhorn.carplay.fetchImages")
+
+        /// Fixed-length, index-addressed buffer so the result order always matches the
+        /// `urls` order (and therefore the podcasts order the tap handler indexes into).
+        /// Appending in completion order — as before — shuffled the covers relative to the
+        /// data, and any load that took neither if/else branch dropped a slot entirely,
+        /// shifting every following image. Writes go through a serial queue to avoid a race
+        /// between SDWebImage callbacks.
+        var images = [UIImage?](repeating: nil, count: urls.count)
         
-        for url in urls {
+        for (index, url) in urls.enumerated() {
             
             fetchGroup.enter()
             
             SDWebImageManager.shared.loadImage(with: url) { _, _, _ in
                 //
             } completed: { image, data, error, _, finished, _ in
-                if finished && error == nil {
-                    images.append(image ?? placeholderImage)
-                } else if error != nil {
-                    images.append(placeholderImage)
-//                    responseError = error
+                let resolved = (finished && error == nil) ? (image ?? placeholderImage) : placeholderImage
+                syncQueue.async {
+                    images[index] = resolved
+                    fetchGroup.leave()
                 }
-                fetchGroup.leave()
             }
         }
                                 
         fetchGroup.notify(queue: .main) {
-            completion(.success(images: images))
+            completion(.success(images: images.map { $0 ?? placeholderImage }))
         }
     }
 }
+

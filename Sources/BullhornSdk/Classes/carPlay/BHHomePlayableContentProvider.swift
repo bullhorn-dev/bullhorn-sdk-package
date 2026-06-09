@@ -1,4 +1,3 @@
-
 import Foundation
 import CarPlay
 
@@ -11,6 +10,13 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
     fileprivate(set) var emptyListText: String = NSLocalizedString("There is nothing here", comment: "")
     
     var carplayInterfaceController: CPInterfaceController?
+
+    /// True while the initial network fetch is in flight. Used to show a "Loading…"
+    /// placeholder only when there is nothing else to display.
+    var isLoading = false
+
+    /// Pending coalesced reload (see `scheduleReload()`).
+    private var reloadWorkItem: DispatchWorkItem?
 
     var followedPodcasts = [BHUser]()
     var featuredPodcasts = [BHUser]()
@@ -46,16 +52,21 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
                 
         let networkId = BHAppConfiguration.shared.networkId
 
+        isLoading = true
+        updateSectionsForList()
+
         if BHReachabilityManager.shared.isConnected() {
             networkManager.fetch(networkId) { _ in
                 DispatchQueue.main.async {
-                    self.loadItems()
+                    self.isLoading = false
+                    self.scheduleReload()
                 }
             }
         } else {
             networkManager.fetchStorage(networkId) { _ in
                 DispatchQueue.main.async {
-                    self.loadItems()
+                    self.isLoading = false
+                    self.scheduleReload()
                 }
             }
         }
@@ -67,6 +78,19 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
         return { $0.recording?.publishUrl != nil }
     }
 
+    /// Coalesces bursts of listener callbacks (the fetch completion plus the several
+    /// DidFetch / DidUpdate notifications that fire almost simultaneously) into a single
+    /// reload. Without this each callback rebuilds the image-row items from scratch,
+    /// re-triggering cover downloads and causing visible flicker. Assumes the main thread.
+    private func scheduleReload() {
+        reloadWorkItem?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            self?.loadItems()
+        }
+        reloadWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15, execute: work)
+    }
+
     // MARK: - BHPlayableContentProvider
 
     func composeCPListTemplate() -> CPListTemplate {
@@ -75,6 +99,7 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
     
     func disconnect() {
         BHLog.p("CarPlay \(#function)")
+        reloadWorkItem?.cancel()
         networkManager.removeListener(self)
         userManager.removeListener(self)
     }
@@ -100,15 +125,18 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
             BHLog.p("CarPlay recent episodes list item selected")
 
             if BHReachabilityManager.shared.isConnected() {
+                /// Push the screen with "Loading…" right away, then fill it once posts arrive.
+                let listTemplate = self.pushLoadingEpisodesTemplate(title: recentTitle)
                 let networkId = BHAppConfiguration.shared.networkId
                 BHNetworkManager.shared.fetchPosts(networkId) { result in
                     DispatchQueue.main.async {
                         self.recentEpisodes = BHNetworkManager.shared.posts
-                        self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle, autoplayContext: .actual)
+                        self.fillEpisodes(self.recentEpisodes, into: listTemplate, autoplayContext: .actual)
                         completion()
                     }
                 }
             } else {
+                /// Offline: data is already cached, push the populated list directly.
                 self.convertEpisodesToCPListTemplate(self.recentEpisodes, title: recentTitle, autoplayContext: .actual)
                 completion()
             }
@@ -153,6 +181,12 @@ class BHHomePlayableContentProvider: BHPlayableContentProvider {
             sections.append(CPListSection(items: [recentEpisodesListItem]))
         }
 
+        /// Show "Loading…" only when the list is otherwise empty and a fetch is in flight.
+        /// If anything (incl. offline cache) is already available, show it instead.
+        if sections.isEmpty && isLoading {
+            sections.append(CPListSection(items: [loadingListItem()]))
+        }
+
         listTemplate.updateSections(sections)
         listTemplate.tabTitle = title
     }
@@ -166,7 +200,8 @@ extension BHHomePlayableContentProvider: BHNetworkManagerListener {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 
@@ -174,7 +209,8 @@ extension BHHomePlayableContentProvider: BHNetworkManagerListener {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
     
@@ -182,7 +218,8 @@ extension BHHomePlayableContentProvider: BHNetworkManagerListener {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
 }
@@ -195,7 +232,8 @@ extension BHHomePlayableContentProvider: BHUserManagerListener {
         BHLog.p("CarPlay \(#function)")
 
         DispatchQueue.main.async {
-            self.loadItems()
+            self.isLoading = false
+            self.scheduleReload()
         }
     }
     
