@@ -2214,7 +2214,6 @@
                         <segue destination="ISO-h0-mfF" kind="show" identifier="Profile.FavoritesSegueIdentifier" id="mQH-fg-wpb"/>
                         <segue destination="cko-RD-0fW" kind="show" identifier="Profile.DownloadsSegueIdentifier" id="NTL-B9-tFj"/>
                         <segue destination="Q2p-ct-dwZ" kind="show" identifier="Profile.FollowedSegueIdentifier" id="Dux-9E-9ph"/>
-                        <segue destination="0tn-Pd-tIz" kind="show" identifier="Profile.MoreInfoSegueIdentifier" id="ppD-0V-INu"/>
                         <segue destination="REK-qd-AQy" kind="show" identifier="Profile.SettingsSegueIdentifier" id="iPA-XL-ErK"/>
                         <segue destination="0Gn-EZ-aJ4" kind="show" identifier="Profile.DevModeSegueIdentifier" id="T4E-CU-pHH"/>
                         <segue destination="u19-7X-5hU" kind="show" identifier="Profile.CategoriesSegueIdentifier" id="brW-fu-ex3"/>
@@ -2497,97 +2496,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jOU-cy-NiT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-569" y="703"/>
-        </scene>
-        <!--More Info-->
-        <scene sceneID="ebO-DP-Emo">
-            <objects>
-                <viewController restorationIdentifier="BHMoreInfoViewController" storyboardIdentifier="BHMoreInfoViewController" title="More Info" id="0tn-Pd-tIz" customClass="BHMoreInfoViewController" customModule="BullhornSdk" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="qxb-hk-5ew">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dF9-gf-DPl">
-                                <rect key="frame" x="0.0" y="47" width="390" height="750"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ZJo-2G-WBx">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="690"/>
-                                        <color key="backgroundColor" name="bhColorPrimaryBg"/>
-                                        <color key="tintColor" name="bhColorPrimary"/>
-                                        <color key="separatorColor" name="bhColorSecondaryBg"/>
-                                        <color key="sectionIndexColor" name="bhColorPrimary"/>
-                                        <color key="sectionIndexBackgroundColor" name="bhColorSecondaryBg"/>
-                                        <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BHSettingCell" rowHeight="55" id="kLz-TX-yp2" customClass="BHSettingCell" customModule="BullhornSdk">
-                                                <rect key="frame" x="0.0" y="50" width="390" height="55"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kLz-TX-yp2" id="q0r-0J-jII">
-                                                    <rect key="frame" x="0.0" y="0.0" width="363.66666666666669" height="55"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODB-Vb-qBZ">
-                                                            <rect key="frame" x="20" y="16" width="323.66666666666669" height="23"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sZP-wH-8rp">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="323.66666666666669" height="23"/>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
-                                                                    <color key="textColor" name="bhColorPrimary"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </stackView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstItem="ODB-Vb-qBZ" firstAttribute="top" secondItem="q0r-0J-jII" secondAttribute="top" constant="16" id="8ql-Ki-mEf"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ODB-Vb-qBZ" secondAttribute="trailing" constant="20" id="j7M-6v-rWj"/>
-                                                        <constraint firstItem="ODB-Vb-qBZ" firstAttribute="leading" secondItem="q0r-0J-jII" secondAttribute="leading" constant="20" id="jz9-OS-pEV"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ODB-Vb-qBZ" secondAttribute="bottom" constant="16" id="xkz-Oa-6iE"/>
-                                                    </constraints>
-                                                </tableViewCellContentView>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <connections>
-                                                    <outlet property="titleLabel" destination="sZP-wH-8rp" id="hVr-1x-eup"/>
-                                                </connections>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9QR-9p-ARS" customClass="BHMiniPlayerView" customModule="BullhornSdk">
-                                        <rect key="frame" x="0.0" y="690" width="390" height="60"/>
-                                        <color key="backgroundColor" systemColor="systemTealColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="P48-Il-Cac"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="9QR-9p-ARS" firstAttribute="leading" secondItem="dF9-gf-DPl" secondAttribute="leading" id="Nde-L7-dTl"/>
-                                    <constraint firstAttribute="trailing" secondItem="9QR-9p-ARS" secondAttribute="trailing" id="UQg-0I-8XC"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="gxb-zT-kB9"/>
-                        <color key="backgroundColor" name="bhColorAppBarBg"/>
-                        <constraints>
-                            <constraint firstItem="dF9-gf-DPl" firstAttribute="top" secondItem="gxb-zT-kB9" secondAttribute="top" id="9br-Ft-4cd"/>
-                            <constraint firstItem="dF9-gf-DPl" firstAttribute="leading" secondItem="gxb-zT-kB9" secondAttribute="leading" id="Bga-0d-4YZ"/>
-                            <constraint firstItem="gxb-zT-kB9" firstAttribute="bottom" secondItem="dF9-gf-DPl" secondAttribute="bottom" id="HfA-RL-4xG"/>
-                            <constraint firstItem="gxb-zT-kB9" firstAttribute="trailing" secondItem="dF9-gf-DPl" secondAttribute="trailing" id="L2f-YT-Xv9"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="7GK-0R-qje">
-                        <barButtonItem key="backBarButtonItem" title=" " id="1B9-ns-u23"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="miniPlayerView" destination="9QR-9p-ARS" id="nd4-Fn-E24"/>
-                        <outlet property="stackView" destination="dF9-gf-DPl" id="Hol-Ig-vIW"/>
-                        <outlet property="tableView" destination="ZJo-2G-WBx" id="CZg-cx-Pha"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kpF-5h-i03" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3174" y="3048"/>
         </scene>
         <!--Downloads Settings-->
         <scene sceneID="0pr-Te-gSs">
@@ -2940,7 +2848,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yd2-IE-x2b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4152" y="3048"/>
+            <point key="canvasLocation" x="-2855" y="3048"/>
         </scene>
         <!--Categories-->
         <scene sceneID="Ert-YX-zeu">
@@ -3209,10 +3117,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78431372549019607" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.0" green="0.76470588235294112" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

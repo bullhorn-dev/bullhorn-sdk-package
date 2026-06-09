@@ -54,6 +54,27 @@ struct SettingsRadioOption {
     let hasText: Bool
     let handler : (() -> Void)
 }
+// MARK: - Info links
+
+public enum BHInfoLinkType {
+    case termsOfUse
+    case privacyPolicy
+    case support
+}
+
+public struct BHInfoLink {
+    let type: BHInfoLinkType
+    let title: String
+    let url: String
+    
+    public init(type: BHInfoLinkType, title: String, url: String) {
+        self.type = type
+        self.title = title
+        self.url = url
+    }
+}
+
+// MARK: - BHProfileViewController
 
 class BHProfileViewController: BHPlayerContainingViewController {
     
@@ -62,7 +83,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
     fileprivate static let FavoritesSegueIdentifier = "Profile.FavoritesSegueIdentifier"
     fileprivate static let FollowedSegueIdentifier = "Profile.FollowedSegueIdentifier"
     fileprivate static let SettingsSegueIdentifier = "Profile.SettingsSegueIdentifier"
-    fileprivate static let MoreInfoSegueIdentifier = "Profile.MoreInfoSegueIdentifier"
     fileprivate static let DevModeSegueIdentifier = "Profile.DevModeSegueIdentifier"
 
     @IBOutlet weak var stackView: UIStackView!
@@ -71,6 +91,8 @@ class BHProfileViewController: BHPlayerContainingViewController {
     
     var models = [Section]()
 
+    private let infoLinks = BullhornSdk.shared.infoLinks
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -168,13 +190,23 @@ class BHProfileViewController: BHPlayerContainingViewController {
             ]))
         }
         
+        models.append(Section(title: "Legal", options: [
+            .staticCell(model: SettingsOption(title: "Terms of Use", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                if let link = self.infoLinks.first(where: { $0.type == .termsOfUse }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
+            }, disclosure: true)),
+            .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                if let link = self.infoLinks.first(where: { $0.type == .privacyPolicy }), let url = URL(string: link.url) {
+                    self.presentSafari(url)
+                }
+            }, disclosure: true)),
+        ]))
+        
         if UserDefaults.standard.isDevModeEnabled {
             models.append(Section(title: "App Preferences", options: [
                 .staticCell(model: SettingsOption(title: "Settings", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.SettingsSegueIdentifier, sender: self)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "More Info", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
                 .staticCell(model: SettingsOption(title: "Developer mode options", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     self.performSegue(withIdentifier: BHProfileViewController.DevModeSegueIdentifier, sender: self)
@@ -184,9 +216,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
             models.append(Section(title: "App Preferences", options: [
                 .staticCell(model: SettingsOption(title: "Appearance", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
                     NotificationCenter.default.post(name: BullhornSdk.OpenAppearanceNotification, object: self, userInfo: nil)
-                }, disclosure: true)),
-                .staticCell(model: SettingsOption(title: "More Info", accessibilityText: nil, icon: nil, iconBackgroundColor: .accent(), handler: {
-                    self.performSegue(withIdentifier: BHProfileViewController.MoreInfoSegueIdentifier, sender: self)
                 }, disclosure: true)),
             ]))
         }

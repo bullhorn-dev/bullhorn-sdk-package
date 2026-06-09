@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let infoLinks: [BHInfoLink] = [
             BHInfoLink(type: .termsOfUse, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
             BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),
-            BHInfoLink(type: .privacyChoices, title: "Your Privacy Choices", url: "https://l.bullhorn.fm/privacy-policy"),
-            BHInfoLink(type: .contactUs, title: "Contact Us", url: "https://l.bullhorn.fm/#get-in-touch"),
             BHInfoLink(type: .support, title: "Report a problem", url: "https://l.bullhorn.fm/privacy-policy")
         ]
 
