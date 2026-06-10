@@ -53,7 +53,7 @@ public class BullhornSdk: NSObject {
     }
 
     public var clientId: String = ""
-    public var infoLinks: [BHInfoLink] = []
+    public var defaultInfoLink: String = ""
 
     internal var defaultNetworkId: String = ""
 
@@ -69,7 +69,7 @@ public class BullhornSdk: NSObject {
     
     // MARK: - Public
     
-    public func configure(clientId: String, networkId: String, infoLinks: [BHInfoLink], configType: BHAppConfigType = .prod) {
+    public func configure(clientId: String, networkId: String, infoLink: String, configType: BHAppConfigType = .prod) {
         BHLog.p("\(#function)")
 
         if BHReachabilityManager.shared.isConnected() {
@@ -80,7 +80,7 @@ public class BullhornSdk: NSObject {
         
         self.clientId = clientId
         self.defaultNetworkId = networkId
-        self.infoLinks = infoLinks
+        self.defaultInfoLink = infoLink
         
         BHLog.p("\(#function) - AppConfig: \(BHAppConfiguration.shared.appVersion(useBuildNumber: true))")
 

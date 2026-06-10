@@ -55,6 +55,18 @@ public class BHAppConfiguration {
         return BHConfigManager.shared.configData?.serverApiSdkV1String ?? ""
     }
 
+    var termsOfUseString: String {
+        return BHConfigManager.shared.configData?.termsOfUseUrlString ?? BullhornSdk.shared.defaultInfoLink
+    }
+
+    var privacyPolicyString: String {
+        return BHConfigManager.shared.configData?.privacyPolicyUrlString ?? BullhornSdk.shared.defaultInfoLink
+    }
+
+    var supportString: String {
+        return BHConfigManager.shared.configData?.supportUrlString ?? BullhornSdk.shared.defaultInfoLink
+    }
+
     var networkId: String {
         switch BHAppConfiguration.type {
         case .qa:

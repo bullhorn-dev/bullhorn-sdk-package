@@ -15,7 +15,10 @@ struct BHConfigBody: Equatable {
     let version: Version
     let updateState: UpdateState
     let changelogURLString: String?
-    
+    var termsOfUseUrlString: String?
+    var privacyPolicyUrlString: String?
+    var supportUrlString: String?
+
     static func fromJSON(_ jsonObject: Any) -> BHConfigBody? {
 
         guard let rootDictionary = jsonObject as? [String: Any] else { return nil }
@@ -26,6 +29,9 @@ struct BHConfigBody: Equatable {
         var versionString: String?
         var forceUpdateVersionString: String?
         var changelogURLString: String?
+        var termsOfUseUrlString: String?
+        var privacyPolicyUrlString: String?
+        var supportUrlString: String?
 
         if let packagesArray = rootDictionary["packages"] as? [Any] {
             for package in packagesArray {
@@ -51,6 +57,12 @@ struct BHConfigBody: Equatable {
             }
         }
         
+        if let linksDictionary = rootDictionary["links"] as? [String: Any] {
+            termsOfUseUrlString = linksDictionary["terms_of_use"] as? String
+            privacyPolicyUrlString = linksDictionary["privacy_policy"] as? String
+            supportUrlString = linksDictionary["support"] as? String
+        }
+        
         let version = Version.init(from: versionString ?? "")
         let forceUpdateVersion = Version.init(from: forceUpdateVersionString ?? "")
         let currentAppVersion = Version.init(from: BHAppConfiguration.shared.appVersion())
@@ -72,7 +84,15 @@ struct BHConfigBody: Equatable {
         var configBody: BHConfigBody?
         if let validServerApiV1String = serverApiV1String, let validServerApiInteractiveV1String = serverApiInteractiveV1String, let validServerApiSdkV1String = serverApiSdkV1String, version.isValid {
 
-            configBody = BHConfigBody.init(serverApiV1String: validServerApiV1String, serverApiInteractiveV1String: validServerApiInteractiveV1String, serverApiSdkV1String: validServerApiSdkV1String, version: version, updateState: updateState, changelogURLString: changelogURLString)
+            configBody = BHConfigBody.init(serverApiV1String: validServerApiV1String,
+                                           serverApiInteractiveV1String: validServerApiInteractiveV1String,
+                                           serverApiSdkV1String: validServerApiSdkV1String,
+                                           version: version,
+                                           updateState: updateState,
+                                           changelogURLString: changelogURLString,
+                                           termsOfUseUrlString: termsOfUseUrlString,
+                                           privacyPolicyUrlString: privacyPolicyUrlString,
+                                           supportUrlString: supportUrlString)
         }
 
         return configBody

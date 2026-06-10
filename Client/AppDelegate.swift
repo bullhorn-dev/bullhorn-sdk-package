@@ -16,11 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var configType: BHAppConfigType
         var clientId: String
         let networkId: String = AuthConfig.shared.networkId
-        let infoLinks: [BHInfoLink] = [
-            BHInfoLink(type: .termsOfUse, title: "Terms of Service", url: "https://l.bullhorn.fm/terms-of-service"),
-            BHInfoLink(type: .privacyPolicy, title: "Privacy Policy", url: "https://l.bullhorn.fm/privacy-policy"),
-            BHInfoLink(type: .support, title: "Report a problem", url: "https://l.bullhorn.fm/privacy-policy")
-        ]
+        let infoLink: String = "https://foxaudionetwork.com"
 
         if let mainBundleInfo = Bundle.main.infoDictionary, let appConfigTypeString = mainBundleInfo["AppConfigType"] as? String, let clientIdString = mainBundleInfo["BullhornSdkId"] as? String {
             configType = BHAppConfigType.init(rawValue: appConfigTypeString) ?? .prod
@@ -32,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
                 
         BullhornSdk.shared.isLoggingEnabled = true
-        BullhornSdk.shared.configure(clientId: clientId, networkId: networkId, infoLinks: infoLinks, configType: configType)
+        BullhornSdk.shared.configure(clientId: clientId, networkId: networkId, infoLink: infoLink, configType: configType)
 
         ThemesManager.shared.updateTheme(theme: ThemesManager.shared.currentTheme())
 

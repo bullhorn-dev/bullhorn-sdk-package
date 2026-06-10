@@ -62,26 +62,6 @@ struct SettingsVersionOption {
     let handler: (() -> Void)
 }
 
-// MARK: - Info links
-
-public enum BHInfoLinkType {
-    case termsOfUse
-    case privacyPolicy
-    case support
-}
-
-public struct BHInfoLink {
-    let type: BHInfoLinkType
-    let title: String
-    let url: String
-    
-    public init(type: BHInfoLinkType, title: String, url: String) {
-        self.type = type
-        self.title = title
-        self.url = url
-    }
-}
-
 // MARK: - BHProfileViewController
 
 class BHProfileViewController: BHPlayerContainingViewController {
@@ -98,8 +78,6 @@ class BHProfileViewController: BHPlayerContainingViewController {
     
     var models = [Section]()
 
-    private let infoLinks = BullhornSdk.shared.infoLinks
-    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -190,12 +168,12 @@ class BHProfileViewController: BHPlayerContainingViewController {
         
         models.append(Section(title: "Legal", options: [
             .staticCell(model: SettingsOption(title: "Terms of Use", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                if let link = self.infoLinks.first(where: { $0.type == .termsOfUse }), let url = URL(string: link.url) {
+                if let url = URL(string: BHAppConfiguration.shared.termsOfUseString) {
                     self.presentSafari(url)
                 }
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
-                if let link = self.infoLinks.first(where: { $0.type == .privacyPolicy }), let url = URL(string: link.url) {
+                if let url = URL(string: BHAppConfiguration.shared.privacyPolicyString) {
                     self.presentSafari(url)
                 }
             }, disclosure: true)),

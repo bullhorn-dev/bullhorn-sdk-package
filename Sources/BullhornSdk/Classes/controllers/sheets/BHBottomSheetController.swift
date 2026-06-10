@@ -166,7 +166,7 @@ open class BHBottomSheetController: UIViewController {
     func openSupport() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
             self.dismiss(animated: true) {
-                if let link = BullhornSdk.shared.infoLinks.first(where: { $0.type == .support }), let url = URL(string: link.url) {
+                if let url = URL(string: BHAppConfiguration.shared.supportString) {
                     UIApplication.topViewController()?.presentSafari(url)
                 }
             }
