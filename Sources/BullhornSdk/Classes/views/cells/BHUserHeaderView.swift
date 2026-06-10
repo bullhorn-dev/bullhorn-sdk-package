@@ -7,6 +7,7 @@ protocol BHUserHeaderViewDelegate: AnyObject {
     func userHeaderViewOnShareButtonPressed(_ view: BHUserHeaderView, shareLink: URL)
     func userHeaderViewOnLinkButtonPressed(_ view: BHUserHeaderView, websiteLink: URL)
     func userHeaderViewOnFollowButtonPressed(_ view: BHUserHeaderView, user: BHUser)
+    func userHeaderViewOnSearchTapped(_ view: BHUserHeaderView)
     func userHeaderViewOnErrorOccured(_ view: BHUserHeaderView, message: String)
 }
 
@@ -26,7 +27,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var collapseButton: UIButton!
     @IBOutlet weak var socialLinksView: BHSocialLinksView!
-    @IBOutlet weak var searchBarView: BHSearchBarView!
+    @IBOutlet weak var searchFieldView: BHSearchFieldView!
 
     fileprivate var isCollapsed: Bool = BHUserHeaderView.shouldCollapse()
     fileprivate var numberOfLines: Int = 5
@@ -96,20 +97,16 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         }
     }
     
-    func calculateHeight(_ searchActive: Bool = false) -> CGFloat {
-        if searchActive {
-            return Constants.panelHeight
-        } else {
-            let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
-            let spacing: CGFloat = 12
-            let bio = bioLabel.attributedText?.string ?? ""
-            let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
+    func calculateHeight() -> CGFloat {
+        let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
+        let spacing: CGFloat = 12
+        let bio = bioLabel.attributedText?.string ?? ""
+        let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
 
-            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + Constants.panelHeight
-        }
+        return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + Constants.panelHeight
     }
 
-    func setup(_ searchActive: Bool = false) {
+    func setup() {
         
         contentView.backgroundColor = .primaryBackground()
         userView.backgroundColor = .primaryBackground()
@@ -162,13 +159,15 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         categoryLabel.font = .secondaryText()
         categoryLabel.adjustsFontForContentSizeCategory = true
 
-        userView.isHidden = searchActive
-        bioView.isHidden = searchActive
-        socialLinksView.isHidden = searchActive || !hasSocialLinks()
-        
-        searchBarView.searchBar.placeholder = "Search..."
-        searchBarView.mode = searchActive ? .dark : .light
-        
+        userView.isHidden = false
+        bioView.isHidden = false
+        socialLinksView.isHidden = !hasSocialLinks()
+
+        searchFieldView.onTap = { [weak self] in
+            guard let self else { return }
+            self.delegate?.userHeaderViewOnSearchTapped(self)
+        }
+
         setupAccessibility()
         reloadData()
     }
@@ -446,3 +445,4 @@ extension BHUserHeaderView: BHSocialLinksViewDelegate {
         delegate?.userHeaderViewOnLinkButtonPressed(self, websiteLink: validUrl)
     }
 }
+

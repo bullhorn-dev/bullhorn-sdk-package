@@ -13,11 +13,9 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
-    fileprivate var searchController: BHSearchController!
     fileprivate var refreshControl: UIRefreshControl?
 
-    fileprivate var searchActive = false
-    fileprivate var hideNavigationBarOnSearchActive = false
+    fileprivate var isLoadingMore = false
 
     fileprivate var headerView: BHUserHeaderView?
     fileprivate var footerView: BHListFooterView?
@@ -70,8 +68,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         configureRefreshControl()
         configureSearchController()
 
-        userManager.addListener(self)
-
         fetch(initial: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(onConnectionChangedNotification(notification:)), name: BHReachabilityManager.ConnectionChangedNotification, object: nil)
@@ -84,7 +80,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
+        userManager.addListener(self)
         tableView.reloadData()
     }
 
@@ -125,11 +122,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
     
     fileprivate func configureSearchController() {
-        guard let searchBar = headerView?.searchBarView.searchBar else { return }
-        
-        searchController = BHSearchController.init(with: searchBar)
-        searchController.searchResultsUpdater = self
-        searchController.delegate = self
+        /// keep the search results presentation within this view controller
+        definesPresentationContext = true
     }
 
     // MARK: - Network
@@ -182,13 +176,19 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     }
     
     fileprivate func fetchPosts() {
-        guard let u = user else { return }
+        guard let u = user, !isLoadingMore else { return }
+
+        isLoadingMore = true
 
         if searchActive {
             defaultShowActivityIndicatorView()
         }
 
-        userManager.getUserPosts(u.id, text: searchController.searchText) { response in
+        userManager.getUserPosts(u.id, text: searchController?.searchBar.text) { [weak self] response in
+            guard let self else { return }
+
+            self.isLoadingMore = false
+
             switch response {
             case .success:
                 self.tableView.reloadData()
@@ -262,11 +262,35 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
         switch info.reason {
         case .like, .unlike:
+            /// updatePost notifies the listener, which reloads the table
             userManager.updatePost(post)
-            tableView.reloadData()
         default:
             break
         }
+    }
+
+    // MARK: - Navigation search hooks
+
+    override func searchManagedTableView() -> UITableView? {
+        return tableView
+    }
+
+    override func performSearch(with text: String) {
+        refreshControl?.endRefreshing()
+
+        /// a new search must supersede any in-flight "load more"
+        isLoadingMore = false
+        fetchPosts()
+    }
+
+    override func searchDidBecomeActive() {
+        /// hide the big header; the real search bar now lives in the navigation bar
+        reloadSearchHeader(scrollToTopWhenDone: false)
+    }
+
+    override func searchDidResignActive() {
+        /// restore the header, then scroll to top so it becomes visible again
+        reloadSearchHeader(scrollToTopWhenDone: true)
     }
 }
 
@@ -307,26 +331,18 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
             self?.showError(message)
         }
 
-        if userManager.hasMore && indexPath.row == userManager.posts.count - 1 {
-            fetchPosts()
-        }
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if shouldShowHeader {
-            headerView?.setup(searchActive)
-            return headerView
-        }
-        return nil
+        guard shouldShowHeader, !searchActive else { return UIView() }
+        headerView?.setup()
+        return headerView
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if shouldShowHeader {
-            return headerView?.calculateHeight(searchActive) ?? 0
-        }
-        return 0
+        guard shouldShowHeader, !searchActive else { return .leastNormalMagnitude }
+        return headerView?.calculateHeight() ?? 0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -334,15 +350,22 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
             footerView?.setup()
             return footerView
         }
-        return nil
+        return UIView()
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return userManager.hasMore ? 40 : 0
+        return userManager.hasMore ? 40 : .leastNormalMagnitude
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         openPostDetails(userManager.posts[indexPath.row])
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard userManager.hasMore, !isLoadingMore else { return }
+        if indexPath.row == userManager.posts.count - 1 {
+            fetchPosts()
+        }
     }
 }
 
@@ -371,57 +394,12 @@ extension BHUserDetailsViewController: BHUserHeaderViewDelegate {
     func userHeaderViewOnCollapseButtonPressed(_ view: BHUserHeaderView) {
         tableView.reloadData()
     }
-}
 
-
-// MARK: - SearchResultsUpdating
-
-extension BHUserDetailsViewController: BHSearchResultsUpdating {
-    
-    func updateSearchResults(for searchController: BHSearchController) {
-        
-        refreshControl?.endRefreshing()
-        
-        if searchController.searchText.count == 0 || searchController.searchText.count > 2 {
-            fetchPosts()
-        }
+    func userHeaderViewOnSearchTapped(_ view: BHUserHeaderView) {
+        activateNavigationSearch()
     }
 }
 
-// MARK: - SearchControllerDelegate
-
-extension BHUserDetailsViewController: BHSearchControllerDelegate {
-    
-    func willPresentSearchController(_ searchController: BHSearchController) {
-        searchActive = true
-        tableView.bounces = false
-        tableView.reloadData()
-        
-        if hideNavigationBarOnSearchActive {
-            navigationController?.setNavigationBarHidden(true, animated: true)
-        }
-        UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState], animations: {
-            self.view.layoutIfNeeded()
-        }) { (result) in }
-    }
-    
-    func willDismissSearchController(_ searchController: BHSearchController) {
-        searchActive = false
-        tableView.bounces = true
-        shouldShowHeader = false
-        tableView.reloadData()
-
-        if hideNavigationBarOnSearchActive {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-        }
-        UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState], animations: {
-            self.view.layoutIfNeeded()
-        }) { (result) in
-            self.shouldShowHeader = true
-            self.tableView.reloadData()
-        }
-    }
-}
 
 // MARK: - BHUserManagerListener
 
@@ -441,3 +419,4 @@ extension BHUserDetailsViewController: BHUserManagerListener {
         }
     }
 }
+

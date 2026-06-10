@@ -209,7 +209,7 @@
                                     <constraint firstAttribute="height" constant="32" id="wpw-iz-TJF"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY7-Ic-36B" customClass="BHSearchBarView" customModule="BullhornSdk">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY7-Ic-36B" customClass="BHSearchFieldView" customModule="BullhornSdk">
                                 <rect key="frame" x="0.0" y="289" width="510" height="44"/>
                                 <color key="backgroundColor" systemColor="systemCyanColor"/>
                                 <constraints>
@@ -234,7 +234,7 @@
                 <outlet property="categoryLabel" destination="aU5-x1-tbq" id="hQh-Vt-tg9"/>
                 <outlet property="collapseButton" destination="mq2-bq-TDl" id="pfL-cn-sRZ"/>
                 <outlet property="followButton" destination="WhH-mf-wRo" id="Bmp-T4-6AG"/>
-                <outlet property="searchBarView" destination="nY7-Ic-36B" id="YwE-jL-EwB"/>
+                <outlet property="searchFieldView" destination="nY7-Ic-36B" id="YwE-jL-EwB"/>
                 <outlet property="shareButton" destination="5uv-n8-dP3" id="jvH-H4-DZ1"/>
                 <outlet property="socialLinksView" destination="mTh-Qn-rm1" id="m2N-Ci-GHI"/>
                 <outlet property="stackView" destination="rnA-fj-jBc" id="W5g-rK-V5p"/>

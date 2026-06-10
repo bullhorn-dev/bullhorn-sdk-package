@@ -8,6 +8,12 @@ class BHPlayerContainingViewController: UIViewController {
     
     var modalVC: UIViewController?
 
+    /// Navigation-bar search state (shared by subclasses that opt in).
+    /// A fresh controller is created per session so the bar lives in the
+    /// navigation bar ONLY while a search is active.
+    var searchController: UISearchController?
+    var searchActive = false
+
     private var movin: Movin?
 
     // MARK: - Lifecycle methods
@@ -39,6 +45,12 @@ class BHPlayerContainingViewController: UIViewController {
         super.viewWillDisappear(animated)
         miniPlayerView.hideActionView()
         hideTopMessageView()
+
+        if isMovingFromParent || isBeingDismissed {
+            deactivateNavigationSearch()
+        } else {
+            searchController?.searchBar.resignFirstResponder()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -197,6 +209,105 @@ class BHPlayerContainingViewController: UIViewController {
     func onPlayerPositionChanged(_ position: Double, duration: Double) {}
 
     func onPlayerPlaybackCompleted() {}
+
+    // MARK: - Navigation search hooks (to override)
+
+    /// The scroll view whose insets/offset the search machinery manages.
+    func searchManagedTableView() -> UITableView? { return nil }
+
+    /// Placeholder shown both in the in-content field and the navigation search bar.
+    func searchBarPlaceholder() -> String {
+        return NSLocalizedString("Search podcasts or episodes", comment: "")
+    }
+
+    /// Perform the actual fetch/filter for the given query.
+    func performSearch(with text: String) {}
+
+    /// Called after the navigation search bar appeared (collapse the header, etc.).
+    func searchDidBecomeActive() {}
+
+    /// Called after the navigation search bar was dismissed (restore the header, etc.).
+    func searchDidResignActive() {}
+
+    // MARK: - Navigation search engine (shared)
+
+    /// Build a fresh, styled search controller for a single search session.
+    func makeSearchController() -> UISearchController {
+        let sc = UISearchController(searchResultsController: nil)
+        sc.searchResultsUpdater = self
+        sc.delegate = self
+        sc.searchBar.delegate = self
+        sc.obscuresBackgroundDuringPresentation = false
+        sc.hidesNavigationBarDuringPresentation = false
+        sc.searchBar.placeholder = searchBarPlaceholder()
+        styleSearchBar(sc.searchBar)
+        return sc
+    }
+
+    func styleSearchBar(_ searchBar: UISearchBar) {
+        searchBar.searchBarStyle = .minimal
+        searchBar.tintColor = .onAccent()
+
+        let textField = searchBar.searchTextField
+        textField.font = .settingsSecondaryText()
+        textField.adjustsFontForContentSizeCategory = true
+        textField.textColor = .primary()
+        textField.tintColor = .accent()
+        textField.layer.cornerRadius = 18
+        textField.clipsToBounds = true
+
+        searchBar.setTextFiledColor(color: .cardBackground())
+        searchBar.setMagnifyingGlassColor(to: .secondary())
+        searchBar.setClearButtonColor(to: .tertiary())
+        searchBar.setPlaceholderTextColor(to: .secondary())
+    }
+
+    /// Entry point: call this from the in-content search field tap.
+    func activateNavigationSearch() {
+        let sc = makeSearchController()
+        searchController = sc
+
+        navigationItem.searchController = sc
+        navigationItem.hidesSearchBarWhenScrolling = false
+
+        /// let the navigation bar lay out the bar, then activate it with the native animation
+        DispatchQueue.main.async {
+            sc.isActive = true
+            sc.searchBar.becomeFirstResponder()
+        }
+    }
+
+    /// Remove the search bar from the navigation bar entirely, so scrolling never reveals it.
+    func deactivateNavigationSearch() {
+        if searchController?.isActive == true {
+            searchController?.isActive = false
+        }
+        navigationItem.searchController = nil
+        searchController = nil
+    }
+
+    /// Reload section 0 with a fade; optionally scroll to top once the header is laid out.
+    func reloadSearchHeader(scrollToTopWhenDone: Bool) {
+        guard let tableView = searchManagedTableView() else { return }
+
+        tableView.performBatchUpdates({
+            tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        }, completion: { [weak self] _ in
+            if scrollToTopWhenDone {
+                self?.scrollSearchableToTop(animated: true)
+            }
+        })
+    }
+
+    func scrollSearchableToTop(animated: Bool) {
+        guard let tableView = searchManagedTableView(), tableView.numberOfSections > 0 else { return }
+        let topOffset = CGPoint(x: 0, y: -tableView.adjustedContentInset.top)
+        tableView.setContentOffset(topOffset, animated: animated)
+    }
+
+    @objc fileprivate func runSearchDebounced() {
+        performSearch(with: searchController?.searchBar.text ?? "")
+    }
 }
 
 
@@ -325,4 +436,34 @@ extension BHPlayerContainingViewController: BHPlayerBaseViewControllerDelegate {
         openPostDetails(post)
     }
 }
+
+// MARK: - Navigation search delegates (shared)
+
+extension BHPlayerContainingViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
+
+    func updateSearchResults(for searchController: UISearchController) {
+        let text = searchController.searchBar.text ?? ""
+
+        /// debounce: don't fire a request on every keystroke
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(runSearchDebounced), object: nil)
+
+        if text.isEmpty || text.count > 2 {
+            perform(#selector(runSearchDebounced), with: nil, afterDelay: 0.35)
+        }
+    }
+
+    func willPresentSearchController(_ searchController: UISearchController) {
+        searchActive = true
+        searchManagedTableView()?.bounces = false
+        searchDidBecomeActive()
+    }
+
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchActive = false
+        searchManagedTableView()?.bounces = true
+        deactivateNavigationSearch()
+        searchDidResignActive()
+    }
+}
+
 
