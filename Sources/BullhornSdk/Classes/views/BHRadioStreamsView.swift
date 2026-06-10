@@ -6,6 +6,7 @@ class BHRadioStreamsView: UIView {
     
     var showLaterStreams: Bool = false {
         didSet {
+            guard oldValue != showLaterStreams else { return }
             setup()
         }
     }
@@ -60,6 +61,7 @@ class BHRadioStreamsView: UIView {
         return button
     }()
     
+    private var isConfigured = false
     private var placeholderImage: UIImage?
     
     private var laterStreamsHeightConstraint: NSLayoutConstraint?
@@ -70,6 +72,11 @@ class BHRadioStreamsView: UIView {
     private let playBtnHeight: CGFloat = 48.0
 
     // MARK: - Initialization
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setup()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -95,6 +102,11 @@ class BHRadioStreamsView: UIView {
     
     private func setup() {
         
+        if isConfigured {
+            subviews.forEach { $0.removeFromSuperview() }
+            BHRadioStreamsManager.shared.removeListener(self)
+        }
+
         backgroundColor = .primaryBackground()
         
         let bundle = Bundle.module
@@ -185,6 +197,7 @@ class BHRadioStreamsView: UIView {
         
         playButton.isEnabled = false
         
+        isConfigured = true
         layoutSubviews()
     }
     
