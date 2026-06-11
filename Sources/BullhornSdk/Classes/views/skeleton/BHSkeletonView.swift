@@ -287,7 +287,6 @@ final class BHSkeletonView: UIView {
         if laterStreams {
             let strip = streamsView(columns: 3, rows: 1)
             content.addArrangedSubview(strip)
-//            strip.heightAnchor.constraint(equalToConstant: Constants.postsCarouselHeight).isActive = true
         }
 
         let play = block(corner: 24)
@@ -295,14 +294,14 @@ final class BHSkeletonView: UIView {
         play.heightAnchor.constraint(equalToConstant: 48).isActive = true   // playBtnHeight
 
         NSLayoutConstraint.activate([
-            card.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 0),
-            card.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0),
+            card.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: pad),
+            card.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -pad),
             card.topAnchor.constraint(equalTo: container.topAnchor, constant: 0),
             card.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0),
             content.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: pad),
             content.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -pad),
-            content.topAnchor.constraint(equalTo: card.topAnchor, constant: 0),
-            content.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: 0),
+            content.topAnchor.constraint(equalTo: card.topAnchor, constant: padV),
+            content.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -padV),
         ])
         return container
     }
