@@ -81,6 +81,6 @@ class BHChannelCollectionViewCell: UICollectionViewCell {
             titleLabel.layer.borderColor = UIColor.primary().cgColor
         }
         
-        self.layoutSubviews()
+        setNeedsLayout()
     }
 }

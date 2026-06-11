@@ -126,9 +126,9 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         
         let newRefreshControl = UIRefreshControl()
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
+        newRefreshControl.tintColor = .accent()
         refreshControl = newRefreshControl
-        refreshControl?.tintColor = .accent()
-        collectionView.addSubview(newRefreshControl)
+        collectionView.refreshControl = newRefreshControl
     }
     
     fileprivate func getAllSectionsIndexSet() -> IndexSet {
@@ -191,6 +191,17 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
+        updateEmptyState()
+    }
+
+    fileprivate func updateEmptyState() {
+        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
+            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            collectionView.setEmptyMessage(message, image: image)
+        } else {
+            collectionView.restore()
+        }
     }
     
     // MARK: - Action handlers
@@ -298,19 +309,14 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
-            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
-            collectionView.setEmptyMessage(message, image: image)
-        } else {
-            collectionView.restore()
-        }
         return BHNetworkManager.shared.splittedUsers.count + 1
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 { return 0 }
-        return BHNetworkManager.shared.splittedUsers[section - 1].users.count
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard section - 1 < groups.count else { return 0 }
+        return groups[section - 1].users.count
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -334,7 +340,12 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
                 
                 guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
-                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers.count > 1 ? BHNetworkManager.shared.splittedUsers[indexPath.section - 1].category.name : ""
+                let groups = BHNetworkManager.shared.splittedUsers
+                if groups.count > 1, indexPath.section - 1 < groups.count {   /// #6
+                    usersHeaderView.titleLabel.text = groups[indexPath.section - 1].category.name
+                } else {
+                    usersHeaderView.titleLabel.text = ""
+                }
                 
                 return usersHeaderView
             }
@@ -345,13 +356,19 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserGridCell.reusableIndentifer, for: indexPath) as! BHUserGridCell
-        cell.user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.item]
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard indexPath.section - 1 < groups.count,
+              indexPath.item < groups[indexPath.section - 1].users.count else { return cell }
+        cell.user = groups[indexPath.section - 1].users[indexPath.item]
     
         return cell
     }
         
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.row]
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard indexPath.section - 1 < groups.count,
+              indexPath.item < groups[indexPath.section - 1].users.count else { return }   /// #6
+        let user = groups[indexPath.section - 1].users[indexPath.item]
         openUserDetails(user)
     }
       

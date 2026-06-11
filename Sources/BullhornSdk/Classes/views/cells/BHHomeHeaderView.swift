@@ -87,12 +87,12 @@ class BHHomeHeaderView: UICollectionReusableView {
         featuredUsersTitleLabel.textColor = .primary()
         featuredUsersTitleLabel.font = .sectionTitle()
         featuredUsersTitleLabel.accessibilityTraits.insert(.header)
-        featuredPostsTitle.backgroundColor = .primaryBackground()
+        featuredUsersTitle.backgroundColor = .primaryBackground()
 
         featuredPostsTitleLabel.textColor = .primary()
         featuredPostsTitleLabel.font = .sectionTitle()
         featuredPostsTitleLabel.accessibilityTraits.insert(.header)
-        featuredUsersTitle.backgroundColor = .primaryBackground()
+        featuredPostsTitle.backgroundColor = .primaryBackground()
 
         followedUsersTitleLabel.textColor = .primary()
         followedUsersTitleLabel.font = .sectionTitle()
