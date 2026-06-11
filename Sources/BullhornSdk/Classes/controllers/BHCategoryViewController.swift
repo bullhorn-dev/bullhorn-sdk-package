@@ -2,18 +2,18 @@
 import UIKit
 import Foundation
 
-class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHCategoryViewController: BHPlayerContainingViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let UserDetailsSegueIdentifier = "Category.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Category.PostDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
@@ -33,9 +33,6 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         super.viewDidLoad()
 
         BHCategoriesManager.shared.addListener(self)
-
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
 
         let bundle = Bundle.module
         let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
@@ -118,14 +115,15 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.collectionView.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         guard let categoryId = category?.id else { return }
         
         if initial {
-            self.defaultShowActivityIndicatorView()
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.category())
             manager.removeCategoryData()
             
             manager.fetchStorageCategoryPodcasts(categoryId) { response in
@@ -234,7 +232,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if manager.users.count == 0 && manager.posts.count == 0 {
-            if !activityIndicator.isAnimating {
+            if skeleton == nil {
                 let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 collectionView.setEmptyMessage(message, image: image)

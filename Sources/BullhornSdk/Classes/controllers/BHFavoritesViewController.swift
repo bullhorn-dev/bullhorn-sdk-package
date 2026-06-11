@@ -3,16 +3,15 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHFavoritesViewController: BHPlayerContainingViewController {
     
     fileprivate static let PostDetailsSegueIdentifier = "FavoritesVC.PostDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-
+    fileprivate var skeleton: BHSkeletonView?
     fileprivate var footerView: BHListFooterView?
 
     fileprivate var feedManager = BHFeedManager.shared
@@ -25,9 +24,6 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
@@ -100,12 +96,13 @@ class BHFavoritesViewController: BHPlayerContainingViewController, ActivityIndic
 
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if initial {
-            self.defaultShowActivityIndicatorView()
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.posts())
             
             feedManager.fetchStoragePosts() { response in
                 switch response {
@@ -186,7 +183,7 @@ extension BHFavoritesViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if feedManager.favorites.count == 0 && !activityIndicator.isAnimating {
+        if feedManager.favorites.count == 0 && skeleton == nil {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "No episode liked yet" : "The Internet connection is lost"

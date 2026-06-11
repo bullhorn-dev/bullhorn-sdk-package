@@ -3,14 +3,13 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHHomeViewController: BHPlayerContainingViewController {
     
     fileprivate static let UserDetailsSegueIdentifier = "Home.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Home.PostDetailsSegueIdentifier"
     fileprivate static let FollowedPodcastsSegueIdentifier = "Home.FollowedPodcastsSegueIdentifier"
     fileprivate static let NotificationsSegueIdentifier = "Home.NotificationsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
 
     fileprivate var headerView: BHHomeHeaderView?
@@ -24,6 +23,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     fileprivate var selectedChannelId: String = UserDefaults.standard.selectedChannelId
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
@@ -35,9 +35,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         let bundle = Bundle.module
         let headerNib = UINib(nibName: "BHHomeHeaderView", bundle: bundle)
         let sectionHeaderNib = UINib(nibName: "BHSectionHeaderView", bundle: bundle)
@@ -144,7 +141,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0 && BHNetworkManager.shared.channels.count > 0
+            self.shouldShowHeader = self.showHeader()
             self.refreshControl?.endRefreshing()
             self.reloadData()
             self.headerView?.reloadData()
@@ -153,14 +150,15 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         if isInitial {
             self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            self.skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.home())
 
             BHNetworkManager.shared.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
                     completeBlock()
-                    if BHNetworkManager.shared.splittedUsers.count > 0 {
-                        self.defaultHideActivityIndicatorView()
+                    if self.showHeader() {
+                        self.skeleton?.dismiss()
+                        self.skeleton = nil
                     }
                 case .failure(error: let error):
                     let message = "Failed to fetch network from storage. \(error.localizedDescription)"
@@ -179,11 +177,16 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                     self.showConnectionError()
                 }
             }
-            self.defaultHideActivityIndicatorView()
             completeBlock()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
     }
-        
+    
+    fileprivate func showHeader() -> Bool {
+        return BHNetworkManager.shared.featuredUsers.count > 0 && BHNetworkManager.shared.channels.count > 0
+    }
+
     fileprivate func reloadData() {
         BHLog.p("\(#function)")
         
@@ -195,7 +198,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     }
 
     fileprivate func updateEmptyState() {
-        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
+        if BHNetworkManager.shared.splittedUsers.count == 0 && skeleton == nil {
             let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
             collectionView.setEmptyMessage(message, image: image)

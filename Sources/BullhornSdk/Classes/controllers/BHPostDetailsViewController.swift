@@ -8,18 +8,17 @@ enum BHPostTabs: Int {
     case transcript
 }
 
-class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHPostDetailsViewController: BHPlayerContainingViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let UserDetailsSegueIdentifier = "PostDetailsVC.UserDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-
+    fileprivate var skeleton: BHSkeletonView?
     fileprivate var headerView: BHPostHeaderView?
 
     fileprivate var postsManager = BHPostsManager()
@@ -39,9 +38,6 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
 
         bottomView.backgroundColor = .primaryBackground()
 
@@ -119,14 +115,15 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         let completeBlock = {
             self.shouldShowHeader = true
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if initial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.postDetails())
 
             postsManager.fetchStorage(postId: validPost.id) { response in
                 switch response {
@@ -262,7 +259,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             tableView.restore()
             return 1
         case .transcript:
-            if postsManager.transcriptSegments.count == 0 && !activityIndicator.isAnimating {
+            if postsManager.transcriptSegments.count == 0 && skeleton == nil {
                 let bundle = Bundle.module
                 let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 

@@ -18,6 +18,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
 
     fileprivate var searchFieldView: BHSearchFieldView?
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
@@ -149,14 +150,15 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         let completeBlock = {
             self.shouldShowHeader = self.hasHeaderContent()
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if isInitial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.explore())
 
             exploreManager.fetchStorage(networkId) { response in
                 switch response {

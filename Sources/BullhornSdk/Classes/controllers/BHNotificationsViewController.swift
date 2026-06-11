@@ -2,15 +2,15 @@
 import UIKit
 import Foundation
 
-class BHNotificationsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHNotificationsViewController: BHPlayerContainingViewController {
     
     fileprivate static let UserDetailsSegueIdentifier = "Notifications.UserDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var userManager = BHUserManager.shared
     fileprivate var selectedUser: BHUser?
@@ -20,9 +20,6 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
@@ -98,12 +95,13 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
     fileprivate func fetch(initial: Bool = false) {
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.collectionView.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if initial {
-            self.defaultShowActivityIndicatorView()
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.notifications())
         }
 
         if let user = BHAccountManager.shared.user {
@@ -171,7 +169,7 @@ extension BHNotificationsViewController: UICollectionViewDelegate, UICollectionV
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if userManager.newEpisodesUsers.count == 0 {
-            if !activityIndicator.isAnimating {
+            if skeleton == nil {
                 let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 collectionView.setEmptyMessage(message, image: image)

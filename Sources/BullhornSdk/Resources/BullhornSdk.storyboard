@@ -895,34 +895,18 @@
                                     <constraint firstItem="g36-m7-2vo" firstAttribute="top" secondItem="eEP-0J-jcO" secondAttribute="bottom" id="wyk-lF-YSG"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvm-3y-KYh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="407" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="k9O-jm-EYL"/>
-                                    <constraint firstAttribute="width" constant="30" id="wTN-Hi-Hye"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="TCd-he-GQl"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
                             <constraint firstItem="4y7-9u-Fli" firstAttribute="leading" secondItem="TCd-he-GQl" secondAttribute="leading" id="1mp-br-ZXr"/>
                             <constraint firstItem="4y7-9u-Fli" firstAttribute="top" secondItem="TCd-he-GQl" secondAttribute="top" id="8RF-M0-zif"/>
-                            <constraint firstItem="zvm-3y-KYh" firstAttribute="centerY" secondItem="jfr-Ob-5pR" secondAttribute="centerY" id="JEd-9Q-KcV"/>
                             <constraint firstItem="TCd-he-GQl" firstAttribute="trailing" secondItem="4y7-9u-Fli" secondAttribute="trailing" id="QPU-Dc-5XO"/>
-                            <constraint firstItem="zvm-3y-KYh" firstAttribute="centerX" secondItem="jfr-Ob-5pR" secondAttribute="centerX" id="gsC-Ej-L8Z"/>
                             <constraint firstItem="TCd-he-GQl" firstAttribute="bottom" secondItem="4y7-9u-Fli" secondAttribute="bottom" id="sfs-mG-Edn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="vAE-gS-TVx"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="zvm-3y-KYh" id="XlT-rU-5Dk"/>
                         <outlet property="collectionView" destination="eEP-0J-jcO" id="JNe-fN-TJ0"/>
                         <outlet property="miniPlayerView" destination="g36-m7-2vo" id="Hk0-26-tIN"/>
                         <segue destination="TEG-MA-Hda" kind="show" identifier="Home.PostDetailsSegueIdentifier" id="TAw-Tl-Zg2"/>
@@ -1053,19 +1037,6 @@
                                     <constraint firstItem="27V-cL-2AF" firstAttribute="leading" secondItem="ylv-B0-sUz" secondAttribute="leading" id="jeL-Y5-RsY"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bYr-AN-UN3" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="Ktg-qv-RfL"/>
-                                    <constraint firstAttribute="height" constant="30" id="jwL-nh-l6m"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lmw-eV-e7z">
                                 <rect key="frame" x="0.0" y="787" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -1077,9 +1048,7 @@
                         <viewLayoutGuide key="safeArea" id="bEm-3g-We1"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
-                            <constraint firstItem="bYr-AN-UN3" firstAttribute="centerX" secondItem="jhH-2Z-9e5" secondAttribute="centerX" id="8oL-Md-cLm"/>
                             <constraint firstItem="Lmw-eV-e7z" firstAttribute="trailing" secondItem="bEm-3g-We1" secondAttribute="trailing" id="C2Y-Pn-UWJ"/>
-                            <constraint firstItem="bYr-AN-UN3" firstAttribute="centerY" secondItem="jhH-2Z-9e5" secondAttribute="centerY" id="Hz7-ys-wi9"/>
                             <constraint firstItem="ylv-B0-sUz" firstAttribute="leading" secondItem="bEm-3g-We1" secondAttribute="leading" id="LML-Df-EZi"/>
                             <constraint firstItem="bEm-3g-We1" firstAttribute="trailing" secondItem="ylv-B0-sUz" secondAttribute="trailing" id="Lr2-1J-QHT"/>
                             <constraint firstItem="ylv-B0-sUz" firstAttribute="top" secondItem="bEm-3g-We1" secondAttribute="top" id="UvK-BD-lvv"/>
@@ -1090,7 +1059,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="CoO-bG-Ffs"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="bYr-AN-UN3" id="vew-o7-cjh"/>
                         <outlet property="bottomView" destination="Lmw-eV-e7z" id="wRE-Gh-oTM"/>
                         <outlet property="miniPlayerView" destination="27V-cL-2AF" id="7OI-Ec-eVc"/>
                         <outlet property="tableView" destination="bye-Ao-Yod" id="CVw-46-Tek"/>
@@ -1753,19 +1721,6 @@
                                     <constraint firstItem="kny-WC-ICj" firstAttribute="top" secondItem="5Lh-fH-nUd" secondAttribute="top" id="vSJ-aj-ubk"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23m-8b-mZx" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="2F0-zW-gyR"/>
-                                    <constraint firstAttribute="width" constant="30" id="8LM-MT-mmX"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WmZ-rg-I3X">
                                 <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -1777,10 +1732,8 @@
                         <viewLayoutGuide key="safeArea" id="uyf-6t-2vs"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
-                            <constraint firstItem="23m-8b-mZx" firstAttribute="centerY" secondItem="MhH-QD-bJf" secondAttribute="centerY" id="0Fj-BS-yiG"/>
                             <constraint firstItem="WmZ-rg-I3X" firstAttribute="leading" secondItem="uyf-6t-2vs" secondAttribute="leading" id="0MJ-yW-3Vh"/>
                             <constraint firstItem="5Lh-fH-nUd" firstAttribute="leading" secondItem="uyf-6t-2vs" secondAttribute="leading" id="3FO-Qq-UEW"/>
-                            <constraint firstItem="23m-8b-mZx" firstAttribute="centerX" secondItem="MhH-QD-bJf" secondAttribute="centerX" id="EcC-RP-beC"/>
                             <constraint firstItem="5Lh-fH-nUd" firstAttribute="trailing" secondItem="uyf-6t-2vs" secondAttribute="trailing" id="Hm4-Og-C4H"/>
                             <constraint firstItem="5Lh-fH-nUd" firstAttribute="top" secondItem="uyf-6t-2vs" secondAttribute="top" id="Po3-r9-P4o"/>
                             <constraint firstItem="5Lh-fH-nUd" firstAttribute="bottom" secondItem="uyf-6t-2vs" secondAttribute="bottom" id="qFK-Wy-XEk"/>
@@ -1792,7 +1745,6 @@
                         <barButtonItem key="backBarButtonItem" id="u7t-1P-8wN"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="23m-8b-mZx" id="8jw-gF-FTG"/>
                         <outlet property="bottomView" destination="WmZ-rg-I3X" id="aZH-DX-Ypw"/>
                         <outlet property="miniPlayerView" destination="maS-jn-QN0" id="BxV-Qp-bBZ"/>
                         <outlet property="tableView" destination="kny-WC-ICj" id="8Xw-ay-dQ2"/>
@@ -1889,28 +1841,13 @@
                                     <constraint firstAttribute="trailing" secondItem="Mh4-rh-oZY" secondAttribute="trailing" id="xFh-Sh-c5I"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nth-N3-jin" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="407" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="g7g-Dy-QeF"/>
-                                    <constraint firstAttribute="width" constant="30" id="hDu-a0-5hZ"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fOm-Lh-v60"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
-                            <constraint firstItem="Nth-N3-jin" firstAttribute="centerY" secondItem="c7K-M3-nor" secondAttribute="centerY" id="6lE-zm-IDd"/>
                             <constraint firstItem="fOm-Lh-v60" firstAttribute="bottom" secondItem="ybI-8s-wbk" secondAttribute="bottom" id="EhM-L1-o7D"/>
                             <constraint firstItem="ybI-8s-wbk" firstAttribute="top" secondItem="fOm-Lh-v60" secondAttribute="top" id="KaD-fm-Bme"/>
                             <constraint firstItem="ybI-8s-wbk" firstAttribute="leading" secondItem="fOm-Lh-v60" secondAttribute="leading" id="Q3x-5V-9hn"/>
-                            <constraint firstItem="Nth-N3-jin" firstAttribute="centerX" secondItem="c7K-M3-nor" secondAttribute="centerX" id="h66-4r-9fh"/>
                             <constraint firstItem="fOm-Lh-v60" firstAttribute="trailing" secondItem="ybI-8s-wbk" secondAttribute="trailing" id="zTS-Zg-tzu"/>
                         </constraints>
                     </view>
@@ -1918,7 +1855,6 @@
                         <barButtonItem key="backBarButtonItem" width="42" systemItem="fixedSpace" id="3JJ-wN-yHV"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="Nth-N3-jin" id="Eq5-9Y-f4v"/>
                         <outlet property="miniPlayerView" destination="Mh4-rh-oZY" id="rZh-QH-SwB"/>
                         <outlet property="tableView" destination="Z5w-0a-glA" id="fQd-Al-y71"/>
                     </connections>
@@ -2013,7 +1949,7 @@
                                 <rect key="frame" x="0.0" y="94" width="390" height="682"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eoT-Yu-FJA">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="578"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="622"/>
                                         <color key="backgroundColor" name="bhColorPrimaryBg"/>
                                         <color key="tintColor" name="bhColorPrimary"/>
                                         <color key="separatorColor" name="bhColorSecondaryBg"/>
@@ -2168,7 +2104,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="BHSettingVersionCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BHSettingVersionCell" rowHeight="55" id="BHV-Ce-ll0" customClass="BHSettingVersionCell" customModule="BullhornSdk">
-                                                <rect key="frame" x="0.0" y="264" width="390" height="55"/>
+                                                <rect key="frame" x="0.0" y="263.66666412353516" width="390" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BHV-Ce-ll0" id="BHV-Cv-iew">
                                                     <rect key="frame" x="0.0" y="0.0" width="390" height="55"/>
@@ -2178,13 +2114,13 @@
                                                             <rect key="frame" x="20" y="16" width="350" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-Ti-tle">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="23"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="286.33333333333331" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                     <color key="textColor" name="bhColorPrimary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="750" horizontalCompressionResistancePriority="751" verticalHuggingPriority="251" text="0.0.6 (3)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-Ve-rsn">
-                                                                    <rect key="frame" x="208" y="0.0" width="142" height="23"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="0.0.6 (3)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHV-Ve-rsn">
+                                                                    <rect key="frame" x="294.33333333333331" y="0.0" width="55.666666666666686" height="23"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                                     <color key="textColor" name="bhColorSecondary"/>
                                                                     <nil key="highlightedColor"/>
@@ -2287,19 +2223,6 @@
                                     <constraint firstAttribute="bottom" secondItem="yk5-Zz-UKd" secondAttribute="bottom" id="pHh-ME-y1T"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GA1-ot-eO8" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="8xu-Yy-BYN"/>
-                                    <constraint firstAttribute="height" constant="30" id="jES-tH-xB2"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yu3-2E-OZj">
                                 <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -2313,12 +2236,10 @@
                         <constraints>
                             <constraint firstItem="cuz-WK-g5W" firstAttribute="bottom" secondItem="Pt7-jH-sdY" secondAttribute="bottom" id="4Az-g9-LuT"/>
                             <constraint firstItem="yu3-2E-OZj" firstAttribute="trailing" secondItem="Pt7-jH-sdY" secondAttribute="trailing" id="ISa-SQ-QaX"/>
-                            <constraint firstItem="GA1-ot-eO8" firstAttribute="centerY" secondItem="yIY-X3-kd5" secondAttribute="centerY" id="RJK-dq-qsp"/>
                             <constraint firstItem="yu3-2E-OZj" firstAttribute="leading" secondItem="Pt7-jH-sdY" secondAttribute="leading" id="eaJ-ov-zrA"/>
                             <constraint firstItem="cuz-WK-g5W" firstAttribute="leading" secondItem="Pt7-jH-sdY" secondAttribute="leading" id="fA9-xA-rw8"/>
                             <constraint firstItem="cuz-WK-g5W" firstAttribute="trailing" secondItem="Pt7-jH-sdY" secondAttribute="trailing" id="oMd-nw-XGR"/>
                             <constraint firstItem="cuz-WK-g5W" firstAttribute="top" secondItem="Pt7-jH-sdY" secondAttribute="top" id="rWu-K8-Syf"/>
-                            <constraint firstItem="GA1-ot-eO8" firstAttribute="centerX" secondItem="yIY-X3-kd5" secondAttribute="centerX" id="vY9-RN-wpg"/>
                             <constraint firstItem="yu3-2E-OZj" firstAttribute="top" secondItem="cuz-WK-g5W" secondAttribute="bottom" id="xIb-zr-0ec"/>
                         </constraints>
                     </view>
@@ -2326,7 +2247,6 @@
                         <barButtonItem key="backBarButtonItem" id="L8T-5e-PNO"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="GA1-ot-eO8" id="epQ-z9-u4m"/>
                         <outlet property="bottomView" destination="yu3-2E-OZj" id="rtA-8x-Nae"/>
                         <outlet property="miniPlayerView" destination="yk5-Zz-UKd" id="x5s-ur-1Jh"/>
                         <outlet property="tableView" destination="y8D-Bz-ojo" id="Itx-1C-5Rc"/>
@@ -2372,19 +2292,6 @@
                                     <constraint firstItem="OJJ-3B-xrL" firstAttribute="top" secondItem="mCb-6o-gKL" secondAttribute="top" id="VHN-8m-P0d"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4sZ-Ff-mnh" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="AQA-B4-Y4R"/>
-                                    <constraint firstAttribute="height" constant="30" id="Txd-wp-L8J"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Mq-UC-Y2D">
                                 <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -2399,10 +2306,8 @@
                             <constraint firstItem="mCb-6o-gKL" firstAttribute="leading" secondItem="k8v-ct-NE8" secondAttribute="leading" id="Beb-SP-kWI"/>
                             <constraint firstItem="k8v-ct-NE8" firstAttribute="bottom" secondItem="mCb-6o-gKL" secondAttribute="bottom" id="DeV-cD-1JF"/>
                             <constraint firstItem="mCb-6o-gKL" firstAttribute="trailing" secondItem="k8v-ct-NE8" secondAttribute="trailing" id="InZ-bj-syR"/>
-                            <constraint firstItem="4sZ-Ff-mnh" firstAttribute="centerY" secondItem="QdS-3I-jbE" secondAttribute="centerY" id="JL9-sp-7YH"/>
                             <constraint firstItem="7Mq-UC-Y2D" firstAttribute="trailing" secondItem="k8v-ct-NE8" secondAttribute="trailing" id="OH7-kR-xKQ"/>
                             <constraint firstItem="7Mq-UC-Y2D" firstAttribute="leading" secondItem="k8v-ct-NE8" secondAttribute="leading" id="Pxr-zw-73A"/>
-                            <constraint firstItem="4sZ-Ff-mnh" firstAttribute="centerX" secondItem="QdS-3I-jbE" secondAttribute="centerX" id="Vr1-0b-Z0W"/>
                             <constraint firstItem="7Mq-UC-Y2D" firstAttribute="top" secondItem="mCb-6o-gKL" secondAttribute="bottom" id="fBy-hd-foe"/>
                             <constraint firstItem="mCb-6o-gKL" firstAttribute="top" secondItem="k8v-ct-NE8" secondAttribute="top" id="vaq-Io-WgH"/>
                         </constraints>
@@ -2411,7 +2316,6 @@
                         <barButtonItem key="backBarButtonItem" id="7Ec-fJ-dgZ"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="4sZ-Ff-mnh" id="Gip-hg-1OX"/>
                         <outlet property="bottomView" destination="7Mq-UC-Y2D" id="Tr3-yO-OCh"/>
                         <outlet property="miniPlayerView" destination="6i2-ux-668" id="VE8-M6-rui"/>
                         <outlet property="tableView" destination="OJJ-3B-xrL" id="g1W-cU-gg0"/>
@@ -2476,19 +2380,6 @@
                                     <constraint firstAttribute="bottom" secondItem="ZeQ-oS-xqD" secondAttribute="bottom" id="zgr-lN-3BF"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lid-Zp-zMu" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="383.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="KeC-gS-2tq"/>
-                                    <constraint firstAttribute="height" constant="30" id="vWH-Hj-dMX"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qz3-gD-SLT">
                                 <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -2500,8 +2391,6 @@
                         <viewLayoutGuide key="safeArea" id="rdL-cp-vvP"/>
                         <color key="backgroundColor" name="bhColorAppBarBg"/>
                         <constraints>
-                            <constraint firstItem="Lid-Zp-zMu" firstAttribute="centerX" secondItem="u7h-wZ-RQZ" secondAttribute="centerX" id="7Kg-E6-KSO"/>
-                            <constraint firstItem="Lid-Zp-zMu" firstAttribute="centerY" secondItem="u7h-wZ-RQZ" secondAttribute="centerY" id="DuM-pN-Oqg"/>
                             <constraint firstItem="rdL-cp-vvP" firstAttribute="bottom" secondItem="QVB-bP-jaG" secondAttribute="bottom" id="JJU-Kb-2YX"/>
                             <constraint firstItem="QVB-bP-jaG" firstAttribute="top" secondItem="rdL-cp-vvP" secondAttribute="top" id="N5r-ZQ-dFc"/>
                             <constraint firstItem="Qz3-gD-SLT" firstAttribute="top" secondItem="QVB-bP-jaG" secondAttribute="bottom" id="Oal-mg-hk2"/>
@@ -2515,7 +2404,6 @@
                         <barButtonItem key="backBarButtonItem" id="4yA-HT-MTX"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="Lid-Zp-zMu" id="KE0-Kb-avW"/>
                         <outlet property="bottomView" destination="Qz3-gD-SLT" id="mCU-V9-mOy"/>
                         <outlet property="collectionView" destination="N8E-Fy-42w" id="HTf-xC-YjZ"/>
                         <outlet property="miniPlayerView" destination="ZeQ-oS-xqD" id="7R1-1W-tSo"/>
@@ -3035,19 +2923,6 @@
                                     <constraint firstItem="9Hv-AC-97U" firstAttribute="leading" secondItem="M5b-yz-4Be" secondAttribute="leading" id="oQD-dN-v8w"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bce-2l-3YY" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
-                                <rect key="frame" x="180" y="378.66666666666669" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="3h2-iC-gah"/>
-                                    <constraint firstAttribute="height" constant="30" id="KpG-Z4-c8M"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                        <color key="value" name="bhColorAccent"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vBb-eh-SAt">
                                 <rect key="frame" x="0.0" y="787" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -3061,11 +2936,9 @@
                         <constraints>
                             <constraint firstItem="JWT-aI-kJs" firstAttribute="bottom" secondItem="M5b-yz-4Be" secondAttribute="bottom" id="4Ry-BJ-9NJ"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="leading" secondItem="JWT-aI-kJs" secondAttribute="leading" id="BUS-8t-fGo"/>
-                            <constraint firstItem="bce-2l-3YY" firstAttribute="centerX" secondItem="78K-ia-EkU" secondAttribute="centerX" id="HDH-BD-8HH"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="leading" secondItem="JWT-aI-kJs" secondAttribute="leading" id="P8L-Vd-E0q"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="top" secondItem="M5b-yz-4Be" secondAttribute="bottom" id="bYU-0u-E9m"/>
                             <constraint firstItem="vBb-eh-SAt" firstAttribute="trailing" secondItem="JWT-aI-kJs" secondAttribute="trailing" id="dk0-L4-s3q"/>
-                            <constraint firstItem="bce-2l-3YY" firstAttribute="centerY" secondItem="78K-ia-EkU" secondAttribute="centerY" id="l3Z-8K-UYt"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="trailing" secondItem="JWT-aI-kJs" secondAttribute="trailing" id="pxe-uT-GPu"/>
                             <constraint firstItem="M5b-yz-4Be" firstAttribute="top" secondItem="JWT-aI-kJs" secondAttribute="top" id="udw-FW-ZnP"/>
                         </constraints>
@@ -3074,7 +2947,6 @@
                         <barButtonItem key="backBarButtonItem" id="Fbf-3i-3FC"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicator" destination="bce-2l-3YY" id="jtm-5d-YKM"/>
                         <outlet property="bottomView" destination="vBb-eh-SAt" id="Uus-1N-lQN"/>
                         <outlet property="collectionView" destination="u6a-YY-Jjv" id="jG5-cB-wc2"/>
                         <outlet property="miniPlayerView" destination="9Hv-AC-97U" id="tea-0x-0UD"/>
@@ -3088,7 +2960,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Dux-9E-9ph"/>
+        <segue reference="Tnh-iY-7ke"/>
         <segue reference="G2h-VU-adC"/>
         <segue reference="yWz-wB-dY7"/>
     </inferredMetricsTieBreakers>

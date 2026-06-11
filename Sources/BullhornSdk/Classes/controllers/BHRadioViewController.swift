@@ -3,15 +3,14 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHRadioViewController: BHPlayerContainingViewController {
     
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate var headerView: BHRadioHeaderView?
-
     fileprivate var refreshControl: UIRefreshControl?
-    
+    fileprivate var skeleton: BHSkeletonView?
+
     fileprivate var shouldShowHeader: Bool = false
 
     // MARK: - Lifecycle
@@ -19,9 +18,6 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         let bundle = Bundle.module
         let radioCellNib = UINib(nibName: "BHRadioCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHRadioHeaderView", bundle: bundle)
@@ -93,14 +89,15 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         let completeBlock = {
             self.shouldShowHeader = BHRadioStreamsManager.shared.radios.count > 0
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if isInitial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.radio())
 
             BHRadioStreamsManager.shared.fetchStorage(networkId) { response in
                 switch response {
@@ -180,7 +177,7 @@ extension BHRadioViewController: UITableViewDataSource, UITableViewDelegate {
         let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
-        if BHRadioStreamsManager.shared.otherRadios.count < 1 && !activityIndicator.isAnimating {
+        if BHRadioStreamsManager.shared.otherRadios.count < 1 && skeleton == nil {
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {

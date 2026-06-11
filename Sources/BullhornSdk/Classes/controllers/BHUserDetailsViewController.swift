@@ -14,6 +14,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var isLoadingMore = false
 
@@ -45,7 +46,7 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         activityIndicator.color = .accent()
 
         bottomView.backgroundColor = .primaryBackground()
-
+        
         let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHUserHeaderView", bundle: bundle)
@@ -136,15 +137,16 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         let completeBlock = {
             self.shouldShowHeader = self.userManager.posts.count > 0 || BHReachabilityManager.shared.isConnected()
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
             self.configureNavigationItems()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
         }
 
         if initial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.userDetails())
 
             userManager.fetchStorage(u.id) { response in
                 switch response {
@@ -303,7 +305,7 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if userManager.posts.count == 0 && !activityIndicator.isAnimating {
+        if userManager.posts.count == 0 && !activityIndicator.isAnimating && skeleton == nil {
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: nil, topOffset: 50)
         } else {
