@@ -44,11 +44,10 @@ class BHUserDetailsViewController: BHPlayerContainingViewController {
         bottomView.backgroundColor = .primaryBackground()
         
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHUserHeaderView", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHUserHeaderView.reusableIndentifer)
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
         tableView.delegate = self

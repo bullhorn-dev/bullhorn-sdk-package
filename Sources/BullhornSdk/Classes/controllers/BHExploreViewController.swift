@@ -34,14 +34,13 @@ class BHExploreViewController: BHPlayerContainingViewController {
         super.viewDidLoad()
         
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHExploreHeaderView", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHExploreHeaderView.reusableIndentifer)
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.register(userCellNib, forCellReuseIdentifier: BHUserCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self

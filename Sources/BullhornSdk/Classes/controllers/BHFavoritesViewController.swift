@@ -27,10 +27,9 @@ class BHFavoritesViewController: BHPlayerContainingViewController {
         bottomView.backgroundColor = .primaryBackground()
 
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self

@@ -31,10 +31,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController {
         
         bottomView.backgroundColor = .primaryBackground()
         
-        let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
-        
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()

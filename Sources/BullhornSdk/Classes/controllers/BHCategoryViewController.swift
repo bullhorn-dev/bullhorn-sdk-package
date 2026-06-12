@@ -52,10 +52,10 @@ class BHCategoryViewController: BHPlayerContainingViewController {
 
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
-        layout?.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout?.estimatedItemSize = .zero
 
         bottomView.backgroundColor = .primaryBackground()
-        
+
         configureNavigationItems()
         configureRefreshControl()
 
@@ -392,3 +392,4 @@ extension BHCategoryViewController: BHCategoriesManagerListener {
         }
     }
 }
+
