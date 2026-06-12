@@ -18,9 +18,13 @@ class BHPlayerContainingViewController: UIViewController {
     /// used to skip the redundant empty-query fetch when data is already present.
     private var isActivatingSearch = false
 
-    /// The search field's default magnifier, kept so we can restore it after
-    /// temporarily replacing it with a loading spinner.
-    private var searchMagnifierView: UIView?
+    /// We own the search field's left view: a fixed-size container holding both
+    /// the magnifier and the loading spinner. Swapping their visibility (instead
+    /// of swapping the leftView itself) keeps the footprint constant, so the text
+    /// never shifts when loading toggles.
+    private var searchLeftContainer: UIView?
+    private var searchMagnifierImageView: UIImageView?
+    private var searchSpinner: UIActivityIndicatorView?
 
     private var movin: Movin?
 
@@ -269,13 +273,34 @@ class BHPlayerContainingViewController: UIViewController {
         textField.clipsToBounds = true
 
         searchBar.setTextFiledColor(color: .cardBackground())
-        searchBar.setMagnifyingGlassColor(to: .secondary())
         searchBar.setClearButtonColor(to: .tertiary())
         searchBar.setPlaceholderTextColor(to: .secondary())
 
-        searchBar.setPositionAdjustment(UIOffset(horizontal: 2, vertical: 0), for: .search)
         searchBar.setPositionAdjustment(UIOffset(horizontal: -2, vertical: 0), for: .clear)
         searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 2, vertical: 0)
+
+        let contentSize: CGFloat = 20
+        let horizontalPadding: CGFloat = 2
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: contentSize + horizontalPadding * 2, height: contentSize))
+
+        let magnifier = UIImageView(image: UIImage(systemName: "magnifyingglass")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 15, weight: .regular)))
+        magnifier.tintColor = .secondary()
+        magnifier.contentMode = .center
+        magnifier.frame = container.bounds
+        container.addSubview(magnifier)
+
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.color = .secondary()
+        spinner.hidesWhenStopped = true
+        spinner.frame = container.bounds
+        container.addSubview(spinner)
+
+        searchLeftContainer = container
+        searchMagnifierImageView = magnifier
+        searchSpinner = spinner
+
+        textField.leftView = container
+        textField.leftViewMode = .always
     }
 
     /// Entry point: call this from the in-content search field tap.
@@ -297,7 +322,9 @@ class BHPlayerContainingViewController: UIViewController {
     /// Remove the search bar from the navigation bar entirely, so scrolling never reveals it.
     func deactivateNavigationSearch() {
         isActivatingSearch = false
-        searchMagnifierView = nil
+        searchLeftContainer = nil
+        searchMagnifierImageView = nil
+        searchSpinner = nil
         if searchController?.isActive == true {
             searchController?.isActive = false
         }
@@ -305,24 +332,20 @@ class BHPlayerContainingViewController: UIViewController {
         searchController = nil
     }
 
-    /// Show a spinner in place of the search field's magnifier while a query is loading.
+    /// Show a spinner in place of the search field's magnifier while a query is
+    /// loading. Both live in the same fixed container, so only their visibility
+    /// flips — the left view footprint stays constant and the text doesn't move.
     /// Used for a new/refining search; pagination still uses the footer dots.
     func setSearchBarLoading(_ loading: Bool) {
-        guard let textField = searchController?.searchBar.searchTextField else { return }
+        guard let magnifier = searchMagnifierImageView, let spinner = searchSpinner else { return }
 
         if loading {
-            if searchMagnifierView == nil {
-                searchMagnifierView = textField.leftView
-            }
-            let spinner = BHActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 16, height: 16))
-            spinner.type = .circleStrokeSpin
-            spinner.color = .secondary()
+            magnifier.isHidden = true
             spinner.startAnimating()
-            textField.leftView = spinner
-        } else if let magnifier = searchMagnifierView {
-            textField.leftView = magnifier
+        } else {
+            spinner.stopAnimating()
+            magnifier.isHidden = false
         }
-        textField.leftViewMode = .always
     }
 
     /// Reload section 0 with a fade; optionally scroll to top once the header is laid out.
@@ -513,5 +536,6 @@ extension BHPlayerContainingViewController: UISearchResultsUpdating, UISearchBar
         searchDidResignActive()
     }
 }
+
 
 
