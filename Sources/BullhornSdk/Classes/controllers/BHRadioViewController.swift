@@ -89,10 +89,10 @@ class BHRadioViewController: BHPlayerContainingViewController {
         let completeBlock = {
             self.shouldShowHeader = BHRadioStreamsManager.shared.radios.count > 0
             self.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
-            self.headerView?.reloadData()
             self.skeleton?.dismiss()
             self.skeleton = nil
+            self.tableView.reloadData()
+            self.headerView?.reloadData()
         }
 
         if isInitial {

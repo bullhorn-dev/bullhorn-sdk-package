@@ -82,9 +82,9 @@ class BHFollowedViewController: BHPlayerContainingViewController {
     fileprivate func fetch(initial: Bool = false) {
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
             self.skeleton?.dismiss()
             self.skeleton = nil
+            self.tableView.reloadData()
         }
 
         if initial {

@@ -3,13 +3,12 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHExploreViewController: BHPlayerContainingViewController {
     
     fileprivate static let UserDetailsSegueIdentifier = "Explore.UserDetailsSegueIdentifier"
     fileprivate static let PostDetailsSegueIdentifier = "Explore.PostDetailsSegueIdentifier"
     fileprivate static let RecentUsersSegueIdentifier = "Explore.RecentUsersSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate var headerView: BHExploreHeaderView?
@@ -34,9 +33,6 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         let bundle = Bundle.module
         let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
@@ -210,14 +206,11 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         guard !isLoadingMore else { return }
         isLoadingMore = true
 
-        if searchActive {
-            defaultShowActivityIndicatorView()
-        }
-
         exploreManager.getPosts(BHAppConfiguration.shared.networkId, text: searchController?.searchBar.text) { [weak self] response in
             guard let self else { return }
 
             self.isLoadingMore = false
+            self.setSearchBarLoading(false)
 
             switch response {
             case .success:
@@ -225,8 +218,6 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             case .failure(error: _):
                 break
             }
-
-            self.defaultHideActivityIndicatorView()
         }
     }
 
@@ -234,14 +225,11 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         guard !isLoadingMore else { return }
         isLoadingMore = true
 
-        if searchActive {
-            defaultShowActivityIndicatorView()
-        }
-
         exploreManager.getUsers(BHAppConfiguration.shared.networkId, text: searchController?.searchBar.text) { [weak self] response in
             guard let self else { return }
 
             self.isLoadingMore = false
+            self.setSearchBarLoading(false)
 
             switch response {
             case .success:
@@ -249,8 +237,6 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             case .failure(error: _):
                 break
             }
-
-            self.defaultHideActivityIndicatorView()
         }
     }
     
@@ -330,11 +316,23 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         return tableView
     }
 
+    override func hasExistingSearchResults() -> Bool {
+        switch selectedTab {
+        case .podcasts:
+            return !exploreManager.users.isEmpty
+        case .episodes:
+            return !exploreManager.posts.isEmpty
+        }
+    }
+
     override func performSearch(with text: String) {
         refreshControl?.endRefreshing()
 
         /// a new search must supersede any in-flight "load more"
         isLoadingMore = false
+
+        /// show the loading spinner in the search bar (pagination uses the footer)
+        setSearchBarLoading(true)
 
         switch selectedTab {
         case .podcasts:
@@ -342,6 +340,9 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         case .episodes:
             fetchPosts()
         }
+
+        /// drop any stale "Nothing to show" while the new query loads
+        tableView.reloadData()
     }
 
     override func searchDidBecomeActive() {
@@ -349,11 +350,20 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         /// and switch the header to the Podcasts/Episodes tabs
         tableView.tableHeaderView = nil
         shouldShowHeader = true
+
+        /// a fetch is imminent when there are no cached results — enter the loading
+        /// state now so the empty message doesn't flash during activation
+        if !hasExistingSearchResults() {
+            isLoadingMore = true
+            setSearchBarLoading(true)
+        }
+
         reloadSearchHeader(scrollToTopWhenDone: false)
     }
 
     override func searchDidResignActive() {
         /// restore the in-content field and the discovery carousels
+        isLoadingMore = false
         tableView.tableHeaderView = searchFieldView
         sizeTableHeaderToFit()
         shouldShowHeader = hasHeaderContent()
@@ -377,22 +387,19 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             return 0
         }
         
-        let bundle = Bundle.module
-        let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-        
         switch selectedTab {
         case .podcasts:
-            if exploreManager.users.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.users.count == 0 && !isLoadingMore {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: image)
+                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
             } else {
                 tableView.restore()
             }
             return exploreManager.users.count
         case .episodes:
-            if exploreManager.posts.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.posts.count == 0 && !isLoadingMore {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: image)
+                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
             } else {
                 tableView.restore()
             }
@@ -536,10 +543,7 @@ extension BHExploreViewController: BHExploreHeaderViewDelegate {
         selectedTab = item
         isLoadingMore = false
 
-        /// show the spinner before reloading so the empty-state doesn't flash
-        defaultShowActivityIndicatorView()
-        tableView.reloadData()
-
+        /// performSearch reloads immediately so the footer dots show while fetching
         performSearch(with: searchController?.searchBar.text ?? "")
     }
     

@@ -5,51 +5,53 @@ extension UITableView {
 
     func setEmptyMessage(_ message: String, image: UIImage?, topOffset: CGFloat = 0) {
 
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: 120))
+        let messageLabel = UILabel()
         messageLabel.text = message
         messageLabel.textColor = .tertiary()
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
         messageLabel.font = .fontWithName(.robotoRegular, size: 16)
-        messageLabel.sizeToFit()
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.spacing = Constants.paddingVertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
 
         if let validImage = image {
             let imageView = UIImageView(image: validImage)
-
-            let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel])
-            stackView.axis = .vertical
-            stackView.alignment = .center
-            stackView.distribution = .fill
-            stackView.spacing = Constants.paddingVertical
-            
-            self.backgroundView = stackView
-            
+            imageView.contentMode = .scaleAspectFit
             imageView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.translatesAutoresizingMaskIntoConstraints = false
-            
+            stackView.addArrangedSubview(imageView)
             NSLayoutConstraint.activate([
                 imageView.heightAnchor.constraint(equalToConstant: 120),
                 imageView.widthAnchor.constraint(equalToConstant: 120),
-                stackView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0),
-                stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: topOffset)
-            ])
-        } else {
-            let stackView = UIStackView(arrangedSubviews: [messageLabel])
-            stackView.axis = .vertical
-            stackView.alignment = .center
-            stackView.distribution = .fill
-            stackView.spacing = Constants.paddingVertical
-            
-            self.backgroundView = stackView
-            
-            stackView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                stackView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0),
-                stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: topOffset)
             ])
         }
 
+        stackView.addArrangedSubview(messageLabel)
+
+        /// container keeps default autoresizing (the table manages its frame = bounds),
+        /// and the content is centered inside it — this renders reliably
+        let container = UIView()
+        container.backgroundColor = .clear
+        container.addSubview(stackView)
+
+        /// default (0) keeps the message centered; a positive offset pins it to the top
+        let verticalConstraint = topOffset > 0
+            ? stackView.topAnchor.constraint(equalTo: container.safeAreaLayoutGuide.topAnchor, constant: topOffset)
+            : stackView.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+
+        NSLayoutConstraint.activate([
+            verticalConstraint,
+            stackView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: Constants.paddingHorizontal),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -Constants.paddingHorizontal),
+        ])
+
+        self.backgroundView = container
         self.separatorStyle = .none
     }
     
@@ -123,3 +125,4 @@ extension UITableViewCell {
         return (next as? UITableView) ?? (parentViewController as? UITableViewController)?.tableView
     }
 }
+

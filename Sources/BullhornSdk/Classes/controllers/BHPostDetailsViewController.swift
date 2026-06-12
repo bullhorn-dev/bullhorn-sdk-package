@@ -115,10 +115,10 @@ class BHPostDetailsViewController: BHPlayerContainingViewController {
         let completeBlock = {
             self.shouldShowHeader = true
             self.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
-            self.headerView?.reloadData()
             self.skeleton?.dismiss()
             self.skeleton = nil
+            self.tableView.reloadData()
+            self.headerView?.reloadData()
         }
 
         if initial {

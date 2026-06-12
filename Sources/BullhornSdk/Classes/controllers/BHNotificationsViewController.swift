@@ -95,9 +95,9 @@ class BHNotificationsViewController: BHPlayerContainingViewController {
     fileprivate func fetch(initial: Bool = false) {
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.collectionView.reloadData()
             self.skeleton?.dismiss()
             self.skeleton = nil
+            self.collectionView.reloadData()
         }
 
         if initial {

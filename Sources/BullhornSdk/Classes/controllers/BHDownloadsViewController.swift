@@ -56,9 +56,9 @@ class BHDownloadsViewController: BHPlayerContainingViewController {
 
         BHDownloadsManager.shared.updateItems { [weak self] in
             DispatchQueue.main.async {
-                self?.reloadDownloads()
                 self?.skeleton?.dismiss()
                 self?.skeleton = nil
+                self?.reloadDownloads()
             }
         }
     }
@@ -202,3 +202,4 @@ extension BHDownloadsViewController: BHDownloadsManagerListener {
     }
     func downloadsManager(_ manager: BHDownloadsManager, itemProgressUpdated item: BHDownloadItem) {}
 }
+

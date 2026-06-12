@@ -3,13 +3,12 @@ import UIKit
 import Foundation
 import SDWebImage
 
-class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+class BHUserDetailsViewController: BHPlayerContainingViewController {
     
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let PostDetailsSegueIdentifier = "UserDetailsVC.PostDetailsSegueIdentifier"
 
-    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
@@ -42,9 +41,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = .accent()
-
         bottomView.backgroundColor = .primaryBackground()
         
         let bundle = Bundle.module
@@ -137,11 +133,11 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         let completeBlock = {
             self.shouldShowHeader = self.userManager.posts.count > 0 || BHReachabilityManager.shared.isConnected()
             self.refreshControl?.endRefreshing()
+            self.skeleton?.dismiss()
+            self.skeleton = nil
             self.tableView.reloadData()
             self.headerView?.reloadData()
             self.configureNavigationItems()
-            self.skeleton?.dismiss()
-            self.skeleton = nil
         }
 
         if initial {
@@ -182,14 +178,11 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
 
         isLoadingMore = true
 
-        if searchActive {
-            defaultShowActivityIndicatorView()
-        }
-
         userManager.getUserPosts(u.id, text: searchController?.searchBar.text) { [weak self] response in
             guard let self else { return }
 
             self.isLoadingMore = false
+            self.setSearchBarLoading(false)
 
             switch response {
             case .success:
@@ -197,8 +190,6 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
             case .failure(error: _):
                 break
             }
-
-            self.defaultHideActivityIndicatorView()
         }
     }
     
@@ -277,12 +268,22 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
         return tableView
     }
 
+    override func hasExistingSearchResults() -> Bool {
+        return !userManager.posts.isEmpty
+    }
+
     override func performSearch(with text: String) {
         refreshControl?.endRefreshing()
 
         /// a new search must supersede any in-flight "load more"
         isLoadingMore = false
+
+        /// show the loading spinner in the search bar (pagination uses the footer)
+        setSearchBarLoading(true)
         fetchPosts()
+
+        /// drop any stale "Nothing to show" while the new query loads
+        tableView.reloadData()
     }
 
     override func searchDidBecomeActive() {
@@ -305,9 +306,9 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if userManager.posts.count == 0 && !activityIndicator.isAnimating && skeleton == nil {
+        if userManager.posts.count == 0 && !isLoadingMore && skeleton == nil {
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-            tableView.setEmptyMessage(message, image: nil, topOffset: 50)
+            tableView.setEmptyMessage(message, image: nil, topOffset: 30)
         } else {
             tableView.restore()
         }

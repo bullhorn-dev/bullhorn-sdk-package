@@ -96,9 +96,9 @@ class BHFavoritesViewController: BHPlayerContainingViewController {
 
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
             self.skeleton?.dismiss()
             self.skeleton = nil
+            self.tableView.reloadData()
         }
 
         if initial {

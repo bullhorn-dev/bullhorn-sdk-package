@@ -14,6 +14,14 @@ class BHPlayerContainingViewController: UIViewController {
     var searchController: UISearchController?
     var searchActive = false
 
+    /// True for the single `updateSearchResults` call that fires on activation,
+    /// used to skip the redundant empty-query fetch when data is already present.
+    private var isActivatingSearch = false
+
+    /// The search field's default magnifier, kept so we can restore it after
+    /// temporarily replacing it with a loading spinner.
+    private var searchMagnifierView: UIView?
+
     private var movin: Movin?
 
     // MARK: - Lifecycle methods
@@ -229,6 +237,10 @@ class BHPlayerContainingViewController: UIViewController {
     /// Called after the navigation search bar was dismissed (restore the header, etc.).
     func searchDidResignActive() {}
 
+    /// Whether the list already has results to show. When true, the redundant
+    /// empty-query fetch that fires on activation is skipped.
+    func hasExistingSearchResults() -> Bool { return false }
+
     // MARK: - Navigation search engine (shared)
 
     /// Build a fresh, styled search controller for a single search session.
@@ -260,12 +272,17 @@ class BHPlayerContainingViewController: UIViewController {
         searchBar.setMagnifyingGlassColor(to: .secondary())
         searchBar.setClearButtonColor(to: .tertiary())
         searchBar.setPlaceholderTextColor(to: .secondary())
+
+        searchBar.setPositionAdjustment(UIOffset(horizontal: 2, vertical: 0), for: .search)
+        searchBar.setPositionAdjustment(UIOffset(horizontal: -2, vertical: 0), for: .clear)
+        searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 2, vertical: 0)
     }
 
     /// Entry point: call this from the in-content search field tap.
     func activateNavigationSearch() {
         let sc = makeSearchController()
         searchController = sc
+        isActivatingSearch = true
 
         navigationItem.searchController = sc
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -279,11 +296,33 @@ class BHPlayerContainingViewController: UIViewController {
 
     /// Remove the search bar from the navigation bar entirely, so scrolling never reveals it.
     func deactivateNavigationSearch() {
+        isActivatingSearch = false
+        searchMagnifierView = nil
         if searchController?.isActive == true {
             searchController?.isActive = false
         }
         navigationItem.searchController = nil
         searchController = nil
+    }
+
+    /// Show a spinner in place of the search field's magnifier while a query is loading.
+    /// Used for a new/refining search; pagination still uses the footer dots.
+    func setSearchBarLoading(_ loading: Bool) {
+        guard let textField = searchController?.searchBar.searchTextField else { return }
+
+        if loading {
+            if searchMagnifierView == nil {
+                searchMagnifierView = textField.leftView
+            }
+            let spinner = BHActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 16, height: 16))
+            spinner.type = .circleStrokeSpin
+            spinner.color = .secondary()
+            spinner.startAnimating()
+            textField.leftView = spinner
+        } else if let magnifier = searchMagnifierView {
+            textField.leftView = magnifier
+        }
+        textField.leftViewMode = .always
     }
 
     /// Reload section 0 with a fade; optionally scroll to top once the header is laid out.
@@ -443,6 +482,15 @@ extension BHPlayerContainingViewController: UISearchResultsUpdating, UISearchBar
 
     func updateSearchResults(for searchController: UISearchController) {
         let text = searchController.searchBar.text ?? ""
+
+        /// the search controller fires this once on activation with an empty query —
+        /// skip that redundant fetch if we already have data to show
+        if isActivatingSearch {
+            isActivatingSearch = false
+            if text.isEmpty && hasExistingSearchResults() {
+                return
+            }
+        }
 
         /// debounce: don't fire a request on every keystroke
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(runSearchDebounced), object: nil)
