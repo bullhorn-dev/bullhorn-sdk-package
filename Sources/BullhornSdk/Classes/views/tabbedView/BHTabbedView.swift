@@ -78,6 +78,8 @@ class BHTabbedView: UIView {
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints =  false
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: Constants.paddingHorizontal, bottom: 0, right: Constants.paddingHorizontal)
         return collectionView
     }()
     
@@ -120,32 +122,26 @@ class BHTabbedView: UIView {
 extension BHTabbedView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        switch configuration {
-        case let .fillEqually(height, spacing):
-            let totalWidth = self.frame.width
-            let widthPerItem = (
-                totalWidth - (
-                    spacing * CGFloat((self.tabs.count + 1))
-                )
-            ) / CGFloat(self.tabs.count)
-            
-            return CGSize(width: widthPerItem,
-                          height: height)
-            
-        case let .fixed(width, height, spacing):
-            return CGSize(width: width - (spacing * 2),
-                          height: height)
-        }
+
+        /// content-sized pill (matches BHChannelsView). Measured with the medium
+        /// font so the width doesn't change when the selected tab turns bold.
+        let title = tabs[indexPath.row].title
+        let font: UIFont = .fontWithName(.robotoMedium, size: 17)
+        let textWidth = (title as NSString)
+            .size(withAttributes: [.font: font])
+            .width
+        /// text + label insets (3pt each side) + horizontal chrome
+        let width = ceil(textWidth) + 6.0 + 2 * Constants.paddingHorizontal
+
+        return CGSize(width: width, height: configuration.height)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        switch configuration {
-        case let .fillEqually(_, spacing),
-             let .fixed(_, _, spacing):
-            
-            return spacing
-        }
+        return Constants.paddingVertical / 2
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 12.0
     }
 }
 
@@ -182,3 +178,4 @@ extension BHTabbedView: UICollectionViewDelegate {
         self.delegate?.tabbedView(self, didMoveToTab: indexPath.item)
     }
 }
+
