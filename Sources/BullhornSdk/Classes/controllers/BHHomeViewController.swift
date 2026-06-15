@@ -30,6 +30,10 @@ class BHHomeViewController: BHPlayerContainingViewController {
         
     fileprivate var shouldShowHeader: Bool = false
 
+    /// the first appearance is already populated by the initial fetch; we only
+    /// refresh visible cells on subsequent appearances (returning to the screen)
+    fileprivate var didInitiallyAppear = false
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -85,11 +89,16 @@ class BHHomeViewController: BHPlayerContainingViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let sections = getAllSectionsIndexSet()
-        collectionView.reloadSections(sections)
-        
-        BHLog.p("Refresh all sections")
+
+        /// skip the first appearance — the initial fetch already populated it.
+        /// On later appearances refresh the visible cells in place (no recreate),
+        /// so state updates without scroll jumps or flicker.
+        guard didInitiallyAppear else {
+            didInitiallyAppear = true
+            return
+        }
+
+        refreshOnFocus()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -128,10 +137,23 @@ class BHHomeViewController: BHPlayerContainingViewController {
         collectionView.refreshControl = newRefreshControl
     }
     
-    fileprivate func getAllSectionsIndexSet() -> IndexSet {
-        let numberOfSections = collectionView.numberOfSections
-        let allSections = IndexSet(integersIn: 1..<numberOfSections)
-        return allSections
+    /// Focus refresh (on returning to the screen), without flicker:
+    /// - the header is refreshed in place (radio, followed section + visibility, badges)
+    /// - visible grid cells are reconfigured (new-episode badges) without recreating them
+    /// - the layout is re-evaluated in case the header height changed (a section
+    ///   appeared/disappeared), but nothing is reloaded/recreated, so no flicker
+    fileprivate func refreshOnFocus() {
+        headerView?.refresh()
+
+        let visibleItems = collectionView.indexPathsForVisibleItems
+
+        UIView.performWithoutAnimation {
+            if !visibleItems.isEmpty {
+                collectionView.reconfigureItems(at: visibleItems)
+            }
+            collectionView.collectionViewLayout.invalidateLayout()
+            collectionView.layoutIfNeeded()
+        }
     }
 
     // MARK: - Network
@@ -192,7 +214,6 @@ class BHHomeViewController: BHPlayerContainingViewController {
         
         BHNetworkManager.shared.splitUsers(selectedChannelId)
 
-        collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
         updateEmptyState()
     }
@@ -330,13 +351,16 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 
                 guard let homeHeaderView = headerView as? BHHomeHeaderView else { return headerView }
                 
-                if self.headerView == nil {
+                if self.headerView !== homeHeaderView {
+                    /// one-time configuration for this instance (styling, delegate, layout)
                     homeHeaderView.initialize()
                     homeHeaderView.delegate = self
+                    homeHeaderView.setup()
+                    self.headerView = homeHeaderView
+                } else {
+                    /// already configured — refresh data/visibility in place
+                    homeHeaderView.refresh()
                 }
-                homeHeaderView.setup()
-                
-                self.headerView = homeHeaderView
                 
                 return  homeHeaderView
             } else {
@@ -469,4 +493,5 @@ extension BHHomeViewController: BHUserManagerListener {
     
     func userManagerDidUpdatePosts(_ manager: BHUserManager) {}
 }
+
 
