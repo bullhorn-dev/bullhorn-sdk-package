@@ -2,16 +2,17 @@
 import UIKit
 import Foundation
 
-class BHDownloadsViewController: BHPlayerContainingViewController {
-    
+class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndicatorSupport {
+        
     class var storyboardIndentifer: String { return String(describing: self) }
 
     fileprivate static let PostDetailsSegueIdentifier = "DownloadsVC.PostDetailsSegueIdentifier"
     
+    @IBOutlet weak var activityIndicator: BHActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
-    fileprivate var skeleton: BHSkeletonView?
+    fileprivate var isInitial: Bool = true
 
     fileprivate var selectedPost: BHPost?
     fileprivate var selectedTab: BHPostTabs = .details
@@ -49,12 +50,14 @@ class BHDownloadsViewController: BHPlayerContainingViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.posts())
+        if isInitial {
+            defaultShowActivityIndicatorView()
+            isInitial = false
+        }
 
         BHDownloadsManager.shared.updateItems { [weak self] in
             DispatchQueue.main.async {
-                self?.skeleton?.dismiss()
-                self?.skeleton = nil
+                self?.defaultHideActivityIndicatorView()
                 self?.reloadDownloads()
             }
         }
@@ -140,7 +143,7 @@ extension BHDownloadsViewController: UITableViewDataSource, UITableViewDelegate 
     }
         
     func numberOfSections(in tableView: UITableView) -> Int {
-        if sections.count == 0 && skeleton == nil {
+        if sections.count == 0 && !activityIndicator.isAnimating {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_downloads_placeholder.png", in: bundle, with: nil)
 

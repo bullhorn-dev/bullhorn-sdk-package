@@ -1087,6 +1087,14 @@
                                     <constraint firstItem="BkJ-nH-gI2" firstAttribute="leading" secondItem="gm6-L4-S2g" secondAttribute="leading" id="rnX-YC-Dg4"/>
                                 </constraints>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MDd-si-fe6" customClass="BHActivityIndicatorView" customModule="BullhornSdk">
+                                <rect key="frame" x="177" y="380.66666666666669" width="36" height="36"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="36" id="WK0-QB-zb0"/>
+                                    <constraint firstAttribute="height" constant="36" id="cre-32-V4d"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-hl-J3T">
                                 <rect key="frame" x="0.0" y="797" width="390" height="40"/>
                                 <color key="backgroundColor" name="bhColorPrimaryBg"/>
@@ -1100,9 +1108,11 @@
                         <constraints>
                             <constraint firstItem="Pgt-hl-J3T" firstAttribute="top" secondItem="gm6-L4-S2g" secondAttribute="bottom" id="0Sg-zs-Zwf"/>
                             <constraint firstItem="Pgt-hl-J3T" firstAttribute="trailing" secondItem="j7z-Ze-alT" secondAttribute="trailing" id="0oq-1a-V6j"/>
+                            <constraint firstItem="MDd-si-fe6" firstAttribute="centerX" secondItem="les-XU-KcI" secondAttribute="centerX" id="3sy-z9-DdU"/>
                             <constraint firstItem="j7z-Ze-alT" firstAttribute="trailing" secondItem="gm6-L4-S2g" secondAttribute="trailing" id="7bg-VI-1DA"/>
                             <constraint firstItem="gm6-L4-S2g" firstAttribute="top" secondItem="j7z-Ze-alT" secondAttribute="top" id="7jz-BW-hkU"/>
                             <constraint firstItem="j7z-Ze-alT" firstAttribute="bottom" secondItem="gm6-L4-S2g" secondAttribute="bottom" id="SRS-Mo-ePy"/>
+                            <constraint firstItem="MDd-si-fe6" firstAttribute="centerY" secondItem="les-XU-KcI" secondAttribute="centerY" id="Sjg-vl-yQG"/>
                             <constraint firstItem="Pgt-hl-J3T" firstAttribute="leading" secondItem="j7z-Ze-alT" secondAttribute="leading" id="Th5-NR-gzO"/>
                             <constraint firstItem="gm6-L4-S2g" firstAttribute="leading" secondItem="j7z-Ze-alT" secondAttribute="leading" id="upx-he-wmJ"/>
                         </constraints>
@@ -1111,6 +1121,7 @@
                         <barButtonItem key="backBarButtonItem" id="Y4Q-He-DzW"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="MDd-si-fe6" id="Y2n-b3-4Os"/>
                         <outlet property="bottomView" destination="Pgt-hl-J3T" id="NuV-Vv-w2Q"/>
                         <outlet property="miniPlayerView" destination="dOX-I5-OX6" id="pOP-rz-NgD"/>
                         <outlet property="tableView" destination="BkJ-nH-gI2" id="KVQ-kY-IQc"/>
