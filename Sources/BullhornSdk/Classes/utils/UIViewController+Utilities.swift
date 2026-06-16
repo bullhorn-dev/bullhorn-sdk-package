@@ -41,26 +41,33 @@ extension UIViewController {
 
     func presentSafari(_ url: URL, configureBlock: ((SFSafariViewController) -> Void)? = nil) {
         
-        var webUrl: URL = url
+        let alert = UIAlertController.init(title: "External Link", message: "You are now leaving the app and going to another website.", preferredStyle: .alert)
 
-        if url.scheme != "http" && url.scheme != "https" {
-            webUrl = URL(string: "https://\(url.absoluteString)") ?? url
-        }
-        
-        let safariVC = SFSafariViewController.init(url: webUrl)
-        safariVC.modalPresentationStyle = .overFullScreen
-        safariVC.preferredControlTintColor = .playerOnDisplayBackground()
-        safariVC.preferredBarTintColor = .defaultBlue()
-        safariVC.modalPresentationCapturesStatusBarAppearance = true
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: "Continue", style: .default) { _ in
+            var webUrl: URL = url
 
-        configureBlock?(safariVC)
-
-        present(safariVC, animated: true) {
-            // Announce to VoiceOver that a new page has opened after presentation
-            if UIAccessibility.isVoiceOverRunning {
-                UIAccessibility.post(notification: .screenChanged, argument: "Opening web page.")
+            if url.scheme != "http" && url.scheme != "https" {
+                webUrl = URL(string: "https://\(url.absoluteString)") ?? url
             }
-        }
+            
+            let safariVC = SFSafariViewController.init(url: webUrl)
+            safariVC.modalPresentationStyle = .overFullScreen
+            safariVC.preferredControlTintColor = .playerOnDisplayBackground()
+            safariVC.preferredBarTintColor = .defaultBlue()
+            safariVC.modalPresentationCapturesStatusBarAppearance = true
+
+            configureBlock?(safariVC)
+
+            self.present(safariVC, animated: true) {
+                // Announce to VoiceOver that a new page has opened after presentation
+                if UIAccessibility.isVoiceOverRunning {
+                    UIAccessibility.post(notification: .screenChanged, argument: "Opening web page.")
+                }
+            }
+        })
+
+        present(alert, animated: true, completion: nil)
     }
     
     func openExternalLink(_ url: URL) {
@@ -69,7 +76,13 @@ extension UIViewController {
             let replaced = url.absoluteString.replacingOccurrences(of: "https", with: "youtube")
 
             if let appURL = URL(string: replaced), UIApplication.shared.canOpenURL(appURL) {
-                UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                let alert = UIAlertController.init(title: "External Link", message: "You are now leaving the app and going to YouTube app.", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction.init(title: "Continue", style: .default) { _ in
+                    UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                })
+                present(alert, animated: true, completion: nil)
             } else {
                 presentSafari(url)
             }
