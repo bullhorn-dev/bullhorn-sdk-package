@@ -47,14 +47,14 @@
                                                 <rect key="frame" x="136" y="0.0" width="342" height="120"/>
                                                 <subviews>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Label label label label label label Label label label label label label " lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eM-l8-pYj">
-                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="40"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="39.666666666666664"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                                                         <color key="textColor" name="bhColorPrimary"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="News" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aU5-x1-tbq">
-                                                        <rect key="frame" x="0.0" y="44" width="342" height="16"/>
+                                                        <rect key="frame" x="0.0" y="43.666666666666664" width="342" height="16"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="ZAQ-n3-N1M"/>
@@ -166,14 +166,24 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="70q-dV-zXN">
                                         <rect key="frame" x="16" y="0.0" width="478" height="85"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hV-kM-MJ0" customClass="BHHyperlinkLabel" customModule="BullhornSdk">
-                                                <rect key="frame" x="0.0" y="0.0" width="440" height="30.666666666666668"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <string key="text">Label label label label label label Label label label label label label Label label label label label label Label label label label label label</string>
-                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
-                                                <color key="textColor" name="bhColorPrimary"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apP-Kk-W5G" customClass="RichTextView" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="0.0" width="440" height="85"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isScrollEnabled" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSelectable" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceVertical" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceHorizontal" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="text" value="Text text text"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                        <color key="value" name="bhColorPrimary"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="numberOfLines">
+                                                        <integer key="value" value="0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mq2-bq-TDl">
                                                 <rect key="frame" x="446" y="0.0" width="32" height="32"/>
                                                 <constraints>
@@ -229,7 +239,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="bioLabel" destination="4hV-kM-MJ0" id="Hs2-r4-CxU"/>
+                <outlet property="bioLabel" destination="apP-Kk-W5G" id="XAc-Fj-FLm"/>
                 <outlet property="bioView" destination="hUW-RM-zUK" id="5Ov-wu-HSL"/>
                 <outlet property="categoryLabel" destination="aU5-x1-tbq" id="hQh-Vt-tg9"/>
                 <outlet property="collapseButton" destination="mq2-bq-TDl" id="pfL-cn-sRZ"/>
@@ -265,11 +275,14 @@
         <namedColor name="bhColorSecondaryBg">
             <color red="0.92156862745098034" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemCyanColor">
-            <color red="0.0" green="0.75294117647058822" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.0" green="0.76470588235294112" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529410000001" green="0.69019607839999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -19,7 +19,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var bioView: UIView!
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var bioLabel: BHHyperlinkLabel!
+    @IBOutlet weak var bioLabel: RichTextView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var unfollowButton: UIButton!
@@ -80,10 +80,10 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         userIcon.sd_setImage(with: userManager?.user?.coverUrl, placeholderImage: placeholderImage)
         categoryLabel.text = userManager?.user?.categoryName
         
-        setupBio(with: didTap)
         updateFollowButton()
         setupSocialLinks()
-        
+        setupBio()
+
         if BHUserHeaderView.shouldCollapse() {
             if let bio = userManager?.user?.bio {
                 collapseButton.isHidden = bio.count < uncollapsedWidth
@@ -218,17 +218,23 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         }
     }
 
-    fileprivate func setupBio(with tapHandler: @escaping (URL) -> Void) {
+    fileprivate func setupBio() {
         
         let attributedString = NSMutableAttributedString(string: userManager?.user?.bio ?? "")
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-        
-        bioLabel.attributedText = attributedString
-        bioLabel.didTapOnURL = tapHandler
+        bioLabel.backgroundColor = .clear
         bioLabel.textAlignment = .left
+        bioLabel.isEnabled = true
+        bioLabel.highlightedLinkAttributes = Attrs().foregroundColor(.secondary()).attributes
+        bioLabel.highlightedTimestampAttributes = Attrs().foregroundColor(.secondary()).attributes
+        bioLabel.onLinkTouchUpInside = { _, val in
+            if let linkStr = val as? String, let url = URL(string: linkStr) {
+                BHLog.p("Open link: \(url.absoluteString)")
+
+                UIApplication.topViewController()?.presentSafari(url)
+            }
+        }
+        bioLabel.attributedText = userManager?.user?.attributedBio(isActive: true, baseColor: .primary())
     }
     
     fileprivate func setupSocialLinks() {
@@ -269,12 +275,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         
         socialLinksView.delegate = self
         socialLinksView.links = links
-    }
-    
-    // MARK: - Actions
-
-    private func didTap(_ url: URL) {
-        delegate?.userHeaderViewOnLinkButtonPressed(self, websiteLink: url)
     }
     
     // MARK: - Actions

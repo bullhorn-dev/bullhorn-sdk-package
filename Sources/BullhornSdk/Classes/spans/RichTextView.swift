@@ -167,6 +167,22 @@ open class RichTextView: BaseAttributedTextView {
     open func resetContentOffset() {
         _textView.contentOffset = CGPoint(x: 0, y: -_textView.adjustedContentInset.top)
     }
+    
+    
+    open func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
+        let tv = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        tv.textContainer.maximumNumberOfLines = numberOfLines
+        tv.textContainer.lineBreakMode = lineBreakMode
+        tv.font = font
+//        tv.textContainerInset = .zero
+        tv.textContainer.lineFragmentPadding = 0
+        tv.attributedText = attributedText
+
+        tv.sizeToFit()
+
+        return ceil(tv.frame.height)
+    }
+
 }
 
 extension RichTextView: UITextViewDelegate {
