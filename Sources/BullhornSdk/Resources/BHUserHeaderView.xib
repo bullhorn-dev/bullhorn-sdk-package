@@ -47,14 +47,14 @@
                                                 <rect key="frame" x="136" y="0.0" width="342" height="120"/>
                                                 <subviews>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Label label label label label label Label label label label label label " lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eM-l8-pYj">
-                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="39.666666666666664"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="40"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                                                         <color key="textColor" name="bhColorPrimary"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="News" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aU5-x1-tbq">
-                                                        <rect key="frame" x="0.0" y="43.666666666666664" width="342" height="16"/>
+                                                        <rect key="frame" x="0.0" y="44" width="342" height="16"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="ZAQ-n3-N1M"/>
@@ -166,7 +166,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="70q-dV-zXN">
                                         <rect key="frame" x="16" y="0.0" width="478" height="85"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apP-Kk-W5G" customClass="RichTextView" customModule="BullhornSdk">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apP-Kk-W5G" customClass="RichLabel" customModule="BullhornSdk">
                                                 <rect key="frame" x="0.0" y="0.0" width="440" height="85"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <userDefinedRuntimeAttributes>

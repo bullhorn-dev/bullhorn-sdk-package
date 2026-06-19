@@ -169,7 +169,7 @@ open class RichTextView: BaseAttributedTextView {
     }
     
     
-    open func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
+    open override func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
         let tv = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         tv.textContainer.maximumNumberOfLines = numberOfLines
         tv.textContainer.lineBreakMode = lineBreakMode

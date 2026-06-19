@@ -446,6 +446,10 @@ open class BaseAttributedTextView: UIView {
         displayTextIfNeeded()
         return _backend.view.intrinsicContentSize
     }
+    
+    open func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
+        return 0
+    }
 
     // MARK: - Links tracking
 

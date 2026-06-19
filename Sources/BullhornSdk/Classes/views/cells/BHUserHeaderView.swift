@@ -19,7 +19,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var bioView: UIView!
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var bioLabel: RichTextView!
+    @IBOutlet weak var bioLabel: RichLabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var unfollowButton: UIButton!
@@ -103,7 +103,7 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
             let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
             let spacing: CGFloat = 12
             let bio = bioLabel.attributedText?.string ?? ""
-            let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 2 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 2 * Constants.paddingHorizontal
+            let bioWidth = bio.count < uncollapsedWidth ? frame.size.width - 3 * Constants.paddingHorizontal : frame.size.width - collapseButton.frame.size.width - 3 * Constants.paddingHorizontal
 
             return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + Constants.panelHeight
         }
@@ -219,9 +219,6 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     }
 
     fileprivate func setupBio() {
-        
-        let attributedString = NSMutableAttributedString(string: userManager?.user?.bio ?? "")
-        
         bioLabel.backgroundColor = .clear
         bioLabel.textAlignment = .left
         bioLabel.isEnabled = true

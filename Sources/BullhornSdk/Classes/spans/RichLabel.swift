@@ -127,4 +127,15 @@ open class RichLabel: BaseAttributedTextView {
     override func makeBackend() -> TextViewBackend {
         return UILabelBackend()
     }
+    
+    open override func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
+        let label = UILabel()
+        label.numberOfLines = numberOfLines
+        label.lineBreakMode = lineBreakMode
+        label.font = UIFont.fontWithName(.robotoRegular, size: 14)
+        label.attributedText = attributedText
+
+        let size = label.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+        return ceil(size.height)
+    }
 }
