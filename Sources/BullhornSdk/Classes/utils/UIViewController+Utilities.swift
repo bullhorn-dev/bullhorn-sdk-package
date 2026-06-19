@@ -39,35 +39,45 @@ extension UIViewController {
         }
     }
 
-    func presentSafari(_ url: URL, configureBlock: ((SFSafariViewController) -> Void)? = nil) {
-        
-        let alert = UIAlertController.init(title: "External Link", message: "You are now leaving the app and going to another website.", preferredStyle: .alert)
+    func presentSafari(_ url: URL, needConfirmation: Bool = true, configureBlock: ((SFSafariViewController) -> Void)? = nil) {
+        guard needConfirmation else {
+            presentSafariViewController(for: url, configureBlock: configureBlock)
+            return
+        }
 
-        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction.init(title: "Continue", style: .default) { _ in
-            var webUrl: URL = url
+        let alert = UIAlertController(title: "External Link",
+                                      message: "You are now leaving the app and going to another website.",
+                                      preferredStyle: .alert)
 
-            if url.scheme != "http" && url.scheme != "https" {
-                webUrl = URL(string: "https://\(url.absoluteString)") ?? url
-            }
-            
-            let safariVC = SFSafariViewController.init(url: webUrl)
-            safariVC.modalPresentationStyle = .overFullScreen
-            safariVC.preferredControlTintColor = .playerOnDisplayBackground()
-            safariVC.preferredBarTintColor = .defaultBlue()
-            safariVC.modalPresentationCapturesStatusBarAppearance = true
-
-            configureBlock?(safariVC)
-
-            self.present(safariVC, animated: true) {
-                // Announce to VoiceOver that a new page has opened after presentation
-                if UIAccessibility.isVoiceOverRunning {
-                    UIAccessibility.post(notification: .screenChanged, argument: "Opening web page.")
-                }
-            }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Continue", style: .default) { [weak self] _ in
+            self?.presentSafariViewController(for: url, configureBlock: configureBlock)
         })
 
         present(alert, animated: true, completion: nil)
+    }
+
+    private func presentSafariViewController(for url: URL, configureBlock: ((SFSafariViewController) -> Void)?) {
+        var webUrl = url
+
+        if url.scheme != "http" && url.scheme != "https" {
+            webUrl = URL(string: "https://\(url.absoluteString)") ?? url
+        }
+
+        let safariVC = SFSafariViewController(url: webUrl)
+        safariVC.modalPresentationStyle = .overFullScreen
+        safariVC.preferredControlTintColor = .playerOnDisplayBackground()
+        safariVC.preferredBarTintColor = .defaultBlue()
+        safariVC.modalPresentationCapturesStatusBarAppearance = true
+
+        configureBlock?(safariVC)
+
+        present(safariVC, animated: true) {
+            // Announce to VoiceOver that a new page has opened after presentation
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .screenChanged, argument: "Opening web page.")
+            }
+        }
     }
     
     func openExternalLink(_ url: URL) {

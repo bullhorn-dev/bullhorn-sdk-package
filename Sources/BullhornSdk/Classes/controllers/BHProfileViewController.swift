@@ -169,12 +169,12 @@ class BHProfileViewController: BHPlayerContainingViewController {
         models.append(Section(title: "Legal", options: [
             .staticCell(model: SettingsOption(title: "Terms of Use", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 if let url = URL(string: BHAppConfiguration.shared.termsOfUseString) {
-                    self.presentSafari(url)
+                    self.presentSafari(url, needConfirmation: false)
                 }
             }, disclosure: true)),
             .staticCell(model: SettingsOption(title: "Privacy Policy", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
                 if let url = URL(string: BHAppConfiguration.shared.privacyPolicyString) {
-                    self.presentSafari(url)
+                    self.presentSafari(url, needConfirmation: false)
                 }
             }, disclosure: true)),
         ]))

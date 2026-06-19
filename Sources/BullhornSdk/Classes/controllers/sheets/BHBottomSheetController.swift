@@ -167,7 +167,7 @@ open class BHBottomSheetController: UIViewController {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: { [self] in
             self.dismiss(animated: true) {
                 if let url = URL(string: BHAppConfiguration.shared.supportString) {
-                    UIApplication.topViewController()?.presentSafari(url)
+                    UIApplication.topViewController()?.presentSafari(url, needConfirmation: false)
                 }
             }
         })
