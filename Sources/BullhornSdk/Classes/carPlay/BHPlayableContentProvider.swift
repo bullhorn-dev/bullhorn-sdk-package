@@ -161,7 +161,8 @@ extension BHPlayableContentProvider {
                     /// Push the screen with "Loading…" right away, then fill it in.
                     let listTemplate = pushLoadingEpisodesTemplate(title: "Podcast Episodes")
 
-                    BHUserManager.shared.getUserPosts(user.id, text: "") { response in
+                    let manager = BHUserManager()
+                    manager.getUserPosts(user.id, text: "") { response in
                         DispatchQueue.main.async {
                             switch response {
                             case .success(posts: let posts, page: _, pages: _):
