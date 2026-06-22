@@ -110,6 +110,15 @@ extension BHHybridPlayer {
 
     internal func destroyMediaPlayer() {
         guard let player = mediaPlayer else { return }
+
+        if post?.isRadioStream() != true {
+            let pos = player.currentTime()
+            let dur = max(player.duration(), pos)
+            if pos > 0 {
+                postPlaybackOffset(overridePosition: pos, overrideDuration: dur)
+            }
+        }
+
         player.clearNextItem()
         if player.isPlaying() || player.isReady() { _ = player.stop() }
         lastSentPosition = 0
