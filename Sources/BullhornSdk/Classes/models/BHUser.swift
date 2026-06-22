@@ -106,7 +106,7 @@ struct BHUser: Codable, Hashable {
         
         let font: UIFont = isActive ? .settingsSecondaryText() : .secondaryText()
         let base = Attrs().font(font).foregroundColor(baseColor)
-        let links = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
+        let links = Attrs().font(font).foregroundColor(baseColor).underlineStyle(.single)
         let a = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
         let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
         let u = Attrs().underlineStyle(.single)

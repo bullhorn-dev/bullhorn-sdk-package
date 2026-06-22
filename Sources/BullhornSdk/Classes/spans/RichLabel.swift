@@ -131,11 +131,17 @@ open class RichLabel: BaseAttributedTextView {
     open override func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
         let label = UILabel()
         label.numberOfLines = numberOfLines
-        label.lineBreakMode = lineBreakMode
-        label.font = UIFont.fontWithName(.robotoRegular, size: 14)
+        label.lineBreakMode = .byWordWrapping
+        label.font = font
         label.attributedText = attributedText
+        label.preferredMaxLayoutWidth = width
 
-        let size = label.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+        let size = label.systemLayoutSizeFitting(
+            target,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
         return ceil(size.height)
     }
 }

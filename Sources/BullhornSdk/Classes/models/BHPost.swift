@@ -137,7 +137,8 @@ struct BHPost: Codable {
         
         let font: UIFont = isActive ? .settingsSecondaryText() : .secondaryText()
         let base = Attrs().font(font).foregroundColor(baseColor)
-        let links = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
+        let linksActive = Attrs().font(font).foregroundColor(baseColor).underlineStyle(.single)
+        let linksInactive = Attrs().font(font).foregroundColor(baseColor)
         let timestamps = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
         let a = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
         let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
@@ -161,7 +162,7 @@ struct BHPost: Codable {
         let attributedText = validText
             .style(tags: ["a": a, "u": u, "i": i, "b": b])
             .styleBase(base)
-            .styleLinks(links)
+            .styleLinks(isActive ? linksActive : linksInactive)
             .styleTimestamps(timestamps)
             .attributedString
 
