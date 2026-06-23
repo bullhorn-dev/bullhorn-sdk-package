@@ -129,19 +129,41 @@ open class RichLabel: BaseAttributedTextView {
     }
     
     open override func requiredHeight(_ width: CGFloat, numberOfLines: Int = 0) -> CGFloat {
-        let label = UILabel()
-        label.numberOfLines = numberOfLines
-        label.lineBreakMode = .byWordWrapping
-        label.font = font
-        label.attributedText = attributedText
-        label.preferredMaxLayoutWidth = width
+        guard let result = layoutReadyAttributedString() else {
+            return 0
+        }
 
-        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let size = label.systemLayoutSizeFitting(
-            target,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-        return ceil(size.height)
+        result.enumerateAttribute(.paragraphStyle, in: NSRange(location: 0, length: result.length), options: []) { value, range, _ in
+            if let style = value as? NSParagraphStyle {
+                let mutable = style.mutableCopy() as! NSMutableParagraphStyle
+                mutable.lineBreakMode = lineBreakMode
+                result.addAttribute(.paragraphStyle, value: mutable, range: range)
+            }
+        }
+
+        let measure: () -> CGFloat = {
+            let label = UILabel()
+            label.numberOfLines = numberOfLines
+            label.lineBreakMode = self.lineBreakMode
+            label.adjustsFontForContentSizeCategory = self.adjustsFontForContentSizeCategory
+            label.attributedText = result
+            label.preferredMaxLayoutWidth = width
+
+            let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+            let size = label.systemLayoutSizeFitting(
+                target,
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            return ceil(size.height)
+        }
+
+        var height: CGFloat = 0
+        traitCollection.performAsCurrent {
+            height = measure()
+        }
+        
+        return height
     }
 }
+

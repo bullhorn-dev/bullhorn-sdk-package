@@ -102,9 +102,15 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         } else {
             let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
             let spacing: CGFloat = 12
-            let bioWidth = frame.size.width - collapseButton.frame.size.width - 3 * Constants.paddingHorizontal
+            let effectiveNumberOfLines = collapseButton.isHidden ? 0 : numberOfLines
+            let bioWidth: CGFloat
+            if collapseButton.isHidden {
+                bioWidth = frame.size.width - 2 * Constants.paddingHorizontal
+            } else {
+                bioWidth = frame.size.width - collapseButton.frame.size.width - 3 * Constants.paddingHorizontal
+            }
 
-            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: numberOfLines) + linksViewHeight + Constants.panelHeight
+            return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: effectiveNumberOfLines) + linksViewHeight + Constants.panelHeight
         }
     }
 
@@ -442,3 +448,4 @@ extension BHUserHeaderView: BHSocialLinksViewDelegate {
         delegate?.userHeaderViewOnLinkButtonPressed(self, websiteLink: validUrl)
     }
 }
+

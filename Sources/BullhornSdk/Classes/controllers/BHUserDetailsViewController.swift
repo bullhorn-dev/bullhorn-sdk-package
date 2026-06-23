@@ -323,8 +323,14 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if shouldShowHeader {
-            return headerView?.calculateHeight(searchActive) ?? 0
+        if shouldShowHeader, let headerView = headerView {
+            let width = tableView.bounds.width
+            if width > 0, headerView.frame.size.width != width {
+                headerView.frame.size.width = width
+                headerView.setNeedsLayout()
+                headerView.layoutIfNeeded()
+            }
+            return headerView.calculateHeight(searchActive)
         }
         return 0
     }

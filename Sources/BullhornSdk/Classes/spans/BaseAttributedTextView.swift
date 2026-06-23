@@ -657,10 +657,14 @@ open class BaseAttributedTextView: UIView {
         }
     }
 
-    private func updateText() {
+    /// The attributed string used for layout & rendering, before the per-state
+    /// (highlighted / disabled) color overlays — those only change color, not metrics.
+    ///
+    /// Used both for on-screen rendering (`updateText`) and for height measurement
+    /// (`requiredHeight` in subclasses) so the two can never diverge.
+    func layoutReadyAttributedString() -> NSMutableAttributedString? {
         guard let str = attributedText else {
-            _backend.attributedText = nil
-            return
+            return nil
         }
 
         let paragraphStyle = NSMutableParagraphStyle()
@@ -691,14 +695,27 @@ open class BaseAttributedTextView: UIView {
             options: .longestEffectiveRangeNotRequired,
             using: { attributes, range, _ in
                 result.addAttributes(attributes, range: range)
-
-                if attributes[.link] != nil {
-                    if !isEnabled, let attrs = disabledLinkAttributes {
-                        result.addAttributes(attrs, range: range)
-                    }
-                }
             }
         )
+
+        result.endEditing()
+
+        return result
+    }
+
+    private func updateText() {
+        guard let result = layoutReadyAttributedString() else {
+            _backend.attributedText = nil
+            return
+        }
+
+        if !isEnabled, let attrs = disabledLinkAttributes {
+            result.enumerateAttribute(.link, in: NSRange(location: 0, length: result.length), options: []) { val, range, _ in
+                if val != nil {
+                    result.addAttributes(attrs, range: range)
+                }
+            }
+        }
 
         if let range = _highlightedLinkRange, let attrs = highlightedLinkAttributes {
             result.addAttributes(attrs, range: range)
@@ -707,8 +724,6 @@ open class BaseAttributedTextView: UIView {
         if let range = _highlightedTimestampRange, let attrs = highlightedTimestampAttributes {
             result.addAttributes(attrs, range: range)
         }
-
-        result.endEditing()
 
         let shouldAdjustsFontForContentSizeCategory = _backend.adjustsFontForContentSizeCategory
 
@@ -838,3 +853,4 @@ open class BaseAttributedTextView: UIView {
         return NSNotFound
     }
 }
+
