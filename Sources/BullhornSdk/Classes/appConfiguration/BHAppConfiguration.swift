@@ -63,6 +63,10 @@ public class BHAppConfiguration {
         return BHConfigManager.shared.configData?.privacyPolicyUrlString ?? BullhornSdk.shared.defaultInfoLink
     }
 
+    var helpString: String {
+        return BHConfigManager.shared.configData?.helpUrlString ?? BullhornSdk.shared.defaultInfoLink
+    }
+
     var supportString: String {
         return BHConfigManager.shared.configData?.supportUrlString ?? BullhornSdk.shared.defaultInfoLink
     }

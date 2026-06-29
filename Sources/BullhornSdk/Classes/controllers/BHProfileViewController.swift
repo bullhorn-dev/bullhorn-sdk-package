@@ -177,6 +177,11 @@ class BHProfileViewController: BHPlayerContainingViewController {
                     self.presentSafari(url, needConfirmation: false)
                 }
             }, disclosure: true)),
+            .staticCell(model: SettingsOption(title: "Help", accessibilityText: "External link", icon: nil, iconBackgroundColor: .accent(), handler: {
+                if let url = URL(string: BHAppConfiguration.shared.helpString) {
+                    self.presentSafari(url, needConfirmation: false)
+                }
+            }, disclosure: true)),
         ]))
         
         let versionValue = BullhornSdk.shared.appConfig.appVersion(useBuildNumber: true) + (UserDefaults.standard.isDevModeEnabled ? " DEV" : "")

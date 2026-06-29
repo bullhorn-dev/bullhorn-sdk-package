@@ -17,6 +17,7 @@ struct BHConfigBody: Equatable {
     let changelogURLString: String?
     var termsOfUseUrlString: String?
     var privacyPolicyUrlString: String?
+    var helpUrlString: String?
     var supportUrlString: String?
 
     static func fromJSON(_ jsonObject: Any) -> BHConfigBody? {
@@ -31,6 +32,7 @@ struct BHConfigBody: Equatable {
         var changelogURLString: String?
         var termsOfUseUrlString: String?
         var privacyPolicyUrlString: String?
+        var helpUrlString: String?
         var supportUrlString: String?
 
         if let packagesArray = rootDictionary["packages"] as? [Any] {
@@ -60,6 +62,7 @@ struct BHConfigBody: Equatable {
         if let linksDictionary = rootDictionary["links"] as? [String: Any] {
             termsOfUseUrlString = linksDictionary["terms_of_use"] as? String
             privacyPolicyUrlString = linksDictionary["privacy_policy"] as? String
+            helpUrlString = linksDictionary["help"] as? String
             supportUrlString = linksDictionary["support"] as? String
         }
         
@@ -92,6 +95,7 @@ struct BHConfigBody: Equatable {
                                            changelogURLString: changelogURLString,
                                            termsOfUseUrlString: termsOfUseUrlString,
                                            privacyPolicyUrlString: privacyPolicyUrlString,
+                                           helpUrlString: helpUrlString,
                                            supportUrlString: supportUrlString)
         }
 
