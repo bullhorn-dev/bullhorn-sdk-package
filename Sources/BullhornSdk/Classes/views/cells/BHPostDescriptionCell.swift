@@ -28,11 +28,12 @@ class BHPostDescriptionCell: UITableViewCell {
         textView.highlightedLinkAttributes = Attrs().foregroundColor(.secondary()).attributes
         textView.highlightedTimestampAttributes = Attrs().foregroundColor(.secondary()).attributes
         textView.onLinkTouchUpInside = { _, val in
-            if let linkStr = val as? String, let url = URL(string: linkStr) {
-                BHLog.p("Open link: \(url.absoluteString)")
+            let url: URL? = (val as? URL) ?? (val as? String).flatMap { URL(string: $0) }
+            guard let url = url else { return }
 
-                UIApplication.topViewController()?.presentSafari(url)
-            }
+            BHLog.p("Open link: \(url.absoluteString)")
+
+            UIApplication.topViewController()?.openExternalLink(url)
         }
         textView.onTimestampTouchUpInside = { _, val in
             if let timestamp = val as? String {
@@ -60,3 +61,4 @@ class BHPostDescriptionCell: UITableViewCell {
         self.accessibilityLabel = post?.attributedDescription().string
     }
 }
+

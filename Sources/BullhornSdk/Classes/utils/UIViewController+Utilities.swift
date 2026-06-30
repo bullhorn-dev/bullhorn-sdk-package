@@ -3,6 +3,40 @@ import UIKit
 import Foundation
 import SafariServices
 
+// MARK: - External app links
+
+private struct ExternalAppLink {
+    let appName: String
+    let matches: (URL) -> Bool
+    let appURL: (URL) -> URL?
+}
+
+private func externalLinkHandle(_ url: URL) -> String? {
+    guard var h = url.path.split(separator: "/").map(String.init).first else { return nil }
+    if h.hasPrefix("@") { h.removeFirst() }
+    guard !h.isEmpty else { return nil }
+    return h.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+}
+
+private let externalAppLinks: [ExternalAppLink] = [
+    ExternalAppLink(
+        appName: "YouTube",
+        matches: { ($0.host?.contains("youtube") ?? false) || $0.host == "youtu.be" },
+        appURL: { URL(string: $0.absoluteString.replacingOccurrences(of: "https", with: "youtube")) }),
+
+    ExternalAppLink(
+        appName: "Instagram",
+        matches: { $0.host?.contains("instagram.com") ?? false },
+        appURL: { externalLinkHandle($0).flatMap { URL(string: "instagram://user?username=\($0)") } }),
+
+    ExternalAppLink(
+        appName: "X",
+        matches: { ($0.host?.contains("x.com") ?? false) || ($0.host?.contains("twitter.com") ?? false) },
+        appURL: { externalLinkHandle($0).flatMap { URL(string: "twitter://user?screen_name=\($0)") } }),
+
+    // TikTok and Facebook: don't add -> presentSafari (Universal Link catch them if the app is installed).
+]
+
 extension UIViewController {
     
     open override func awakeFromNib() {
@@ -82,23 +116,23 @@ extension UIViewController {
     
     func openExternalLink(_ url: URL) {
 
-        if url.absoluteString.contains("youtube") {
-            let replaced = url.absoluteString.replacingOccurrences(of: "https", with: "youtube")
-
-            if let appURL = URL(string: replaced), UIApplication.shared.canOpenURL(appURL) {
-                let alert = UIAlertController.init(title: "External Link", message: "You are now leaving the app and going to YouTube app.", preferredStyle: .alert)
-
-                alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
-                alert.addAction(UIAlertAction.init(title: "Continue", style: .default) { _ in
-                    UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
-                })
-                present(alert, animated: true, completion: nil)
-            } else {
-                presentSafari(url)
-            }
-        } else {
+        guard let provider = externalAppLinks.first(where: { $0.matches(url) }),
+              let appURL = provider.appURL(url),
+              UIApplication.shared.canOpenURL(appURL)
+        else {
             presentSafari(url)
+            return
         }
+
+        let alert = UIAlertController(title: "External Link",
+                                      message: "You are now leaving the app and going to the \(provider.appName) app.",
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Continue", style: .default) { _ in
+            UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+        })
+        present(alert, animated: true, completion: nil)
     }
     
     func presentEmailDialog(withUrl url: URL) {
@@ -167,3 +201,4 @@ extension UIViewController {
         return self.isViewLoaded && self.view.window != nil
     }
 }
+

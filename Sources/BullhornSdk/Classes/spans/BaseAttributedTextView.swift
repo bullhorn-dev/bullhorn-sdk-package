@@ -62,11 +62,13 @@ open class BaseAttributedTextView: UIView {
     // MARK: - Links open vars
 
     open var highlightedLinkValue: Any? {
-        if let range = _highlightedLinkRange, let val = attributedText?.attributedSubstring(from: range) {
-            return val.string
-        } else {
+        guard let range = _highlightedLinkRange else {
             return nil
         }
+        if let href = attributedText?.attribute(.hyperlink, at: range.location, effectiveRange: nil) {
+            return href
+        }
+        return attributedText?.attributedSubstring(from: range).string
     }
 
     open var highlightedLinkRange: Range<String.Index>? {
@@ -123,6 +125,16 @@ open class BaseAttributedTextView: UIView {
         for match in matches {
             let rects = _backend.enclosingRects(forGlyphRange: match.range)
             newLinkFramesCache.append(RangeRects(range: match.range, rects: rects))
+        }
+
+        if let attributed = attributedText {
+            let full = NSRange(location: 0, length: (text as NSString).length)
+            attributed.enumerateAttribute(.hyperlink, in: full, options: []) { val, range, _ in
+                guard val != nil else { return }
+                if newLinkFramesCache.contains(where: { $0.range == range }) { return }
+                let rects = _backend.enclosingRects(forGlyphRange: range)
+                newLinkFramesCache.append(RangeRects(range: range, rects: rects))
+            }
         }
 
         _linkFramesCache = newLinkFramesCache
@@ -853,4 +865,5 @@ open class BaseAttributedTextView: UIView {
         return NSNotFound
     }
 }
+
 

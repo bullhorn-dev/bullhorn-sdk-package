@@ -140,7 +140,14 @@ struct BHPost: Codable {
         let linksActive = Attrs().font(font).foregroundColor(baseColor).underlineStyle(.single)
         let linksInactive = Attrs().font(font).foregroundColor(baseColor)
         let timestamps = Attrs().font(font).foregroundColor(isActive ? .accent() : baseColor)
-        let a = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
+        let a = TagTuner { ctx in
+            let attrs = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
+            if isActive { attrs.underlineStyle(.single) }
+            if let href = ctx.tag.attributes["href"] {
+                attrs.hyperlink(href)
+            }
+            return attrs
+        }
         let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
         let u = Attrs().underlineStyle(.single)
         let i = TagTuner { info in
@@ -349,5 +356,6 @@ struct BHOffset: Codable {
     let timestamp: Double
     let completed: Bool
 }
+
 
 
