@@ -103,11 +103,14 @@ class BHLinkResolver {
                             
                     case .failure(error: let e):
                         BHLog.w(e)
+                        DispatchQueue.main.async {
+                            UIApplication.topViewController()?.showError("Failed to load podcast details.")
+                        }
                         break
                     }
                 }
             } else {
-                UIApplication.topViewController()?.showError("Failed to load episode details. The Internet connection is lost.")
+                UIApplication.topViewController()?.showError("Failed to load podcast details. The Internet connection is lost.")
             }
             result = true
         }
@@ -186,15 +189,13 @@ class BHLinkResolver {
                         case .failure(error: let e):
                             BHLog.w(e)
                             DispatchQueue.main.async {
-                                UIApplication.topViewController()?.showError("Failed to load episode details. This episode is no longer available.")
+                                UIApplication.topViewController()?.showError("Failed to load category details.")
                             }
                             break
                         }
                     }
                 } else {
-                    DispatchQueue.main.async {
-                        UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
-                    }
+                    UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
                 }
             }
             result = true
