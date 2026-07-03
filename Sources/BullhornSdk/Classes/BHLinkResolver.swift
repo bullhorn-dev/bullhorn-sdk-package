@@ -159,12 +159,14 @@ class BHLinkResolver {
         if let validAlias = linkInfo.alias {
             BHNetworkManager.shared.splitUsersForCarPlay()
             if let categoryModel = BHNetworkManager.shared.getCategoryModel(with: validAlias) {
-                let bundle = Bundle.module
-                let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
-                let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
-                vc.category = categoryModel.category
+                DispatchQueue.main.async {
+                    let bundle = Bundle.module
+                    let storyboard = UIStoryboard(name: StoryboardName.main, bundle: bundle)
+                    let vc = storyboard.instantiateViewController(withIdentifier: BHCategoryViewController.storyboardIndentifer) as! BHCategoryViewController
+                    vc.category = categoryModel.category
                     
-                UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                    UIApplication.topNavigationController()?.pushViewController(vc, animated: true)
+                }
             } else {
                 if BHReachabilityManager.shared.isConnected() {
                     let networkId = BHAppConfiguration.shared.networkId
@@ -190,7 +192,9 @@ class BHLinkResolver {
                         }
                     }
                 } else {
-                    UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
+                    DispatchQueue.main.async {
+                        UIApplication.topViewController()?.showError("Failed to load category details. The Internet connection is lost.")
+                    }
                 }
             }
             result = true
