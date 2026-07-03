@@ -99,12 +99,13 @@ public class BullhornSdk: NSObject {
         BHLog.p("\(#function)")
     }
     
-    public func restore(sdkUser: BHSdkUser) {
+    public func restore(sdkUser: BHSdkUser, completion: (() -> Void)? = nil) {
         BHLog.p("\(#function) sdkUserId: \(sdkUser.id)")
 
         if !BHAccountManager.shared.restoreAccount(with: sdkUser.id) {
             login(sdkUser: sdkUser) { [self] _ in
                 BHTracker.shared.start(with: clientId)
+                DispatchQueue.main.async { completion?() }
             }
         } else {
             externalUser = sdkUser
@@ -113,6 +114,7 @@ public class BullhornSdk: NSObject {
             if UserDefaults.standard.isPushNotificationsFeatureEnabled && UserDefaults.standard.isPushNotificationsEnabled {
                 BHNotificationsManager.shared.checkUserNotificationsEnabled(withNotDeterminedStatusEnabled: false)
             }
+            DispatchQueue.main.async { completion?() }
         }
         
         BHDownloadsManager.shared.updateItems()

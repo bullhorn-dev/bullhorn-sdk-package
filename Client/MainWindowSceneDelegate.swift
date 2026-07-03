@@ -2,9 +2,15 @@
 import UIKit
 import BullhornSdk
 
+extension Notification.Name {
+    static let appReadyForDeepLinks = Notification.Name("App.readyForDeepLinks")
+}
+
 class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+
+    // MARK: - Scene lifecycle
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 

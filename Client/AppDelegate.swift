@@ -117,6 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func bullhornLogin() {
+        debugPrint("\(#function)")
 
         var sdkUserId: String
         
@@ -128,7 +129,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         let sdkUser = BHSdkUser(id: sdkUserId, fullName: nil, profilePictureUri: nil, level: .anonymous)
-        BullhornSdk.shared.restore(sdkUser: sdkUser)
+        
+        BullhornSdk.shared.restore(sdkUser: sdkUser) { [weak self] in
+            debugPrint("Bullhorn restore completed, app is ready for deep links")
+            NotificationCenter.default.post(name: .appReadyForDeepLinks, object: nil)
+        }
     }
     
     private func handlePlayMediaIntent(_ intent: INPlayMediaIntent,
