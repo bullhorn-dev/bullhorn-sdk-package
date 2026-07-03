@@ -16,6 +16,8 @@ protocol BHHybridPlayerListener: ObserverProtocol {
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings)
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double)
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool)
+    func hybridPlayerDidStartPictureInPicture(_ player: BHHybridPlayer)
+    func hybridPlayerDidStopPictureInPicture(_ player: BHHybridPlayer)
 }
 
 extension BHHybridPlayerListener {
@@ -29,6 +31,8 @@ extension BHHybridPlayerListener {
     func hybridPlayer(_ player: BHHybridPlayer, playbackSettingsUpdated settings: BHPlayerItem.PlaybackSettings) {}
     func hybridPlayer(_ player: BHHybridPlayer, sleepTimerUpdated sleepTimer: Double) {}
     func hybridPlayer(_ player: BHHybridPlayer, playerItem item: BHPlayerItem, playbackCompleted completed: Bool) {}
+    func hybridPlayerDidStartPictureInPicture(_ player: BHHybridPlayer) {}
+    func hybridPlayerDidStopPictureInPicture(_ player: BHHybridPlayer) {}
 }
 
 // MARK: - BHHybridPlayer
@@ -372,6 +376,23 @@ class BHHybridPlayer {
 
     func getVideoLayer() -> UIView? { mediaPlayer?.getVideoLayer() }
 
+    // MARK: - Picture in Picture
+
+    var pipRestoreUIHandler: ((@escaping (Bool) -> Void) -> Void)?
+
+    func isPictureInPicturePossible() -> Bool {
+        mediaPlayer?.isPictureInPicturePossible() ?? false
+    }
+
+    func isPictureInPictureActive() -> Bool {
+        mediaPlayer?.isPictureInPictureActive() ?? false
+    }
+
+    func startPictureInPicture() { mediaPlayer?.startPictureInPicture() }
+    func stopPictureInPicture()  { mediaPlayer?.stopPictureInPicture() }
+
+    // MARK: - Bulletin
+
     func getTimelineEvent() -> BHBulletinEvent? {
         guard let bulletin = bulletinManager.bulletin, let player = mediaPlayer else { return nil }
         return bulletin.getTimelineEvent(player.currentTime())
@@ -452,4 +473,5 @@ class BHHybridPlayer {
             autoplayContext: autoplayContext)
     }
 }
+
 

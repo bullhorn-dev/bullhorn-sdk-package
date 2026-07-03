@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import AVKit
 import Combine
 import UIKit
 
@@ -26,6 +27,10 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     private var isIntentionalPause = false
     private var lastKnownPosition: TimeInterval = 0
+
+    // Picture in Picture
+    private var pipController: AVPictureInPictureController?
+    private(set) var isPiPActive = false
 
     // Seamless queue support
     private var nextPlayerItem: AVPlayerItem?
@@ -64,6 +69,7 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         if isVideo {
             layerView?.connect(to: player)
             subscribeToAppLifecycle()
+            setupPictureInPicture()
         }
     }
 
@@ -119,6 +125,36 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
 
     override func hasVideo()      -> Bool    { isVideoContent }
     override func getVideoLayer() -> UIView? { layerView }
+
+    // MARK: - Picture in Picture
+
+    private func setupPictureInPicture() {
+        guard isVideoContent,
+              AVPictureInPictureController.isPictureInPictureSupported(),
+              let layer = layerView?.avPlayerLayer else { return }
+
+        let pip = AVPictureInPictureController(playerLayer: layer)
+        pip?.delegate = self
+        pip?.canStartPictureInPictureAutomaticallyFromInline = true
+        pipController = pip
+        BHLog.p("PiP controller created")
+    }
+
+    override func isPictureInPicturePossible() -> Bool {
+        pipController?.isPictureInPicturePossible ?? false
+    }
+
+    override func isPictureInPictureActive() -> Bool { isPiPActive }
+
+    override func startPictureInPicture() {
+        guard let pip = pipController, !pip.isPictureInPictureActive else { return }
+        pip.startPictureInPicture()
+    }
+
+    override func stopPictureInPicture() {
+        guard let pip = pipController, pip.isPictureInPictureActive else { return }
+        pip.stopPictureInPicture()
+    }
 
     // MARK: - Seamless Queue
 
@@ -200,7 +236,11 @@ extension BHSystemMediaPlayer {
         NotificationCenter.default
             .publisher(for: UIApplication.didEnterBackgroundNotification)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.layerView?.disconnect() }
+            .sink { [weak self] _ in
+                guard let self else { return }
+                guard !self.isPiPActive else { return } // don't disconnect when PiP is active
+                self.layerView?.disconnect()
+            }
             .store(in: &playerCancellables)
 
         NotificationCenter.default
@@ -208,6 +248,7 @@ extension BHSystemMediaPlayer {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
+                guard !self.isPiPActive else { return } // don't connect after PiP was active
                 self.layerView?.connect(to: self.player)
                 self.layerView?.setNeedsDisplay()
             }
@@ -283,6 +324,8 @@ extension BHSystemMediaPlayer {
                 if isIntentionalPause {
                     isIntentionalPause = false
                     if case .playing = playbackState { playbackState = .paused }
+                } else if isPiPActive {
+                    if case .playing = playbackState { playbackState = .paused }
                 } else if case .playing = playbackState {
                     player.play()
                     player.rate = playbackRate
@@ -324,4 +367,44 @@ extension BHSystemMediaPlayer {
         delegate?.mediaPlayerFailedToPlayToEndTime(self)
     }
 }
+
+// MARK: - AVPictureInPictureControllerDelegate
+
+extension BHSystemMediaPlayer: AVPictureInPictureControllerDelegate {
+
+    func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        BHLog.p("\(#function)")
+        isPiPActive = true
+    }
+
+    func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        BHLog.p("\(#function)")
+        delegate?.mediaPlayerDidStartPictureInPicture(self)
+    }
+
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
+                                    failedToStartPictureInPictureWithError error: Error) {
+        BHLog.w("\(#function) - \(error)")
+        isPiPActive = false
+    }
+
+    func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        BHLog.p("\(#function)")
+        isPiPActive = false
+
+        if UIApplication.shared.applicationState != .active {
+            layerView?.disconnect()
+        }
+
+        delegate?.mediaPlayerDidStopPictureInPicture(self)
+    }
+
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
+                                    restoreUserInterfaceForPictureInPictureStopWithCompletionHandler
+                                    completionHandler: @escaping (Bool) -> Void) {
+        BHLog.p("\(#function)")
+        delegate?.mediaPlayer(self, restorePictureInPictureUI: completionHandler)
+    }
+}
+
 

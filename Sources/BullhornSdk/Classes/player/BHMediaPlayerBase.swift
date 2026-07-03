@@ -15,6 +15,24 @@ protocol BHMediaPlayerDelegate: AnyObject {
     func mediaPlayerServicesWereReset(_ player: any BHPlaybackEngine)
     func mediaPlayerDidRequestNowPlayingItemInfo(_ player: any BHPlaybackEngine) -> BHNowPlayingItemInfo
     func mediaPlayerDidAdvanceToNextItem(_ player: any BHPlaybackEngine, completedItemPosition: TimeInterval)
+
+    // MARK: Picture in Picture
+    func mediaPlayerDidStartPictureInPicture(_ player: any BHPlaybackEngine)
+    func mediaPlayerDidStopPictureInPicture(_ player: any BHPlaybackEngine)
+    func mediaPlayer(_ player: any BHPlaybackEngine,
+                     restorePictureInPictureUI completionHandler: @escaping (Bool) -> Void)
+}
+
+// MARK: - Default Delegate implementations
+
+extension BHMediaPlayerDelegate {
+
+    func mediaPlayerDidStartPictureInPicture(_ player: any BHPlaybackEngine) {}
+    func mediaPlayerDidStopPictureInPicture(_ player: any BHPlaybackEngine) {}
+    func mediaPlayer(_ player: any BHPlaybackEngine,
+                     restorePictureInPictureUI completionHandler: @escaping (Bool) -> Void) {
+        completionHandler(true)
+    }
 }
 
 // MARK: - BHMediaPlayerBase
@@ -204,6 +222,13 @@ class BHMediaPlayerBase: NSObject, BHPlaybackEngine,
     func hasVideo()      -> Bool    { false }
     func getVideoLayer() -> UIView? { nil   }
 
+    // MARK: - BHPlaybackEngine — Picture in Picture
+
+    func isPictureInPicturePossible() -> Bool { false }
+    func isPictureInPictureActive()   -> Bool { false }
+    func startPictureInPicture()      {}
+    func stopPictureInPicture()       {}
+
     // MARK: - Internal helpers
 
     internal func seekAndPlay(to time: TimeInterval, resume: Bool) {
@@ -336,4 +361,5 @@ extension BHMediaPlayerBase {
         }
     }
 }
+
 

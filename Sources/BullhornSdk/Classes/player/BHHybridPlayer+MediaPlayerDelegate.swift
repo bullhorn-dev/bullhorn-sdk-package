@@ -86,4 +86,29 @@ extension BHHybridPlayer: BHMediaPlayerDelegate {
         }
         return info
     }
+
+    // MARK: - Picture in Picture
+
+    func mediaPlayerDidStartPictureInPicture(_ player: any BHPlaybackEngine) {
+        BHLog.p("\(#function)")
+        observersContainer.notifyObserversAsync { $0.hybridPlayerDidStartPictureInPicture(self) }
+    }
+
+    func mediaPlayerDidStopPictureInPicture(_ player: any BHPlaybackEngine) {
+        BHLog.p("\(#function)")
+        observersContainer.notifyObserversAsync { $0.hybridPlayerDidStopPictureInPicture(self) }
+    }
+
+    func mediaPlayer(_ player: any BHPlaybackEngine,
+                     restorePictureInPictureUI completionHandler: @escaping (Bool) -> Void) {
+        BHLog.p("\(#function)")
+        DispatchQueue.main.async { [weak self] in
+            if let handler = self?.pipRestoreUIHandler {
+                handler(completionHandler)
+            } else {
+                completionHandler(true)
+            }
+        }
+    }
 }
+

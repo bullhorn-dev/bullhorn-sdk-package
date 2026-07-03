@@ -30,6 +30,12 @@ protocol BHPlaybackEngine: AnyObject {
     func hasVideo()      -> Bool
     func getVideoLayer() -> UIView?
 
+    // MARK: Picture in Picture
+    func isPictureInPicturePossible() -> Bool
+    func isPictureInPictureActive()   -> Bool
+    func startPictureInPicture()
+    func stopPictureInPicture()
+
     // MARK: NowPlaying updates
     func updateNowPlayingItemInfo(with itemInfo: BHNowPlayingItemInfo?)
     func updateNowPlayingInfo()
@@ -71,4 +77,5 @@ protocol BHSystemNotificationHandling: AnyObject {
     func configurePlayerNotifications()
     func removePlayerNotifications()
 }
+
 
