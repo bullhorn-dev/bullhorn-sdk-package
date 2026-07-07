@@ -315,6 +315,24 @@ extension BHSystemMediaPlayer {
     }
 
     private func onTimeControlStatusChanged() {
+        if isPiPActive, case .failed = playbackState {
+            switch player.timeControlStatus {
+            case .playing:
+                player.rate = playbackRate
+                playbackState = .playing
+            case .waitingToPlayAtSpecifiedRate:
+                if BHReachabilityManager.shared.isConnected() || currentMediaURL.isFileURL {
+                player.rate = playbackRate
+                playbackState = .playing
+            } else {
+                player.pause()
+            }
+            default:
+                break
+            }
+            return
+        }
+
         guard playbackState.isEngineReady else { return }
         guard case .seeking = playbackState else {
             switch player.timeControlStatus {
