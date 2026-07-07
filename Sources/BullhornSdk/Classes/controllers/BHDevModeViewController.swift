@@ -84,6 +84,12 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
                 UserDefaults.standard.isInteractiveTranscriptsFeatureEnabled = !value
                 self.configure()
                 self.tableView.reloadData()
+            })),
+            .toggleCell(model: SettingsToggleOption(title: "Picture in Picture", isActive: UserDefaults.standard.isPictureInPictureFeatureEnabled, handler: {
+                let value = UserDefaults.standard.isPictureInPictureFeatureEnabled
+                UserDefaults.standard.isPictureInPictureFeatureEnabled = !value
+                self.configure()
+                self.tableView.reloadData()
             }))
         ]))
     }

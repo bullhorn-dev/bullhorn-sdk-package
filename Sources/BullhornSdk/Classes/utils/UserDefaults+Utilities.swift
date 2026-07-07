@@ -35,7 +35,8 @@ extension UserDefaults {
     fileprivate static let pushNotificationsFeatureEnabledDefaultsKey = "pushNotificationsFeatureEnabledDefaultsKey"
     fileprivate static let autoDownloadsFeatureEnabledDefaultsKey = "autoDownloadsFeatureEnabledDefaultsKey"
     fileprivate static let interactiveTranscriptsFeatureEnabledDefaultsKey = "interactiveTranscriptsFeatureEnabledDefaultsKey"
-    
+    fileprivate static let pictureInPictureFeatureEnabledDefaultsKey = "pictureInPictureFeatureEnabledDefaultsKey"
+
     static let playNextEnabledDefaultsKey = "playNextEnabledDefaultsKey"
 
     var numberOfTimesLaunched: Int {
@@ -293,6 +294,15 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.interactiveTranscriptsFeatureEnabledDefaultsKey)
+        }
+    }
+    
+    var isPictureInPictureFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.pictureInPictureFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.pictureInPictureFeatureEnabledDefaultsKey)
         }
     }
 }

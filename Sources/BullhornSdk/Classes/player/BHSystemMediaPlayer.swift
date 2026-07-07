@@ -129,6 +129,8 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     // MARK: - Picture in Picture
 
     private func setupPictureInPicture() {
+        // PiP is under development — enabled only in developer mode for now.
+        guard UserDefaults.standard.isPictureInPictureFeatureEnabled else { return }
         guard isVideoContent,
               AVPictureInPictureController.isPictureInPictureSupported(),
               let layer = layerView?.avPlayerLayer else { return }
