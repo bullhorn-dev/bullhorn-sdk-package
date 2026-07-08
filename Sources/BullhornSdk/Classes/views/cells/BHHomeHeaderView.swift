@@ -87,12 +87,12 @@ class BHHomeHeaderView: UICollectionReusableView {
         featuredUsersTitleLabel.textColor = .primary()
         featuredUsersTitleLabel.font = .sectionTitle()
         featuredUsersTitleLabel.accessibilityTraits.insert(.header)
-        featuredPostsTitle.backgroundColor = .primaryBackground()
+        featuredUsersTitle.backgroundColor = .primaryBackground()
 
         featuredPostsTitleLabel.textColor = .primary()
         featuredPostsTitleLabel.font = .sectionTitle()
         featuredPostsTitleLabel.accessibilityTraits.insert(.header)
-        featuredUsersTitle.backgroundColor = .primaryBackground()
+        featuredPostsTitle.backgroundColor = .primaryBackground()
 
         followedUsersTitleLabel.textColor = .primary()
         followedUsersTitleLabel.font = .sectionTitle()
@@ -131,6 +131,26 @@ class BHHomeHeaderView: UICollectionReusableView {
     
     func scrollToSelectedChannel() {
         channelsView.moveToChannel(UserDefaults.standard.selectedChannelId)
+    }
+
+    /// Lightweight focus refresh: re-evaluates section visibility and reloads the
+    /// carousels' data in place. Unlike `setup()` it skips the one-time styling,
+    /// delegate wiring and channel scroll — so it's cheap to call on every return
+    /// to the screen and picks up new followed podcasts, radio and badges.
+    func refresh() {
+        radioStreamsView.isHidden = !hasRadioStreams()
+        featuredUsersTitle.isHidden = !hasFeaturedUsers()
+        featuredUsersView.isHidden = !hasFeaturedUsers()
+        featuredPostsTitle.isHidden = !hasFeaturedPosts()
+        featuredPostsView.isHidden = !hasFeaturedPosts()
+        scheduledPostsTitle.isHidden = !hasScheduledPosts()
+        scheduledPostsView.isHidden = !hasScheduledPosts()
+        livePostsTitle.isHidden = !hasLivePosts()
+        livePostsView.isHidden = !hasLivePosts()
+        followedUsersTitle.isHidden = !hasFollowedUsers()
+        followedUsersView.isHidden = !hasFollowedUsers()
+
+        reloadData()
     }
     
     func calculateHeight() -> CGFloat {
@@ -255,3 +275,4 @@ extension BHHomeHeaderView : BHLiveCarouselViewDelegate {
         delegate?.headerView(self, didSelectPost: post)
     }
 }
+

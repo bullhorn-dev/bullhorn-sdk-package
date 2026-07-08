@@ -9,9 +9,9 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate var headerView: BHRadioHeaderView?
-
     fileprivate var refreshControl: UIRefreshControl?
-    
+    fileprivate var skeleton: BHSkeletonView?
+
     fileprivate var shouldShowHeader: Bool = false
 
     // MARK: - Lifecycle
@@ -84,6 +84,27 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         tableView.addSubview(newRefreshControl)
     }
 
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.radio())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
+    }
+
     // MARK: - Network
 
     fileprivate func fetch(_ isInitial: Bool = false) {
@@ -93,14 +114,14 @@ class BHRadioViewController: BHPlayerContainingViewController, ActivityIndicator
         let completeBlock = {
             self.shouldShowHeader = BHRadioStreamsManager.shared.radios.count > 0
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
+            self.hideFetchProgress()
             self.tableView.reloadData()
             self.headerView?.reloadData()
         }
 
         if isInitial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            showFetchProgress()
 
             BHRadioStreamsManager.shared.fetchStorage(networkId) { response in
                 switch response {
@@ -180,7 +201,7 @@ extension BHRadioViewController: UITableViewDataSource, UITableViewDelegate {
         let bundle = Bundle.module
         let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
         
-        if BHRadioStreamsManager.shared.otherRadios.count < 1 && !activityIndicator.isAnimating {
+        if BHRadioStreamsManager.shared.otherRadios.count < 1 && !isFetching() {
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
             tableView.setEmptyMessage(message, image: image)
         } else {

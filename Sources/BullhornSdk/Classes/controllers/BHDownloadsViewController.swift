@@ -12,6 +12,8 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomView: UIView!
 
+    fileprivate var isInitial: Bool = true
+
     fileprivate var selectedPost: BHPost?
     fileprivate var selectedTab: BHPostTabs = .details
 
@@ -33,10 +35,7 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
         
         bottomView.backgroundColor = .primaryBackground()
         
-        let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
-        
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
@@ -54,8 +53,14 @@ class BHDownloadsViewController: BHPlayerContainingViewController, ActivityIndic
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if isInitial {
+            defaultShowActivityIndicatorView()
+            isInitial = false
+        }
+
         BHDownloadsManager.shared.updateItems { [weak self] in
             DispatchQueue.main.async {
+                self?.defaultHideActivityIndicatorView()
                 self?.reloadDownloads()
             }
         }

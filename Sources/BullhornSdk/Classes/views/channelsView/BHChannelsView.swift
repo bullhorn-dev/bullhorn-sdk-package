@@ -17,6 +17,12 @@ class BHChannelsView: UIView {
     }
 
     private var currentlySelectedIndex: Int = 0
+
+    /// Initial channel to center once the collection view has a valid layout.
+    /// The header asks us to scroll during `setup()`, but at that point our
+    /// bounds are still zero, so the offset would be computed against an empty
+    /// contentSize (→ a small wrong offset that later "self-corrects").
+    private var pendingScrollChannelId: String?
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -55,26 +61,50 @@ class BHChannelsView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        collectionView.reloadData()
+        /// Perform the deferred initial scroll now that we have a real width,
+        /// so the channels strip appears already at the correct position
+        /// instead of starting offset and animating into place later.
+        if let channelId = pendingScrollChannelId, collectionView.bounds.width > 0 {
+            pendingScrollChannelId = nil
+            if let index = channels.firstIndex(where: { $0.id == channelId }) {
+                scroll(to: index, animated: false)
+            }
+        }
     }
     
     // MARK: - Action
     
+    /// Programmatic selection (e.g. restoring the persisted channel on launch).
+    /// If the collection view isn't laid out yet, defer the scroll to the next
+    /// `layoutSubviews` so the offset is computed against a valid contentSize.
     func moveToChannel(_ channelId: String) {
-        if let index = channels.firstIndex(where: { channel in
-            return channel.id == channelId
-        }) {
-            moveToChannel(at: index)
+        guard let index = channels.firstIndex(where: { $0.id == channelId }) else { return }
+
+        if collectionView.bounds.width == 0 {
+            pendingScrollChannelId = channelId
+            UserDefaults.standard.selectedChannelId = channels[index].id
+            currentlySelectedIndex = index
+            return
         }
+        scroll(to: index, animated: false)
     }
 
+    /// User-initiated selection (tap) — animate.
     func moveToChannel(at index: Int) {
-        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
+        scroll(to: index, animated: true)
+    }
+
+    private func scroll(to index: Int, animated: Bool) {
+        guard index >= 0, index < channels.count else { return }
 
         UserDefaults.standard.selectedChannelId = channels[index].id
-        self.currentlySelectedIndex = index
-        
+        currentlySelectedIndex = index
+
         collectionView.reloadData()
+        /// ensure item attributes are computed against the current bounds
+        /// before asking for a scroll offset
+        collectionView.layoutIfNeeded()
+        collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: animated)
     }
     
     func calculateHeight() -> CGFloat {
@@ -92,8 +122,7 @@ class BHChannelsView: UIView {
             collectionView.leftAnchor.constraint(equalTo: self.leftAnchor),
             collectionView.topAnchor.constraint(equalTo: self.topAnchor),
             collectionView.rightAnchor.constraint(equalTo: self.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: calculateHeight())
+            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         
         collectionView.accessibilityTraits.insert(.tabBar)
@@ -107,7 +136,13 @@ extension BHChannelsView: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let channel = channels[indexPath.row]
-        let width = Double(channel.title.count) * 8.0 + 2 * Constants.paddingHorizontal
+
+        let font: UIFont = .fontWithName(.robotoMedium, size: 17)
+        let textWidth = (channel.title as NSString)
+            .size(withAttributes: [.font: font])
+            .width
+        /// text + label insets (3pt each side) + horizontal chrome
+        let width = ceil(textWidth) + 6.0 + 2 * Constants.paddingHorizontal
 
         return CGSize(width: width, height: frame.size.height)
     }
@@ -145,3 +180,4 @@ extension BHChannelsView: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         self.delegate?.channelsView(self, didMoveToChannel: indexPath.item)
     }
 }
+

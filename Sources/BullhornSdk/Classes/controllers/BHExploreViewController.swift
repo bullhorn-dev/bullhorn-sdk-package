@@ -16,10 +16,9 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     fileprivate var footerView: BHListFooterView?
     fileprivate var selectedTab: BHTabs = .podcasts
 
-    fileprivate let searchController = UISearchController(searchResultsController: nil)
+    fileprivate var searchFieldView: BHSearchFieldView?
     fileprivate var refreshControl: UIRefreshControl?
-
-    fileprivate var searchActive = false
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
@@ -28,26 +27,23 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     fileprivate let exploreManager = BHExploreManager.shared
     
     fileprivate var shouldShowHeader: Bool = false
+    fileprivate var isLoadingMore = false
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        exploreManager.addListener(self)
-
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = .accent()
-
         let bundle = Bundle.module
-        let postCellNib = UINib(nibName: "BHPostCell", bundle: bundle)
         let userCellNib = UINib(nibName: "BHUserCell", bundle: bundle)
         let headerNib = UINib(nibName: "BHExploreHeaderView", bundle: bundle)
         let footerNib = UINib(nibName: "BHListFooterView", bundle: bundle)
 
         tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: BHExploreHeaderView.reusableIndentifer)
         tableView.register(footerNib, forHeaderFooterViewReuseIdentifier: BHListFooterView.reusableIndentifer)
-        tableView.register(postCellNib, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
+        tableView.register(BHPostCell.self, forCellReuseIdentifier: BHPostCell.reusableIndentifer)
         tableView.register(userCellNib, forCellReuseIdentifier: BHUserCell.reusableIndentifer)
         tableView.delegate = self
         tableView.dataSource = self
@@ -58,7 +54,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         
         footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BHListFooterView.reusableIndentifer) as? BHListFooterView
 
-        configureSearchBar()
+        configureSearchField()
         configureRefreshControl()
         configureNavigationItems()
 
@@ -72,7 +68,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
+        exploreManager.addListener(self)
         tableView.reloadData()
     }
     
@@ -89,13 +86,14 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
+        exploreManager.removeListener(self)
         refreshControl?.endRefreshing()
     }
         
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        layoutSearchBar()
+
+        sizeTableHeaderToFit()
     }
     
     // MARK: - Private
@@ -106,45 +104,34 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         navigationItem.largeTitleDisplayMode = .never
     }
 
-    fileprivate func configureSearchBar() {
+    fileprivate func configureSearchField() {
 
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-
-        searchController.searchBar.placeholder = "Search podcasts or episodes"
-        searchController.searchBar.delegate = self
-        searchController.searchBar.searchBarStyle = .prominent
-        searchController.searchBar.barStyle = .black
-        searchController.searchBar.isTranslucent = false
-
-        configureSearchBarStyle()
-
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-
+        /// keep the search results presentation within this view controller
         definesPresentationContext = true
-    }
-    
-    fileprivate func configureSearchBarStyle() {
 
-        searchController.searchBar.backgroundColor = searchActive ? .navigationBackground() : .primaryBackground()
-//        searchController.searchBar.barTintColor = .navigationBackground()
-        searchController.searchBar.tintColor = .onAccent()
-        searchController.searchBar.setPlaceholderTextColor(to: .secondary())
-        searchController.searchBar.setMagnifyingGlassColor(to: .secondary())
-        searchController.searchBar.setClearButtonColor(to: .tertiary())
-        
-        searchController.searchBar.searchTextField.font = .fontWithName(.robotoRegular, size: 14)
-        searchController.searchBar.searchTextField.textColor = .primary()
-        searchController.searchBar.searchTextField.tintColor = .accent()
-        searchController.searchBar.searchTextField.borderStyle = .roundedRect
-        searchController.searchBar.searchTextField.layer.cornerRadius = 18
-        searchController.searchBar.searchTextField.backgroundColor = .cardBackground()
-        searchController.searchBar.searchTextField.clipsToBounds = true
+        let field = BHSearchFieldView()
+        field.onTap = { [weak self] in
+            self?.activateNavigationSearch()
+        }
+        field.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: searchFieldHeight)
+        searchFieldView = field
+        tableView.tableHeaderView = field
+    }
+
+    fileprivate var searchFieldHeight: CGFloat { return 52.0 }
+
+    /// keep the in-content search field sized to the table width
+    fileprivate func sizeTableHeaderToFit() {
+        guard let header = tableView.tableHeaderView else { return }
+        let width = tableView.bounds.width
+        if header.frame.width != width {
+            header.frame.size = CGSize(width: width, height: searchFieldHeight)
+            tableView.tableHeaderView = header
+        }
     }
 
     fileprivate func configureRefreshControl() {
-        
+
         let newRefreshControl = UIRefreshControl()
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
         refreshControl = newRefreshControl
@@ -152,12 +139,25 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         tableView.addSubview(newRefreshControl)
     }
     
-    fileprivate func layoutSearchBar() {
-        let tf = searchController.searchBar.searchTextField.frame
-        let y: CGFloat = searchActive ? tf.origin.y : 12.0
-
-        searchController.searchBar.searchTextField.frame = CGRect(origin: CGPoint(x: tf.origin.x, y: y), size: tf.size)
-        searchController.view.layoutSubviews()
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.explore())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
     }
 
     // MARK: - Network
@@ -167,22 +167,21 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0
+            self.shouldShowHeader = self.hasHeaderContent()
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.hideFetchProgress()
         }
 
         if isInitial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            showFetchProgress()
 
             exploreManager.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
-                    let showHeader = BHNetworkManager.shared.featuredUsers.count > 0
-                    if showHeader || !BHReachabilityManager.shared.isConnected() {
+                    if self.hasHeaderContent() || !BHReachabilityManager.shared.isConnected() {
                         completeBlock()
                     }
                 case .failure(error: let error):
@@ -205,6 +204,13 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             completeBlock()
         }
     }
+
+    /// The discovery header is shown whenever it has any content to display.
+    fileprivate func hasHeaderContent() -> Bool {
+        return BHExploreManager.shared.recentUsers.count > 0
+            || BHNetworkManager.shared.featuredUsers.count > 0
+            || BHNetworkManager.shared.featuredPosts.count > 0
+    }
     
     fileprivate func fetchRecents() {
         exploreManager.fetchRecent(BHAppConfiguration.shared.networkId) { response in
@@ -219,38 +225,40 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     }
 
     fileprivate func fetchPosts() {
+        guard !isLoadingMore else { return }
+        isLoadingMore = true
 
-        if searchActive {
-            defaultShowActivityIndicatorView()
-        }
+        exploreManager.getPosts(BHAppConfiguration.shared.networkId, text: searchController?.searchBar.text) { [weak self] response in
+            guard let self else { return }
 
-        exploreManager.getPosts(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
+            self.isLoadingMore = false
+            self.setSearchBarLoading(false)
+
             switch response {
             case .success:
                 self.tableView.reloadData()
             case .failure(error: _):
                 break
             }
-
-            self.defaultHideActivityIndicatorView()
         }
     }
 
     fileprivate func fetchUsers() {
+        guard !isLoadingMore else { return }
+        isLoadingMore = true
 
-        if searchActive {
-            defaultShowActivityIndicatorView()
-        }
+        exploreManager.getUsers(BHAppConfiguration.shared.networkId, text: searchController?.searchBar.text) { [weak self] response in
+            guard let self else { return }
 
-        exploreManager.getUsers(BHAppConfiguration.shared.networkId, text: searchController.searchBar.text) { response in
+            self.isLoadingMore = false
+            self.setSearchBarLoading(false)
+
             switch response {
             case .success:
                 self.tableView.reloadData()
             case .failure(error: _):
                 break
             }
-            
-            self.defaultHideActivityIndicatorView()
         }
     }
     
@@ -323,6 +331,68 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     @objc fileprivate func onContentSizeCategoryChanged(_ notification: Notification) {
         tableView.reloadData()
     }
+
+    // MARK: - Navigation search hooks
+
+    override func searchManagedTableView() -> UITableView? {
+        return tableView
+    }
+
+    override func hasExistingSearchResults() -> Bool {
+        switch selectedTab {
+        case .podcasts:
+            return !exploreManager.users.isEmpty
+        case .episodes:
+            return !exploreManager.posts.isEmpty
+        }
+    }
+
+    override func performSearch(with text: String) {
+        refreshControl?.endRefreshing()
+
+        /// a new search must supersede any in-flight "load more"
+        isLoadingMore = false
+
+        /// show the loading spinner in the search bar (pagination uses the footer)
+        setSearchBarLoading(true)
+
+        switch selectedTab {
+        case .podcasts:
+            fetchUsers()
+        case .episodes:
+            fetchPosts()
+        }
+
+        /// drop any stale "Nothing to show" while the new query loads
+        tableView.reloadData()
+    }
+
+    override func searchDidBecomeActive() {
+        /// hide the in-content field (the real bar is now in the navigation bar),
+        /// and switch the header to the Podcasts/Episodes tabs
+        tableView.tableHeaderView = nil
+        shouldShowHeader = true
+
+        /// a fetch is imminent when there are no cached results — enter the loading
+        /// state now so the empty message doesn't flash during activation
+        if !hasExistingSearchResults() {
+            isLoadingMore = true
+            setSearchBarLoading(true)
+        }
+
+        reloadSearchHeader(scrollToTopWhenDone: false)
+    }
+
+    override func searchDidResignActive() {
+        /// restore the in-content field and the discovery carousels
+        isLoadingMore = false
+        tableView.tableHeaderView = searchFieldView
+        sizeTableHeaderToFit()
+        shouldShowHeader = hasHeaderContent()
+
+        fetchRecents()
+        reloadSearchHeader(scrollToTopWhenDone: true)
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -339,22 +409,19 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             return 0
         }
         
-        let bundle = Bundle.module
-        let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
-        
         switch selectedTab {
         case .podcasts:
-            if exploreManager.users.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.users.count == 0 && !isLoadingMore {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: image)
+                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
             } else {
                 tableView.restore()
             }
             return exploreManager.users.count
         case .episodes:
-            if exploreManager.posts.count == 0 && !activityIndicator.isAnimating {
+            if exploreManager.posts.count == 0 && !isLoadingMore {
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: image)
+                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
             } else {
                 tableView.restore()
             }
@@ -367,11 +434,6 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         case .podcasts:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHUserCell.reusableIndentifer, for: indexPath) as! BHUserCell
             cell.user = exploreManager.users[indexPath.row]
-
-            if exploreManager.hasMoreUsers && indexPath.row == exploreManager.users.count - 1 {
-                fetchUsers()
-            }
-
             return cell
         case .episodes:
             let cell = tableView.dequeueReusableCell(withIdentifier: BHPostCell.reusableIndentifer, for: indexPath) as! BHPostCell
@@ -390,11 +452,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             cell.errorClosure = { [weak self] message in
                 self?.showError(message)
             }
-            
-            if exploreManager.hasMorePosts && indexPath.row == exploreManager.posts.count - 1 {
-                fetchPosts()
-            }
-            
+
             return cell
         }
     }
@@ -404,7 +462,7 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             headerView?.setup(searchActive)
             return headerView
         } else {
-            return nil
+            return UIView()
         }
     }
 
@@ -412,15 +470,13 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
         if shouldShowHeader {
             return headerView?.calculateHeight(searchActive) ?? 88
         } else {
-            return 0
+            return .leastNormalMagnitude
         }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        
-        if !searchActive {
-            return nil
-        }
+
+        guard searchActive else { return UIView() }
 
         switch selectedTab {
         case .podcasts:
@@ -435,20 +491,18 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
 
-        return nil
+        return UIView()
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        
-        if !searchActive {
-            return 0
-        }
-        
+
+        guard searchActive else { return .leastNormalMagnitude }
+
         switch selectedTab {
         case .podcasts:
-            return exploreManager.hasMoreUsers ? 40 : 0
+            return exploreManager.hasMoreUsers ? 40 : .leastNormalMagnitude
         case .episodes:
-            return exploreManager.hasMorePosts ? 40 : 0
+            return exploreManager.hasMorePosts ? 40 : .leastNormalMagnitude
         }
     }
     
@@ -459,6 +513,21 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
             openUserDetails(exploreManager.users[indexPath.row])
         case .episodes:
             openPostDetails(exploreManager.posts[indexPath.row])
+        }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard searchActive, !isLoadingMore else { return }
+
+        switch selectedTab {
+        case .podcasts:
+            if exploreManager.hasMoreUsers && indexPath.row == exploreManager.users.count - 1 {
+                fetchUsers()
+            }
+        case .episodes:
+            if exploreManager.hasMorePosts && indexPath.row == exploreManager.posts.count - 1 {
+                fetchPosts()
+            }
         }
     }
 }
@@ -491,15 +560,13 @@ extension BHExploreViewController: BHExploreHeaderViewDelegate {
     }
 
     func headerView(_ view: BHExploreHeaderView, didSelectTabBarItem item: BHTabs) {
+        guard selectedTab != item else { return }
+
         selectedTab = item
-        tableView.reloadData()
-        
-        switch selectedTab {
-        case .podcasts:
-            fetchUsers()
-        case .episodes:
-            fetchPosts()
-        }
+        isLoadingMore = false
+
+        /// performSearch reloads immediately so the footer dots show while fetching
+        performSearch(with: searchController?.searchBar.text ?? "")
     }
     
     func headerView(_ view: BHExploreHeaderView, didRequestPlayPost post: BHPost) {
@@ -516,66 +583,6 @@ extension BHExploreViewController: BHExploreHeaderViewDelegate {
     }
 }
 
-// MARK: - UISearchResultsUpdating
 
-extension BHExploreViewController: UISearchResultsUpdating {
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        
-        refreshControl?.endRefreshing()
-        
-        let searchText: String = searchController.searchBar.text ?? ""
-        
-        if searchText.isEmpty || searchText.count > 2 {
-            switch selectedTab {
-            case .podcasts:
-                fetchUsers()
-            case .episodes:
-                fetchPosts()
-            }
-        }
-    }
-}
-
-extension BHExploreViewController: UISearchBarDelegate {
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-    }
-
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        
-        searchActive = true
-        configureSearchBarStyle()
-        tableView.reloadData()
-        
-        return true
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-
-        searchActive = false
-        shouldShowHeader = true
-        
-//        if (selectedTab == .podcasts && exploreManager.users.count > 0) ||
-//            (selectedTab == .episodes && exploreManager.posts.count > 0) {
-//            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-//        }
-        tableView.reloadData()
-
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-        
-        fetchRecents()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.layoutSearchBar()
-            self.configureSearchBarStyle()
-        }
-    }
-}
 
 

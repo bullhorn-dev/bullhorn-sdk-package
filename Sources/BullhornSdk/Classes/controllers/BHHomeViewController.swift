@@ -24,11 +24,16 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     fileprivate var selectedChannelId: String = UserDefaults.standard.selectedChannelId
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
         
     fileprivate var shouldShowHeader: Bool = false
+
+    /// the first appearance is already populated by the initial fetch; we only
+    /// refresh visible cells on subsequent appearances (returning to the screen)
+    fileprivate var didInitiallyAppear = false
 
     // MARK: - Lifecycle
 
@@ -88,11 +93,16 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let sections = getAllSectionsIndexSet()
-        collectionView.reloadSections(sections)
-        
-        BHLog.p("Refresh all sections")
+
+        /// skip the first appearance — the initial fetch already populated it.
+        /// On later appearances refresh the visible cells in place (no recreate),
+        /// so state updates without scroll jumps or flicker.
+        guard didInitiallyAppear else {
+            didInitiallyAppear = true
+            return
+        }
+
+        refreshOnFocus()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -126,15 +136,49 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         
         let newRefreshControl = UIRefreshControl()
         newRefreshControl.addTarget(self, action: #selector(onRefreshControlAction(_:)), for: .valueChanged)
+        newRefreshControl.tintColor = .accent()
         refreshControl = newRefreshControl
-        refreshControl?.tintColor = .accent()
-        collectionView.addSubview(newRefreshControl)
+        collectionView.refreshControl = newRefreshControl
     }
     
-    fileprivate func getAllSectionsIndexSet() -> IndexSet {
-        let numberOfSections = collectionView.numberOfSections
-        let allSections = IndexSet(integersIn: 1..<numberOfSections)
-        return allSections
+    /// Focus refresh (on returning to the screen), without flicker:
+    /// - the header is refreshed in place (radio, followed section + visibility, badges)
+    /// - visible grid cells are reconfigured (new-episode badges) without recreating them
+    /// - the layout is re-evaluated in case the header height changed (a section
+    ///   appeared/disappeared), but nothing is reloaded/recreated, so no flicker
+    fileprivate func refreshOnFocus() {
+        headerView?.refresh()
+
+        let visibleItems = collectionView.indexPathsForVisibleItems
+
+        UIView.performWithoutAnimation {
+            if !visibleItems.isEmpty {
+                collectionView.reconfigureItems(at: visibleItems)
+            }
+            collectionView.collectionViewLayout.invalidateLayout()
+            collectionView.layoutIfNeeded()
+        }
+    }
+    
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.home())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
     }
 
     // MARK: - Network
@@ -144,7 +188,7 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         let networkId = BHAppConfiguration.shared.networkId
         
         let completeBlock = {
-            self.shouldShowHeader = BHNetworkManager.shared.featuredUsers.count > 0 && BHNetworkManager.shared.channels.count > 0
+            self.shouldShowHeader = self.showHeader()
             self.refreshControl?.endRefreshing()
             self.reloadData()
             self.headerView?.reloadData()
@@ -153,14 +197,14 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 
         if isInitial {
             self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            self.showFetchProgress()
 
             BHNetworkManager.shared.fetchStorage(networkId) { response in
                 switch response {
                 case .success:
                     completeBlock()
-                    if BHNetworkManager.shared.splittedUsers.count > 0 {
-                        self.defaultHideActivityIndicatorView()
+                    if self.showHeader() {
+                        self.hideFetchProgress()
                     }
                 case .failure(error: let error):
                     let message = "Failed to fetch network from storage. \(error.localizedDescription)"
@@ -179,18 +223,32 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
                     self.showConnectionError()
                 }
             }
-            self.defaultHideActivityIndicatorView()
             completeBlock()
+            self.hideFetchProgress()
         }
     }
-        
+    
+    fileprivate func showHeader() -> Bool {
+        return BHNetworkManager.shared.featuredUsers.count > 0 && BHNetworkManager.shared.channels.count > 0
+    }
+
     fileprivate func reloadData() {
         BHLog.p("\(#function)")
         
         BHNetworkManager.shared.splitUsers(selectedChannelId)
 
-        collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
+        updateEmptyState()
+    }
+
+    fileprivate func updateEmptyState() {
+        if BHNetworkManager.shared.splittedUsers.count == 0 && !isFetching() {
+            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
+            collectionView.setEmptyMessage(message, image: image)
+        } else {
+            collectionView.restore()
+        }
     }
     
     // MARK: - Action handlers
@@ -298,19 +356,14 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
 extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if BHNetworkManager.shared.splittedUsers.count == 0 && !activityIndicator.isAnimating {
-            let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
-            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
-            collectionView.setEmptyMessage(message, image: image)
-        } else {
-            collectionView.restore()
-        }
         return BHNetworkManager.shared.splittedUsers.count + 1
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 { return 0 }
-        return BHNetworkManager.shared.splittedUsers[section - 1].users.count
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard section - 1 < groups.count else { return 0 }
+        return groups[section - 1].users.count
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -321,20 +374,28 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 
                 guard let homeHeaderView = headerView as? BHHomeHeaderView else { return headerView }
                 
-                if self.headerView == nil {
+                if self.headerView !== homeHeaderView {
+                    /// one-time configuration for this instance (styling, delegate, layout)
                     homeHeaderView.initialize()
                     homeHeaderView.delegate = self
+                    homeHeaderView.setup()
+                    self.headerView = homeHeaderView
+                } else {
+                    /// already configured — refresh data/visibility in place
+                    homeHeaderView.refresh()
                 }
-                homeHeaderView.setup()
-                
-                self.headerView = homeHeaderView
                 
                 return  homeHeaderView
             } else {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BHSectionHeaderView.reusableIndentifer, for: indexPath)
                 
                 guard let usersHeaderView = headerView as? BHSectionHeaderView else { return headerView }
-                usersHeaderView.titleLabel.text = BHNetworkManager.shared.splittedUsers.count > 1 ? BHNetworkManager.shared.splittedUsers[indexPath.section - 1].category.name : ""
+                let groups = BHNetworkManager.shared.splittedUsers
+                if groups.count > 1, indexPath.section - 1 < groups.count {   /// #6
+                    usersHeaderView.titleLabel.text = groups[indexPath.section - 1].category.name
+                } else {
+                    usersHeaderView.titleLabel.text = ""
+                }
                 
                 return usersHeaderView
             }
@@ -345,13 +406,19 @@ extension BHHomeViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BHUserGridCell.reusableIndentifer, for: indexPath) as! BHUserGridCell
-        cell.user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.item]
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard indexPath.section - 1 < groups.count,
+              indexPath.item < groups[indexPath.section - 1].users.count else { return cell }
+        cell.user = groups[indexPath.section - 1].users[indexPath.item]
     
         return cell
     }
         
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = BHNetworkManager.shared.splittedUsers[indexPath.section - 1].users[indexPath.row]
+        let groups = BHNetworkManager.shared.splittedUsers
+        guard indexPath.section - 1 < groups.count,
+              indexPath.item < groups[indexPath.section - 1].users.count else { return }   /// #6
+        let user = groups[indexPath.section - 1].users[indexPath.item]
         openUserDetails(user)
     }
       
@@ -449,4 +516,5 @@ extension BHHomeViewController: BHUserManagerListener {
     
     func userManagerDidUpdatePosts(_ manager: BHUserManager) {}
 }
+
 

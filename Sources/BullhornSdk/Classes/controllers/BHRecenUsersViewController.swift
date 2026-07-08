@@ -12,7 +12,7 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-
+    fileprivate var skeleton: BHSkeletonView?
     fileprivate var footerView: BHListFooterView?
 
     fileprivate var selectedUser: BHUser?
@@ -89,6 +89,27 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
         tableView.addSubview(newRefreshControl)
     }
     
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.users())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
+    }
+    
     // MARK: - Network
     
     fileprivate func fetchUsers(initial: Bool = false) {
@@ -97,12 +118,12 @@ class BHRecentUsersViewController: BHPlayerContainingViewController, ActivityInd
 
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
+            self.hideFetchProgress()
             self.tableView.reloadData()
         }
 
         if initial {
-            self.defaultShowActivityIndicatorView()
+            showFetchProgress()
             
             BHExploreManager.shared.fetchStorageRecentUsers(networkId) { response in
                 switch response {
@@ -181,7 +202,7 @@ extension BHRecentUsersViewController: UITableViewDataSource, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if BHExploreManager.shared.recentUsers.count == 0 && !activityIndicator.isAnimating {
+        if BHExploreManager.shared.recentUsers.count == 0 && !isFetching() {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"

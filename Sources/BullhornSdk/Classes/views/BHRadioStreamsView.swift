@@ -66,6 +66,8 @@ class BHRadioStreamsView: UIView {
     
     private var laterStreamsHeightConstraint: NSLayoutConstraint?
 
+    private var activeConstraints: [NSLayoutConstraint] = []
+
     private let spacingHeight: CGFloat = 10.0
     private let imageHeight: CGFloat = Constants.radioAspectRatio * (UIScreen.main.bounds.width - 4 * Constants.paddingHorizontal)
     private let titleLblHeight: CGFloat = 24.0
@@ -101,102 +103,76 @@ class BHRadioStreamsView: UIView {
     // MARK: - Private
     
     private func setup() {
-        
+
         if isConfigured {
+            NSLayoutConstraint.deactivate(activeConstraints)
+            activeConstraints.removeAll()
             subviews.forEach { $0.removeFromSuperview() }
             BHRadioStreamsManager.shared.removeListener(self)
         }
 
         backgroundColor = .primaryBackground()
-        
+
         let bundle = Bundle.module
         placeholderImage = UIImage(named: "ic_radio_placeholder.png", in: bundle, with: nil)
-        
-        if showLaterStreams {
-            let vStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, laterStreamsView, playButton])
-            vStackView.axis = .vertical
-            vStackView.alignment = .fill
-            vStackView.distribution = .fill
-            vStackView.spacing = spacingHeight
-            
-            shadowView.addSubview(vStackView)
-            addSubview(shadowView)
-            
-            shadowView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            playButton.translatesAutoresizingMaskIntoConstraints = false
-            titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            laterStreamsView.translatesAutoresizingMaskIntoConstraints = false
-            vStackView.translatesAutoresizingMaskIntoConstraints = false
-            
-            let shadowBottom = shadowView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.paddingVertical)
-            shadowBottom.priority = UILayoutPriority(999)
 
+        let arranged = showLaterStreams
+            ? [imageView, titleLabel, laterStreamsView, playButton]
+            : [imageView, titleLabel, playButton]
+        let vStackView = UIStackView(arrangedSubviews: arranged)
+        vStackView.axis = .vertical
+        vStackView.alignment = .fill
+        vStackView.distribution = .fill
+        vStackView.spacing = spacingHeight
+
+        shadowView.addSubview(vStackView)
+        addSubview(shadowView)
+
+        shadowView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        laterStreamsView.translatesAutoresizingMaskIntoConstraints = false
+        vStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let shadowBottom = shadowView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.paddingVertical)
+        shadowBottom.priority = UILayoutPriority(999)
+
+        var constraints: [NSLayoutConstraint] = [
+            shadowView.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.paddingVertical),
+            shadowView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.paddingHorizontal),
+            shadowView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.paddingHorizontal),
+            shadowBottom,
+            vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
+            vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
+            vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
+            vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical),
+            imageView.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
+            imageView.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
+            imageView.heightAnchor.constraint(equalToConstant: imageHeight),
+            playButton.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
+            playButton.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
+            playButton.heightAnchor.constraint(equalToConstant: playBtnHeight),
+            titleLabel.heightAnchor.constraint(equalToConstant: titleLblHeight),
+        ]
+
+        if showLaterStreams {
             let laterHeight = laterStreamsView.heightAnchor.constraint(equalToConstant: laterStreamsView.calculateHeight())
             laterStreamsHeightConstraint = laterHeight
-
-            NSLayoutConstraint.activate([
-                shadowView.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.paddingVertical),
-                shadowView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.paddingHorizontal),
-                shadowView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.paddingHorizontal),
-                shadowBottom,
-                vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
-                vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
-                vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
-                vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical),
-                imageView.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
-                imageView.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
-                imageView.heightAnchor.constraint(equalToConstant: imageHeight),
-                playButton.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
-                playButton.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
-                playButton.heightAnchor.constraint(equalToConstant: playBtnHeight),
-                titleLabel.heightAnchor.constraint(equalToConstant: titleLblHeight),
-                laterHeight
-            ])
-        } else {
-            let vStackView = UIStackView(arrangedSubviews: [imageView, titleLabel, playButton])
-            vStackView.axis = .vertical
-            vStackView.alignment = .fill
-            vStackView.distribution = .fill
-            vStackView.spacing = spacingHeight
-            
-            shadowView.addSubview(vStackView)
-            addSubview(shadowView)
-            
-            shadowView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            playButton.translatesAutoresizingMaskIntoConstraints = false
-            titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            vStackView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                shadowView.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.paddingVertical),
-                shadowView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.paddingHorizontal),
-                shadowView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.paddingHorizontal),
-                shadowView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.paddingVertical),
-                vStackView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: Constants.paddingVertical),
-                vStackView.leftAnchor.constraint(equalTo: shadowView.leftAnchor, constant: Constants.paddingHorizontal),
-                vStackView.rightAnchor.constraint(equalTo: shadowView.rightAnchor, constant: -Constants.paddingHorizontal),
-                vStackView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: -Constants.paddingVertical),
-                imageView.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
-                imageView.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
-                imageView.heightAnchor.constraint(equalToConstant: imageHeight),
-                playButton.leftAnchor.constraint(equalTo: vStackView.leftAnchor, constant: 0),
-                playButton.rightAnchor.constraint(equalTo: vStackView.rightAnchor, constant: 0),
-                playButton.heightAnchor.constraint(equalToConstant: playBtnHeight),
-                titleLabel.heightAnchor.constraint(equalToConstant: titleLblHeight),
-                heightAnchor.constraint(equalToConstant: calculateHeight())
-            ])
+            constraints.append(laterHeight)
         }
-        
+
+        activeConstraints = constraints
+        NSLayoutConstraint.activate(constraints)
+
         BHRadioStreamsManager.shared.addListener(self)
-        
+
         imageView.sd_setImage(with: nil, placeholderImage: placeholderImage)
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .tertiary()
-        
+
         playButton.isEnabled = false
-        
+
         isConfigured = true
         layoutSubviews()
     }
@@ -235,4 +211,5 @@ extension BHRadioStreamsView: BHRadioStreamsListener {
         }
     }
 }
+
 

@@ -36,6 +36,7 @@ extension UserDefaults {
     fileprivate static let autoDownloadsFeatureEnabledDefaultsKey = "autoDownloadsFeatureEnabledDefaultsKey"
     fileprivate static let interactiveTranscriptsFeatureEnabledDefaultsKey = "interactiveTranscriptsFeatureEnabledDefaultsKey"
     fileprivate static let pictureInPictureFeatureEnabledDefaultsKey = "pictureInPictureFeatureEnabledDefaultsKey"
+    fileprivate static let skeletonFeatureEnabledDefaultsKey = "skeletonFeatureEnabledDefaultsKey"
 
     static let playNextEnabledDefaultsKey = "playNextEnabledDefaultsKey"
 
@@ -303,6 +304,15 @@ extension UserDefaults {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: UserDefaults.pictureInPictureFeatureEnabledDefaultsKey)
+        }
+    }
+    
+    var isSkeletonFeatureEnabled: Bool {
+        get {
+            return isDevModeEnabled && UserDefaults.standard.bool(forKey: UserDefaults.skeletonFeatureEnabledDefaultsKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: UserDefaults.skeletonFeatureEnabledDefaultsKey)
         }
     }
 }

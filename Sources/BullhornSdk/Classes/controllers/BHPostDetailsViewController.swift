@@ -19,7 +19,7 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
-
+    fileprivate var skeleton: BHSkeletonView?
     fileprivate var headerView: BHPostHeaderView?
 
     fileprivate var postsManager = BHPostsManager()
@@ -113,20 +113,43 @@ class BHPostDetailsViewController: BHPlayerContainingViewController, ActivityInd
         tableView.addSubview(newRefreshControl)
     }
     
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.postDetails())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
+    }
+
+    // MARK: - Network
+    
     fileprivate func fetch(initial: Bool = false) {
         guard let validPost = post else { return }
 
         let completeBlock = {
             self.shouldShowHeader = true
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
+            self.hideFetchProgress()
             self.tableView.reloadData()
             self.headerView?.reloadData()
         }
 
         if initial {
-            self.shouldShowHeader = false
-            self.defaultShowActivityIndicatorView()
+            shouldShowHeader = false
+            showFetchProgress()
 
             postsManager.fetchStorage(postId: validPost.id) { response in
                 switch response {
@@ -262,7 +285,7 @@ extension BHPostDetailsViewController: UITableViewDataSource, UITableViewDelegat
             tableView.restore()
             return 1
         case .transcript:
-            if postsManager.transcriptSegments.count == 0 && !activityIndicator.isAnimating {
+            if postsManager.transcriptSegments.count == 0 && !isFetching() {
                 let bundle = Bundle.module
                 let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
 

@@ -14,6 +14,7 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var selectedUser: BHUser?
     fileprivate var selectedPost: BHPost?
@@ -55,10 +56,10 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
 
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
-        layout?.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout?.estimatedItemSize = .zero
 
         bottomView.backgroundColor = .primaryBackground()
-        
+
         configureNavigationItems()
         configureRefreshControl()
 
@@ -112,20 +113,41 @@ class BHCategoryViewController: BHPlayerContainingViewController, ActivityIndica
         collectionView.addSubview(newRefreshControl)
     }
     
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.category())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
+    }
+    
     // MARK: - Network
     
     fileprivate func fetch(initial: Bool = false) {
         
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
             self.collectionView.reloadData()
+            self.hideFetchProgress()
         }
 
         guard let categoryId = category?.id else { return }
         
         if initial {
-            self.defaultShowActivityIndicatorView()
+            showFetchProgress()
             manager.removeCategoryData()
             
             manager.fetchStorageCategoryPodcasts(categoryId) { response in
@@ -234,7 +256,7 @@ extension BHCategoryViewController: UICollectionViewDelegate, UICollectionViewDa
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if manager.users.count == 0 && manager.posts.count == 0 {
-            if !activityIndicator.isAnimating {
+            if !isFetching() {
                 let image = UIImage(named: "ic_list_placeholder.png", in: Bundle.module, with: nil)
                 let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection appears to be offline"
                 collectionView.setEmptyMessage(message, image: image)
@@ -394,3 +416,4 @@ extension BHCategoryViewController: BHCategoriesManagerListener {
         }
     }
 }
+

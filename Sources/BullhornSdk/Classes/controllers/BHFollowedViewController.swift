@@ -11,6 +11,7 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
     @IBOutlet weak var bottomView: UIView!
 
     fileprivate var refreshControl: UIRefreshControl?
+    fileprivate var skeleton: BHSkeletonView?
 
     fileprivate var userManager = BHUserManager.shared
     fileprivate var selectedUser: BHUser?
@@ -80,17 +81,38 @@ class BHFollowedViewController: BHPlayerContainingViewController, ActivityIndica
         tableView.addSubview(newRefreshControl)
     }
     
+    fileprivate func showFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton = BHSkeletonView.present(over: view, rows: BHSkeletonView.users())
+        } else {
+            defaultShowActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func hideFetchProgress() {
+        if UserDefaults.standard.isSkeletonFeatureEnabled {
+            skeleton?.dismiss()
+            skeleton = nil
+        } else {
+            defaultHideActivityIndicatorView()
+        }
+    }
+    
+    fileprivate func isFetching() -> Bool {
+        return skeleton != nil || activityIndicator.isAnimating
+    }
+    
     // MARK: - Network
     
     fileprivate func fetch(initial: Bool = false) {
         let completeBlock = {
             self.refreshControl?.endRefreshing()
-            self.defaultHideActivityIndicatorView()
+            self.hideFetchProgress()
             self.tableView.reloadData()
         }
 
         if initial {
-            self.defaultShowActivityIndicatorView()
+            showFetchProgress()
         }
 
         if let user = BHAccountManager.shared.user {
@@ -144,7 +166,7 @@ extension BHFollowedViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if userManager.followedUsers.count == 0 && !activityIndicator.isAnimating {
+        if userManager.followedUsers.count == 0 && !isFetching() {
             let bundle = Bundle.module
             let image = UIImage(named: "ic_list_placeholder.png", in: bundle, with: nil)
             let message = BHReachabilityManager.shared.isConnected() ? "No podcast followed yet" : "The Internet connection is lost"

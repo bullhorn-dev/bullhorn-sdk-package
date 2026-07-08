@@ -90,6 +90,12 @@ class BHDevModeViewController: UIViewController, UIGestureRecognizerDelegate {
                 UserDefaults.standard.isPictureInPictureFeatureEnabled = !value
                 self.configure()
                 self.tableView.reloadData()
+            })),
+            .toggleCell(model: SettingsToggleOption(title: "Skeleton loader", isActive: UserDefaults.standard.isSkeletonFeatureEnabled, handler: {
+                let value = UserDefaults.standard.isSkeletonFeatureEnabled
+                UserDefaults.standard.isSkeletonFeatureEnabled = !value
+                self.configure()
+                self.tableView.reloadData()
             }))
         ]))
     }

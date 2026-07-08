@@ -91,8 +91,6 @@ class BHUserGridCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: stackView.widthAnchor),
         ])
-                
-        layoutSubviews()
     }
 
     private func update() {

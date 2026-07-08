@@ -126,7 +126,7 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         var totalHeight: CGFloat = 0
 
         if searchActive {
-            return tabbedView.frame.size.height > 0 ? tabbedView.frame.size.height : Constants.panelHeight
+            return tabbedView.frame.size.height > 0 ? tabbedView.frame.size.height : 56.0
         } else {
             if hasRecentUsers() {
                 totalHeight += recentUsersView.calculateHeight() + (recentUsersTitle.frame.size.height > 0 ? recentUsersTitle.frame.size.height : Constants.panelHeight)
