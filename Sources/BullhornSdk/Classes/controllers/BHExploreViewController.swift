@@ -224,6 +224,28 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         }
     }
 
+    // MARK: - Empty state
+
+    fileprivate func updateSearchEmptyState() {
+        guard searchActive, !isLoadingMore else {
+            tableView.restore()
+            return
+        }
+
+        let isEmpty: Bool
+        switch selectedTab {
+        case .podcasts: isEmpty = exploreManager.users.isEmpty
+        case .episodes: isEmpty = exploreManager.posts.isEmpty
+        }
+
+        if isEmpty {
+            let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
+            tableView.setEmptyMessage(message, image: nil, topOffset: 80)
+        } else {
+            tableView.restore()
+        }
+    }
+
     fileprivate func fetchPosts() {
         guard !isLoadingMore else { return }
         isLoadingMore = true
@@ -240,6 +262,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             case .failure(error: _):
                 break
             }
+
+            self.updateSearchEmptyState()
         }
     }
 
@@ -259,6 +283,8 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             case .failure(error: _):
                 break
             }
+
+            self.updateSearchEmptyState()
         }
     }
     
@@ -350,10 +376,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
     override func performSearch(with text: String) {
         refreshControl?.endRefreshing()
 
-        /// a new search must supersede any in-flight "load more"
         isLoadingMore = false
-
-        /// show the loading spinner in the search bar (pagination uses the footer)
         setSearchBarLoading(true)
 
         switch selectedTab {
@@ -363,35 +386,34 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             fetchPosts()
         }
 
-        /// drop any stale "Nothing to show" while the new query loads
+        updateSearchEmptyState()
         tableView.reloadData()
     }
 
     override func searchDidBecomeActive() {
-        /// hide the in-content field (the real bar is now in the navigation bar),
-        /// and switch the header to the Podcasts/Episodes tabs
+        tableView.restore()
+
         tableView.tableHeaderView = nil
         shouldShowHeader = true
 
-        /// a fetch is imminent when there are no cached results — enter the loading
-        /// state now so the empty message doesn't flash during activation
         if !hasExistingSearchResults() {
             isLoadingMore = true
             setSearchBarLoading(true)
         }
 
-        reloadSearchHeader(scrollToTopWhenDone: false)
+        reloadSearchHeader(scrollToTopWhenDone: false, animated: false)
     }
 
     override func searchDidResignActive() {
-        /// restore the in-content field and the discovery carousels
         isLoadingMore = false
+        tableView.restore()
+
         tableView.tableHeaderView = searchFieldView
         sizeTableHeaderToFit()
         shouldShowHeader = hasHeaderContent()
 
         fetchRecents()
-        reloadSearchHeader(scrollToTopWhenDone: true)
+        reloadSearchHeader(scrollToTopWhenDone: true, animated: false)
     }
 }
 
@@ -405,26 +427,12 @@ extension BHExploreViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        if !searchActive {
-            return 0
-        }
-        
+        guard searchActive else { return 0 }
+
         switch selectedTab {
         case .podcasts:
-            if exploreManager.users.count == 0 && !isLoadingMore {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
-            } else {
-                tableView.restore()
-            }
             return exploreManager.users.count
         case .episodes:
-            if exploreManager.posts.count == 0 && !isLoadingMore {
-                let message = BHReachabilityManager.shared.isConnected() ? "Nothing to show" : "The Internet connection is lost"
-                tableView.setEmptyMessage(message, image: nil, topOffset: 80)
-            } else {
-                tableView.restore()
-            }
             return exploreManager.posts.count
         }
     }
@@ -582,6 +590,7 @@ extension BHExploreViewController: BHExploreHeaderViewDelegate {
         }
     }
 }
+
 
 
 

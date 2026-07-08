@@ -41,6 +41,7 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
     weak var delegate: BHExploreHeaderViewDelegate?
     
     fileprivate var selectedTab: BHTabs = .podcasts
+    fileprivate var didConfigureTabs = false
 
     // MARK: - Lifecycle
 
@@ -95,11 +96,14 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         seeAllRecentsButton.backgroundColor = .clear
         seeAllRecentsButton.tintColor = .accent()
         
-        tabbedView.tabs = [
-            BHTabItemView(title: "Podcasts"),
-            BHTabItemView(title: "Episodes")
-        ]
-        tabbedView.delegate = self
+        if !didConfigureTabs {
+            didConfigureTabs = true
+            tabbedView.tabs = [
+                BHTabItemView(title: "Podcasts"),
+                BHTabItemView(title: "Episodes")
+            ]
+            tabbedView.delegate = self
+        }
                 
         if searchActive {
             recentUsersTitle.isHidden = true
@@ -126,7 +130,7 @@ class BHExploreHeaderView: UITableViewHeaderFooterView {
         var totalHeight: CGFloat = 0
 
         if searchActive {
-            return tabbedView.frame.size.height > 0 ? tabbedView.frame.size.height : 56.0
+            return 56.0
         } else {
             if hasRecentUsers() {
                 totalHeight += recentUsersView.calculateHeight() + (recentUsersTitle.frame.size.height > 0 ? recentUsersTitle.frame.size.height : Constants.panelHeight)
@@ -203,4 +207,5 @@ extension BHExploreHeaderView: BHPostCarouselViewDelegate {
         delegate?.headerView(self, didRequestPlayPost: post)
     }
 }
+
 

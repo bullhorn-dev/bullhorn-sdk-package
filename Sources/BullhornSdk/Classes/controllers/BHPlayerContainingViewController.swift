@@ -8,20 +8,10 @@ class BHPlayerContainingViewController: UIViewController {
     
     var modalVC: UIViewController?
 
-    /// Navigation-bar search state (shared by subclasses that opt in).
-    /// A fresh controller is created per session so the bar lives in the
-    /// navigation bar ONLY while a search is active.
     var searchController: UISearchController?
     var searchActive = false
 
-    /// True for the single `updateSearchResults` call that fires on activation,
-    /// used to skip the redundant empty-query fetch when data is already present.
     private var isActivatingSearch = false
-
-    /// We own the search field's left view: a fixed-size container holding both
-    /// the magnifier and the loading spinner. Swapping their visibility (instead
-    /// of swapping the leftView itself) keeps the footprint constant, so the text
-    /// never shifts when loading toggles.
     private var searchLeftContainer: UIView?
     private var searchMagnifierImageView: UIImageView?
     private var searchSpinner: UIActivityIndicatorView?
@@ -319,7 +309,6 @@ class BHPlayerContainingViewController: UIViewController {
         }
     }
 
-    /// Remove the search bar from the navigation bar entirely, so scrolling never reveals it.
     func deactivateNavigationSearch() {
         isActivatingSearch = false
         searchLeftContainer = nil
@@ -332,10 +321,6 @@ class BHPlayerContainingViewController: UIViewController {
         searchController = nil
     }
 
-    /// Show a spinner in place of the search field's magnifier while a query is
-    /// loading. Both live in the same fixed container, so only their visibility
-    /// flips — the left view footprint stays constant and the text doesn't move.
-    /// Used for a new/refining search; pagination still uses the footer dots.
     func setSearchBarLoading(_ loading: Bool) {
         guard let magnifier = searchMagnifierImageView, let spinner = searchSpinner else { return }
 
@@ -348,17 +333,28 @@ class BHPlayerContainingViewController: UIViewController {
         }
     }
 
-    /// Reload section 0 with a fade; optionally scroll to top once the header is laid out.
-    func reloadSearchHeader(scrollToTopWhenDone: Bool) {
+    func reloadSearchHeader(scrollToTopWhenDone: Bool, animated: Bool = true) {
         guard let tableView = searchManagedTableView() else { return }
 
-        tableView.performBatchUpdates({
-            tableView.reloadSections(IndexSet(integer: 0), with: .fade)
-        }, completion: { [weak self] _ in
+        let completion = { [weak self] in
             if scrollToTopWhenDone {
                 self?.scrollSearchableToTop(animated: true)
             }
-        })
+        }
+
+        if animated {
+            tableView.performBatchUpdates({
+                tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+            }, completion: { _ in
+                completion()
+            })
+        } else {
+            UIView.performWithoutAnimation {
+                tableView.reloadData()
+                tableView.layoutIfNeeded()
+            }
+            completion()
+        }
     }
 
     func scrollSearchableToTop(animated: Bool) {
@@ -536,6 +532,7 @@ extension BHPlayerContainingViewController: UISearchResultsUpdating, UISearchBar
         searchDidResignActive()
     }
 }
+
 
 
 
