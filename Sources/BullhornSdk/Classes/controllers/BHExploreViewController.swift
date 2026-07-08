@@ -401,7 +401,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
             setSearchBarLoading(true)
         }
 
-        reloadSearchHeader(scrollToTopWhenDone: false, animated: false)
+        reloadSearchHeader(scrollToTopWhenDone: false, style: .crossDissolve)
     }
 
     override func searchDidResignActive() {
@@ -413,7 +413,7 @@ class BHExploreViewController: BHPlayerContainingViewController, ActivityIndicat
         shouldShowHeader = hasHeaderContent()
 
         fetchRecents()
-        reloadSearchHeader(scrollToTopWhenDone: true, animated: false)
+        reloadSearchHeader(scrollToTopWhenDone: true, style: .crossDissolve)
     }
 }
 

@@ -333,7 +333,13 @@ class BHPlayerContainingViewController: UIViewController {
         }
     }
 
-    func reloadSearchHeader(scrollToTopWhenDone: Bool, animated: Bool = true) {
+    enum SearchHeaderReloadStyle {
+        case sectionFade
+        case crossDissolve
+        case none
+    }
+
+    func reloadSearchHeader(scrollToTopWhenDone: Bool, style: SearchHeaderReloadStyle = .sectionFade) {
         guard let tableView = searchManagedTableView() else { return }
 
         let completion = { [weak self] in
@@ -342,13 +348,21 @@ class BHPlayerContainingViewController: UIViewController {
             }
         }
 
-        if animated {
+        switch style {
+        case .sectionFade:
             tableView.performBatchUpdates({
                 tableView.reloadSections(IndexSet(integer: 0), with: .fade)
             }, completion: { _ in
                 completion()
             })
-        } else {
+        case .crossDissolve:
+            UIView.transition(with: tableView, duration: 0.3, options: [.transitionCrossDissolve, .allowUserInteraction], animations: {
+                tableView.reloadData()
+                tableView.layoutIfNeeded()
+            }, completion: { _ in
+                completion()
+            })
+        case .none:
             UIView.performWithoutAnimation {
                 tableView.reloadData()
                 tableView.layoutIfNeeded()
