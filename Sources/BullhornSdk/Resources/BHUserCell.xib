@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
-        </array>
-        <array key="Roboto-Regular.ttf">
-            <string>Roboto-Regular</string>
         </array>
     </customFonts>
     <objects>
@@ -28,7 +25,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a5j-cc-Oxa">
                         <rect key="frame" x="16" y="8" width="358" height="104"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-AS-zZr">
+                            <stackView opaque="NO" contentMode="scaleToFill" alignment="fill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-AS-zZr">
                                 <rect key="frame" x="16" y="12" width="326" height="80"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_avatar_placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="GYo-3i-0Et">
@@ -39,46 +36,38 @@
                                             <constraint firstAttribute="width" constant="80" id="Hm6-Lx-e3Y"/>
                                         </constraints>
                                     </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YEM-Lb-TVk">
-                                        <rect key="frame" x="80" y="0.0" width="16" height="80"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="16" id="AKu-g5-P4N"/>
-                                        </constraints>
-                                    </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="nir-mG-S38">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="nir-mG-S38">
                                         <rect key="frame" x="96" y="0.0" width="230" height="80"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label label label label label label label label label label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8x-cF-1Uv">
-                                                <rect key="frame" x="0.0" y="0.0" width="220.33333333333334" height="35.333333333333336"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Label label label label label label label label label label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8x-cF-1Uv">
+                                                <rect key="frame" x="0.0" y="0.0" width="230" height="26"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                                 <color key="textColor" name="bhColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WY2-Cn-8EJ">
-                                                <rect key="frame" x="0.0" y="37.333333333333343" width="227.33333333333334" height="42.666666666666657"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="52" id="RyE-Wb-Vwa"/>
-                                                </constraints>
-                                                <string key="text">Label label label label label label label label label label label Label label label label label label label label label label label</string>
-                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                                <color key="textColor" name="bhColorPrimary"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <view contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Htu-b2-Jx1" customClass="RichLabel" customModule="BullhornSdk">
+                                                <rect key="frame" x="0.0" y="28" width="230" height="52"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isScrollEnabled" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSelectable" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceVertical" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="alwaysBounceHorizontal" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="text" value="Text text text"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isEnabled" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                        <color key="value" name="bhColorPrimary"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="numberOfLines">
+                                                        <integer key="value" value="0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="GYo-3i-0Et" firstAttribute="centerY" secondItem="6dC-AS-zZr" secondAttribute="centerY" id="Ulg-eL-Lnv"/>
-                                    <constraint firstItem="YEM-Lb-TVk" firstAttribute="top" secondItem="6dC-AS-zZr" secondAttribute="top" id="h22-AX-EE1"/>
-                                    <constraint firstItem="YEM-Lb-TVk" firstAttribute="leading" secondItem="GYo-3i-0Et" secondAttribute="trailing" id="iSQ-Rr-mfL"/>
-                                    <constraint firstItem="nir-mG-S38" firstAttribute="centerY" secondItem="6dC-AS-zZr" secondAttribute="centerY" id="mVz-gZ-bqK"/>
-                                    <constraint firstItem="nir-mG-S38" firstAttribute="leading" secondItem="YEM-Lb-TVk" secondAttribute="trailing" id="mui-DW-0Bx"/>
-                                    <constraint firstAttribute="bottom" secondItem="YEM-Lb-TVk" secondAttribute="bottom" id="qch-vh-wxX"/>
-                                    <constraint firstAttribute="trailing" secondItem="nir-mG-S38" secondAttribute="trailing" id="uC9-Xc-wpl"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" name="bhColorCardBg"/>
@@ -100,7 +89,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="bioLabel" destination="WY2-Cn-8EJ" id="JMb-fg-hBb"/>
+                <outlet property="bioLabel" destination="Htu-b2-Jx1" id="jmV-Rz-v8J"/>
                 <outlet property="nameLabel" destination="B8x-cF-1Uv" id="laV-y7-O9h"/>
                 <outlet property="shadowView" destination="a5j-cc-Oxa" id="7I6-19-E6R"/>
                 <outlet property="userIcon" destination="GYo-3i-0Et" id="EdU-54-CCh"/>
