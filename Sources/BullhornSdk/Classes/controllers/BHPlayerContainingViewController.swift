@@ -443,6 +443,7 @@ extension BHPlayerContainingViewController: BHHybridPlayerListener {
     func hybridPlayerDidFinishPlaying(_ player: BHHybridPlayer) {
         DispatchQueue.main.async {
             self.onPlayerPlaybackCompleted()
+            self.updateMiniPlayer()
         }
     }
     
