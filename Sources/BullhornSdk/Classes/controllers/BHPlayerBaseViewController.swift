@@ -199,7 +199,13 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         updateSettingsControls()
         
         BHOrientationManager.shared.landscapeSupported = true
-        onDeviceOrientationChanged()
+
+        if isBeingPresented || isMovingToParent {
+            isFullscreen = false
+            BHHybridPlayer.shared.isFullScreen = false
+        }
+
+        updateFullscreenButton()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -231,7 +237,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if BHHybridPlayer.shared.isFullScreenEnabled() {
-            return isFullscreen ? .landscape : .allButUpsideDown
+            return isFullscreen ? .landscape : .portrait
         } else {
             return .portrait
         }
@@ -332,6 +338,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     }
     
     @objc fileprivate func onDeviceOrientationChanged() {
+        guard view.window != nil else { return }
 
         if !BHHybridPlayer.shared.isFullScreenEnabled() {
             isFullscreen = false
@@ -386,8 +393,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
             guard let scene = view.window?.windowScene else { return }
 
-            let preferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: UIInterfaceOrientationMask(rawValue: UInt(orientation.rawValue)))
-            
+            let preferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: interfaceOrientationMask(for: orientation))
+
             scene.requestGeometryUpdate(preferences)
             setNeedsUpdateOfSupportedInterfaceOrientations()
 
@@ -403,6 +410,16 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         
         onUserInterfaceRotated()
         updateLayers()
+    }
+    
+    private func interfaceOrientationMask(for orientation: UIInterfaceOrientation) -> UIInterfaceOrientationMask {
+        switch orientation {
+        case .portrait:           return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft:      return .landscapeLeft
+        case .landscapeRight:     return .landscapeRight
+        default:                  return .portrait
+        }
     }
         
     // MARK: - Actions
