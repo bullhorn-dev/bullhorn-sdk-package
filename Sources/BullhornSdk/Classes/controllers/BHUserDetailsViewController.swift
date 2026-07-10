@@ -159,8 +159,8 @@ class BHUserDetailsViewController: BHPlayerContainingViewController, ActivityInd
             self.shouldShowHeader = self.userManager.posts.count > 0 || BHReachabilityManager.shared.isConnected()
             self.refreshControl?.endRefreshing()
             self.hideFetchProgress()
-            self.tableView.reloadData()
             self.headerView?.reloadData()
+            self.tableView.reloadData()
             self.configureNavigationItems()
         }
 
@@ -369,7 +369,7 @@ extension BHUserDetailsViewController: UITableViewDataSource, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard shouldShowHeader, !searchActive else { return .leastNormalMagnitude }
-        return headerView?.calculateHeight() ?? 0
+        return headerView?.calculateHeight(availableWidth: tableView.bounds.width) ?? 0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

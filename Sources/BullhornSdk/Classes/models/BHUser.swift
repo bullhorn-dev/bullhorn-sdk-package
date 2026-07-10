@@ -132,7 +132,7 @@ struct BHUser: Codable, Hashable {
             .styleLinks(links)
             .attributedString
 
-        return attributedText
+        return attributedText.trimmingWhitespaceAndNewlines()
     }
 
     //
@@ -143,6 +143,26 @@ struct BHUser: Codable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+// MARK: - NSAttributedString + Trimming
+
+extension NSAttributedString {
+
+    /// Removes leading and trailing whitespace/newline characters while preserving attributes
+    func trimmingWhitespaceAndNewlines() -> NSAttributedString {
+        let result = NSMutableAttributedString(attributedString: self)
+        let charSet = CharacterSet.whitespacesAndNewlines
+
+        while let first = result.string.unicodeScalars.first, charSet.contains(first) {
+            result.deleteCharacters(in: NSRange(location: 0, length: 1))
+        }
+        while let last = result.string.unicodeScalars.last, charSet.contains(last) {
+            result.deleteCharacters(in: NSRange(location: result.length - 1, length: 1))
+        }
+
+        return result
     }
 }
 
@@ -235,3 +255,4 @@ public class BHSelfUser: NSObject, Codable {
         }
     }
 }
+

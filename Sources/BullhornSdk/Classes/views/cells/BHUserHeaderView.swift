@@ -32,6 +32,8 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
     fileprivate var isCollapsed: Bool = BHUserHeaderView.shouldCollapse()
     fileprivate var numberOfLines: Int = 5
     fileprivate var uncollapsedWidth: Int = 300
+
+    fileprivate static let bioStackSpacing: CGFloat = 6
     
     weak var delegate: BHUserHeaderViewDelegate?
 
@@ -85,30 +87,27 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
         setupSocialLinks()
         setupBio()
 
-        if BHUserHeaderView.shouldCollapse() {
-            if let bio = userManager?.user?.bio {
-                collapseButton.isHidden = bio.count < uncollapsedWidth
-            } else {
-                collapseButton.isHidden = true
-            }
-            updateCollapseButton()
-        } else {
-            collapseButton.isHidden = true
-        }
+        collapseButton.isHidden = !shouldShowCollapseButton()
+        updateCollapseButton()
+
+        bioLabel.numberOfLines = collapseButton.isHidden ? 0 : numberOfLines
     }
     
-    func calculateHeight() -> CGFloat {
-        let linksViewHeight = hasSocialLinks() ? socialLinksView.calculateHeight() : 0
-        let spacing: CGFloat = 12
-        let effectiveNumberOfLines = collapseButton.isHidden ? 0 : numberOfLines
+    func calculateHeight(availableWidth: CGFloat) -> CGFloat {
+        let hasLinks = hasSocialLinks()
+        let linksViewHeight = hasLinks ? socialLinksView.calculateHeight() : 0
+        let spacing = stackView.spacing
+        let gapsCount: CGFloat = hasLinks ? 3 : 2
+        let showsCollapseButton = shouldShowCollapseButton()
+        let effectiveNumberOfLines = showsCollapseButton ? numberOfLines : 0
         let bioWidth: CGFloat
-        if collapseButton.isHidden {
-            bioWidth = frame.size.width - 2 * Constants.paddingHorizontal
+        if showsCollapseButton {
+            bioWidth = availableWidth - 2 * Constants.paddingHorizontal - collapseButton.frame.size.width - BHUserHeaderView.bioStackSpacing
         } else {
-            bioWidth = frame.size.width - collapseButton.frame.size.width - 3 * Constants.paddingHorizontal
+            bioWidth = availableWidth - 2 * Constants.paddingHorizontal
         }
 
-        return 3 * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: effectiveNumberOfLines) + linksViewHeight + Constants.panelHeight
+        return gapsCount * spacing + userView.frame.size.height + bioLabel.requiredHeight(bioWidth, numberOfLines: effectiveNumberOfLines) + linksViewHeight + Constants.panelHeight
     }
 
     func setup() {
@@ -196,6 +195,11 @@ class BHUserHeaderView: UITableViewHeaderFooterView {
 
     fileprivate func hasSocialLinks() -> Bool {
         return hasWebsite() || userManager?.user?.socialLinks?.isEmpty() != true
+    }
+
+    fileprivate func shouldShowCollapseButton() -> Bool {
+        guard BHUserHeaderView.shouldCollapse(), let bio = userManager?.user?.bio else { return false }
+        return bio.count >= uncollapsedWidth
     }
 
     fileprivate func updateCollapseButton() {
