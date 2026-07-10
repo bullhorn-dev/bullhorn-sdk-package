@@ -52,21 +52,11 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     var postsManager = BHPostsManager()
 
     var playerItem: BHPlayerItem? {
-        if let playerItem = BHLivePlayer.shared.playerItem {
-            return playerItem
-        } else if let playerItem = BHHybridPlayer.shared.playerItem {
-            return playerItem
-        }
-        return nil
+        return BHHybridPlayer.shared.playerItem
     }
     
     var post: BHPost? {
-        if BHHybridPlayer.shared.post != nil {
-            return BHHybridPlayer.shared.post
-        } else if BHLivePlayer.shared.post != nil {
-            return BHLivePlayer.shared.post
-        }
-        return nil
+        return BHHybridPlayer.shared.post
     }
 
     private var isSliding = false
@@ -183,9 +173,8 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
         overlayView.addGestureRecognizer(tapOverlayViewGestureRecognizer)
 
         setupAccessibility()
-                
+
         BHHybridPlayer.shared.addListener(self, withDuplicates: true)
-//        BHLivePlayer.shared.addListener(self)
     }
     
     deinit {
@@ -223,7 +212,6 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
     
     override func viewDidDisappear(_ animated: Bool) {
         BHHybridPlayer.shared.removeListener(self)
-//        BHLivePlayer.shared.removeListener(self)
         super.viewDidDisappear(animated)
     }
 
@@ -282,7 +270,7 @@ class BHPlayerBaseViewController: UIViewController, ActivityIndicatorSupport {
 
         case .waitingRoom,
              .live:
-            updateVideoLayer(BHLivePlayer.shared.isVideoAvailable)
+            updateVideoLayer(BHHybridPlayer.shared.isVideoAvailable)
         }
         
         if let item = playerItem {
@@ -858,50 +846,3 @@ extension BHPlayerBaseViewController: BHHybridPlayerListener {
         }
     }
 }
-
-// MARK: - BHLivePlayerListener
-
-extension BHPlayerBaseViewController: BHLivePlayerListener {
-        
-    func livePlayer(_ player: BHLivePlayer, initializedWith playerItem: BHPlayerItem) {
-        DispatchQueue.main.async {
-            self.resetUI()
-            self.resetProgressUI()
-            self.reloadData()
-            self.updateAfterSettingsChanged()
-        }
-    }
-    
-    func livePlayer(_ player: BHLivePlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
-    
-    func livePlayer(_ player: BHLivePlayer, bulletinDidChange bulletin: BHBulletin) {
-        DispatchQueue.main.async {
-            self.hasVideo = player.isVideoAvailable
-            self.hasTile = bulletin.hasTiles
-        }
-    }
-    
-    func livePlayerDidFinishPlaying(_ player: BHLivePlayer) {
-        DispatchQueue.main.async {
-            self.resetUI()
-        }
-    }
-    
-    func livePlayerDidFailedToPlay(_ player: BHLivePlayer, error: Error?) {
-        DispatchQueue.main.async {
-            var message = "Failed to play live episode. "
-
-            if BHReachabilityManager.shared.isConnected() {
-                if let validError = error {
-                    message += " \(validError.localizedDescription)"
-                }
-            } else {
-                message += "The Internet connection is lost."
-            }
-            if !self.isFullscreen {
-                self.showError(message)
-            }
-        }
-    }
-}
-

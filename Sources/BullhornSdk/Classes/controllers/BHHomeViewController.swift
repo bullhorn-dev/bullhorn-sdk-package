@@ -312,7 +312,6 @@ class BHHomeViewController: BHPlayerContainingViewController, ActivityIndicatorS
         BHLog.p("\(#function)")
         
         BHHybridPlayer.shared.close()
-        BHLivePlayer.shared.close()
         BHDownloadsManager.shared.removeAll()
         
         DataBaseManager.shared.dataStack.drop() { error in
@@ -496,7 +495,7 @@ extension BHHomeViewController: BHHomeHeaderViewDelegate {
         if post.isLiveStream() {
             BHHybridPlayer.shared.playRequest(with: post, playlist: [], autoplayContext: .actual)
         } else {
-            BHLivePlayer.shared.playRequest(with: post)
+            BHHybridPlayer.shared.playRequest(with: post, playlist: [], autoplayContext: .none)
         }
     }
 }

@@ -149,7 +149,6 @@ public class BullhornSdk: NSObject {
         externalUser = nil
 
         BHHybridPlayer.shared.close()
-        BHLivePlayer.shared.close()
 
         BHAccountManager.shared.loginAnonymously() { _ in
             DispatchQueue.main.async {

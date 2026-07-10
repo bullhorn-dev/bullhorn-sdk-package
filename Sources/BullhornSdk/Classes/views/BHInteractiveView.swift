@@ -50,8 +50,6 @@ class BHInteractiveView: UIView {
         super.init(frame: frame)
         
         BHHybridPlayer.shared.addListener(self)
-        BHLivePlayer.shared.addListener(self)
-
         setupUI()
     }
 
@@ -59,14 +57,11 @@ class BHInteractiveView: UIView {
         super.init(coder: coder)
 
         BHHybridPlayer.shared.addListener(self)
-        BHLivePlayer.shared.addListener(self)
-
         setupUI()
     }
     
     deinit {
 //        BHHybridPlayer.shared.removeListener(self)
-//        BHLivePlayer.shared.removeListener(self)
     }
     
     // MARK: - Lifecycle
@@ -252,39 +247,6 @@ extension BHInteractiveView: BHHybridPlayerListener {
             if !(player.isEnded() || player.isFailed()) {
                 self.reloadData()
             }
-        }
-    }
-}
-
-// MARK: - BHLivePlayerListener
-
-extension BHInteractiveView: BHLivePlayerListener {
-
-    func livePlayer(_ player: BHLivePlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
-    
-    func livePlayer(_ player: BHLivePlayer, positionChanged position: Double, duration: Double) {
-        DispatchQueue.main.async {
-            let event = BHLivePlayer.shared.bulletin?.getTimelineEvent(position)
-            
-            if let validEvent = event {
-                if let validPrevEvent = self.bulletinEvent, validEvent.id != validPrevEvent.id {
-                    self.tiles.removeAll()
-                    self.tiles.append(validEvent.bulletinTile)
-                    self.bulletinEvent = validEvent
-                    self.reloadData()
-                }
-            } else {
-                self.tiles.removeAll()
-                self.bulletinEvent = nil
-                self.reloadData()
-            }
-        }
-    }
-    
-    func livePlayer(_ player: BHLivePlayer, bulletinDidChange bulletin: BHBulletin) {
-        DispatchQueue.main.async {
-            self.tiles = bulletin.preShowEvents?.compactMap({ $0.bulletinTile }) ?? []
-            self.reloadData()
         }
     }
 }

@@ -165,8 +165,6 @@ class BHHybridPlayer {
 
         BHLog.p("PlayRequest id: \(post.id), title: \(post.title), position: \(post.playbackOffset)")
 
-        BHLivePlayer.shared.close()
-
         if isPostActive(post.id) {
             if isPlaying() {
                 pause()

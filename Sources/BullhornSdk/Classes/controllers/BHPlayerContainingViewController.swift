@@ -38,8 +38,6 @@ class BHPlayerContainingViewController: UIViewController {
         super.viewWillAppear(animated)
 
         BHHybridPlayer.shared.addListener(self)
-        BHLivePlayer.shared.addListener(self)
-
         updateMiniPlayer()
     }
     
@@ -59,7 +57,6 @@ class BHPlayerContainingViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         BHHybridPlayer.shared.removeListener(self)
-        BHLivePlayer.shared.removeListener(self)
     }
     
     // MARK: - Private
@@ -72,7 +69,7 @@ class BHPlayerContainingViewController: UIViewController {
     }
     
     private func isLiveInteractive() -> Bool {
-        return BHLivePlayer.shared.post?.isLiveNow() ?? false
+        return BHHybridPlayer.shared.post?.isLiveNow() ?? false
     }
     
     private func isRadioStream() -> Bool {
@@ -90,7 +87,7 @@ class BHPlayerContainingViewController: UIViewController {
         if isRecordingInteractive() {
             type = .interactive
         } else if isLiveInteractive() {
-            let liveStatus = BHLivePlayer.shared.post?.liveStatus ?? .scheduled
+            let liveStatus = BHHybridPlayer.shared.post?.liveStatus ?? .scheduled
             switch liveStatus {
             case .scheduled,
                  .preShow:
@@ -169,7 +166,7 @@ class BHPlayerContainingViewController: UIViewController {
     }
 
     private func updateMiniPlayer() {
-        if BHHybridPlayer.shared.playerItem == nil && BHLivePlayer.shared.playerItem == nil {
+        if BHHybridPlayer.shared.playerItem == nil {
             miniPlayerView.isHidden = true
             return
         }
@@ -195,7 +192,6 @@ class BHPlayerContainingViewController: UIViewController {
     
     private func closePlayer() {
         BHHybridPlayer.shared.close()
-        BHLivePlayer.shared.close()
     }
     
     // MARK: - Internal (to override)
@@ -453,45 +449,6 @@ extension BHPlayerContainingViewController: BHHybridPlayerListener {
     func hybridPlayerDidClose(_ player: BHHybridPlayer) {
         DispatchQueue.main.async {
             self.onPlayerPlaybackCompleted()
-        }
-    }
-}
-
-// MARK: - BHLivePlayerListener
-
-extension BHPlayerContainingViewController : BHLivePlayerListener {
-
-    func livePlayer(_ player: BHLivePlayer, initializedWith playerItem: BHPlayerItem) {
-        DispatchQueue.main.async {
-            self.updateMiniPlayer()
-            if self.isVisible() {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    if self.movin == nil {
-                        self.presentPlayer()
-                    }
-                }
-            }
-        }
-    }
-    
-    func livePlayer(_ player: BHLivePlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
-
-    func livePlayerDidFinishPlaying(_ player: BHLivePlayer) {
-        DispatchQueue.main.async { self.updateMiniPlayer() }
-    }
-    
-    func livePlayerDidFailedToPlay(_ player: BHLivePlayer, error: Error?) {
-        DispatchQueue.main.async {
-            var message = "Failed to play live episode. "
-            
-            if BHReachabilityManager.shared.isConnected() {
-                if let validError = error {
-                    message += " \(validError.localizedDescription)"
-                }
-            } else {
-                message += "The Internet connection is lost."
-            }
-            self.showError(message)
         }
     }
 }

@@ -214,7 +214,6 @@ class BHMiniPlayerView: UIView {
         ])
 
         BHHybridPlayer.shared.addListener(self)
-        BHLivePlayer.shared.addListener(self)
     }
     
     private func updateControls(with state: PlayerState, stateFlags: PlayerStateFlags) {
@@ -280,20 +279,15 @@ class BHMiniPlayerView: UIView {
     }
     
     private func getPlayerItem() -> BHPlayerItem? {
-        if let playerItem = BHLivePlayer.shared.playerItem {
-            return playerItem
-        } else if let playerItem = BHHybridPlayer.shared.playerItem {
-            return playerItem
-        }
-        return nil
+        return BHHybridPlayer.shared.playerItem
     }
 
     private func isLiveNow() -> Bool {
-        return BHLivePlayer.shared.post?.isLiveNow() ?? false
+        return BHHybridPlayer.shared.post?.isLiveNow() ?? false
     }
     
     private func isLiveStream() -> Bool {
-        return BHLivePlayer.shared.post?.isLiveStream() ?? false
+        return BHHybridPlayer.shared.post?.isLiveStream() ?? false
     }
 
     // MARK: - Actions
@@ -348,26 +342,6 @@ extension BHMiniPlayerView: BHHybridPlayerListener {
         DispatchQueue.main.async {
             self.resetControls()
             self.updateControls(with: .ended, stateFlags: .complete)
-        }
-    }
-}
-
-// MARK: - BHLivePlayerListener
-
-extension BHMiniPlayerView: BHLivePlayerListener {
-    
-    func livePlayer(_ player: BHLivePlayer, initializedWith playerItem: BHPlayerItem) {
-        DispatchQueue.main.async {
-            self.resetControls()
-            self.updateControls(with: .idle, stateFlags: .initial)
-        }
-    }
-    
-    func livePlayer(_ player: BHLivePlayer, stateUpdated state: PlayerState, stateFlags: PlayerStateFlags) {}
-    
-    func livePlayerDidFinishPlaying(_ player: BHLivePlayer) {
-        DispatchQueue.main.async {
-            self.resetControls()
         }
     }
 }

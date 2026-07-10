@@ -578,7 +578,7 @@ extension BHExploreViewController: BHExploreHeaderViewDelegate {
     }
     
     func headerView(_ view: BHExploreHeaderView, didRequestPlayPost post: BHPost) {
-        BHLivePlayer.shared.playRequest(with: post)
+        BHHybridPlayer.shared.playRequest(with: post, playlist: [], autoplayContext: .none)
     }
     
     func headerView(_ view: BHExploreHeaderView, didSelectSeeAll section: Sections) {

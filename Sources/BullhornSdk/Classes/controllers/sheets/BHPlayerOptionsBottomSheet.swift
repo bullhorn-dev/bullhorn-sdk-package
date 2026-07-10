@@ -147,15 +147,7 @@ final class BHPlayerOptionsBottomSheet: BHBottomSheetController {
     }
     
     @objc func onShareItem(_ sender: UITapGestureRecognizer) {
-        var post: BHPost?
-            
-        if type == .recording {
-            post = BHHybridPlayer.shared.post
-        } else {
-            post = BHLivePlayer.shared.post
-        }
-            
-        guard let validPost = post else { return }
+        guard let validPost = BHHybridPlayer.shared.post else { return }
         
         openShareDialog(validPost.shareLink)
     }

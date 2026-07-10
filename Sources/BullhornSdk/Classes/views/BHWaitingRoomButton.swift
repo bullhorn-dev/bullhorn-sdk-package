@@ -77,6 +77,6 @@ class BHWaitingRoomButton: UIView {
     @objc private func onPress(_ sender: Any) {
         guard let validPost = post else { return }
 
-        BHLivePlayer.shared.playRequest(with: validPost)
+        BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: .none)
     }
 }

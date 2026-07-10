@@ -44,7 +44,7 @@ class BHPostDescriptionCell: UITableViewCell {
                 guard let validPost = self.post else { return }
                 
                 if validPost.isLiveNow() {
-                    BHLivePlayer.shared.playRequest(with: validPost)
+                    BHHybridPlayer.shared.playRequest(with: validPost, playlist: [], autoplayContext: .none)
                 } else {
                     if BHHybridPlayer.shared.isPostActive(validPost.id) {
                         BHHybridPlayer.shared.seek(to: Double(seconds), resume: true)
