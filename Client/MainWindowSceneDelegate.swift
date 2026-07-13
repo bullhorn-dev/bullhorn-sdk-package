@@ -25,7 +25,11 @@ class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = initialViewController
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-                
+
+        if let tabBarVC = window?.rootViewController as? UITabBarController {
+            BHMiniPlayerManager.shared.attach(to: window!, tabBar: tabBarVC.tabBar)
+        }
+
         debugPrint("Main window scene will connect.")
         
         if let url = connectionOptions.userActivities.first?.webpageURL {
