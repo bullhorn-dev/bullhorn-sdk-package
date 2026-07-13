@@ -48,8 +48,9 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
     init(withUrl url: URL, coverUrl: URL? = nil, isVideo: Bool = false) {
         mediaURL        = url
         currentMediaURL = url
-        playerItem      = AVPlayerItem(url: url)
-        player          = BHSystemMediaPlayer.makePlayer(with: AVPlayerItem(url: url))
+        playerItem      = BHSystemMediaPlayer.makeItem(with: url, isVideo: isVideo)
+        player          = BHSystemMediaPlayer.makePlayer(
+                            with: BHSystemMediaPlayer.makeItem(with: url, isVideo: isVideo))
         isVideoContent  = isVideo
 
         super.init()
@@ -168,7 +169,7 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         
         if nextItemURL == url { return }
         clearNextItem()
-        let item = AVPlayerItem(url: url)
+        let item = BHSystemMediaPlayer.makeItem(with: url, isVideo: isVideoContent)
         nextPlayerItem = item
         nextItemURL    = url
         player.insert(item, after: nil)
@@ -195,6 +196,17 @@ final class BHSystemMediaPlayer: BHMediaPlayerBase {
         p.volume = 1.0
         p.actionAtItemEnd = .advance
         return p
+    }
+
+    private static func makeItem(with url: URL, isVideo: Bool) -> AVPlayerItem {
+        let asset = AVURLAsset(url: url)
+
+        if isVideo {
+            let keys = ["tracks", "playable", "duration"]
+            asset.loadValuesAsynchronously(forKeys: keys, completionHandler: nil)
+        }
+
+        return AVPlayerItem(asset: asset)
     }
 }
 
@@ -441,6 +453,3 @@ extension BHSystemMediaPlayer: AVPictureInPictureControllerDelegate {
         }
     }
 }
-
-
-
