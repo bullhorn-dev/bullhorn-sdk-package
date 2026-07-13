@@ -86,6 +86,16 @@ struct ThemesManager {
         let style: UIUserInterfaceStyle = isDarkMode ? .dark : .light
         BullhornSdk.shared.updateUserInterfaceStyle(style)
      }
+
+    mutating func systemInterfaceStyleDidChange(_ style: UIUserInterfaceStyle) {
+        guard currentTheme() == .system else { return }
+
+        let isDarkMode = style == .dark
+        guard currentStyle != (isDarkMode ? .dark : .light) else { return }
+
+        updateUserInterfaceStyle(isDarkMode)
+        BullhornSdk.shared.updateUserInterfaceStyle(isDarkMode ? .dark : .light)
+    }
     
     // MARK: - Private
 

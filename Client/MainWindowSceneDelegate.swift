@@ -9,6 +9,7 @@ extension Notification.Name {
 class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private var systemThemeTracker: SystemThemeTrackerView?
 
     // MARK: - Scene lifecycle
 
@@ -30,6 +31,8 @@ class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
             BHMiniPlayerManager.shared.attach(to: window!, tabBar: tabBarVC.tabBar)
         }
 
+        installSystemThemeTracker()
+                
         debugPrint("Main window scene will connect.")
         
         if let url = connectionOptions.userActivities.first?.webpageURL {
@@ -82,6 +85,17 @@ class MainWindowSceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // MARK: - Private
     
+    private func installSystemThemeTracker() {
+        guard let window else { return }
+
+        let tracker = SystemThemeTrackerView(frame: .zero)
+        tracker.onStyleChange = { style in
+            ThemesManager.shared.systemInterfaceStyleDidChange(style)
+        }
+        window.addSubview(tracker)
+        systemThemeTracker = tracker
+    }
+
     private func handleDeepLink(_ url: URL) {
         debugPrint("Handle deep link: \(url.absoluteString)")
 

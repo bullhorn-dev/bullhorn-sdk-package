@@ -37,3 +37,27 @@ extension UIView: ThemesObserver {
 struct WeakThemesObserver {
     weak var observer: ThemesObserver?
 }
+
+// MARK: - SystemThemeTrackerView
+
+final class SystemThemeTrackerView: UIView {
+
+    var onStyleChange: ((UIUserInterfaceStyle) -> Void)?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            onStyleChange?(traitCollection.userInterfaceStyle)
+        }
+    }
+}
+
