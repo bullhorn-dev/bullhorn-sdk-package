@@ -3,12 +3,12 @@ import Foundation
 
 class BHBulletinTileTextView: BHBulletinTileBaseView {
     
-    var textLabel = BHHyperlinkLabel()
+    var textLabel = RichLabel()
     
     override init(with tile: BHBulletinTile) {
         super.init(with: tile)
         
-        setup(with: didTap)
+        setup()
     }
     
     required init?(coder: NSCoder) {
@@ -21,26 +21,17 @@ class BHBulletinTileTextView: BHBulletinTileBaseView {
     
     // MARK: - Private
     
-    fileprivate func setup(with tapHandler: @escaping (URL) -> Void) {
+    fileprivate func setup() {
         
-        let attributedString = NSMutableAttributedString(string: tile.description ?? "")
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-        
-        textLabel.hyperlinkAttributes = [
-            .foregroundColor: UIColor.playerOnDisplayBackground(),
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
         textLabel.textColor = .playerOnDisplayBackground()
         textLabel.font = .fontWithName(.robotoMedium, size: 18)
         textLabel.textAlignment = .center
         textLabel.numberOfLines = 0
         textLabel.lineBreakMode = .byWordWrapping
+        textLabel.isEnabled = true
+        textLabel.clipsToBounds = true
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.attributedText = attributedString
-        textLabel.didTapOnURL = tapHandler
+        textLabel.attributedText = tile.attributedDescription()
 
         addSubview(textLabel)
         
@@ -49,11 +40,5 @@ class BHBulletinTileTextView: BHBulletinTileBaseView {
             textLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             textLabel.widthAnchor.constraint(equalTo: widthAnchor)
         ])
-    }
-    
-    // MARK: - Actions
-
-    private func didTap(_ url: URL) {
-        openUrl(url)
     }
 }

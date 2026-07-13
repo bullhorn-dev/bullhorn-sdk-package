@@ -6,6 +6,11 @@ public protocol AttributesProvider {
     var attributes: [NSAttributedString.Key: Any] { get }
 }
 
+extension NSAttributedString.Key {
+    static let hyperlink = NSAttributedString.Key("hyperlink")
+    static let timestamp = NSAttributedString.Key("timestamp")
+}
+
 extension Dictionary: AttributesProvider where Key == NSAttributedString.Key, Value == Any {
     public var attributes: [NSAttributedString.Key: Any] {
         return self

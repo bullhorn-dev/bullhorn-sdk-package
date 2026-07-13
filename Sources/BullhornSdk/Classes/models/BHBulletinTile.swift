@@ -1,5 +1,6 @@
 
 import Foundation
+import UIKit
 
 // MARK: - BHBulletinPollVariant
 
@@ -165,5 +166,39 @@ struct BHBulletinTile: JsonApiCodable {
         if let index = pollVariants?.firstIndex(where: {$0.id == variant.id}) {
             pollVariants?[index] = variant
         }
+    }
+    
+    func attributedDescription(baseColor: UIColor = UIColor.playerOnDisplayBackground()) -> NSAttributedString {
+        guard let validText = description else { return NSAttributedString() }
+        
+        let font: UIFont = .fontWithName(.robotoMedium, size: 18)
+        let base = Attrs().font(font).foregroundColor(baseColor)
+        let links = Attrs().font(font).foregroundColor(baseColor).underlineStyle(.single)
+        let a = Attrs().font(font).foregroundColor(baseColor)
+        let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
+        let u = Attrs().underlineStyle(.single)
+        let i = TagTuner { info in
+            var set = Set<String>()
+            set.insert(info.tag.name)
+            info.outerTags.forEach { set.insert($0.name) }
+
+            let attrs = Attrs()
+            if set.contains("b") && set.contains("i") {
+                attrs.font(UIFont(name: "HelveticaNeue-BoldItalic", size: 14)!)
+            } else if set.contains("i") {
+                attrs.font(UIFont(name: "HelveticaNeue-Italic", size: 14)!)
+            } else if set.contains("b") {
+                attrs.font(UIFont(name: "HelveticaNeue-Bold", size: 14)!)
+            }
+            return attrs
+        }
+
+        let attributedText = validText
+            .style(tags: ["a": a, "u": u, "i": i, "b": b])
+            .styleBase(base)
+            .styleLinks(links)
+            .attributedString
+
+        return attributedText.trimmingWhitespaceAndNewlines()
     }
 }
