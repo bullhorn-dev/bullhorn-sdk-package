@@ -425,6 +425,22 @@ extension BHSystemMediaPlayer: AVPictureInPictureControllerDelegate {
         BHLog.p("\(#function)")
         delegate?.mediaPlayer(self, restorePictureInPictureUI: completionHandler)
     }
+
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
+                                    skipByInterval skipInterval: CMTime,
+                                    completionHandler: @escaping () -> Void) {
+        let delta = CMTimeGetSeconds(skipInterval)
+        let target = max(0, playerCurrentTime() + delta)
+
+        BHLog.p("\(#function) delta=\(delta) target=\(target)")
+
+        let cmTime = CMTime(value: CMTimeValue(target * timeScale),
+                            timescale: CMTimeScale(timeScale))
+        playerSeek(to: cmTime, forceResume: false) { _ in
+            completionHandler()
+        }
+    }
 }
+
 
 

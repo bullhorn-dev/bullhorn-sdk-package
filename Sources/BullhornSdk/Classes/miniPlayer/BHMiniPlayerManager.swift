@@ -44,7 +44,16 @@ public final class BHMiniPlayerManager: NSObject {
 
         // Returning from PiP lands on the full player.
         BHHybridPlayer.shared.pipRestoreUIHandler = { [weak self] completion in
-            self?.presentPlayer()
+            guard let self else {
+                completion(true)
+                return
+            }
+
+            // Fall back to the full player when the mini player has nowhere to
+            // land (e.g. the current screen has no mini player).
+            if self.pipStartedFromFullPlayer || !self.shouldShowMiniPlayer() {
+                self.presentPlayer()
+            }
             completion(true)
         }
 
@@ -102,6 +111,10 @@ public final class BHMiniPlayerManager: NSObject {
 
     private var movin: Movin?
     private var modalVC: UIViewController?
+
+    /// Whether the full player was on screen when PiP started; used to restore
+    /// the UI to the place PiP was started from.
+    private var pipStartedFromFullPlayer = false
 
     private override init() {
         super.init()
@@ -390,6 +403,12 @@ extension BHMiniPlayerManager: BHHybridPlayerListener {
         DispatchQueue.main.async {
             self.miniPlayerView.detachVideoLayer()
             self.updateVisibility()
+        }
+    }
+
+    func hybridPlayerDidStartPictureInPicture(_ player: BHHybridPlayer) {
+        DispatchQueue.main.async {
+            self.pipStartedFromFullPlayer = self.modalVC != nil
         }
     }
 }
