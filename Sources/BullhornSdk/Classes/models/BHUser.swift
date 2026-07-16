@@ -107,7 +107,16 @@ struct BHUser: Codable, Hashable {
         let font: UIFont = isActive ? .settingsSecondaryText() : .secondaryText()
         let base = Attrs().font(font).foregroundColor(baseColor)
         let links = Attrs().font(font).foregroundColor(baseColor).underlineStyle(.single)
-        let a = Attrs().font(font).foregroundColor(isActive ? .primary() : baseColor)
+        let a = TagTuner { info in
+            let attrs = Attrs()
+                .font(font)
+                .foregroundColor(isActive ? .primary() : baseColor)
+                .underlineStyle(.single)
+            if let href = info.tag.attributes["href"], !href.isEmpty {
+                attrs.hyperlink(href)
+            }
+            return attrs
+        }
         let b = Attrs().font(.fontWithName(.robotoBold, size: 14))
         let u = Attrs().underlineStyle(.single)
         let i = TagTuner { info in
