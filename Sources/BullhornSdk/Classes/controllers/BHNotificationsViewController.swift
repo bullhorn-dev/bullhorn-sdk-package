@@ -39,8 +39,10 @@ class BHNotificationsViewController: BHPlayerContainingViewController, ActivityI
         collectionView.delegate = self
         collectionView.dataSource = self
 
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        layout?.sectionHeadersPinToVisibleBounds = true
+        let layout = BHLeftAlignedFlowLayout()
+        layout.estimatedItemSize = .zero
+        layout.sectionHeadersPinToVisibleBounds = true
+        collectionView.collectionViewLayout = layout
 
         configureNavigationItems()
         configureRefreshControl()
